@@ -1,0 +1,1 @@
+INDEX VERSION 1.126+D:\Aplicatii\Android\Android LITE REPORTS\.metadata\.plugins\org.eclipse.jdt.core
