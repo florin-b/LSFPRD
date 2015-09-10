@@ -32,6 +32,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private CautaClientDialogListener listener;
 	private Context context;
 	private boolean isMeserias;
+	private boolean isClientObiectivKA;
 
 	public CautaClientDialog(Context context) {
 		super(context);
@@ -89,7 +90,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private void setListenerListClienti() {
 		listClientiObiective.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			
+		
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				BeanClient client = (BeanClient) listClientiObiective.getItemAtPosition(arg2);
 				if (listener != null) {
@@ -108,11 +109,16 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private void cautaClient() {
 		String numeClient = textNumeClient.getText().toString().trim().replace('*', '%');
 
+		String localUnitLog = UserInfo.getInstance().getUnitLog();
+
+		if (isClientObiectivKA)
+			localUnitLog = "NN10";
+
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("numeClient", numeClient);
 		params.put("depart", "00");
 		params.put("departAg", UserInfo.getInstance().getCodDepart());
-		params.put("unitLog", UserInfo.getInstance().getUnitLog());
+		params.put("unitLog", localUnitLog);
 
 		opClient.getListClienti(params);
 	}
@@ -150,6 +156,14 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 	public void setMeserias(boolean isMeserias) {
 		this.isMeserias = isMeserias;
+	}
+
+	public boolean isClientObiectivKA() {
+		return isClientObiectivKA;
+	}
+
+	public void setClientObiectivKA(boolean isClientObiectivKA) {
+		this.isClientObiectivKA = isClientObiectivKA;
 	}
 
 }
