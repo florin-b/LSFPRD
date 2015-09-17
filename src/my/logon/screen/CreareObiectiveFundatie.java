@@ -42,6 +42,9 @@ import enums.EnumDepartFinisaje;
 import enums.EnumDepartInterioare;
 import enums.EnumOperatiiObiective;
 
+
+
+
 public class CreareObiectiveFundatie extends Fragment implements ObiectiveListener, CautaClientDialogListener {
 
 	private TextView textCurrentPage;
@@ -212,14 +215,14 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 		boolean isFinisajeVisible = false;
 
 		for (BeanStadiuObiectiv stadiu : listStadii) {
-			if (stadiu.getCodDepart().equals("04") && stadiu.getCodStadiu() == 1) {
+			if (stadiu.getCodDepart().equals("04") && (stadiu.getCodStadiu() == 1 || stadiu.getCodStadiu() == 2)) {
 				isFundatieVisible = true;
 				break;
 			}
 		}
 
 		for (BeanStadiuObiectiv stadiu : listStadii) {
-			if (!stadiu.getCodDepart().equals("04") && stadiu.getCodStadiu() == 1) {
+			if (!stadiu.getCodDepart().equals("04") && (stadiu.getCodStadiu() == 1 || stadiu.getCodStadiu() == 2)) {
 				isFinisajeVisible = true;
 				break;
 			}
@@ -264,7 +267,7 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 
 		for (EnumDepartFinisaje departFin : EnumDepartFinisaje.values()) {
 			for (BeanStadiuObiectiv stadiu : listStadii) {
-				if (stadiu.getCodDepart().equals(departFin.getCodDepart()) && stadiu.getCodStadiu() == 1) {
+				if (stadiu.getCodDepart().equals(departFin.getCodDepart()) && (stadiu.getCodStadiu() == 1 || stadiu.getCodStadiu() == 2)) {
 					finisajValues.add(departFin.name());
 					break;
 				}
@@ -274,7 +277,7 @@ public class CreareObiectiveFundatie extends Fragment implements ObiectiveListen
 		}
 
 		for (BeanStadiuObiectiv stadiu : listStadii) {
-			if (stadiu.getCodDepart().equals("03") && stadiu.getCodStadiu() == 1) {
+			if (stadiu.getCodDepart().equals("03") && (stadiu.getCodStadiu() == 1 || stadiu.getCodStadiu() == 2)) {
 				finisajValues.add(EnumDepartFinisaje.Interioare.name());
 				break;
 			}
