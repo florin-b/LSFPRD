@@ -27,6 +27,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import enums.EnumTipUser;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -83,14 +85,15 @@ public class MainMenu extends Activity {
 			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",
-			"Cmz.blocate limita credit", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Articole avarie", "Afisare sablon",
-			"Urmarire sablon", "Info client", "Clienti inactivi", "Clienti semiactivi", "Adrese clienti", "Info venituri", "Despre", "Iesire" };
+			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Articole avarie",
+			"Afisare sablon", "Urmarire sablon", "Info client", "Clienti inactivi", "Clienti semiactivi", "Adrese clienti", "Info venituri",
+			"Despre", "Iesire" };
 
 	public int[] btnImageDV = new int[] { R.drawable.id_icon, R.drawable.agree_icon, R.drawable.constraints, R.drawable.preview_icon,
-			R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.cmd_bloc, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon,
-			R.drawable.dollar_icon, R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.viewreduceri_icon, R.drawable.chart_icon,
-			R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.line_chart_icon,
-			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+			R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.cmd_bloc, R.drawable.colosseum, R.drawable.vanzari, R.drawable.neincasate,
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.viewreduceri_icon,
+			R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon,
+			R.drawable.line_chart_icon, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesKA = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Cmz.blocate limita credit",
 			"Creare CLP", "Afisare CLP", "Creare DL", "Afisare DL", "Obiective", "Retur paleti", "Stare retur paleti", "Vanzari", "Neincasate",
@@ -101,10 +104,10 @@ public class MainMenu extends Activity {
 			R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon,
 			R.drawable.dollar_icon, R.drawable.client_info, R.drawable.location_icon, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesDK = { "Utilizator", "Afisare comanda", "Cmz.blocate limita credit", "Vanzari", "Neincasate", "Stocuri", "Preturi",
-			"Info client", "Adrese clienti", "Despre", "Iesire" };
+	public String[] btnNamesDK = { "Utilizator", "Afisare comanda", "Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri",
+			"Preturi", "Info client", "Adrese clienti", "Despre", "Iesire" };
 
-	public int[] btnImageDK = new int[] { R.drawable.id_icon, R.drawable.preview_icon, R.drawable.cmd_bloc, R.drawable.vanzari,
+	public int[] btnImageDK = new int[] { R.drawable.id_icon, R.drawable.preview_icon, R.drawable.cmd_bloc, R.drawable.colosseum, R.drawable.vanzari,
 			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.client_info, R.drawable.location_icon,
 			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
@@ -447,8 +450,18 @@ public class MainMenu extends Activity {
 				// obiective
 				if (selectedBtnName.equalsIgnoreCase("Obiective")) {
 
-					Intent nextScreen = new Intent(MainMenu.this, ObiectiveKA.class);
-					startActivity(nextScreen);
+					Intent nextScreen = null;
+
+					if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.KA.getTipAcces())) {
+						nextScreen = new Intent(MainMenu.this, ObiectiveKA.class);
+					} else if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces())
+							|| UserInfo.getInstance().getTipUser().equals(EnumTipUser.DK.getTipAcces())) {
+						nextScreen = new Intent(MainMenu.this, AfiseazaObiectiveKA.class);
+					}
+
+					if (nextScreen != null)
+						startActivity(nextScreen);
+
 					finish();
 
 				}

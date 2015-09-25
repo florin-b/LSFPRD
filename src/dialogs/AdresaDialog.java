@@ -5,8 +5,6 @@ import java.util.List;
 
 import listeners.AdresaDialogListener;
 import my.logon.screen.R;
-import my.logon.screen.R.id;
-import my.logon.screen.R.layout;
 import utils.UtilsGeneral;
 import adapters.AdapterListJudete;
 import android.app.Dialog;
@@ -35,10 +33,10 @@ public class AdresaDialog extends Dialog {
 		setTitle("Adresa");
 		setCancelable(true);
 
-		setUpLayout();
+		setupLayout();
 	}
 
-	private void setUpLayout() {
+	private void setupLayout() {
 
 		spinnerJudete = (Spinner) findViewById(R.id.spinnerJudete);
 
