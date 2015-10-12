@@ -90,7 +90,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private void setListenerListClienti() {
 		listClientiObiective.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-		
+			
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				BeanClient client = (BeanClient) listClientiObiective.getItemAtPosition(arg2);
 				if (listener != null) {

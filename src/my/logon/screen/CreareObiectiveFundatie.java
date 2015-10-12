@@ -42,9 +42,6 @@ import enums.EnumDepartFinisaje;
 import enums.EnumDepartInterioare;
 import enums.EnumOperatiiObiective;
 
-
-
-
 public class CreareObiectiveFundatie extends Fragment implements ObiectiveListener, CautaClientDialogListener {
 
 	private TextView textCurrentPage;

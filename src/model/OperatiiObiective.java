@@ -9,7 +9,6 @@ import listeners.AsyncTaskListener;
 import listeners.ObiectiveListener;
 import my.logon.screen.AsyncTaskWSCall;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

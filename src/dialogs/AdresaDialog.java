@@ -5,6 +5,8 @@ import java.util.List;
 
 import listeners.AdresaDialogListener;
 import my.logon.screen.R;
+import my.logon.screen.R.id;
+import my.logon.screen.R.layout;
 import utils.UtilsGeneral;
 import adapters.AdapterListJudete;
 import android.app.Dialog;

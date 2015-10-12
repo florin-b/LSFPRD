@@ -25,7 +25,7 @@
     <color name="listArticol">#9E5510</color>
     <color name="listCodArticol">#C4B014</color>
     
-   
+   <color name="labelColor">#556B2F</color>
 
     <string name="strCauta">Caut\u0103</string>
     <string name="strDistrib">Client distribu\u0163ie</string>

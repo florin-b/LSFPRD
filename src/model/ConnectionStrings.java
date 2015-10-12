@@ -10,17 +10,14 @@ public class ConnectionStrings {
 
 	private static ConnectionStrings instance = new ConnectionStrings();
 
-	
-	
-	
 	private String myUrl;
 	private String myNamespace;
 	private String myDatabase;
 
 	private ConnectionStrings() {
-		myUrl = "http://10.1.0.58/androidwebservices/service1.asmx";
-		myNamespace = "http://SmartScan.org/";
-		myDatabase = Environment.getExternalStorageDirectory().getPath() + "/download/AndroidLR";
+		myUrl = "http://10.1.0.58/AndroidWebServices/TESTService.asmx";
+		myNamespace = "http://SFATest.org/";
+		myDatabase = Environment.getExternalStorageDirectory().getPath() + "/download/AndroidLRTest";
 	}
 
 	public static ConnectionStrings getInstance() {

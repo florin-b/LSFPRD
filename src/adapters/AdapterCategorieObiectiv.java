@@ -2,6 +2,8 @@ package adapters;
 
 import java.util.List;
 
+
+
 import my.logon.screen.R;
 import android.content.Context;
 import android.view.LayoutInflater;
