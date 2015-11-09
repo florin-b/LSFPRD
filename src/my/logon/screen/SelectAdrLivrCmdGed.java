@@ -27,7 +27,6 @@ import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -66,7 +65,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private Button saveAdrLivrBtn;
 	private EditText txtPers, txtTel, txtObservatii;
 
-	private TextView txtPersCont, txtTelefon, txtObsPlata, textMail;
+	private TextView txtObsPlata, textMail;
 
 	private static final String METHOD_NAME = "getClientJud";
 
@@ -96,7 +95,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	public static RadioButton radioAdresaSediu, radioAltaAdresa;
 	LinearLayout layoutAdrLivrare1, layoutAdrLivrare2;
-	private String codClient;
+
 	private ArrayList<HashMap<String, String>> listAdreseLivrare = null;
 	private OperatiiClient operatiiClient;
 	private List<BeanAdresaLivrare> listAdrese = null;
@@ -118,9 +117,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		setContentView(R.layout.selectadrlivrcmd_ged_header);
 
 		try {
-
-			Intent intent = getIntent();
-			codClient = intent.getStringExtra("codClient");
 
 			ActionBar actionBar = getActionBar();
 			actionBar.setTitle("Date livrare");
@@ -392,7 +388,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 					layoutListAdrese.setVisibility(View.GONE);
 					layoutAdrOras.setVisibility(View.VISIBLE);
 					layoutAdrStrada.setVisibility(View.VISIBLE);
-					
 				}
 
 			}
@@ -960,7 +955,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void valideazaDateLivrare() {
 		String adresa = "";
-		String oras = "";
 		String strada = "";
 		String pers = "";
 		String telefon = "";
@@ -1086,7 +1080,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
-		params.put("localitate", textLocalitate.getText().toString().trim());
+		params.put("localitate", DateLivrare.getInstance().getOras());
 
 		operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
 

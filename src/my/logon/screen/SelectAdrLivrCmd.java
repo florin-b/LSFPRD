@@ -18,7 +18,6 @@ import listeners.MapListener;
 import listeners.ObiectiveListener;
 import listeners.OperatiiAdresaListener;
 import model.ArticolComanda;
-import model.ConnectionStrings;
 import model.DateLivrare;
 import model.HandleJSONData;
 import model.ListaArticoleComanda;
@@ -75,6 +74,7 @@ import beans.BeanObiectivDepartament;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import connectors.ConnectionStrings;
 import dialogs.MapAddressDialog;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
@@ -99,7 +99,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	public SimpleAdapter adapterJudete, adapterAdreseLivrare;
 
 	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerDataLivrare, spinnerAdreseLivrare, spinnerDocInsot,
-			spinnerTipReducere, spinnerResponsabil, spinnerPersCont;
+			spinnerTipReducere, spinnerResponsabil;
 	private static ArrayList<HashMap<String, String>> listJudete = null, listAdreseLivrare = null;
 	private ArrayAdapter<String> adapterDataLivrare, adapterTermenPlata, adapterResponsabil;
 	private LinearLayout layoutAdrese, layoutAdr1, layoutAdr2, layoutValoareIncasare;
@@ -1322,6 +1322,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private void setListenerSpinnerAdreseLivrare() {
 		spinnerAdreseLivrare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
+			@SuppressWarnings("unchecked")
 			
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				artMap = (HashMap<String, String>) spinnerAdreseLivrare.getSelectedItem();

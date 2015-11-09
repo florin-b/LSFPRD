@@ -2,7 +2,7 @@
  * @author florinb
  *
  */
-package model;
+package connectors;
 
 import android.os.Environment;
 
@@ -15,9 +15,11 @@ public class ConnectionStrings {
 	private String myDatabase;
 
 	private ConnectionStrings() {
-		myUrl = "http://10.1.0.58/AndroidWebServices/TESTService.asmx";
-		myNamespace = "http://SFATest.org/";
-		myDatabase = Environment.getExternalStorageDirectory().getPath() + "/download/AndroidLRTest";
+
+		myUrl = "http://10.1.0.58/androidwebservices/service1.asmx";
+		myNamespace = "http://SmartScan.org/";
+		myDatabase = Environment.getExternalStorageDirectory().getPath() + "/download/AndroidLR";
+
 	}
 
 	public static ConnectionStrings getInstance() {

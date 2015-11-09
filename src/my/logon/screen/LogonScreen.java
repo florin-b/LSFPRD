@@ -45,7 +45,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 	private EditText etUsername;
 	private EditText etPassword;
 	private TextView lblResult;
-	
+
 	private static final String SOAP_ACTION = "http://SmartScan.org/userLogon";
 	private static final String METHOD_NAME = "userLogon";
 	private static final String NAMESPACE = "http://SmartScan.org/";
@@ -83,8 +83,10 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		setContentView(R.layout.main);
 
 		if (isDebugMode(this)) {
-			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
+			StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog()
+					.build());
+			StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog()
+					.penaltyDeath().build());
 		}
 
 		slideToUnLock = (MySwitch) findViewById(R.id.switchLogon);
@@ -402,8 +404,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 			}
 			if (token[0].equals("3")) {
 
-				if (token[5].equals("8") || token[5].equals("9") || token[5].equals("10") || token[5].equals("14") || token[5].equals("12") || token[5].equals("27")
-						|| token[5].equals("35") || token[5].equals("17") || token[5].equals("18")) // doar
+				if (token[5].equals("8") || token[5].equals("9") || token[5].equals("10") || token[5].equals("14") || token[5].equals("12")
+						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18")) // doar
 				// agentii,
 				// admin , sd , dv, dd, ka, dir ka, cons, sm
 				{
@@ -441,21 +443,31 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setUnitLog(getFiliala(token[2].toString()));
 					uInfo.setInitUnitLog(getFiliala(token[2].toString()));
 					uInfo.setTipAcces(token[5].toString());
-					uInfo.setTipUser(InfoStrings.getTipUser(token[5].toString()));
+
+					if (token[10].toLowerCase(Locale.getDefault()).equals("w")) {
+						uInfo.setTipUser("WOOD");
+						uInfo.setTipUserSap("WOOD");
+					} else {
+						uInfo.setTipUser(InfoStrings.getTipUser(token[5].toString()));
+						uInfo.setTipUserSap(token[10]);
+					}
+
 					uInfo.setParentScreen("logon");
 					uInfo.setFilialeDV(token[9]);
 					uInfo.setAltaFiliala(false);
 					uInfo.setUserSite(token[8]);
 					uInfo.setDepartExtra(token[7]);
-					uInfo.setTipUserSap(token[10]);
+
 					uInfo.setExtraFiliale(token[11]);
 
-					if (uInfo.getTipAcces().equals("27") || uInfo.getTipAcces().equals("35") || uInfo.getTipAcces().equals("17") || uInfo.getTipAcces().equals("18")) {
+					if (uInfo.getTipAcces().equals("27") || uInfo.getTipAcces().equals("35") || uInfo.getTipAcces().equals("17")
+							|| uInfo.getTipAcces().equals("18")) {
 
 						uInfo.setCodDepart("01");
 						uInfo.setNumeDepart("LEMN");
 					}
 
+					
 					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
 					startActivity(nextScreen);
 					finish();

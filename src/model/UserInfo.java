@@ -29,6 +29,7 @@ public class UserInfo {
 	private double comisionCV = 0;
 	private String coefCorectie = "";
 	private String userSite = "";
+	private boolean userWood = false;
 
 	private static UserInfo instance = new UserInfo();
 
@@ -183,6 +184,14 @@ public class UserInfo {
 		this.initUnitLog = initUnitLog;
 	}
 
+	public boolean isUserWood() {
+		return userWood;
+	}
+
+	public void setUserWood(boolean userWood) {
+		this.userWood = userWood;
+	}
+
 	public void setExtraFiliale(String extraFiliale) {
 
 		Scanner scanner = new Scanner(extraFiliale.trim());
@@ -196,5 +205,16 @@ public class UserInfo {
 
 		this.extraFiliale = listExtraFiliale;
 	}
+
+	@Override
+	public String toString() {
+		return "UserInfo [nume=" + nume + ", filiala=" + filiala + ", cod=" + cod + ", numeDepart=" + numeDepart + ", codDepart=" + codDepart
+				+ ", unitLog=" + unitLog + ", initUnitLog=" + initUnitLog + ", tipAcces=" + tipAcces + ", parentScreen=" + parentScreen
+				+ ", filialeDV=" + filialeDV + ", altaFiliala=" + altaFiliala + ", tipUser=" + tipUser + ", departExtra=" + departExtra
+				+ ", tipUserSap=" + tipUserSap + ", extraFiliale=" + extraFiliale + ", comisionCV=" + comisionCV + ", coefCorectie=" + coefCorectie
+				+ ", userSite=" + userSite + ", userWood=" + userWood + "]";
+	}
+	
+	
 
 }

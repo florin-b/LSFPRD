@@ -27,8 +27,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import enums.EnumTipUser;
-
+import utils.UtilsUser;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -48,11 +47,11 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.widget.AbsoluteLayout.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
+import enums.EnumTipUser;
 
 public class MainMenu extends Activity {
 
@@ -134,6 +133,12 @@ public class MainMenu extends Activity {
 			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.client_info, R.drawable.despre_icon,
 			R.drawable.exit_icon, R.drawable.blank };
 
+	public String[] btnNamesWOOD = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Stocuri", "Preturi", "Despre",
+			"Iesire" };
+
+	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
+	
 	private static final String URL = "http://10.1.0.58/androidwebservices/service1.asmx";
 	String name = "", filiala = "";
 	public String cod;
@@ -944,8 +949,7 @@ public class MainMenu extends Activity {
 
 				} else {
 
-					if (UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("17")) // ged
-					{
+					if (isUserGed() || UtilsUser.isConsWood()) {
 						paramDepart = "11";
 					} else {
 						paramDepart = UserInfo.getInstance().getCodDepart();
@@ -993,6 +997,10 @@ public class MainMenu extends Activity {
 
 		}
 
+	}
+	
+	private boolean isUserGed() {
+		return UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("17") || UtilsUser.isDV_WOOD();
 	}
 
 	public void startModifCmdBtnAnimation(String result) {
@@ -1233,6 +1241,10 @@ public class MainMenu extends Activity {
 			nrBtns = btnNamesCONSGED.length;
 		}
 
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
+			nrBtns = btnNamesWOOD.length;
+		}
+
 		return nrBtns;
 
 	}
@@ -1271,6 +1283,10 @@ public class MainMenu extends Activity {
 
 		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
 			btnName = btnNamesCONSGED[btnPos];
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
+			btnName = btnNamesWOOD[btnPos];
 		}
 
 		return btnName;
@@ -1312,6 +1328,10 @@ public class MainMenu extends Activity {
 
 		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
 			btnImg = btnImageCONSGED[btnPos];
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
+			btnImg = btnImageWOOD[btnPos];
 		}
 
 		return btnImg;
@@ -1395,6 +1415,16 @@ public class MainMenu extends Activity {
 
 			for (int i = 0; i < btnNamesCONSGED.length; i++) {
 				if (btnNamesCONSGED[i].equalsIgnoreCase(btnName)) {
+					position = i;
+					break;
+				}
+			}
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
+
+			for (int i = 0; i < btnNamesWOOD.length; i++) {
+				if (btnNamesWOOD[i].equalsIgnoreCase(btnName)) {
 					position = i;
 					break;
 				}
