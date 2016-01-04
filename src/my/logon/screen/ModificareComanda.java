@@ -497,7 +497,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						prepareArtForDelivery();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && tipClientVar.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
+									.show();
 							return;
 						}
 
@@ -527,7 +528,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 						if (dateLivrareInstance.getObsPlata().equals("SO") && dateLivrareInstance.getTipPlata().equals("E")) {
 							if (!dateLivrareInstance.isValIncModif()) {
-								dateLivrareInstance.setValoareIncasare(nf3.format(ModificareComanda.totalComanda * 1.24));
+								dateLivrareInstance.setValoareIncasare(nf3.format(ModificareComanda.totalComanda * 1.20));
 							}
 						}
 
@@ -607,7 +608,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		String tempDistribUL = InfoStrings.getDistribUnitLog(selectedUnitLog);
 
 		if (InfoStrings.getClientGenericGed(tempDistribUL, "PF").equals(selectedClientCode)
-				|| InfoStrings.getClientGenericGed(tempDistribUL, "PJ").equals(selectedClientCode))
+				|| InfoStrings.getClientGenericGed(tempDistribUL, "PJ").equals(selectedClientCode)
+				|| InfoStrings.getClientGenericGedWood(tempDistribUL, "PF").equals(selectedClientCode)
+				|| InfoStrings.getClientGenericGedWood(tempDistribUL, "PJ").equals(selectedClientCode))
 			return true;
 		else
 			return false;
@@ -1286,11 +1289,13 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 				listViewSelPos = position;
 
-				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos) || (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
+				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos)
+						|| (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewSelPos - 1, 0);
 				}
 
-				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos) || (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
+				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos)
+						|| (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewArticole.getFirstVisiblePosition() + 1, 0);
 				}
 

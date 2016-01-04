@@ -50,8 +50,8 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 	public static String selectedCmd = "", selectedCmdSap = "";
 	ListView listViewArtCmdClp;
 
-	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipPlata,
-			textTipTransport, textAprobatOC, textObservatii;
+	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipPlata, textTipTransport, textAprobatOC,
+			textObservatii;
 
 	LinearLayout layoutCmdCondHead;
 	Button btnAprobaClp, btnRespingeClp;
@@ -80,10 +80,9 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 
 		spinnerCmdClp = (Spinner) findViewById(R.id.spinnerCmdClp);
 
-		adapterComenziClp = new SimpleAdapter(this, listComenziClp, R.layout.list_comenzi_clp, new String[] {
-				"idCmdClp", "numeClient", "data", "cmdSAP", "ul", "agent", "depoz", "status" }, new int[] {
-				R.id.textIdCmdClp, R.id.textClient, R.id.textData, R.id.textCmdSAP, R.id.textUL, R.id.textAgent,
-				R.id.textDepoz, R.id.textStatusClp });
+		adapterComenziClp = new SimpleAdapter(this, listComenziClp, R.layout.list_comenzi_clp, new String[] { "idCmdClp", "numeClient", "data",
+				"cmdSAP", "ul", "agent", "depoz", "status" }, new int[] { R.id.textIdCmdClp, R.id.textClient, R.id.textData, R.id.textCmdSAP,
+				R.id.textUL, R.id.textAgent, R.id.textDepoz, R.id.textStatusClp });
 
 		spinnerCmdClp.setAdapter(adapterComenziClp);
 		addSpinnerCmdListener();
@@ -93,10 +92,9 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 		layoutDelBtn = (RelativeLayout) findViewById(R.id.layoutDelBtn);
 		layoutDelBtn.setVisibility(View.GONE);
 
-		adapterArtCmdClp = new SimpleAdapter(this, listArtCmdClp, R.layout.art_comenzi_clp, new String[] { "nrCrt",
-				"numeArt", "codArt", "cantArt", "umArt", "depozit", "status" }, new int[] { R.id.textNrCrt,
-				R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textDepozit,
-				R.id.textStatusArt });
+		adapterArtCmdClp = new SimpleAdapter(this, listArtCmdClp, R.layout.art_comenzi_clp, new String[] { "nrCrt", "numeArt", "codArt", "cantArt",
+				"umArt", "depozit", "status" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt,
+				R.id.textDepozit, R.id.textStatusArt });
 
 		listViewArtCmdClp.setAdapter(adapterArtCmdClp);
 		listViewArtCmdClp.setVisibility(View.INVISIBLE);
@@ -241,20 +239,19 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 
 	public void showConfirmationApprovalAlert() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Aprobati cererea?").setCancelable(false)
-				.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
+		builder.setMessage("Aprobati cererea?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
 
-						tipOpCmdClp = 0; // aprobare
-						opereazaComandaClp();
+				tipOpCmdClp = 0; // aprobare
+				opereazaComandaClp();
 
-					}
-				}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
+			}
+		}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
 
-					}
-				}).setTitle("Confirmare").setIcon(R.drawable.warning96);
+			}
+		}).setTitle("Confirmare").setIcon(R.drawable.warning96);
 
 		AlertDialog alert = builder.create();
 		alert.show();
@@ -273,20 +270,19 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 
 	public void showConfirmationDenialAlert() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Respingeti cererea?").setCancelable(false)
-				.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
+		builder.setMessage("Respingeti cererea?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
 
-						tipOpCmdClp = 1; // respingere
-						opereazaComandaClp();
+				tipOpCmdClp = 1; // respingere
+				opereazaComandaClp();
 
-					}
-				}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
+			}
+		}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
 
-					}
-				}).setTitle("Confirmare").setIcon(R.drawable.warning96);
+			}
+		}).setTitle("Confirmare").setIcon(R.drawable.warning96);
 
 		AlertDialog alert = builder.create();
 		alert.show();

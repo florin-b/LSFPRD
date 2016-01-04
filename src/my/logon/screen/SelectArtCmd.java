@@ -482,7 +482,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						finalPrice = initPrice;
 
 						if (CreareComanda.canalDistrib.equals("10"))
-							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.24)));
+							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
 						else
 							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 
@@ -505,7 +505,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						finalPrice = initPrice;
 
 						if (CreareComanda.canalDistrib.equals("10"))
-							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.24)));
+							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
 						else
 							textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 
@@ -557,7 +557,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 										finalPrice = newPr;
 
 										if (CreareComanda.canalDistrib.equals("10"))
-											textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.24)));
+											textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.20)));
 										else
 											textPretTVA.setText(String.valueOf(nf2.format(finalPrice)));
 									}
@@ -567,7 +567,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 								txtPretArt.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
 								if (CreareComanda.canalDistrib.equals("10"))
-									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.24)));
+									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
 								else
 									textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 							}
@@ -589,7 +589,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 							}
 
 							if (CreareComanda.canalDistrib.equals("10"))
-								textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.24)));
+								textPretTVA.setText(String.valueOf(nf2.format(finalPrice * 1.20)));
 							else
 								textPretTVA.setText(String.valueOf(nf2.format(finalPrice)));
 
@@ -899,7 +899,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						return;
 					}
 
-					if (Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString().replaceAll(",", ""))) {
+					if (Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString()
+							.replaceAll(",", ""))) {
 						Toast.makeText(getApplicationContext(), "Stoc insuficient!", Toast.LENGTH_LONG).show();
 						return;
 					}
@@ -1043,15 +1044,15 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 																							// e
 																							// adaugat
 																							// deja
-								CreareComanda.articoleComanda += numeArticol + "#" + codArticol + "#" + cantArticol + "#" + String.valueOf(finalPrice) + "#"
-										+ localUnitMas + "#" + globalDepozSel + "#" + nf.format(procRedFin) + "#" + tipAlert + "#" + codPromo + "#"
-										+ nf.format(procRedFact) + "#" + nf.format(procDiscClient) + "#" + nf.format(procentAprob) + "#" + valMultiplu + "#"
-										+ String.valueOf(valArticol) + "#" + infoArticol + "#" + Umb + "#" + cantUmb + "#" + alteValori + "#"
-										+ globalCodDepartSelectetItem + "#" + tipArticol + "@@";
+								CreareComanda.articoleComanda += numeArticol + "#" + codArticol + "#" + cantArticol + "#"
+										+ String.valueOf(finalPrice) + "#" + localUnitMas + "#" + globalDepozSel + "#" + nf.format(procRedFin) + "#"
+										+ tipAlert + "#" + codPromo + "#" + nf.format(procRedFact) + "#" + nf.format(procDiscClient) + "#"
+										+ nf.format(procentAprob) + "#" + valMultiplu + "#" + String.valueOf(valArticol) + "#" + infoArticol + "#"
+										+ Umb + "#" + cantUmb + "#" + alteValori + "#" + globalCodDepartSelectetItem + "#" + tipArticol + "@@";
 
 						} else {
-							Toast.makeText(getApplicationContext(), "Comanda contine depozite diferite, articolul nu a fost adaugat! ", Toast.LENGTH_LONG)
-									.show();
+							Toast.makeText(getApplicationContext(), "Comanda contine depozite diferite, articolul nu a fost adaugat! ",
+									Toast.LENGTH_LONG).show();
 
 						}
 
@@ -1222,7 +1223,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				minimKAPrice = 0;
 				if (UserInfo.getInstance().getTipAcces().equals("27")) {
 
-					minimKAPrice = listPrice / globalCantArt * valMultiplu - (listPrice / globalCantArt * valMultiplu) * Double.valueOf(tokenPret[16]) / 100;
+					minimKAPrice = listPrice / globalCantArt * valMultiplu - (listPrice / globalCantArt * valMultiplu)
+							* Double.valueOf(tokenPret[16]) / 100;
 
 					if (listPrice > 0)
 						procDiscClient = 100 - (initPrice / listPrice) * 100;
@@ -1269,7 +1271,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				txtPretArt.setHint(nf2.format(initPrice / globalCantArt * valMultiplu));
 
 				if (CreareComanda.canalDistrib.equals("10"))
-					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.24)));
+					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu * 1.20)));
 				else
 					textPretTVA.setText(String.valueOf(nf2.format(initPrice / globalCantArt * valMultiplu)));
 
@@ -1338,9 +1340,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						double pret1 = (Double.parseDouble(tokenPret[1]) / Double.parseDouble(tokenPret[0])) * valMultiplu;
 						double pret2 = (Double.parseDouble(tokenPret[6]) / Double.parseDouble(tokenPret[5])) * valMultiplu;
 
-						artPromoText = "Din cantitatea comandata " + tokenPret[0] + " " + tokenPret[2] + " au pretul de " + nf2.format(pret1) + " RON/"
-								+ tokenPret[2] + " si " + tokenPret[5] + " " + tokenPret[7] + " au pretul de " + nf2.format(pret2) + " RON/" + tokenPret[7]
-								+ ".";
+						artPromoText = "Din cantitatea comandata " + tokenPret[0] + " " + tokenPret[2] + " au pretul de " + nf2.format(pret1)
+								+ " RON/" + tokenPret[2] + " si " + tokenPret[5] + " " + tokenPret[7] + " au pretul de " + nf2.format(pret2)
+								+ " RON/" + tokenPret[7] + ".";
 					}
 
 				} else {
