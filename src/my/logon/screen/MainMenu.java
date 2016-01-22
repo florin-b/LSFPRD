@@ -27,6 +27,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import utils.UtilsApps;
 import utils.UtilsUser;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -58,16 +59,16 @@ public class MainMenu extends Activity {
 	public GridView gridview;
 
 	public String[] btnNamesAgents = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Creare cmd GED", "Comenzi simulate",
-			"Cmz.blocate limita credit", "Creare CLP", "Afisare CLP", "Creare DL", "Afisare DL", "Retur paleti", "Stare retur paleti", "Vanzari",
-			"Neincasate", "Stocuri", "Preturi", "Urmarire sablon", "Info client", "Clienti inactivi", "Clienti semiactivi", "Adrese clienti",
-			"Info venituri", "Despre", "Iesire" };
+			"Cmz.blocate limita credit", "Creare CLP", "Afisare CLP", "Creare DL", "Afisare DL", "Retur paleti", "Stare retur paleti", "Obiective",
+			"Vanzari", "Neincasate", "Stocuri", "Preturi", "Urmarire sablon", "Info client", "Clienti inactivi", "Clienti semiactivi",
+			"Adrese clienti", "Info venituri", "Despre", "Iesire" };
 
 	public int[] btnImageAgents = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.blue_basket_icon, R.drawable.simulate, R.drawable.cmd_bloc, R.drawable.clp, R.drawable.afis_clp, R.drawable.box_orange_48,
-			R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.vanzari, R.drawable.neincasate,
-			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi,
-			R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.despre_icon, R.drawable.exit_icon,
-			R.drawable.blank };
+			R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.colosseum, R.drawable.vanzari,
+			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.chart_icon, R.drawable.client_info,
+			R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.despre_icon,
+			R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesSD = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Creare cmd GED",
 			"Cmz.blocate limita credit", "Creare CLP", "Aprobare CLP", "Afisare CLP", "Creare DL", "Aprobare DL", "Afisare DL", "Retur paleti",
@@ -138,7 +139,7 @@ public class MainMenu extends Activity {
 
 	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
-	
+
 	private static final String URL = "http://10.1.0.58/androidwebservices/service1.asmx";
 	String name = "", filiala = "";
 	public String cod;
@@ -456,18 +457,35 @@ public class MainMenu extends Activity {
 				if (selectedBtnName.equalsIgnoreCase("Obiective")) {
 
 					Intent nextScreen = null;
+					boolean isDownloading = false;
 
 					if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.KA.getTipAcces())) {
 						nextScreen = new Intent(MainMenu.this, ObiectiveKA.class);
-					} else if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces())
-							|| UserInfo.getInstance().getTipUser().equals(EnumTipUser.DK.getTipAcces())) {
+					} else if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()) || UserInfo.getInstance().getTipUser()
+							.equals(EnumTipUser.DK.getTipAcces()))
+							&& !UtilsUser.isDV_CONS()) {
 						nextScreen = new Intent(MainMenu.this, AfiseazaObiectiveKA.class);
+
+					} else if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.SD.getTipAcces()) || UserInfo.getInstance().getTipUser()
+							.equals(EnumTipUser.AV.getTipAcces()))) {
+						nextScreen = new Intent(MainMenu.this, AfiseazaObiectiveAgenti.class);
+					} else if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.CV.getTipAcces()) || UtilsUser.isDV_CONS()) {
+
+						if (UtilsApps.isPackageInstalled("com.stimasoft.obiectivecva", getApplicationContext())) {
+							nextScreen = getPackageManager().getLaunchIntentForPackage("com.stimasoft.obiectivecva");
+							addExtraInfo(nextScreen);
+						} else {
+							new UtilsApps().installObiectivaCVAApk(MainMenu.this);
+							isDownloading = true;
+
+						}
+
 					}
 
-					if (nextScreen != null)
+					if (nextScreen != null && !isDownloading) {
 						startActivity(nextScreen);
-
-					finish();
+						finish();
+					}
 
 				}
 
@@ -638,6 +656,18 @@ public class MainMenu extends Activity {
 			}
 
 		}
+
+	}
+
+	private void addExtraInfo(Intent intent) {
+
+		intent.putExtra("nume", UserInfo.getInstance().getNume());
+		intent.putExtra("filiala", UserInfo.getInstance().getFiliala());
+		intent.putExtra("cod", UserInfo.getInstance().getCod());
+		intent.putExtra("unitLog", UserInfo.getInstance().getUnitLog());
+		intent.putExtra("tipAcces", UserInfo.getInstance().getTipAcces());
+		intent.putExtra("tipUser", UserInfo.getInstance().getTipUser());
+		intent.putExtra("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 	}
 
@@ -998,7 +1028,7 @@ public class MainMenu extends Activity {
 		}
 
 	}
-	
+
 	private boolean isUserGed() {
 		return UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("17") || UtilsUser.isDV_WOOD();
 	}
