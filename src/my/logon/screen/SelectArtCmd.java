@@ -843,7 +843,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			params.put("tipArticol", tipArticol);
 			params.put("tipCautare", tipCautare);
 			params.put("departament", selectedDepartamentAgent);
-
+			params.put("filiala", UserInfo.getInstance().getUnitLog());
+			
 			opArticol.getArticoleDistributie(params);
 
 		} catch (Exception e) {

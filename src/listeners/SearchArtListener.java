@@ -88,7 +88,7 @@ public class SearchArtListener extends Observable {
 				}
 
 				checkDB = SQLiteDatabase.openDatabase(
-						ConnectionStrings.getInstance().getDatabaseName(), null,
+						ConnectionStrings.getInstance().getNamespace(), null,
 						SQLiteDatabase.OPEN_READWRITE);
 				cur = checkDB
 						.rawQuery(

@@ -67,7 +67,7 @@ public class GetArticoleFromDB extends AsyncTask<Void, Void, List<ArticolDB>> {
 					condArt = " upper(ar.nume) like  upper('" + codArt + "%') ";
 			}
 
-			checkDB = SQLiteDatabase.openDatabase(ConnectionStrings.getInstance().getDatabaseName(), null,
+			checkDB = SQLiteDatabase.openDatabase(ConnectionStrings.getInstance().getNamespace(), null,
 					SQLiteDatabase.OPEN_READWRITE);
 			Cursor cur = checkDB.rawQuery(
 					"SELECT ar.id,ar.nume, ar.umvanz_d, ar.umvanz_g, st.cod_depart, ar.tip_art FROM articoledef ar, sinteticedef st where "

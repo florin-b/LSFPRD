@@ -38,7 +38,8 @@ public class UtilsUser {
 	}
 
 	public static boolean isAgentOrSD() {
-		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV") || UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
+		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV")
+				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
 
 	}
 
@@ -48,10 +49,15 @@ public class UtilsUser {
 
 	public static boolean isDV_WOOD() {
 		if (isANYDV()) {
-			String[] filiale = UserInfo.getInstance().getFilialeDV().split(";");
 
-			if (filiale.length > 0 && filiale[0].substring(2, 3).equals("4"))
-				return true;
+			String filDV = UserInfo.getInstance().getFilialeDV();
+
+			if (filDV.contains(";")) {
+				String[] filiale = UserInfo.getInstance().getFilialeDV().split(";");
+
+				if (filiale.length > 0 && filiale[0].substring(2, 3).equals("4"))
+					return true;
+			}
 
 		}
 

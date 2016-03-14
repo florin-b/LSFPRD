@@ -593,7 +593,7 @@ public class SelectExceptiiReduceri extends Activity {
 							+ "%') ";
 
 				checkDB = SQLiteDatabase.openDatabase(
-						ConnectionStrings.getInstance().getDatabaseName(), null,
+						ConnectionStrings.getInstance().getNamespace(), null,
 						SQLiteDatabase.OPEN_READWRITE);
 				Cursor cur = checkDB.rawQuery(
 						"SELECT distinct codnivel1,numenivel1 FROM nivel1def where "
@@ -680,7 +680,7 @@ public class SelectExceptiiReduceri extends Activity {
 							+ "%') ";
 
 				checkDB = SQLiteDatabase.openDatabase(
-						ConnectionStrings.getInstance().getDatabaseName(), null,
+						ConnectionStrings.getInstance().getNamespace(), null,
 						SQLiteDatabase.OPEN_READWRITE);
 				Cursor cur = checkDB.rawQuery(
 						"SELECT id,nume,sintetic FROM articoledef where "

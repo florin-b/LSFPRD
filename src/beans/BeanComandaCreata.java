@@ -31,6 +31,7 @@ public class BeanComandaCreata {
 	private String aprobariPrimite;
 	private String conditiiImpuse;
 	private String codClientGenericGed;
+	private String telAgent;
 
 	public BeanComandaCreata() {
 
@@ -260,8 +261,6 @@ public class BeanComandaCreata {
 		this.codClientGenericGed = codClientGenericGed;
 	}
 
-	
-	
 	public String getConditiiImpuse() {
 		return conditiiImpuse;
 	}
@@ -270,16 +269,21 @@ public class BeanComandaCreata {
 		this.conditiiImpuse = conditiiImpuse;
 	}
 
+	public String getTelAgent() {
+		return telAgent;
+	}
+
+	public void setTelAgent(String telAgent) {
+		this.telAgent = telAgent;
+	}
+
 	public String toString() {
-		return "BeanComandaCreata [id=" + id + ", numeClient=" + numeClient + ", codClient=" + codClient + ", data="
-				+ data + ", suma=" + suma + ", moneda=" + moneda + ", monedaTva=" + monedaTva + ", sumaTva=" + sumaTva
-				+ ", stare=" + stare + ", cmdSap=" + cmdSap + ", tipClient=" + tipClient + ", divizieAgent="
-				+ divizieAgent + ", canalDistrib=" + canalDistrib + ", filiala=" + filiala + ", factRed=" + factRed
-				+ ", accept1=" + accept1 + ", accept2=" + accept2 + ", numeAgent=" + numeAgent + ", termenPlata="
-				+ termenPlata + ", cursValutar=" + cursValutar + ", docInsotitor=" + docInsotitor + ", adresaNoua="
-				+ adresaNoua + ", adresaLivrare=" + adresaLivrare + ", divizieComanda=" + divizieComanda
-				+ ", pondere30=" + pondere30 + ", aprobariNecesare=" + aprobariNecesare + ", aprobariPrimite="
-				+ aprobariPrimite + "]";
+		return "BeanComandaCreata [id=" + id + ", numeClient=" + numeClient + ", codClient=" + codClient + ", data=" + data + ", suma=" + suma + ", moneda="
+				+ moneda + ", monedaTva=" + monedaTva + ", sumaTva=" + sumaTva + ", stare=" + stare + ", cmdSap=" + cmdSap + ", tipClient=" + tipClient
+				+ ", divizieAgent=" + divizieAgent + ", canalDistrib=" + canalDistrib + ", filiala=" + filiala + ", factRed=" + factRed + ", accept1="
+				+ accept1 + ", accept2=" + accept2 + ", numeAgent=" + numeAgent + ", termenPlata=" + termenPlata + ", cursValutar=" + cursValutar
+				+ ", docInsotitor=" + docInsotitor + ", adresaNoua=" + adresaNoua + ", adresaLivrare=" + adresaLivrare + ", divizieComanda=" + divizieComanda
+				+ ", pondere30=" + pondere30 + ", aprobariNecesare=" + aprobariNecesare + ", aprobariPrimite=" + aprobariPrimite + "]";
 	}
 
 }
