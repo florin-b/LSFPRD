@@ -12,13 +12,11 @@ public class ConnectionStrings {
 
 	private String myUrl;
 	private String myNamespace;
-	private String myDatabase;
 
 	private ConnectionStrings() {
 
 		myUrl = "http://10.1.0.58/androidwebservices/service1.asmx";
 		myNamespace = "http://SmartScan.org/";
-		myDatabase = Environment.getExternalStorageDirectory().getPath() + "/download/AndroidLR";
 
 	}
 
@@ -32,10 +30,6 @@ public class ConnectionStrings {
 
 	public String getNamespace() {
 		return this.myNamespace;
-	}
-
-	public String getDatabaseName() {
-		return this.myDatabase;
 	}
 
 }

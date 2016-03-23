@@ -2,6 +2,8 @@ package utils;
 
 import model.UserInfo;
 
+
+
 public class UtilsUser {
 
 	public static boolean isKA() {
@@ -38,8 +40,7 @@ public class UtilsUser {
 	}
 
 	public static boolean isAgentOrSD() {
-		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV")
-				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
+		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV") || UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
 
 	}
 

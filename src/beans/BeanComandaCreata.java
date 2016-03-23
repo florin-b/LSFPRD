@@ -32,6 +32,8 @@ public class BeanComandaCreata {
 	private String conditiiImpuse;
 	private String codClientGenericGed;
 	private String telAgent;
+	private String codStare;
+	private double avans;
 
 	public BeanComandaCreata() {
 
@@ -275,6 +277,22 @@ public class BeanComandaCreata {
 
 	public void setTelAgent(String telAgent) {
 		this.telAgent = telAgent;
+	}
+
+	public String getCodStare() {
+		return codStare;
+	}
+
+	public void setCodStare(String codStare) {
+		this.codStare = codStare;
+	}
+
+	public double getAvans() {
+		return avans;
+	}
+
+	public void setAvans(double avans) {
+		this.avans = avans;
 	}
 
 	public String toString() {

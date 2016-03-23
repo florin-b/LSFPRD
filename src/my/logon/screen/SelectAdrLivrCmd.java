@@ -82,8 +82,8 @@ import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 import enums.EnumOperatiiObiective;
 
-public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, AsyncTaskListener, OperatiiAdresaListener, ObiectiveListener,
-		MapListener {
+public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, AsyncTaskListener, OperatiiAdresaListener,
+		ObiectiveListener, MapListener {
 
 	private Button saveAdrLivrBtn;
 	private EditText txtPers, txtTel, txtObservatii, txtValoareIncasare;
@@ -231,8 +231,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		operatiiAdresa.setOperatiiAdresaListener(this);
 
 		listJudete = new ArrayList<HashMap<String, String>>();
-		adapterJudete = new SimpleAdapter(this, listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet,
-				R.id.textCodJudet });
+		adapterJudete = new SimpleAdapter(this, listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
+				R.id.textNumeJudet, R.id.textCodJudet });
 
 		spinnerTermenPlata = (Spinner) findViewById(R.id.spinnerTermenPlata);
 		adapterTermenPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -250,8 +250,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		setListenerSpinnerAdreseLivrare();
 
 		listAdreseLivrare = new ArrayList<HashMap<String, String>>();
-		adapterAdreseLivrare = new SimpleAdapter(this, listAdreseLivrare, R.layout.row_layout_2_items, new String[] { "rowText", "rowId" }, new int[] {
-				R.id.textRowName, R.id.textRowId });
+		adapterAdreseLivrare = new SimpleAdapter(this, listAdreseLivrare, R.layout.row_layout_2_items, new String[] { "rowText", "rowId" },
+				new int[] { R.id.textRowName, R.id.textRowId });
 
 		spinnerAdreseLivrare.setAdapter(adapterAdreseLivrare);
 		selectedAddrModifCmd = -1;
@@ -397,7 +397,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void afisCoordAdresa() {
 		if (DateLivrare.getInstance().getCoordonateAdresa() != null && DateLivrare.getInstance().getCoordonateAdresa().latitude != 0)
-			textCoordAdresa.setText(DateLivrare.getInstance().getCoordonateAdresa().latitude + "," + DateLivrare.getInstance().getCoordonateAdresa().longitude);
+			textCoordAdresa.setText(DateLivrare.getInstance().getCoordonateAdresa().latitude + ","
+					+ DateLivrare.getInstance().getCoordonateAdresa().longitude);
 		else
 			textCoordAdresa.setText("");
 
@@ -612,7 +613,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	public void addListenerRadioLista() {
 
 		radioLista.setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View v) {
 				clearAdresaLivrare();
 
@@ -638,7 +639,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	public void addListenerRadioText() {
 
 		radioText.setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View v) {
 				clearAdresaLivrare();
 
@@ -663,7 +664,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private void addListenerRadioObiectiv() {
 
 		radioObiectiv.setOnClickListener(new OnClickListener() {
-			
+
 			public void onClick(View v) {
 				clearAdresaLivrare();
 
@@ -730,8 +731,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			for (int i = 0; i < adresaArray.size(); i++) {
 				temp = new HashMap<String, String>();
 
-				strAdresa = getNumeJudet(adresaArray.get(i).getCodJudet()) + "; " + adresaArray.get(i).getOras() + "; " + adresaArray.get(i).getStrada() + "; "
-						+ adresaArray.get(i).getNrStrada() + ";";
+				strAdresa = getNumeJudet(adresaArray.get(i).getCodJudet()) + "; " + adresaArray.get(i).getOras() + "; "
+						+ adresaArray.get(i).getStrada() + "; " + adresaArray.get(i).getNrStrada() + ";";
 
 				temp.put("rowText", strAdresa);
 				temp.put("rowId", adresaArray.get(i).getCodAdresa());
@@ -1077,18 +1078,15 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		textLocalitate.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setOras(textLocalitate.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -1364,7 +1362,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		if (!CreareComanda.codClientVar.equals("")) {
 
-			if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null && getTipTransport().equals("TRAP")) {
+			if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null
+					&& getTipTransport().equals("TRAP")) {
 				Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
 				return false;
 			}
@@ -1374,20 +1373,21 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		return true;
 	}
 
+	private boolean isAdresaImprecisa() {
 
+		return false;
+	}
 
 	private void setListenerSpinnerAdreseLivrare() {
 		spinnerAdreseLivrare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
 			@SuppressWarnings("unchecked")
-			
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				artMap = (HashMap<String, String>) spinnerAdreseLivrare.getSelectedItem();
 				setAdresaLivrareFromList(artMap);
 
 			}
 
-			
 			public void onNothingSelected(AdapterView<?> arg0) {
 
 			}
@@ -1514,7 +1514,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	}
 
-	
 	public void addressSelected(LatLng coord) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
 		textCoordAdresa.setText(coord.latitude + "," + coord.longitude);
