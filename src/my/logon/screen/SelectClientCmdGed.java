@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
@@ -67,6 +68,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	private RadioButton radioClMeserias;
 	private NumberFormat numberFormat;
+	private CheckBox checkPlatTva;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		operatiiClient = new OperatiiClient(this);
 		operatiiClient.setOperatiiClientListener(this);
+
+		checkPlatTva = (CheckBox) findViewById(R.id.checkPlatTva);
+		checkPlatTva.setVisibility(View.INVISIBLE);
 
 		layoutClientPersoana = (LinearLayout) findViewById(R.id.layoutClientPersoana);
 		layoutClientPersoana.setVisibility(View.GONE);
@@ -238,6 +243,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				if (arg1) {
 					layoutLabelJ.setVisibility(View.VISIBLE);
 					layoutTextJ.setVisibility(View.VISIBLE);
+					checkPlatTva.setChecked(true);
+					checkPlatTva.setVisibility(View.VISIBLE);
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
 				}
@@ -253,6 +260,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				if (arg1) {
 					layoutLabelJ.setVisibility(View.GONE);
 					layoutTextJ.setVisibility(View.GONE);
+					checkPlatTva.setVisibility(View.INVISIBLE);
 
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
@@ -269,6 +277,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			public void onClick(View v) {
 				layoutLabelJ.setVisibility(View.GONE);
 				layoutTextJ.setVisibility(View.GONE);
+				checkPlatTva.setVisibility(View.INVISIBLE);
 
 				setTextNumeClientEnabled(false);
 
@@ -374,8 +383,12 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 						if (UtilsUser.isConsWood())
 							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PJ");
-						else
-							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PJ");
+						else {
+							if (checkPlatTva.isChecked())
+								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PJ");
+							else
+								CreareComandaGed.codClientVar = InfoStrings.gedPJNeplatitorTVA(UserInfo.getInstance().getUnitLog());
+						}
 					}
 
 					if (radioCmdNormala.isChecked())

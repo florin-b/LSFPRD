@@ -107,6 +107,12 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		performOperation();
 	}
 
+	public void getCodBare(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_COD_BARE;
+		this.params = params;
+		performOperation();
+	}
+
 	public Object getDepartBV90(String codArticol) {
 		numeComanda = EnumArticoleDAO.GET_DEP_BV90;
 
