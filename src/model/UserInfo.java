@@ -4,11 +4,20 @@
  */
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserInfo {
+public class UserInfo implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
 
 	private String nume = "";
 	private String filiala = "";
@@ -205,16 +214,5 @@ public class UserInfo {
 
 		this.extraFiliale = listExtraFiliale;
 	}
-
-	@Override
-	public String toString() {
-		return "UserInfo [nume=" + nume + ", filiala=" + filiala + ", cod=" + cod + ", numeDepart=" + numeDepart + ", codDepart=" + codDepart
-				+ ", unitLog=" + unitLog + ", initUnitLog=" + initUnitLog + ", tipAcces=" + tipAcces + ", parentScreen=" + parentScreen
-				+ ", filialeDV=" + filialeDV + ", altaFiliala=" + altaFiliala + ", tipUser=" + tipUser + ", departExtra=" + departExtra
-				+ ", tipUserSap=" + tipUserSap + ", extraFiliale=" + extraFiliale + ", comisionCV=" + comisionCV + ", coefCorectie=" + coefCorectie
-				+ ", userSite=" + userSite + ", userWood=" + userWood + "]";
-	}
-	
-	
 
 }

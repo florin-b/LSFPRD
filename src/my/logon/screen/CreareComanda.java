@@ -742,6 +742,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 						String localRedSeparat = dateLivrareInstance.getRedSeparat();
 
+						
+						
 						if (globalSubCmp.equals("1") && !UserInfo.getInstance().getCodDepart().equals("07"))
 							localRedSeparat = "X";
 
@@ -1150,6 +1152,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("idObiectiv", DateLivrare.getInstance().getIdObiectiv());
 			obj.put("isAdresaObiectiv", DateLivrare.getInstance().isAdresaObiectiv());
 			obj.put("coordonateGps", getCoordAdresa());
+			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
+			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 
 		} catch (JSONException ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();

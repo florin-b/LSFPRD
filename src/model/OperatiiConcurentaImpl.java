@@ -15,7 +15,9 @@ import org.json.JSONTokener;
 
 import android.content.Context;
 import android.widget.Toast;
+import beans.BeanArticolConcurenta;
 import beans.BeanCompanieConcurenta;
+import beans.BeanNewPretConcurenta;
 import beans.BeanPretConcurenta;
 import enums.EnumOperatiiConcurenta;
 
@@ -37,6 +39,13 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 
 	}
 
+	public void getArticoleConcurentaBulk(HashMap<String, String> params) {
+		numeComanda = EnumOperatiiConcurenta.GET_ARTICOLE_CONCURENTA_BULK;
+		this.params = params;
+		performOperation();
+
+	}
+
 	public void getCompaniiConcurente(HashMap<String, String> params) {
 		numeComanda = EnumOperatiiConcurenta.GET_COMPANII_CONCURENTE;
 		this.params = params;
@@ -53,6 +62,36 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 		numeComanda = EnumOperatiiConcurenta.ADD_PRET_CONCURENTA;
 		this.params = params;
 		performOperation();
+	}
+
+	public void saveListPreturi(HashMap<String, String> params) {
+		numeComanda = EnumOperatiiConcurenta.SAVE_LIST_PRETURI;
+		this.params = params;
+		performOperation();
+	}
+
+	
+	public String serializePreturi(List<BeanNewPretConcurenta> listPreturi) {
+
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = null;
+
+		try {
+
+			for (BeanNewPretConcurenta pret : listPreturi) {
+				jsonObject = new JSONObject();
+				jsonObject.put("cod", pret.getCod());
+				jsonObject.put("concurent", pret.getConcurent());
+				jsonObject.put("valoare", pret.getValoare());
+				jsonArray.put(jsonObject);
+
+			}
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return jsonArray.toString();
 	}
 
 	public List<BeanCompanieConcurenta> deserializeCompConcurente(Object resultList) {
@@ -109,6 +148,40 @@ public class OperatiiConcurentaImpl implements OperatiiConcurenta, AsyncTaskList
 		}
 
 		return preturiList;
+	}
+
+	public ArrayList<BeanArticolConcurenta> deserializeArticoleConcurenta(String serializedListArticole) {
+		BeanArticolConcurenta articol = null;
+		ArrayList<BeanArticolConcurenta> listArticole = new ArrayList<BeanArticolConcurenta>();
+
+		try {
+			Object json = new JSONTokener(serializedListArticole).nextValue();
+
+			if (json instanceof JSONArray) {
+
+				JSONArray jsonArray = new JSONArray(serializedListArticole);
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject articolObject = jsonArray.getJSONObject(i);
+
+					articol = new BeanArticolConcurenta();
+					articol.setCod(articolObject.getString("cod"));
+					articol.setNume(articolObject.getString("nume"));
+					articol.setUmVanz(articolObject.getString("umVanz"));
+					articol.setValoare(articolObject.getString("valoare"));
+					articol.setDataValoare(articolObject.getString("dataValoare"));
+
+					listArticole.add(articol);
+
+				}
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return listArticole;
+
 	}
 
 	private void performOperation() {

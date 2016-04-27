@@ -498,8 +498,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						prepareArtForDelivery();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && tipClientVar.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
 							return;
 						}
 
@@ -862,6 +861,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("idObiectiv", DateLivrare.getInstance().getIdObiectiv());
 			obj.put("isAdresaObiectiv", DateLivrare.getInstance().isAdresaObiectiv());
 			obj.put("coordonateGps", getCoordAdresa());
+			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
+			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");
@@ -1290,13 +1291,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 				listViewSelPos = position;
 
-				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos)
-						|| (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
+				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos) || (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewSelPos - 1, 0);
 				}
 
-				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos)
-						|| (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
+				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos) || (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewArticole.getFirstVisiblePosition() + 1, 0);
 				}
 

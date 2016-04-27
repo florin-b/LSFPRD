@@ -6,69 +6,25 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_weight="0.5"
+        android:descendantFocusability="afterDescendants"
         android:orientation="vertical" >
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <EditText
+            android:id="@+id/editCauta"
             android:layout_width="match_parent"
-            android:layout_height="45dip"
-            android:orientation="horizontal" >
-
-            <ToggleButton
-                android:id="@+id/tglTipArt"
-                style="@style/button_text_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left|bottom"
-                android:layout_weight="0.07"
-                android:background="@drawable/button_style_5"
-                android:textOff="Articol"
-                android:textOn="Sintetic" />
-
-            <ToggleButton
-                android:id="@+id/togglebutton"
-                style="@style/button_text_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left|bottom"
-                android:layout_marginLeft="10dip"
-                android:layout_weight="0.07"
-                android:background="@drawable/button_style_5"
-                android:textOff="Nume"
-                android:textOn="Cod" />
-
-            <EditText
-                android:id="@+id/txtNumeArt"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="left|bottom"
-                android:layout_marginLeft="10dip"
-                android:layout_weight="0.2"
-                android:background="@drawable/edittext_style_1"
-                android:inputType="textNoSuggestions"
-                android:maxLength="30"
-                android:singleLine="true"
-                android:textColor="@color/editTextColor1"
-                android:typeface="monospace" />
-
-            <Button
-                android:id="@+id/articoleBtn"
-                style="@style/button_text_1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="10dip"
-                android:layout_weight="0.07"
-                android:background="@drawable/button_style_1"
-                android:text="@string/strCauta" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|bottom"
+            android:maxLength="30"
+            android:singleLine="true"
+            android:textColor="@color/editTextColor1"
+            android:textSize="18sp"
+            android:typeface="monospace" />
 
         <ListView
             android:id="@+id/listArticole"
@@ -88,7 +44,6 @@
     </View>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -96,7 +51,6 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -106,8 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center"
-                android:layout_weight="0.05"
-                android:textSize="18sp" />
+                android:layout_weight="0.05" />
 
             <Spinner
                 android:id="@+id/spinnerArtTypeList"
@@ -121,7 +74,47 @@
         </LinearLayout>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dip"
+            android:orientation="horizontal" >
+
+            <Spinner
+                android:id="@+id/spinnerLuna"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center"
+                android:layout_weight="0.05" />
+
+            <View
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.01" >
+            </View>
+
+            <Button
+                android:id="@+id/salveazaPreturiBtn"
+                style="@style/ok_button"
+                android:layout_width="0dip"
+                android:layout_height="40dip"
+                android:layout_gravity="right|bottom"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="10dip"
+                android:layout_weight="0.05"
+                android:background="@drawable/ok_button_style"
+                android:paddingLeft="20dip"
+                android:paddingRight="20dip"
+                android:text="@string/salveaza" />
+
+            <View
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.02" >
+            </View>
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/artDetLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,7 +123,6 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
@@ -158,7 +150,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
@@ -227,8 +218,6 @@
             </LinearLayout>
 
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/artDetLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="right"
