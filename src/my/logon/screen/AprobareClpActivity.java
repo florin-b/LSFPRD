@@ -14,6 +14,7 @@ import listeners.ClpDAOListener;
 import model.ClpDAO;
 import model.HandleJSONData;
 import model.UserInfo;
+import utils.UtilsFormatting;
 import adapters.ArticoleCLPAdapter;
 import adapters.ComenziCLPAdapter;
 import android.app.ActionBar;
@@ -53,6 +54,8 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 	private TextView textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipPlata, textTipTransport, textAprobatOC,
 			textObservatii;
 
+	private TextView textValTransp, textProcTransp;
+
 	LinearLayout layoutCmdCondHead;
 	Button btnAprobaClp, btnRespingeClp;
 	Integer tipOpCmdClp = -1;
@@ -80,9 +83,9 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 
 		spinnerCmdClp = (Spinner) findViewById(R.id.spinnerCmdClp);
 
-		adapterComenziClp = new SimpleAdapter(this, listComenziClp, R.layout.list_comenzi_clp, new String[] { "idCmdClp", "numeClient", "data",
-				"cmdSAP", "ul", "agent", "depoz", "status" }, new int[] { R.id.textIdCmdClp, R.id.textClient, R.id.textData, R.id.textCmdSAP,
-				R.id.textUL, R.id.textAgent, R.id.textDepoz, R.id.textStatusClp });
+		adapterComenziClp = new SimpleAdapter(this, listComenziClp, R.layout.list_comenzi_clp, new String[] { "idCmdClp", "numeClient", "data", "cmdSAP", "ul",
+				"agent", "depoz", "status" }, new int[] { R.id.textIdCmdClp, R.id.textClient, R.id.textData, R.id.textCmdSAP, R.id.textUL, R.id.textAgent,
+				R.id.textDepoz, R.id.textStatusClp });
 
 		spinnerCmdClp.setAdapter(adapterComenziClp);
 		addSpinnerCmdListener();
@@ -92,9 +95,9 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 		layoutDelBtn = (RelativeLayout) findViewById(R.id.layoutDelBtn);
 		layoutDelBtn.setVisibility(View.GONE);
 
-		adapterArtCmdClp = new SimpleAdapter(this, listArtCmdClp, R.layout.art_comenzi_clp, new String[] { "nrCrt", "numeArt", "codArt", "cantArt",
-				"umArt", "depozit", "status" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt,
-				R.id.textDepozit, R.id.textStatusArt });
+		adapterArtCmdClp = new SimpleAdapter(this, listArtCmdClp, R.layout.art_comenzi_clp, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt",
+				"depozit", "status" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textDepozit,
+				R.id.textStatusArt });
 
 		listViewArtCmdClp.setAdapter(adapterArtCmdClp);
 		listViewArtCmdClp.setVisibility(View.INVISIBLE);
@@ -125,6 +128,9 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 
 		delClpBtn = (Button) findViewById(R.id.delClpBtn);
 		delClpBtn.setVisibility(View.GONE);
+
+		textValTransp = (TextView) findViewById(R.id.textValTransp);
+		textProcTransp = (TextView) findViewById(R.id.textProcTransp);
 
 		try {
 
@@ -218,6 +224,8 @@ public class AprobareClpActivity extends Activity implements ClpDAOListener {
 			textTipTransport.setText(dateLivrare.getMijlocTransport());
 			textAprobatOC.setText(dateLivrare.getAprobatOC());
 			textObservatii.setText(dateLivrare.getObsComanda());
+			textValTransp.setText(UtilsFormatting.format2Decimals(Double.valueOf(dateLivrare.getValTransp()), true) + " RON");
+			textProcTransp.setText(UtilsFormatting.format2Decimals(Double.valueOf(dateLivrare.getProcTransp()), true) + " %");
 
 			List<ArticolCLP> listArticole = dateComanda.getArticole();
 
