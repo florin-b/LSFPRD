@@ -107,7 +107,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private Button btnPozitieAdresa;
 	private TextView textCoordAdresa;
 	private EditText textNrStr;
-
+	private Spinner spinnerIndoire;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -192,6 +193,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			checkMacara = (CheckBox) findViewById(R.id.checkMacara);
 			setMacaraVisible();
 			setListenerCheckMacara();
+			
+			spinnerIndoire = (Spinner) findViewById(R.id.spinnerIndoire);
+			setupSpinnerIndoire();
 
 			spinnerTransp = (Spinner) findViewById(R.id.spinnerTransp);
 
@@ -395,6 +399,16 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			}
 		});
+
+	}
+	
+	private void setupSpinnerIndoire() {
+
+		String[] indoireValues = { "Tip prelucrare fier-beton 6 m", "TAIERE", "INDOIRE" };
+
+		ArrayAdapter<String> adapterIndoire = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, indoireValues);
+		adapterIndoire.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerIndoire.setAdapter(adapterIndoire);
 
 	}
 
@@ -786,18 +800,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textLocalitate.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setOras(textLocalitate.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -809,18 +820,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textStrada.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setStrada(textStrada.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -854,18 +862,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textLocalitateLivrare.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setOrasD(textLocalitateLivrare.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -877,18 +882,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textStradaLivrare.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setAdresaD(textStradaLivrare.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -1083,6 +1085,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			dateLivrareInstance.setDateLivrare(getAdrLivrareJSON());
 		}
 
+		if (spinnerIndoire.getVisibility() == View.VISIBLE && spinnerIndoire.getSelectedItemPosition() > 0) {
+			dateLivrareInstance.setPrelucrare(spinnerIndoire.getSelectedItem().toString());
+		} else
+			dateLivrareInstance.setPrelucrare("-1");
+		
 		finish();
 
 	}
@@ -1276,7 +1283,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
-	
 	public void addressSelected(LatLng coord) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
 		textCoordAdresa.setText(coord.latitude + "," + coord.longitude);

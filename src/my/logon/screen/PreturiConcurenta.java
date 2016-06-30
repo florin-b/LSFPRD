@@ -182,6 +182,7 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 				pret.setCod(articol.getCod());
 				pret.setValoare(articol.getValoare());
 				pret.setConcurent(competitionId);
+				pret.setObservatii(articol.getObservatii());
 				listPreturi.add(pret);
 
 			}
@@ -199,18 +200,14 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 		editCautaString.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				showFilteredArts(s.toString());
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -247,7 +244,6 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 	private void setSpinnerLunaListener() {
 		spinnerLuna.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (position > 0) {
 					Calendar cal = Calendar.getInstance();
@@ -262,7 +258,6 @@ public class PreturiConcurenta extends Activity implements SpinnerSelectionListe
 
 			}
 
-			
 			public void onNothingSelected(AdapterView<?> arg0) {
 				return;
 			}
