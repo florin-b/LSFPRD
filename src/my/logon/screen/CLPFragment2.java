@@ -1174,18 +1174,24 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 	private void showSaveStatus(String status) {
 
+		String strInfo = "";
+		String[] info = { "" };
+
+		if (status.contains(","))
+			info = status.split(",");
+
+		if (info.length > 1 && info[1].trim().length() > 0)
+			strInfo = info[1];
+
 		if (status.startsWith("0")) {
 
-			String[] info = status.split(",");
-
-			if (info[1].trim().length() > 0)
-				Toast.makeText(getActivity(), info[1], Toast.LENGTH_LONG).show();
+			if (info.length > 0 && info[1].trim().length() > 0)
+				Toast.makeText(getActivity(), strInfo, Toast.LENGTH_LONG).show();
 
 			Toast.makeText(getActivity(), "Comanda salvata.", Toast.LENGTH_SHORT).show();
 			clearAllData();
 		} else {
-			Toast.makeText(getActivity(), "Comanda nu a fost salvata.", Toast.LENGTH_SHORT).show();
-
+			Toast.makeText(getActivity(), "Comanda nu a fost salvata. " + strInfo, Toast.LENGTH_LONG).show();
 		}
 	}
 
