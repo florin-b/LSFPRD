@@ -536,7 +536,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 		textProcRed.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
-				// TODO
+				
 
 				try {
 

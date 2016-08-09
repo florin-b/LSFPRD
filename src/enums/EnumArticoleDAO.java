@@ -17,4 +17,4 @@ public enum EnumArticoleDAO {
 		return numeComanda;
 	}
 
-}
+} 
