@@ -101,18 +101,21 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		performOperation();
 	}
 
+	
 	public void getStocArticole(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_STOC_ARTICOLE;
 		this.params = params;
 		performOperation();
 	}
-
+	
+	
 	public void getCodBare(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_COD_BARE;
 		this.params = params;
 		performOperation();
 	}
 
+	
 	public Object getDepartBV90(String codArticol) {
 		numeComanda = EnumArticoleDAO.GET_DEP_BV90;
 
@@ -185,6 +188,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 			jsonParametru.put("metodaPlata", parametru.getMetodaPlata());
 			jsonParametru.put("codJudet", parametru.getCodJudet());
 			jsonParametru.put("localitate", parametru.getLocalitate());
+			jsonParametru.put("filialaAlternativa", parametru.getFilialaAlternativa());
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -258,6 +262,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		return serializedResult;
 	}
 
+	
 	public String serializeListArtStoc(List<BeanArticolStoc> listArticole) {
 
 		JSONArray jsonArray = new JSONArray();
@@ -370,7 +375,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		List<BeanArticolStoc> listArticole = new ArrayList<BeanArticolStoc>();
 
 		try {
-			Object jsonObject = new JSONTokener(serializedResult).nextValue();
+			Object jsonObject =  new JSONTokener(serializedResult).nextValue();
 
 			if (jsonObject instanceof JSONArray) {
 				JSONArray jsonArray = new JSONArray(serializedResult);
@@ -400,5 +405,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 
 		return listArticole;
 	}
+
+	
 
 }
