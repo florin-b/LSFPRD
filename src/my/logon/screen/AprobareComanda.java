@@ -611,13 +611,18 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			NumberFormat nf3 = new DecimalFormat("00000000");
 			String fullCode = nf3.format(Integer.parseInt(UserInfo.getInstance().getCod())).toString();
 
+			String localDivizieAgent = divizieAgent;
+			if (comandaCurenta.getCanalDistrib().equals("20") && comandaCurenta.getAprobariNecesare().trim().length() > 0)
+				localDivizieAgent = "11";
+			
+			
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("nrCmd", selectedCmd);
 			params.put("nrCmdSAP", selectedCmdSAP);
 			params.put("tipOp", String.valueOf(tipOpCmd));
 			params.put("codUser", fullCode);
 			params.put("codRespingere", codRespingere);
-			params.put("divizieAgent", divizieAgent);
+			params.put("divizieAgent", localDivizieAgent);
 			params.put("elimTransp", getStareElimTransport());
 			params.put("filiala", listComenzi.get(selectedPosComanda).getFiliala());
 			params.put("codStare", comandaCurenta.getCodStare());

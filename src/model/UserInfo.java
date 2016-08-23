@@ -39,6 +39,8 @@ public class UserInfo implements Serializable {
 	private String coefCorectie = "";
 	private String userSite = "";
 	private boolean userWood = false;
+	
+	private boolean filHome = false;
 
 	private static UserInfo instance = new UserInfo();
 
@@ -213,6 +215,27 @@ public class UserInfo implements Serializable {
 		}
 
 		this.extraFiliale = listExtraFiliale;
+	}
+
+	public void setExtraFiliale(List<String> extraFiliale) {
+		this.extraFiliale = extraFiliale;
+	}
+	
+	public boolean isFilHome() {
+		return filHome;
+	}
+
+	public void setFilHome(boolean filHome) {
+		this.filHome = filHome;
+	}
+	
+	@Override
+	public String toString() {
+		return "UserInfo [nume=" + nume + ", filiala=" + filiala + ", cod=" + cod + ", numeDepart=" + numeDepart + ", codDepart=" + codDepart + ", unitLog="
+				+ unitLog + ", initUnitLog=" + initUnitLog + ", tipAcces=" + tipAcces + ", parentScreen=" + parentScreen + ", filialeDV=" + filialeDV
+				+ ", altaFiliala=" + altaFiliala + ", tipUser=" + tipUser + ", departExtra=" + departExtra + ", tipUserSap=" + tipUserSap + ", extraFiliale="
+				+ extraFiliale + ", comisionCV=" + comisionCV + ", coefCorectie=" + coefCorectie + ", userSite=" + userSite + ", userWood=" + userWood
+				+ ", filHome=" + filHome + "]";
 	}
 
 }

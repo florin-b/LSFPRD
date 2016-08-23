@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
 
+import utils.UtilsUser;
+
 import listeners.AsyncTaskListener;
 import model.InfoStrings;
 import model.UserInfo;
@@ -113,6 +115,22 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		globalMyIP = getIPConnection();
 
+		checkBundleExtra();
+
+	}
+
+	private void checkBundleExtra() {
+
+		if (getIntent().hasExtra("UserInfo")) {
+			UtilsUser.deserializeUserInfo(getIntent().getExtras().getString("UserInfo"), getApplicationContext());
+			startMainMenuActivity();
+		}
+	}
+
+	private void startMainMenuActivity() {
+		Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
+		startActivity(nextScreen);
+		finish();
 	}
 
 	private void addListenerSlider() {
@@ -273,7 +291,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		if (numeFiliala.equals("BACAU"))
 			fl = "BC10";
-		
+
 		if (numeFiliala.equals("BUZAU"))
 			fl = "BZ10";
 
@@ -470,7 +488,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 						uInfo.setNumeDepart("LEMN");
 					}
 
-					
+					uInfo.setFilHome(Boolean.valueOf(token[12]));
+
 					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
 					startActivity(nextScreen);
 					finish();
