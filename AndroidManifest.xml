@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="my.logon.screen"
-    android:versionCode="213"
+    android:versionCode="214"
     android:versionName="1.1" >
 
     <uses-sdk
@@ -326,6 +326,12 @@
         </activity>
         <activity
             android:name=".StareComenzi"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".RealizareTarget"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >

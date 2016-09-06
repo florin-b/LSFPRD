@@ -1,4 +1,4 @@
-package my.logon.screen;
+package  my.logon.screen;
 
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -61,10 +61,8 @@ public class AsyncTaskWSCall {
 		try {
 			retVal = new WebServiceCallFromFragment(context, contextListener, methodName, params).execute().get();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
