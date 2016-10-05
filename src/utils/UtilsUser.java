@@ -53,6 +53,10 @@ public class UtilsUser {
 
 	}
 
+	public static boolean isSD() {
+		return UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
+	}
+
 	public static boolean isConsWood() {
 		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("WOOD");
 	}
@@ -111,7 +115,7 @@ public class UtilsUser {
 
 		return false;
 	}
-	
+
 	public static String serializeUserInfo() {
 
 		JSONObject jsonUser = new JSONObject();

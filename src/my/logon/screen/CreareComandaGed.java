@@ -426,20 +426,19 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false)
-					.setPositiveButton("Da", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
+			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
 
-							resetAllVars();
-							UserInfo.getInstance().setParentScreen("");
+					resetAllVars();
+					UserInfo.getInstance().setParentScreen("");
 
-							backToMainMenu();
-						}
-					}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							dialog.cancel();
-						}
-					}).setTitle("Atentie!").setIcon(R.drawable.warning96);
+					backToMainMenu();
+				}
+			}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			}).setTitle("Atentie!").setIcon(R.drawable.warning96);
 
 			AlertDialog alert = builder.create();
 			alert.show();
@@ -1062,8 +1061,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && CreareComandaGed.tipClient.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
 							return;
 						}
 
@@ -1074,8 +1072,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						String alerteKA = "!";
 
 						// comanda consilier (av) simulata
-						if ((UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("9") || UserInfo
-								.getInstance().getTipAcces().equals("10"))
+						if ((UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance()
+								.getTipAcces().equals("10"))
 								&& CreareComandaGed.tipComanda.equals("S")) {
 
 							if (CreareComandaGed.rezervStoc) {
@@ -1278,7 +1276,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("ponderare", listArticole.get(i).getPonderare());
 				myArray.put(obj);
 
-				
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
 					alertDV = true;
 					if (!comandaFinala.getComandaBlocata().equals("21"))
@@ -1302,6 +1299,12 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				}
 
 			}
+
+			if (DateLivrare.getInstance().isAdrLivrNoua()) {
+				alertSD = true;
+				comandaFinala.setComandaBlocata("1");
+			}
+
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
 		}
@@ -1388,6 +1391,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("factRed", DateLivrare.getInstance().getFactRed());
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
 			obj.put("coordonateGps", getCoordAdresa());
+			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 
 		} catch (Exception ex) {
@@ -1706,8 +1710,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						valTransport = Double.parseDouble(textValTransp.getText().toString().trim());
 
 						if (valTransport < valTransportSAP) {
-							Toast.makeText(getApplicationContext(), "Valoarea transportului nu poate fi mai mica decat cea din SAP!",
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Valoarea transportului nu poate fi mai mica decat cea din SAP!", Toast.LENGTH_SHORT)
+									.show();
 							valTransport = valTransportSAP;
 							textValTransp.setText(nf3.format(valTransport));
 						} else {
@@ -2052,6 +2056,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	}
 
+	
 	public void paletDialogResponse(EnumDaNuOpt response) {
 		switch (response) {
 		case DA:
