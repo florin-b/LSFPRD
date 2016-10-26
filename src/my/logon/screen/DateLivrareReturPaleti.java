@@ -33,30 +33,27 @@ import beans.BeanAdresaLivrare;
 import beans.BeanPersoanaContact;
 import enums.EnumMotivRespingere;
 
-public class DateLivrareReturMarfa extends Fragment implements OnItemClickListener, OnTouchListener {
+public class DateLivrareReturPaleti extends Fragment implements OnItemClickListener, OnTouchListener {
 
 	ClientReturListener clientListener;
 	Spinner spinnerTransport, spinnerDataRetur, spinnerMotivRetur, spinnerAdresaRetur, spinnerJudet;
-	String[] arrayTipTransport = { "Selectati tip transport", "TRAP - Transport Arabesque", "TCLI - Transport client",
-			"TERT - Transport curier" };
+	String[] arrayTipTransport = { "Selectati tip transport", "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport curier" };
 	LinearLayout layoutAdresaNoua;
 	private List<BeanAdresaLivrare> listAdrese;
 	private ListPopupWindow lpw;
 
 	private EditText textOras, textStrada, textPersoana, textTelefon, textObservatii;
-	public static String dataRetur, tipTransport, motivRetur, adresaCodJudet = "", adresaOras = "", adresaStrada = "",
-			numePersContact = "", telPersContact = "", adresaCodAdresa = "", observatii = "";
+	public static String dataRetur, tipTransport, motivRetur, adresaCodJudet = "", adresaOras = "", adresaStrada = "", numePersContact = "",
+			telPersContact = "", adresaCodAdresa = "", observatii = "";
 	private String[] arrayPersoane, arrayTelefoane;
 
-	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV",
-			"BUCURESTI", "BUZAU", "CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ",
-			"GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI", "ILFOV", "MARAMURES",
-			"MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN",
-			"TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
+	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU", "CALARASI",
+			"CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI",
+			"ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN", "TIMIS", "TULCEA",
+			"VALCEA", "VASLUI", "VRANCEA" };
 
-	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13",
-			"14", "15", "16", "17", "52", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31",
-			"30", "32", "33", "34", "35", "36", "38", "37", "39" };
+	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52", "18", "19",
+			"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -103,8 +100,7 @@ public class DateLivrareReturMarfa extends Fragment implements OnItemClickListen
 	}
 
 	private void populateSpinnerTransport() {
-		ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_spinner_item, arrayTipTransport);
+		ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, arrayTipTransport);
 		adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerTransport.setAdapter(adapterSpinnerTransp);
 	}
@@ -125,8 +121,7 @@ public class DateLivrareReturMarfa extends Fragment implements OnItemClickListen
 	}
 
 	private void populateSpinnerDataRetur() {
-		ArrayAdapter<String> adapterDataRetur = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_spinner_item);
+		ArrayAdapter<String> adapterDataRetur = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item);
 		adapterDataRetur.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		adapterDataRetur.add("Selectati data retur");
@@ -161,8 +156,7 @@ public class DateLivrareReturMarfa extends Fragment implements OnItemClickListen
 	private void populateSpinnerMotivRetur() {
 		List<String> listMotive = EnumMotivRespingere.getStringList();
 
-		ArrayAdapter<String> adapterMotive = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_spinner_dropdown_item, listMotive);
+		ArrayAdapter<String> adapterMotive = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, listMotive);
 
 		listMotive.add(0, "Selectati motiv retur");
 		spinnerMotivRetur.setAdapter(adapterMotive);
@@ -221,8 +215,8 @@ public class DateLivrareReturMarfa extends Fragment implements OnItemClickListen
 	private void fillSpinnerJudete() {
 
 		ArrayList<HashMap<String, String>> listJudete = new ArrayList<HashMap<String, String>>();
-		SimpleAdapter adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete,
-				new String[] { "numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+		SimpleAdapter adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
+				new int[] { R.id.textNumeJudet, R.id.textCodJudet });
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("numeJudet", "Selectat judetul");
@@ -347,14 +341,13 @@ public class DateLivrareReturMarfa extends Fragment implements OnItemClickListen
 		List<String> strListAdrese = new ArrayList<String>();
 
 		for (BeanAdresaLivrare adresa : listAdrese) {
-			strListAdrese.add(UtilsGeneral.getNumeJudet(adresa.getCodJudet()) + ", " + adresa.getOras() + ", "
-					+ adresa.getStrada() + " " + adresa.getNrStrada());
+			strListAdrese.add(UtilsGeneral.getNumeJudet(adresa.getCodJudet()) + ", " + adresa.getOras() + ", " + adresa.getStrada() + " "
+					+ adresa.getNrStrada());
 		}
 		strListAdrese.add("Alta adresa");
 
 		String[] adreseArray = strListAdrese.toArray(new String[strListAdrese.size()]);
-		spinnerAdresaRetur.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1,
-				adreseArray));
+		spinnerAdresaRetur.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, adreseArray));
 	}
 
 	public void setListAdreseLivrare(List<BeanAdresaLivrare> listAdrese) {
@@ -385,8 +378,8 @@ public class DateLivrareReturMarfa extends Fragment implements OnItemClickListen
 		}
 	}
 
-	public static DateLivrareReturMarfa newInstance() {
-		DateLivrareReturMarfa frg = new DateLivrareReturMarfa();
+	public static DateLivrareReturPaleti newInstance() {
+		DateLivrareReturPaleti frg = new DateLivrareReturPaleti();
 		Bundle bdl = new Bundle();
 		frg.setArguments(bdl);
 		return frg;
@@ -402,12 +395,16 @@ public class DateLivrareReturMarfa extends Fragment implements OnItemClickListen
 	public boolean onTouch(View v, MotionEvent event) {
 		final int DRAWABLE_RIGHT = 2;
 
-		if (event.getAction() == MotionEvent.ACTION_UP) {
-			if (event.getX() >= (v.getWidth() - ((EditText) v).getCompoundDrawables()[DRAWABLE_RIGHT].getBounds()
-					.width())) {
-				lpw.show();
-				return true;
+		try {
+
+			if (event.getAction() == MotionEvent.ACTION_UP) {
+				if (event.getX() >= (v.getWidth() - ((EditText) v).getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+					lpw.show();
+					return true;
+				}
 			}
+		} catch (Exception ex) {
+
 		}
 		return false;
 	}

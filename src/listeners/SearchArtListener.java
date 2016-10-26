@@ -2,9 +2,6 @@ package listeners;
 
 import java.util.Observable;
 
-import connectors.ConnectionStrings;
-
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+import connectors.ConnectionStrings;
 
 public class SearchArtListener extends Observable {
 

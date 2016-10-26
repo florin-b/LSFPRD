@@ -3,10 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import connectors.ConnectionStrings;
-
-import beans.ArticolDB;
-
 import listeners.AsyncTaskListener;
 import my.logon.screen.CreareComanda;
 import android.app.ProgressDialog;
@@ -15,6 +11,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.widget.Toast;
+import beans.ArticolDB;
+import connectors.ConnectionStrings;
 
 public class GetArticoleFromDB extends AsyncTask<Void, Void, List<ArticolDB>> {
 

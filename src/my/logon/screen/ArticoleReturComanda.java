@@ -12,8 +12,6 @@ import model.OperatiiReturMarfa;
 import model.UserInfo;
 import utils.UtilsGeneral;
 import adapters.ArticoleReturAdapter;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -35,8 +33,9 @@ import android.widget.Toast;
 import beans.BeanArticolRetur;
 import beans.BeanComandaRetur;
 import enums.EnumRetur;
+import enums.EnumTipRetur;
 
-public class ArticoleReturMarfa extends Fragment implements ListaArtReturListener, OperatiiReturListener {
+public class ArticoleReturComanda extends Fragment implements ListaArtReturListener, OperatiiReturListener {
 
 	TextView textDocument;
 	ListView listArticoleRetur;
@@ -95,8 +94,8 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 		return v;
 	}
 
-	public static ArticoleReturMarfa newInstance() {
-		ArticoleReturMarfa frg = new ArticoleReturMarfa();
+	public static ArticoleReturComanda newInstance() {
+		ArticoleReturComanda frg = new ArticoleReturComanda();
 		Bundle bdl = new Bundle();
 		frg.setArguments(bdl);
 		return frg;
@@ -155,27 +154,27 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 
 	private boolean isDateReturValide() {
 
-		if (DateLivrareReturMarfa.dataRetur.length() == 0) {
+		if (DateLivrareReturComanda.dataRetur.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati data retur", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		if (DateLivrareReturMarfa.tipTransport.length() == 0) {
+		if (DateLivrareReturComanda.tipTransport.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati tipul de transport", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		if (DateLivrareReturMarfa.motivRetur.length() == 0) {
+		if (DateLivrareReturComanda.motivRetur.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati motivul de retur", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		if (DateLivrareReturMarfa.adresaCodJudet.length() == 0) {
+		if (DateLivrareReturComanda.adresaCodJudet.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati judetul", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
-		if (DateLivrareReturMarfa.adresaOras.length() == 0) {
+		if (DateLivrareReturComanda.adresaOras.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati orasul", Toast.LENGTH_SHORT).show();
 			return false;
 		}
@@ -202,9 +201,7 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 				myHandler.post(new Runnable() {
 					public void run() {
 
-						showWarningDialog();
-
-						// performSaveRetur();
+						performSaveRetur();
 					}
 				});
 				myTimer.cancel();
@@ -218,24 +215,30 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 
 		BeanComandaRetur comandaRetur = new BeanComandaRetur();
 		comandaRetur.setNrDocument(nrDocument);
-		comandaRetur.setDataLivrare(DateLivrareReturMarfa.dataRetur);
-		comandaRetur.setTipTransport(DateLivrareReturMarfa.tipTransport);
+		comandaRetur.setDataLivrare(DateLivrareReturComanda.dataRetur);
+		comandaRetur.setTipTransport(DateLivrareReturComanda.tipTransport);
 		comandaRetur.setCodAgent(UserInfo.getInstance().getCod());
 		comandaRetur.setTipAgent(UserInfo.getInstance().getTipUser());
-		comandaRetur.setMotivRespingere(DateLivrareReturMarfa.motivRetur);
-		comandaRetur.setNumePersContact(DateLivrareReturMarfa.numePersContact);
-		comandaRetur.setTelPersContact(DateLivrareReturMarfa.telPersContact);
-		comandaRetur.setAdresaCodJudet(DateLivrareReturMarfa.adresaCodJudet);
-		comandaRetur.setAdresaOras(DateLivrareReturMarfa.adresaOras);
-		comandaRetur.setAdresaStrada(DateLivrareReturMarfa.adresaStrada);
-		comandaRetur.setAdresaCodAdresa(DateLivrareReturMarfa.adresaCodAdresa);
+		comandaRetur.setMotivRespingere(DateLivrareReturComanda.motivRetur);
+		comandaRetur.setNumePersContact(DateLivrareReturComanda.numePersContact);
+		comandaRetur.setTelPersContact(DateLivrareReturComanda.telPersContact);
+		comandaRetur.setAdresaCodJudet(DateLivrareReturComanda.adresaCodJudet);
+		comandaRetur.setAdresaOras(DateLivrareReturComanda.adresaOras);
+		comandaRetur.setAdresaStrada(DateLivrareReturComanda.adresaStrada);
+		comandaRetur.setAdresaCodAdresa(DateLivrareReturComanda.adresaCodAdresa);
 		comandaRetur.setListArticole(opRetur.serializeListArticole(listArticole));
-		comandaRetur.setObservatii(DateLivrareReturMarfa.observatii);
+		comandaRetur.setObservatii(DateLivrareReturComanda.observatii);
 		comandaRetur.setCodClient(codClient);
 		comandaRetur.setNumeClient(numeClient);
 
+		if (DateLivrareReturComanda.tipTransport.equals("TRAP"))
+			comandaRetur.setTransBack(DateLivrareReturComanda.transBack);
+		else
+			comandaRetur.setTransBack(false);
+
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("dateRetur", opRetur.serializeComandaRetur(comandaRetur));
+		params.put("tipRetur", EnumTipRetur.COMANDA.getTipRetur());
 
 		opRetur.saveComandaRetur(params);
 
@@ -272,32 +275,6 @@ public class ArticoleReturMarfa extends Fragment implements ListaArtReturListene
 		populateListArticole(listArticole);
 		listArticoleRetur.setSelection(artPosition);
 		clearArtFields();
-
-	}
-
-	public void showWarningDialog() {
-
-		StringBuilder alertMsg = new StringBuilder();
-		alertMsg.append("\n");
-		alertMsg.append("Te rugam sa te asiguri ca ai discutat cu clientul pentru pregatirea numarului si tipurilor de paleti ce trebuiesc returnati!");
-		alertMsg.append("\n");
-		alertMsg.append("\n");
-		alertMsg.append("Este responsabilitatea ta! ");
-		alertMsg.append("\n");
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setMessage(alertMsg.toString()).setCancelable(false).setPositiveButton("Salveaza", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				performSaveRetur();
-			}
-		}).setNegativeButton("Anuleaza", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.cancel();
-			}
-		}).setTitle("Atentie!").setIcon(R.drawable.warning96).setCancelable(false);
-
-		AlertDialog alert = builder.create();
-		alert.show();
 
 	}
 

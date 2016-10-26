@@ -63,8 +63,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private LinearLayout layoutClientPersoana, layoutClientDistrib;
 	private ListView listViewClienti;
 	private BeanClient selectedClient;
-	private TextView textNumeClientDistrib, textCodClientDistrib, textAdrClient, textLimitaCredit, textRestCredit, tipClient, clientBlocat,
-			filialaClient;
+	private TextView textNumeClientDistrib, textCodClientDistrib, textAdrClient, textLimitaCredit, textRestCredit, tipClient, clientBlocat, filialaClient;
 
 	private RadioButton radioClMeserias;
 	private NumberFormat numberFormat;
@@ -373,8 +372,12 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 						if (UtilsUser.isConsWood())
 							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PF");
-						else
-							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
+						else {
+							if (UtilsUser.isUserExceptieCONSGED())
+								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PF");
+							else
+								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
+						}
 					}
 
 					if (radioClPJ.isChecked()) {
@@ -384,10 +387,17 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						if (UtilsUser.isConsWood())
 							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PJ");
 						else {
-							if (checkPlatTva.isChecked())
-								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PJ");
-							else
-								CreareComandaGed.codClientVar = InfoStrings.gedPJNeplatitorTVA(UserInfo.getInstance().getUnitLog());
+							if (checkPlatTva.isChecked()) {
+								if (UtilsUser.isUserExceptieCONSGED())
+									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PJ");
+								else
+									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PJ");
+							} else {
+								if (UtilsUser.isUserExceptieCONSGED())
+									CreareComandaGed.codClientVar = InfoStrings.gedPJNeplatitorTVA_CONSGED(UserInfo.getInstance().getUnitLog());
+								else
+									CreareComandaGed.codClientVar = InfoStrings.gedPJNeplatitorTVA(UserInfo.getInstance().getUnitLog());
+							}
 						}
 					}
 
