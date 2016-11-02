@@ -24,6 +24,7 @@ import model.OperatiiAdresa;
 import model.OperatiiAdresaImpl;
 import model.OperatiiClient;
 import model.UserInfo;
+import utils.MapUtils;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.ActionBar;
@@ -260,7 +261,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			// tip plata
 			for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
 
-				strTipPlata = adapterSpinnerPlata.getItem(i).toString().substring(0, adapterSpinnerPlata.getItem(i).toString().indexOf("-") - 1).trim();
+				strTipPlata = adapterSpinnerPlata.getItem(i).toString().substring(0, adapterSpinnerPlata.getItem(i).toString().indexOf("-") - 1)
+						.trim();
 
 				if (strTipPlata.equals(dateLivrareInstance.getTipPlata())) {
 					spinnerPlata.setSelection(i);
@@ -338,7 +340,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private void afisCoordAdresa() {
 
 		if (DateLivrare.getInstance().getCoordonateAdresa() != null) {
-			textCoordAdresa.setText(DateLivrare.getInstance().getCoordonateAdresa().latitude + "," + DateLivrare.getInstance().getCoordonateAdresa().longitude);
+			textCoordAdresa.setText(DateLivrare.getInstance().getCoordonateAdresa().latitude + ","
+					+ DateLivrare.getInstance().getCoordonateAdresa().longitude);
 		} else
 			textCoordAdresa.setText("");
 
@@ -476,8 +479,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			listJudeteLivrare = new ArrayList<HashMap<String, String>>();
 
-			adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
-					R.id.textNumeJudet, R.id.textCodJudet });
+			adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
+					new int[] { R.id.textNumeJudet, R.id.textCodJudet });
 
 			HashMap<String, String> temp = new HashMap<String, String>();
 			temp.put("numeJudet", UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudetD()));
@@ -495,8 +498,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		listJudeteLivrare = new ArrayList<HashMap<String, String>>(listJudete);
 
-		adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
-				R.id.textNumeJudet, R.id.textCodJudet });
+		adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
+				new int[] { R.id.textNumeJudet, R.id.textCodJudet });
 
 		spinnerJudetLivrare.setAdapter(adapterJudeteLivrare);
 		spinnerJudetLivrare.setSelection(0);
@@ -840,18 +843,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textLocalitate.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setOras(textLocalitate.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -863,18 +863,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textStrada.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setStrada(textStrada.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -908,18 +905,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textLocalitateLivrare.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setOrasD(textLocalitateLivrare.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -931,18 +925,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textStradaLivrare.addTextChangedListener(new TextWatcher() {
 
-			
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setAdresaD(textStradaLivrare.getText().toString().trim());
 
 			}
 
-			
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
-			
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -1090,6 +1081,14 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		}
 
+		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
+		dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition());
+
+		if (!isAdresaCorecta()) {
+			Toast.makeText(getApplicationContext(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
+			return;
+		}
+
 		String cantar = "NU";
 
 		dateLivrareInstance.setCantar("NU");
@@ -1100,9 +1099,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		String rawTipPlataStr = spinnerPlata.getSelectedItem().toString();
 
 		dateLivrareInstance.setTipPlata(rawTipPlataStr.substring(0, rawTipPlataStr.indexOf("-") - 1).trim());
-
-		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
-		dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition());
 
 		adresa = dateLivrareInstance.getNumeJudet() + " " + dateLivrareInstance.getOras() + " " + dateLivrareInstance.getStrada();
 
@@ -1162,26 +1158,24 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
-	private void valideazaAdresaLivrare() {
+	private void setAdresaLivrare(Address address) {
 
-		if (isAdresaCompleta()) {
-			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
-			params.put("codJudet", DateLivrare.getInstance().getCodJudet());
-			params.put("localitate", DateLivrare.getInstance().getOras());
+		textLocalitate.setText(address.getCity());
+		textStrada.setText(address.getStreet());
 
-			operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
-		}
+		if (address.getNumber() != null && address.getNumber().length() > 0)
+			textNrStr.setText(address.getNumber());
 
 	}
 
-	private boolean isAdresaCompleta() {
+	private void valideazaAdresaLivrare() {
 
-		if (textNrStr.getText().toString().trim().equals("") && DateLivrare.getInstance().getCoordonateAdresa() == null && getTipTransport().equals("TRAP")) {
-			Toast.makeText(this, "Adresa de livrare imprecisa, pozitionati adresa pe harta", Toast.LENGTH_SHORT).show();
-			return false;
-		}
+		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+		params.put("localitate", DateLivrare.getInstance().getOras());
 
-		return true;
+		operatiiAdresa.isAdresaValida(params, EnumLocalitate.LOCALITATE_SEDIU);
+
 	}
 
 	private String getTipTransport() {
@@ -1247,26 +1241,30 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 				android.app.FragmentManager fm = getFragmentManager();
 
-				Address address = new Address();
-
-				if (radioAdresaSediu.isChecked()) {
-					address.setCity(DateLivrare.getInstance().getOras());
-					address.setStreet(DateLivrare.getInstance().getStrada());
-					address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
-				} else if (radioAltaAdresa.isChecked()) {
-					address.setCity(DateLivrare.getInstance().getOrasD());
-					address.setStreet(DateLivrare.getInstance().getAdresaD());
-					address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudetD()));
-				}
-
 				if (!isAdresaComplet())
 					return;
 
-				MapAddressDialog mapDialog = new MapAddressDialog(address, SelectAdrLivrCmdGed.this, fm);
+				MapAddressDialog mapDialog = new MapAddressDialog(getAddressFromForm(), SelectAdrLivrCmdGed.this, fm);
 				mapDialog.setMapListener(SelectAdrLivrCmdGed.this);
 				mapDialog.show();
 			}
 		});
+	}
+
+	private Address getAddressFromForm() {
+		Address address = new Address();
+
+		if (radioAdresaSediu.isChecked()) {
+			address.setCity(DateLivrare.getInstance().getOras());
+			address.setStreet(DateLivrare.getInstance().getStrada());
+			address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudet()));
+		} else if (radioAltaAdresa.isChecked()) {
+			address.setCity(DateLivrare.getInstance().getOrasD());
+			address.setStreet(DateLivrare.getInstance().getAdresaD());
+			address.setSector(UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudetD()));
+		}
+
+		return address;
 	}
 
 	private boolean isAdresaComplet() {
@@ -1281,6 +1279,19 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		}
 
 		return true;
+	}
+
+	private boolean isAdresaCorecta() {
+		if (DateLivrare.getInstance().getTransport().equals("TRAP"))
+			return isAdresaGoogleOk();
+		else
+			return true;
+
+	}
+
+	private boolean isAdresaGoogleOk() {
+		return MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext()).latitude > 0;
+
 	}
 
 	private void fillAdreseLivrareClient(String adreseLivrare) {
@@ -1350,10 +1361,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
-	
-	public void addressSelected(LatLng coord) {
+	public void addressSelected(LatLng coord, android.location.Address address) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
 		textCoordAdresa.setText(coord.latitude + "," + coord.longitude);
+		setAdresaLivrare(MapUtils.getAddress(address));
 
 	}
+
 }
