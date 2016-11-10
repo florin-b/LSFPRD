@@ -111,7 +111,6 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 			spinnerComenzi.setAdapter(adapter);
 		} else
 			Toast.makeText(getApplicationContext(), "Nu exista comenzi", Toast.LENGTH_SHORT).show();
-		
 
 	}
 
@@ -194,7 +193,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 
 			LatLng coordClient = null;
 			try {
-				coordClient = MapUtils.geocodeAddress(address, this);
+				coordClient = MapUtils.geocodeAddress(address, this).getCoordinates();
 			} catch (Exception e) {
 
 			}
@@ -252,7 +251,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 		operatiiComenzi.getClientiBorderou(params);
 	}
 
-	@Override
+	
 	public void onResume() {
 		super.onResume();
 
@@ -314,7 +313,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 	
 	public void agentSelected(Agent agent) {
 		getComenziDeschise(agent.getCod());
-		actionBar.setTitle("Stare comenzi" + " - " + agent.getNume() );
+		actionBar.setTitle("Stare comenzi" + " - " + agent.getNume());
 
 	}
 
