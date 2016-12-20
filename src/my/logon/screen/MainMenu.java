@@ -447,14 +447,14 @@ public class MainMenu extends Activity {
 					finish();
 
 				}
-				
+
 				if (selectedBtnName.equalsIgnoreCase("Retur comenzi")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, ReturComanda.class);
 					startActivity(nextScreen);
 					finish();
 
-				}				
+				}
 
 				if (selectedBtnName.equalsIgnoreCase("Stare retur paleti")) {
 
@@ -650,16 +650,7 @@ public class MainMenu extends Activity {
 
 				}
 
-				// retea
-				if (selectedBtnName.equalsIgnoreCase("Retea")) {
-
-					Intent nextScreen = new Intent(MainMenu.this, Retea.class);
-					startActivity(nextScreen);
-					finish();
-
-				}
-
-				// sincronizare articole
+				
 				if (selectedBtnName.equalsIgnoreCase("Comenzi conditionate")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, ComenziConditionate.class);

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.Address;
+import beans.GeocodeAddress;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -67,8 +68,9 @@ public class MapAddressDialog extends Dialog {
 			if (address.getStreet() != null && address.getStreet().trim().length() > 1)
 				detailLevel = DETAIL_HIGH;
 
-			LatLng coord = null;
-			coord = MapUtils.geocodeAddress(address, context).getCoordinates();
+			GeocodeAddress geoAddress = MapUtils.geocodeAddress(address, context);
+
+			LatLng coord = geoAddress.getCoordinates();
 
 			if (coord.latitude == 0) {
 				textLabel.setText("Adresa inexistenta.");
@@ -97,7 +99,6 @@ public class MapAddressDialog extends Dialog {
 	private void setMapListener() {
 		map.setOnMapClickListener(new OnMapClickListener() {
 
-			
 			public void onMapClick(LatLng latLng) {
 				MarkerOptions markerOptions = new MarkerOptions();
 				markerOptions.position(latLng);
@@ -146,7 +147,6 @@ public class MapAddressDialog extends Dialog {
 	private void setListenerCloseDialog() {
 		btnCloseDialog.setOnClickListener(new View.OnClickListener() {
 
-			
 			public void onClick(View v) {
 				dismiss();
 
