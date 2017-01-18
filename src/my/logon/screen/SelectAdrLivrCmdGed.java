@@ -1037,9 +1037,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		if (strMailAddr.trim().length() == 0)
 			strMailAddr = " ";
 
-		dateLivrareInstance.setPersContact(pers);
-		dateLivrareInstance.setNrTel(telefon);
-
 		if (!(layoutListAdrese.getVisibility() == View.VISIBLE) && !(DateLivrare.getInstance().isAltaAdresa())) {
 			if (dateLivrareInstance.getCodJudet().equals("")) {
 				Toast.makeText(getApplicationContext(), "Selectati judetul!", Toast.LENGTH_SHORT).show();
@@ -1058,14 +1055,25 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		}
 
-		if (pers.equals("")) {
-			Toast.makeText(getApplicationContext(), "Completati persoana de contact!", Toast.LENGTH_SHORT).show();
-			return;
-		}
+		if (spinnerTransp.getSelectedItem().toString().toLowerCase().contains("tcli") && DateLivrare.getInstance().getTipPersClient().equals("PF")
+				&& !DateLivrare.getInstance().isFacturaCmd()) {
 
-		if (telefon.equals("")) {
-			Toast.makeText(getApplicationContext(), "Completati nr. de telefon!", Toast.LENGTH_SHORT).show();
-			return;
+			if (pers.equals(""))
+				pers = " ";
+
+			if (telefon.equals(""))
+				telefon = " ";
+
+		} else {
+			if (pers.equals("")) {
+				Toast.makeText(getApplicationContext(), "Completati persoana de contact!", Toast.LENGTH_SHORT).show();
+				return;
+			}
+
+			if (telefon.equals("")) {
+				Toast.makeText(getApplicationContext(), "Completati nr. de telefon!", Toast.LENGTH_SHORT).show();
+				return;
+			}
 		}
 
 		if (spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque") && spinnerTonaj.getSelectedItemPosition() == 0) {
@@ -1081,6 +1089,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			}
 
 		}
+
+		dateLivrareInstance.setPersContact(pers);
+		dateLivrareInstance.setNrTel(telefon);
 
 		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
 		dateLivrareInstance.setDataLivrare(spinnerDataLivrare.getSelectedItemPosition());
