@@ -101,21 +101,21 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		performOperation();
 	}
 
-	
+	@Override
 	public void getStocArticole(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_STOC_ARTICOLE;
 		this.params = params;
 		performOperation();
 	}
 
-	
+	@Override
 	public void getCodBare(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_COD_BARE;
 		this.params = params;
 		performOperation();
 	}
 
-	
+	@Override
 	public Object getDepartBV90(String codArticol) {
 		numeComanda = EnumArticoleDAO.GET_DEP_BV90;
 
@@ -264,7 +264,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		return serializedResult;
 	}
 
-	
+	@Override
 	public String serializeListArtStoc(List<BeanArticolStoc> listArticole) {
 
 		JSONArray jsonArray = new JSONArray();
@@ -324,14 +324,16 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 				pretArticol.setPretMediu(jsonObject.getString("pretMediu"));
 				pretArticol.setAdaosMediu(jsonObject.getString("adaosMediu"));
 				pretArticol.setUmPretMediu(jsonObject.getString("umPretMediu"));
-				pretArticol.setCoefCorectie(Double.valueOf(jsonObject.getString("coefCorectie")));
-				pretArticol.setProcTransport(Double.valueOf(jsonObject.getString("procTransport")));
-				pretArticol.setDiscMaxAV(Double.valueOf(jsonObject.getString("discMaxAV")));
-				pretArticol.setDiscMaxSD(Double.valueOf(jsonObject.getString("discMaxSD")));
-				pretArticol.setDiscMaxDV(Double.valueOf(jsonObject.getString("discMaxDV")));
-				pretArticol.setDiscMaxKA(Double.valueOf(jsonObject.getString("discMaxKA")));
+				pretArticol.setCoefCorectie(Double.valueOf(jsonObject.getString("coefCorectie") != "null" ? jsonObject.getString("coefCorectie") : "0"));
+				pretArticol.setProcTransport(Double.valueOf(jsonObject.getString("procTransport") != "null" ? jsonObject.getString("procTransport") : "0"));
+				pretArticol.setDiscMaxAV(Double.valueOf(jsonObject.getString("discMaxAV") != "null" ? jsonObject.getString("discMaxAV") : "0"));
+				pretArticol.setDiscMaxSD(Double.valueOf(jsonObject.getString("discMaxSD") != "null" ? jsonObject.getString("discMaxSD") : "0"));
+				pretArticol.setDiscMaxDV(Double.valueOf(jsonObject.getString("discMaxDV") != "null" ? jsonObject.getString("discMaxDV") : "0"));
+				pretArticol.setDiscMaxKA(Double.valueOf(jsonObject.getString("discMaxKA") != "null" ? jsonObject.getString("discMaxKA") : "0"));
 				pretArticol.setImpachetare(jsonObject.getString("impachetare"));
 				pretArticol.setIstoricPret(jsonObject.getString("istoricPret"));
+				pretArticol.setValTrap(Double.valueOf(jsonObject.getString("valTrap")));
+				pretArticol.setErrMsg(jsonObject.getString("errMsg"));
 
 			}
 

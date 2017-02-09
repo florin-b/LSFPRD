@@ -98,13 +98,13 @@ public class MainMenu extends Activity {
 
 	public String[] btnNamesKA = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Cmz.blocate limita credit",
 			"Creare CLP", "Afisare CLP", "Creare DL", "Afisare DL", "Obiective", "Retur paleti", "Stare retur paleti", "Retur comenzi", "Vanzari",
-			"Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Info client", "Adrese clienti", "Despre", "Iesire" };
+			"Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Info client", "Clienti facturati", "Adrese clienti", "Despre", "Iesire" };
 
 	public int[] btnImageKA = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.cmd_bloc, R.drawable.clp, R.drawable.afis_clp, R.drawable.box_orange_48, R.drawable.box_yellow_48, R.drawable.colosseum,
 			R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda, R.drawable.vanzari, R.drawable.neincasate,
-			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.client_info, R.drawable.location_icon,
-			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.client_info, R.drawable.clienti_inactivi,
+			R.drawable.location_icon, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesDK = { "Utilizator", "Afisare comanda", "Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri",
 			"Preturi", "Info client", "Adrese clienti", "Despre", "Iesire" };
@@ -642,6 +642,15 @@ public class MainMenu extends Activity {
 
 				}
 
+				// Clienti facturati KA - Robert
+				if (selectedBtnName.equalsIgnoreCase("Clienti facturati")) {
+
+					Intent nextScreen = new Intent(MainMenu.this, ClientiFacturati.class);
+					startActivity(nextScreen);
+					finish();
+
+				}
+
 				if (selectedBtnName.equalsIgnoreCase("Info venituri")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, InfoVenituri.class);
@@ -650,7 +659,6 @@ public class MainMenu extends Activity {
 
 				}
 
-				
 				if (selectedBtnName.equalsIgnoreCase("Comenzi conditionate")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, ComenziConditionate.class);
