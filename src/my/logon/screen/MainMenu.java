@@ -29,6 +29,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import utils.UtilsApps;
 import utils.UtilsUser;
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -41,6 +42,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -273,7 +275,18 @@ public class MainMenu extends Activity {
 			if (convertView == null) {
 
 				btn = new Button(mContext);
-				btn.setLayoutParams(new GridView.LayoutParams(130, 110));
+				DisplayMetrics metrics = new DisplayMetrics();
+				getWindowManager().getDefaultDisplay().getMetrics(metrics);
+				int width = metrics.widthPixels;
+				int height = metrics.heightPixels;
+
+				if ((width <= 1024) && (height <= 552)) {
+					btn.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT, 120));
+				}
+
+				else {
+					btn.setLayoutParams(new GridView.LayoutParams(LayoutParams.MATCH_PARENT, 160));
+				}
 
 			} else {
 				btn = (Button) convertView;

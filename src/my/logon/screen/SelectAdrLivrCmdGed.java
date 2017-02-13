@@ -55,6 +55,7 @@ import android.widget.Toast;
 import beans.Address;
 import beans.BeanAdresaLivrare;
 import beans.BeanAdreseJudet;
+import beans.GeocodeAddress;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -1314,7 +1315,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private boolean isAdresaGoogleOk() {
-		return MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext()).isAdresaValida();
+
+		GeocodeAddress geoAddress = MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext());
+		DateLivrare.getInstance().setCoordonateAdresa(geoAddress.getCoordinates());
+
+		return geoAddress.isAdresaValida();
 
 	}
 
