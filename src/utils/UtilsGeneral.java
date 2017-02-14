@@ -60,6 +60,7 @@ public class UtilsGeneral {
 
 		listDepozite.add("MAV1");
 		listDepozite.add("MAV2");
+		listDepozite.add("92V1");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 
@@ -67,8 +68,6 @@ public class UtilsGeneral {
 
 	public static String[] getDepoziteSite() {
 		List<String> listDepozite = new ArrayList<String>(Arrays.asList(getDepoziteGed()));
-		listDepozite.add("92V1");
-		listDepozite.add("95V1");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 
