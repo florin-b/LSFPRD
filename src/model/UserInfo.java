@@ -4,20 +4,11 @@
  */
 package model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class UserInfo implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	/**
-	 * 
-	 */
+public class UserInfo {
 
 	private String nume = "";
 	private String filiala = "";
@@ -39,8 +30,8 @@ public class UserInfo implements Serializable {
 	private String coefCorectie = "";
 	private String userSite = "";
 	private boolean userWood = false;
-	
 	private boolean filHome = false;
+	private String ftpIP = "";
 
 	private static UserInfo instance = new UserInfo();
 
@@ -220,7 +211,7 @@ public class UserInfo implements Serializable {
 	public void setExtraFiliale(List<String> extraFiliale) {
 		this.extraFiliale = extraFiliale;
 	}
-	
+
 	public boolean isFilHome() {
 		return filHome;
 	}
@@ -228,7 +219,15 @@ public class UserInfo implements Serializable {
 	public void setFilHome(boolean filHome) {
 		this.filHome = filHome;
 	}
-	
+
+	public String getFtpIP() {
+		return ftpIP;
+	}
+
+	public void setFtpIP(String ftpIP) {
+		this.ftpIP = ftpIP;
+	}
+
 	@Override
 	public String toString() {
 		return "UserInfo [nume=" + nume + ", filiala=" + filiala + ", cod=" + cod + ", numeDepart=" + numeDepart + ", codDepart=" + codDepart + ", unitLog="

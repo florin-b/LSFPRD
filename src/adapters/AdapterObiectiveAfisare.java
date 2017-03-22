@@ -48,7 +48,12 @@ public class AdapterObiectiveAfisare extends BaseAdapter {
 
 		BeanObiectivAfisare obiectiv = getItem(position);
 
-		viewHolder.textIdObiectiv.setText(obiectiv.getId());
+		String numeAgent = "";
+
+		if (obiectiv.getNumeAgent() != null && obiectiv.getNumeAgent() != "null") {
+			numeAgent = " [" + obiectiv.getNumeAgent() + "]";
+		}
+		viewHolder.textIdObiectiv.setText(obiectiv.getId() + numeAgent);
 		viewHolder.textNumeObiectiv.setText(obiectiv.getNume());
 		viewHolder.textBeneficiar.setText(obiectiv.getBeneficiar());
 		viewHolder.textStadiu.setText(EnumStadiuObiectivKA.getNumeStadiu(Integer.parseInt(obiectiv.getCodStatus())));
@@ -68,7 +73,5 @@ public class AdapterObiectiveAfisare extends BaseAdapter {
 	public long getItemId(int arg0) {
 		return 0;
 	}
-
-	
 
 }

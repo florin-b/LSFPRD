@@ -348,6 +348,12 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		if (numeFiliala.equals("CRAIOVA"))
 			fl = "DJ10";
+		
+		if (numeFiliala.equals("SIBIU"))
+			fl = "SB10";		
+		
+		if (numeFiliala.equals("DEVA"))
+			fl = "HD10";		
 
 		return fl;
 
@@ -489,6 +495,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					}
 
 					uInfo.setFilHome(Boolean.valueOf(token[12]));
+					uInfo.setFtpIP(token[13]);
 
 					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
 					startActivity(nextScreen);

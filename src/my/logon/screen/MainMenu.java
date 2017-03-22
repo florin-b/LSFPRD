@@ -28,6 +28,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import utils.UtilsApps;
+import utils.UtilsConn;
 import utils.UtilsUser;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -183,6 +184,8 @@ public class MainMenu extends Activity {
 		animation.setRepeatCount(Animation.INFINITE);
 		animation.setRepeatMode(Animation.REVERSE);
 
+		
+		
 		// verificare update doar la logon
 		if (UserInfo.getInstance().getParentScreen().equals("logon")) {
 
@@ -733,26 +736,24 @@ public class MainMenu extends Activity {
 
 			try {
 
-				mFTPClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
-
-				mFTPClient.connect("10.1.0.6", 21);
+				mFTPClient.connect(UtilsConn.ftpAccess(getApplicationContext()).getIp(), 21);
 
 				if (FTPReply.isPositiveCompletion(mFTPClient.getReplyCode())) {
 
-					mFTPClient.login("litesfa", "egoo4Ur");
+					mFTPClient.login(UtilsConn.ftpAccess(getApplicationContext()).getUser(), UtilsConn.ftpAccess(getApplicationContext()).getPass());
 
 					mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
 					mFTPClient.enterLocalPassiveMode();
 
-					String sourceFile = "/Update/LiteSFA/LiteReportsVer.txt";
+					String sourceFile = UtilsConn.ftpAccess(getApplicationContext()).getVerFile();
 
-					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVer.txt");
+					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVerTest.txt");
 					mFTPClient.retrieveFile(sourceFile, desFile2);
 
 					desFile2.close();
 
 				} else {
-					errMessage = "Probeme la conectare!";
+					errMessage = "Probleme la conectare!";
 				}
 			} catch (Exception e) {
 				errMessage = e.getMessage();
@@ -765,7 +766,7 @@ public class MainMenu extends Activity {
 							mFTPClient.disconnect();
 						} catch (IOException f) {
 							errMessage = f.getMessage();
-							Toast.makeText(getApplicationContext(), errMessage, Toast.LENGTH_LONG).show();
+							Toast.makeText(MainMenu.this, errMessage, Toast.LENGTH_LONG).show();
 						}
 					}
 				}
@@ -773,6 +774,7 @@ public class MainMenu extends Activity {
 
 			return response;
 		}
+
 
 		@Override
 		protected void onPostExecute(String result) {
@@ -878,30 +880,31 @@ public class MainMenu extends Activity {
 
 			try {
 
-				mFTPClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
-
-				mFTPClient.connect("10.1.0.6", 21);
+				mFTPClient.connect(UtilsConn.ftpAccess(getApplicationContext()).getIp(), 21);
 
 				if (FTPReply.isPositiveCompletion(mFTPClient.getReplyCode())) {
 
-					mFTPClient.login("litesfa", "egoo4Ur");
+					mFTPClient.login(UtilsConn.ftpAccess(getApplicationContext()).getUser(), UtilsConn.ftpAccess(getApplicationContext()).getPass());
 
 					mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
 					mFTPClient.enterLocalPassiveMode();
 
-					String sourceFile = "/Update/LiteSFA/LiteSFA.apk";
-					FileOutputStream desFile1 = new FileOutputStream("sdcard/download/LiteSFA.apk");
+					String sourceFile = UtilsConn.ftpAccess(getApplicationContext()).getApkFile();
+
+					FileOutputStream desFile1 = new FileOutputStream("sdcard/download/LiteSFATest.apk");
 					mFTPClient.retrieveFile(sourceFile, desFile1);
 
-					sourceFile = "/Update/LiteSFA/LiteReportsVer.txt";
-					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVer.txt");
+					sourceFile = "/Update/LiteSFA/LiteReportsVerTEST.txt";
+					sourceFile = UtilsConn.ftpAccess(getApplicationContext()).getVerFile();
+
+					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVerTest.txt");
 					mFTPClient.retrieveFile(sourceFile, desFile2);
 
 					desFile1.close();
 					desFile2.close();
 
 				} else {
-					errMessage = "Probeme la conectare!";
+					errMessage = "Probleme la conectare!";
 				}
 			} catch (Exception e) {
 				errMessage = e.getMessage();

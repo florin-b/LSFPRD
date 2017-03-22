@@ -26,6 +26,7 @@ import model.OperatiiClient;
 import model.UserInfo;
 import utils.MapUtils;
 import utils.UtilsAddress;
+import utils.UtilsComenzi;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.ActionBar;
@@ -72,9 +73,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private TextView txtObsPlata, textMail;
 
 	private static final String METHOD_NAME = "getClientJud";
-
-	String[] tipPlata = { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata", "BRD - Card BRD", "ING - Card ING",
-			"UNI - Card Unicredit", "E1 - Numerar sofer" };
 
 	String[] tipPlataOnline = { "E - Numerar la livrare", "INS - Card online", "O - Virament bancar" };
 
@@ -196,7 +194,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransportOnline);
 
 			} else {
-				adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlata);
+				adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, UtilsComenzi.tipPlataGed());
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
 
 			}
@@ -273,8 +271,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			// tip plata
 			for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
 
-				strTipPlata = adapterSpinnerPlata.getItem(i).toString().substring(0, adapterSpinnerPlata.getItem(i).toString().indexOf("-") - 1)
-						.trim();
+				strTipPlata = adapterSpinnerPlata.getItem(i).toString().substring(0, adapterSpinnerPlata.getItem(i).toString().indexOf("-") - 1).trim();
 
 				if (strTipPlata.equals(dateLivrareInstance.getTipPlata())) {
 					spinnerPlata.setSelection(i);
@@ -323,6 +320,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		chkbClientLaRaft.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
+			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 				if (isChecked) {
@@ -500,8 +498,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			listJudeteLivrare = new ArrayList<HashMap<String, String>>();
 
-			adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
-					new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+			adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
+					R.id.textNumeJudet, R.id.textCodJudet });
 
 			HashMap<String, String> temp = new HashMap<String, String>();
 			temp.put("numeJudet", UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudetD()));
@@ -519,8 +517,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		listJudeteLivrare = new ArrayList<HashMap<String, String>>(listJudete);
 
-		adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
-				new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+		adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
+				R.id.textNumeJudet, R.id.textCodJudet });
 
 		spinnerJudetLivrare.setAdapter(adapterJudeteLivrare);
 		spinnerJudetLivrare.setSelection(0);
@@ -845,15 +843,18 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textLocalitate.addTextChangedListener(new TextWatcher() {
 
+			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setOras(textLocalitate.getText().toString().trim());
 
 			}
 
+			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
+			@Override
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -865,15 +866,18 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textStrada.addTextChangedListener(new TextWatcher() {
 
+			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setStrada(textStrada.getText().toString().trim());
 
 			}
 
+			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
+			@Override
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -907,15 +911,18 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textLocalitateLivrare.addTextChangedListener(new TextWatcher() {
 
+			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setOrasD(textLocalitateLivrare.getText().toString().trim());
 
 			}
 
+			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
+			@Override
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -927,15 +934,18 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textStradaLivrare.addTextChangedListener(new TextWatcher() {
 
+			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				DateLivrare.getInstance().setAdresaD(textStradaLivrare.getText().toString().trim());
 
 			}
 
+			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 			}
 
+			@Override
 			public void afterTextChanged(Editable s) {
 
 			}
@@ -1058,7 +1068,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		if (spinnerTransp.getSelectedItem().toString().toLowerCase().contains("tcli") && DateLivrare.getInstance().getTipPersClient().equals("PF")
 				&& !DateLivrare.getInstance().isFacturaCmd()) {
-
 			if (pers.equals(""))
 				pers = " ";
 
@@ -1160,6 +1169,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			dateLivrareInstance.setPrelucrare(spinnerIndoire.getSelectedItem().toString());
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
+
+		// beans.LatLng coordAdresa = new
+		// beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude,dateLivrareInstance.getCoordonateAdresa().longitude);
+		// EnumZona zona = ZoneBucuresti.getZonaBucuresti(coordAdresa);
+		// Toast.makeText(getApplicationContext(), zona.toString(),
+		// Toast.LENGTH_LONG).show();
 
 		finish();
 
@@ -1386,6 +1401,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
+	@Override
 	public void addressSelected(LatLng coord, android.location.Address address) {
 		DateLivrare.getInstance().setCoordonateAdresa(coord);
 		setAdresaLivrare(MapUtils.getAddress(address));

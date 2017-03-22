@@ -407,7 +407,7 @@
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="0.2"
-                        android:text="Aprobat DV" />
+                        android:text="Aprobat DZ" />
 
                     <TextView
                         android:id="@+id/textAcceptDV"

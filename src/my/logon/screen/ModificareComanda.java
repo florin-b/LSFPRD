@@ -479,8 +479,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						prepareArtForDelivery();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && tipClientVar.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
 							return;
 						}
 
@@ -737,6 +736,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		articol.setUmb("BUC");
 		articol.setDepart(listArticoleComanda.get(0).getDepart());
 		articol.setObservatii("");
+		articol.setIstoricPret("");
 		listArticoleComanda.add(articol);
 
 	}
@@ -773,6 +773,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 				obj.put("observatii", listArticoleComanda.get(i).getTipAlert());
 				obj.put("departAprob", listArticoleComanda.get(i).getDepartAprob());
+				obj.put("istoricPret", listArticoleComanda.get(i).getIstoricPret());
 				myArray.put(obj);
 			}
 		} catch (Exception ex) {
@@ -1286,7 +1287,6 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			spinnerComenzi.setVisibility(View.INVISIBLE);
 			salveazaComandaBtn.setVisibility(View.INVISIBLE);
 			stergeComandaBtn.setVisibility(View.INVISIBLE);
-
 			aprobareBtn.setVisibility(View.INVISIBLE);
 
 		}
@@ -1308,13 +1308,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 				listViewSelPos = position;
 
-				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos)
-						|| (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
+				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos) || (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewSelPos - 1, 0);
 				}
 
-				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos)
-						|| (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
+				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos) || (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewArticole.getFirstVisiblePosition() + 1, 0);
 				}
 

@@ -20,25 +20,23 @@ import enums.EnumTipAlert;
 
 public class UtilsGeneral {
 
-	public static String[] numeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Buzau", "Constanta", "Cluj", "Craiova", "Focsani",
-			"Galati", "Glina", "Hunedoara", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
+	public static String[] numeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Buzau", "Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Glina",
+			"Hunedoara", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
 
-	public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "HD10", "IS10",
-			"BU11", "BH10", "BU12", "NT10", "AG10", "PH10", "TM10", "MS10" };
+	public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "HD10", "IS10", "BU11",
+			"BH10", "BU12", "NT10", "AG10", "PH10", "TM10", "MS10" };
 
-	public static String[] numeDivizii = { "Lemnoase", "Feronerie", "Parchet", "Materiale grele", "Electrice", "Gips", "Chimice", "Instalatii",
-			"Hidroizolatii" };
+	public static String[] numeDivizii = { "Lemnoase", "Feronerie", "Parchet", "Materiale grele", "Electrice", "Gips", "Chimice", "Instalatii", "Hidroizolatii" };
 
 	public static String[] codDivizii = { "01", "02", "03", "04", "05", "06", "07", "08", "09" };
 
-	public static String[] numeJudete = { "Selectati un judet", "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA",
-			"BRASOV", "BUCURESTI", "BUZAU", "CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU",
-			"GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI", "ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ",
-			"SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN", "TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
+	public static String[] numeJudete = { "Selectati un judet", "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV",
+			"BUCURESTI", "BUZAU", "CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA",
+			"HUNEDOARA", "IALOMITA", "IASI", "ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA",
+			"TELEORMAN", "TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
 
-	public static String[] codJudete = { " ", "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15",
-			"16", "17", "52", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38",
-			"37", "39" };
+	public static String[] codJudete = { " ", "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17",
+			"52", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
 
 	private static String[] depoziteDISTRIB = { "V1 - vanzare", "V2 - vanzare", "V3 - vanzare", "G1 - gratuite", "G2 - gratuite", "G3 - gratuite",
 			"D1 - deteriorate", "D2 - deteriorate", "D3 - deteriorate", "DESC", "GAR1" };
@@ -439,6 +437,119 @@ public class UtilsGeneral {
 			retVal = "VRANCEA";
 
 		return retVal;
+	}
+
+	public static String getFiliala(String numeFiliala) {
+		String fl = "NN10";
+
+		if (numeFiliala.equals("BACAU"))
+			fl = "BC10";
+
+		if (numeFiliala.equals("BUZAU"))
+			fl = "BZ10";
+
+		if (numeFiliala.equals("GALATI"))
+			fl = "GL10";
+
+		if (numeFiliala.equals("PITESTI"))
+			fl = "AG10";
+
+		if (numeFiliala.equals("TIMISOARA"))
+			fl = "TM10";
+
+		if (numeFiliala.equals("ORADEA"))
+			fl = "BH10";
+
+		if (numeFiliala.equals("FOCSANI"))
+			fl = "VN10";
+
+		if (numeFiliala.equals("GLINA"))
+			fl = "BU10";
+
+		if (numeFiliala.equals("ANDRONACHE"))
+			fl = "BU13";
+
+		if (numeFiliala.equals("OTOPENI"))
+			fl = "BU12";
+
+		if (numeFiliala.equals("CLUJ"))
+			fl = "CJ10";
+
+		if (numeFiliala.equals("BAIA"))
+			fl = "MM10";
+
+		if (numeFiliala.equals("MILITARI"))
+			fl = "BU11";
+
+		if (numeFiliala.equals("CONSTANTA"))
+			fl = "CT10";
+
+		if (numeFiliala.equals("BRASOV"))
+			fl = "BV10";
+
+		if (numeFiliala.equals("PLOIESTI"))
+			fl = "PH10";
+
+		if (numeFiliala.equals("PIATRA"))
+			fl = "NT10";
+
+		if (numeFiliala.equals("MURES"))
+			fl = "MS10";
+
+		if (numeFiliala.equals("IASI"))
+			fl = "IS10";
+
+		if (numeFiliala.equals("CRAIOVA"))
+			fl = "DJ10";
+
+		if (numeFiliala.equals("SIBIU"))
+			fl = "SB10";
+
+		return fl;
+
+	}
+
+	public static String getDepart(String numeDepart) {
+		String dpt = "00";
+
+		if (numeDepart.equals("CHIM"))
+			dpt = "07";
+
+		if (numeDepart.equals("DIVE"))
+			dpt = "10";
+
+		if (numeDepart.equals("ELEC"))
+			dpt = "05";
+
+		if (numeDepart.equals("FERO"))
+			dpt = "02";
+
+		if (numeDepart.equals("GIPS"))
+			dpt = "06";
+
+		if (numeDepart.equals("INST"))
+			dpt = "08";
+
+		if (numeDepart.equals("LEMN"))
+			dpt = "01";
+
+		if (numeDepart.equals("MATE"))
+			dpt = "04";
+
+		if (numeDepart.equals("PARC"))
+			dpt = "03";
+
+		if (numeDepart.equals("CHIM"))
+			dpt = "07";
+
+		if (numeDepart.equals("HIDR"))
+			dpt = "09";
+
+		if (numeDepart.equals("LEFA"))
+			dpt = "02";
+
+		return dpt;
+
 	}
 
 }
