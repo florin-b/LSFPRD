@@ -184,8 +184,6 @@ public class MainMenu extends Activity {
 		animation.setRepeatCount(Animation.INFINITE);
 		animation.setRepeatMode(Animation.REVERSE);
 
-		
-		
 		// verificare update doar la logon
 		if (UserInfo.getInstance().getParentScreen().equals("logon")) {
 
@@ -487,7 +485,8 @@ public class MainMenu extends Activity {
 					Intent nextScreen = null;
 					boolean isDownloading = false;
 
-					if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.KA.getTipAcces())) {
+					if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.KA.getTipAcces())
+							|| UserInfo.getInstance().getTipUser().equals(EnumTipUser.SK.getTipAcces())) {
 						nextScreen = new Intent(MainMenu.this, ObiectiveKA.class);
 					} else if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()) || UserInfo.getInstance().getTipUser()
 							.equals(EnumTipUser.DK.getTipAcces()))
@@ -747,7 +746,7 @@ public class MainMenu extends Activity {
 
 					String sourceFile = UtilsConn.ftpAccess(getApplicationContext()).getVerFile();
 
-					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVerTest.txt");
+					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVer.txt");
 					mFTPClient.retrieveFile(sourceFile, desFile2);
 
 					desFile2.close();
@@ -774,7 +773,6 @@ public class MainMenu extends Activity {
 
 			return response;
 		}
-
 
 		@Override
 		protected void onPostExecute(String result) {
@@ -891,13 +889,13 @@ public class MainMenu extends Activity {
 
 					String sourceFile = UtilsConn.ftpAccess(getApplicationContext()).getApkFile();
 
-					FileOutputStream desFile1 = new FileOutputStream("sdcard/download/LiteSFATest.apk");
+					FileOutputStream desFile1 = new FileOutputStream("sdcard/download/LiteSFA.apk");
 					mFTPClient.retrieveFile(sourceFile, desFile1);
 
-					sourceFile = "/Update/LiteSFA/LiteReportsVerTEST.txt";
+					sourceFile = "/Update/LiteSFA/LiteReportsVer.txt";
 					sourceFile = UtilsConn.ftpAccess(getApplicationContext()).getVerFile();
 
-					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVerTest.txt");
+					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVer.txt");
 					mFTPClient.retrieveFile(sourceFile, desFile2);
 
 					desFile1.close();

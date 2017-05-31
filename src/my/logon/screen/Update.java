@@ -218,9 +218,9 @@ public class Update extends Activity {
 					mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
 					mFTPClient.enterLocalPassiveMode();
 
-					String sourceFile = "/Update/LiteSFA/LiteReportsVerTest.txt";
+					String sourceFile = "/Update/LiteSFA/LiteReportsVer.txt";
 
-					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVerTest.txt");
+					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVer.txt");
 					mFTPClient.retrieveFile(sourceFile, desFile2);
 
 					desFile2.close();
@@ -306,13 +306,13 @@ public class Update extends Activity {
 					mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
 					mFTPClient.enterLocalPassiveMode();
 
-					String sourceFile = "/Update/LiteSFA/LiteSFATest.apk";
+					String sourceFile = "/Update/LiteSFA/LiteSFA.apk";
 
-					FileOutputStream desFile1 = new FileOutputStream("sdcard/download/LiteSFATest.apk");
+					FileOutputStream desFile1 = new FileOutputStream("sdcard/download/LiteSFA.apk");
 					mFTPClient.retrieveFile(sourceFile, desFile1);
 
 					sourceFile = "/Update/LiteSFA/LiteReportsVer.txt";
-					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVerTest.txt");
+					FileOutputStream desFile2 = new FileOutputStream("sdcard/download/LiteReportsVer.txt");
 					mFTPClient.retrieveFile(sourceFile, desFile2);
 
 					desFile1.close();
@@ -366,14 +366,14 @@ public class Update extends Activity {
 
 	public void startInstall() {
 
-		String fileUrl = "/download/LiteSFATest.apk";
+		String fileUrl = "/download/LiteSFA.apk";
 		String file = android.os.Environment.getExternalStorageDirectory().getPath() + fileUrl;
 		File f = new File(file);
 
 		if (f.exists()) {
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/"
-					+ "LiteSFATest.apk")), "application/vnd.android.package-archive");
+					+ "LiteSFA.apk")), "application/vnd.android.package-archive");
 			startActivity(intent);
 			finish();
 		} else {
@@ -395,7 +395,7 @@ public class Update extends Activity {
 
 		try {
 
-			File fVer = new File(Environment.getExternalStorageDirectory() + "/download/LiteReportsVerTest.txt");
+			File fVer = new File(Environment.getExternalStorageDirectory() + "/download/LiteReportsVer.txt");
 			FileInputStream fileIS = new FileInputStream(fVer);
 			BufferedReader buf = new BufferedReader(new InputStreamReader(fileIS));
 			String readString = buf.readLine();
@@ -417,7 +417,7 @@ public class Update extends Activity {
 
 					newVersionCodeLabel.setVisibility(View.VISIBLE);
 					newVersionCode.setVisibility(View.VISIBLE);
-
+					
 					newVersion.setText(tokenVer[0]);
 					releaseDate.setText(tokenVer[1]);
 					newVersionCode.setText(tokenVer[3]);

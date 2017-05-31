@@ -20,5 +20,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="lib" path="D:/Aplicatii/Android/Librarii/google-maps-services-0.1.7"/>
+	<classpathentry exported="true" kind="lib" path="D:/Aplicatii/Android/Librarii/ZoneBucuresti.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

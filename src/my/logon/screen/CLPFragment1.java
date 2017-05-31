@@ -94,10 +94,11 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
 
 	String[] numeFiliala = { "Bacau", "Baia Mare", "Brasov", "Buzau", "Brasov-central", "Buc. Andronache", "Buc. Militari", "Buc. Otopeni", "Buc. Glina",
-			"Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Hunedoara", "Iasi", "Oradea", "Piatra Neamt", "Pitesti", "Ploiesti", "Timisoara", "Tg. Mures" };
+			"Constanta", "Cluj", "Craiova", "Focsani", "Galati", "Hunedoara", "Iasi", "Oradea", "Piatra Neamt", "Pitesti", "Ploiesti", "Sibiu", "Timisoara",
+			"Tg. Mures" };
 
 	String[] codFiliala = { "BC10", "MM10", "BV10", "BZ10", "BV90", "BU13", "BU11", "BU12", "BU10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "HD10", "IS10",
-			"BH10", "NT10", "AG10", "PH10", "TM10", "MS10" };
+			"BH10", "NT10", "AG10", "PH10", "SB10", "TM10", "MS10" };
 
 	String[] tipPlata = { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata" };
 
@@ -1145,7 +1146,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	}
 
-	
+	@Override
 	public void operatiiAdresaComplete(EnumOperatiiAdresa numeComanda, Object result, EnumLocalitate tipLocalitate) {
 		switch (numeComanda) {
 		case GET_ADRESE_JUDET:
@@ -1157,7 +1158,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	}
 
-	
+	@Override
 	public void addressSelected(LatLng coord, android.location.Address address) {
 		coordAdresa = coord;
 		setAdresaLivrare(MapUtils.getAddress(address));

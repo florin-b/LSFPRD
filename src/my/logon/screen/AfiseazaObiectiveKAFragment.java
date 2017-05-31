@@ -64,8 +64,9 @@ public class AfiseazaObiectiveKAFragment extends Fragment implements DialogObiec
 
 		setupLayout(v);
 
-		if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces()) || UserInfo.getInstance().getTipUser()
-				.equals(EnumTipUser.DK.getTipAcces()))
+		if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.DV.getTipAcces())
+				|| UserInfo.getInstance().getTipUser().equals(EnumTipUser.DK.getTipAcces()) || UserInfo.getInstance().getTipUser()
+				.equals(EnumTipUser.SK.getTipAcces()))
 				&& !UtilsUser.isDV_CONS())
 			optiuniDialog.show();
 		else
@@ -159,10 +160,8 @@ public class AfiseazaObiectiveKAFragment extends Fragment implements DialogObiec
 
 		strDetalii.append("Adresa :" + UtilsFormatting.addSpace("Adresa :", 30) + adresa + "\n");
 		strDetalii.append("Beneficiar :" + UtilsFormatting.addSpace("Beneficiar :", 30) + detaliiObiectiv.getNumeBeneficiar() + "\n");
-		strDetalii.append("Antreprenor general :" + UtilsFormatting.addSpace("Antreprenor general :", 30)
-				+ detaliiObiectiv.getNumeAntreprenorGeneral() + "\n");
-		strDetalii.append("Categorie :" + UtilsFormatting.addSpace("Categorie :", 30) + detaliiObiectiv.getCategorieObiectiv().getNumeCategorie()
-				+ "\n");
+		strDetalii.append("Antreprenor general :" + UtilsFormatting.addSpace("Antreprenor general :", 30) + detaliiObiectiv.getNumeAntreprenorGeneral() + "\n");
+		strDetalii.append("Categorie :" + UtilsFormatting.addSpace("Categorie :", 30) + detaliiObiectiv.getCategorieObiectiv().getNumeCategorie() + "\n");
 		strDetalii.append("Valoare :" + UtilsFormatting.addSpace("Valoare :", 30)
 				+ UtilsFormatting.format2Decimals(Double.parseDouble(detaliiObiectiv.getValoareObiectiv()), true) + " RON \n");
 
@@ -224,9 +223,9 @@ public class AfiseazaObiectiveKAFragment extends Fragment implements DialogObiec
 				while (iteratorEv.hasNext()) {
 					BeanUrmarireEveniment eveniment = iteratorEv.next();
 					if (eveniment.getCodDepart().equals(stadiu.getCodDepart()) && eveniment.getCodClient().equals(constructor.getCodClient())) {
-						strDetalii.append(UtilsFormatting.addSpace("", 43) + EnumUrmarireObiective.getNumeEveniment(eveniment.getIdEveniment())
-								+ " :" + UtilsFormatting.addSpace(EnumUrmarireObiective.getNumeEveniment(eveniment.getIdEveniment()), 10)
-								+ eveniment.getData() + " Obs: " + eveniment.getObservatii() + " \n");
+						strDetalii.append(UtilsFormatting.addSpace("", 43) + EnumUrmarireObiective.getNumeEveniment(eveniment.getIdEveniment()) + " :"
+								+ UtilsFormatting.addSpace(EnumUrmarireObiective.getNumeEveniment(eveniment.getIdEveniment()), 10) + eveniment.getData()
+								+ " Obs: " + eveniment.getObservatii() + " \n");
 
 						iteratorEv.remove();
 

@@ -108,6 +108,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 	ComenziDAO comenzi;
 
 	LinearLayout layoutMarja, layoutDetaliiCmd;
+	private LinearLayout layoutCmdBV90;
 
 	enum TipUser {
 		AG("Agenti", "AG"), KA("Keyaccounti", "KA"), CV("Consilieri", "CV");
@@ -173,8 +174,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 		spinnerListener.setListener(this);
 
-		adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
-				R.id.textNumeAgent, R.id.textCodAgent });
+		adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] { R.id.textNumeAgent,
+				R.id.textCodAgent });
 
 		listViewArticole = (ListView) findViewById(R.id.listArt);
 
@@ -214,6 +215,9 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		layoutTotalCmd = (LinearLayout) findViewById(R.id.layoutAfisTotalCmd);
 		layoutTotalCmd.setVisibility(View.INVISIBLE);
 
+		layoutCmdBV90 = (LinearLayout) findViewById(R.id.layoutCmdBV90);
+		layoutCmdBV90.setVisibility(View.GONE);
+
 		textTotalCmd = (TextView) findViewById(R.id.textValTotalCmd);
 		textTotalTvaCmd = (TextView) findViewById(R.id.textValTotalCmdTva);
 
@@ -252,7 +256,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 	}
 
 	boolean isSefDepart() {
-		return UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18");
+		return UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
+				|| UserInfo.getInstance().getTipAcces().equals("32");
 	}
 
 	boolean isAgent() {
@@ -329,7 +334,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			selectedCodDepart = UserInfo.getInstance().getCodDepart();
 
 		// dka
-		if (UserInfo.getInstance().getTipAcces().equals("35")) {
+		if (UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("32")) {
 			selectedCodDepart = "10";
 		}
 
@@ -359,8 +364,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		spinnerTipUser.setVisibility(View.VISIBLE);
 		ArrayList<HashMap<String, String>> listTipUsers = new ArrayList<HashMap<String, String>>();
 
-		SimpleAdapter adapterTypes = new SimpleAdapter(this, listTipUsers, R.layout.generic_rowlayout, new String[] { "stringName", "stringId" },
-				new int[] { R.id.textName, R.id.textId });
+		SimpleAdapter adapterTypes = new SimpleAdapter(this, listTipUsers, R.layout.generic_rowlayout, new String[] { "stringName", "stringId" }, new int[] {
+				R.id.textName, R.id.textId });
 
 		HashMap<String, String> temp;
 
@@ -461,8 +466,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 		spinnerAgentiAfisCmd.setVisibility(View.VISIBLE);
 
-		adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
-				R.id.textNumeAgent, R.id.textCodAgent });
+		adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] { R.id.textNumeAgent,
+				R.id.textCodAgent });
 		spinnerAgentiAfisCmd.setAdapter(adapterAgenti);
 
 		if (listAgenti.size() > 0) {
@@ -601,6 +606,13 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			textPondereArtBAfis.setText(String.format("%.02f", (valoriComanda.getPondereB() / valoriComanda.getTotal()) * 100) + "%");
 
 		}
+
+		String unitLogAlt = listArticole.get(0).getUnitLogAlt();
+
+		if (unitLogAlt.equals("BV90") || unitLogAlt.equals("BV92"))
+			layoutCmdBV90.setVisibility(View.VISIBLE);
+		else
+			layoutCmdBV90.setVisibility(View.GONE);
 
 	}
 

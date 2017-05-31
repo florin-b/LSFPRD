@@ -120,8 +120,7 @@ public class User extends Activity implements HelperSiteListener {
 
 			// afisare filiale BUC
 			listFiliala = new ArrayList<HashMap<String, String>>();
-			adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" },
-					new int[] { R.id.textRowName });
+			adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" }, new int[] { R.id.textRowName });
 
 			HashMap<String, String> temp;
 
@@ -139,8 +138,8 @@ public class User extends Activity implements HelperSiteListener {
 
 		}
 
-		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance()
-				.getTipAcces().equals("18"))
+		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("32")
+				|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18"))
 				&& !UserInfo.getInstance().getUserSite().equals("X"))// KA,
 		// cons
 		// sau
@@ -151,8 +150,7 @@ public class User extends Activity implements HelperSiteListener {
 			if (UserInfo.getInstance().getUnitLog().contains("BU")) {
 				// afisare filiale BUC
 				listFiliala = new ArrayList<HashMap<String, String>>();
-				adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" },
-						new int[] { R.id.textRowName });
+				adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" }, new int[] { R.id.textRowName });
 
 				HashMap<String, String> temp;
 				temp = new HashMap<String, String>();
@@ -217,8 +215,8 @@ public class User extends Activity implements HelperSiteListener {
 		}
 
 		listDepart = new ArrayList<HashMap<String, String>>();
-		adapterDepart = new SimpleAdapter(this, listDepart, R.layout.simplerowlayout_2, new String[] { "rowText", "rowDesc" }, new int[] {
-				R.id.textRowName, R.id.textRowId });
+		adapterDepart = new SimpleAdapter(this, listDepart, R.layout.simplerowlayout_2, new String[] { "rowText", "rowDesc" }, new int[] { R.id.textRowName,
+				R.id.textRowId });
 
 		HashMap<String, String> temp;
 		temp = new HashMap<String, String>();
@@ -381,7 +379,7 @@ public class User extends Activity implements HelperSiteListener {
 			retVal = "Administrator";
 		} else if (codAcc.equals("9")) {
 			retVal = "Agent";
-		} else if (codAcc.equals("10")) {
+		} else if (codAcc.equals("10") || codAcc.equals("32")) {
 			retVal = "Sef departament";
 		}
 
@@ -507,6 +505,7 @@ public class User extends Activity implements HelperSiteListener {
 		return;
 	}
 
+	@Override
 	public void helperSiteComplete(String numeComanda, Object result) {
 
 		if (helperSite != null)
