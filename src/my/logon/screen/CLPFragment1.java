@@ -26,7 +26,9 @@ import model.UserInfo;
 import utils.MapUtils;
 import utils.ScreenUtils;
 import utils.UtilsGeneral;
+
 import android.app.DatePickerDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -186,6 +188,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			txtNumeClient = (EditText) v.findViewById(R.id.txtNumeClient);
 			txtNumeClient.setHint("Introduceti nume client");
 
+			initLocale();
+			
 			this.cautaClientBtn = (Button) v.findViewById(R.id.clientBtn);
 			addListenerCautaClient();
 
@@ -1141,6 +1145,16 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	}
 
+	
+	private void initLocale()
+	{
+		Locale locale = new Locale("en", "US");
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
+	}
+	
 	public void opAgentComplete(ArrayList<HashMap<String, String>> listAgenti) {
 		populateAgentiList(listAgenti);
 

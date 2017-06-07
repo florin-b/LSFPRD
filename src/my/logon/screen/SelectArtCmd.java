@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import listeners.OperatiiArticolListener;
 import model.ArticolComanda;
@@ -23,6 +24,7 @@ import utils.DepartamentAgent;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import adapters.CautareArticoleAdapter;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -147,7 +149,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		resultLayout = (LinearLayout) findViewById(R.id.resLayout);
 		resultLayout.setVisibility(View.INVISIBLE);
 
-		nf2 = NumberFormat.getInstance();
+		nf2 = NumberFormat.getInstance(new Locale("en","US"));
 
 		textStocKA = (TextView) findViewById(R.id.textStocKA);
 		textUmKA = (TextView) findViewById(R.id.textUmKA);

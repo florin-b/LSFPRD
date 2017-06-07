@@ -107,6 +107,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 			operatiiComenzi = new DlDAO(getActivity());
 			operatiiComenzi.setDlDAOListener(this);
 
+			initLocale();
 			nf2 = NumberFormat.getInstance();
 
 			layoutArtHeader = (LinearLayout) v.findViewById(R.id.layoutHeaderArtDl);
@@ -154,9 +155,9 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 			listArtCmdDl = (ListView) v.findViewById(R.id.listArtCmdDl);
 
 			listArtSelDl = new ArrayList<HashMap<String, String>>();
-			adapterListArtDl = new SimpleAdapter(getActivity(), listArtSelDl, R.layout.custom_art_row_clp, new String[] { "nrCrt", "numeArt", "codArt",
-					"cantArt", "depozit", "Umb" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textDepozit,
-					R.id.textCantUmb }
+			adapterListArtDl = new SimpleAdapter(getActivity(), listArtSelDl, R.layout.custom_art_row_clp, new String[] { "nrCrt", "numeArt",
+					"codArt", "cantArt", "depozit", "Umb" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt,
+					R.id.textDepozit, R.id.textCantUmb }
 
 			);
 
@@ -822,9 +823,9 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 					+ CreareDispozitiiLivrare.telefon + "#" + CreareDispozitiiLivrare.codFurnizor + "#" + CreareDispozitiiLivrare.dataLivrare + "#"
 					+ CreareDispozitiiLivrare.tipMarfa + "#" + CreareDispozitiiLivrare.masaMarfa + "#"
 					+ DLFragment1.spinnerTipCamion.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#"
-					+ DLFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#" + depozDest + "#" + tipPlata + "#"
-					+ valoareClp + "#" + observatiiClp + "#" + CreareDispozitiiLivrare.codFurnizorProduse + "#" + CreareDispozitiiLivrare.selectedAgent + "#"
-					+ CreareDispozitiiLivrare.tipTransport + "#" + strTonaj + "@" + articoleFinale;
+					+ DLFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#" + depozDest + "#"
+					+ tipPlata + "#" + valoareClp + "#" + observatiiClp + "#" + CreareDispozitiiLivrare.codFurnizorProduse + "#"
+					+ CreareDispozitiiLivrare.selectedAgent + "#" + CreareDispozitiiLivrare.tipTransport + "#" + strTonaj + "@" + articoleFinale;
 
 			performSaveDl();
 
@@ -892,7 +893,7 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 	private void clearAllData() {
 
 		listArticole.clear();
-		// adapterArticole.notifyDataSetChanged();
+
 
 		listArtSelDl.clear();
 		adapterListArtDl.notifyDataSetChanged();
@@ -921,25 +922,18 @@ public class DLFragment2 extends Fragment implements DlDAOListener, OperatiiArti
 		}
 
 		slidingDrawerSaveDl.close();
+		initLocale();
+	}
+
+	private void initLocale() {
+		Locale locale = new Locale("en", "US");
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
 	}
 
 	private void checkStaticVars() {
-		// pentru in idle mare variabilele statice se sterg si setarile locale
-		// se reseteaza
-
-		// resetare locale la idle
-		String locLang = getActivity().getResources().getConfiguration().locale.getLanguage();
-
-		if (!locLang.toLowerCase(Locale.getDefault()).equals("en")) {
-
-			String languageToLoad = "en";
-			Locale locale = new Locale(languageToLoad);
-			Locale.setDefault(locale);
-			Configuration config = new Configuration();
-			config.locale = locale;
-			getActivity().getResources().updateConfiguration(config, getActivity().getResources().getDisplayMetrics());
-		}
-
 		// restart app la idle
 		if (UserInfo.getInstance().getCod().equals("")) {
 
