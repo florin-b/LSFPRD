@@ -875,7 +875,7 @@ public class InfoStrings {
 
 			if (filiala.equals("BU12"))
 				codClient = "4119000026";
-			
+
 			if (filiala.equals("SB10"))
 				codClient = "4119000422";
 
@@ -944,6 +944,9 @@ public class InfoStrings {
 
 			if (filiala.equals("BU12"))
 				codClient = "4119000062";
+
+			if (filiala.equals("SB10"))
+				codClient = "4119000410";
 
 		}
 
