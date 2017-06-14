@@ -877,7 +877,7 @@ public class InfoStrings {
 				codClient = "4119000026";
 
 			if (filiala.equals("SB10"))
-				codClient = "4119000422";
+				codClient = "4119000360";
 
 		}
 
@@ -1018,6 +1018,9 @@ public class InfoStrings {
 
 		if (filiala.equals("BU12")) // Otopeni
 			codClient = "4119000271";
+		
+		if (filiala.equals("SB10")) 
+			codClient = "4119000411";
 
 		return codClient;
 

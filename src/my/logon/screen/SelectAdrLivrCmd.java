@@ -80,8 +80,8 @@ import enums.EnumOperatiiAdresa;
 import enums.EnumOperatiiObiective;
 import enums.EnumZona;
 
-public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, OperatiiAdresaListener, ObiectiveListener, MapListener,
-		AutocompleteDialogListener {
+public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, OperatiiAdresaListener, ObiectiveListener,
+		MapListener, AutocompleteDialogListener {
 
 	private Button saveAdrLivrBtn;
 	private EditText txtPers, txtTel, txtObservatii, txtValoareIncasare;
@@ -237,8 +237,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		operatiiAdresa.setOperatiiAdresaListener(this);
 
 		listJudete = new ArrayList<HashMap<String, String>>();
-		adapterJudete = new SimpleAdapter(this, listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet,
-				R.id.textCodJudet });
+		adapterJudete = new SimpleAdapter(this, listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
+				R.id.textNumeJudet, R.id.textCodJudet });
 
 		spinnerTermenPlata = (Spinner) findViewById(R.id.spinnerTermenPlata);
 		adapterTermenPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -1281,11 +1281,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setPrelucrare("-1");
 
 		if (dateLivrareInstance.getOras().equalsIgnoreCase("bucuresti")) {
-			beans.LatLng coordAdresa = new beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude, dateLivrareInstance.getCoordonateAdresa().longitude);
+			beans.LatLng coordAdresa = new beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude,
+					dateLivrareInstance.getCoordonateAdresa().longitude);
 			EnumZona zona = ZoneBucuresti.getZonaBucuresti(coordAdresa);
 
 			dateLivrareInstance.setZonaBucuresti(zona);
 		}
+		else
+			dateLivrareInstance.setZonaBucuresti(EnumZona.NEDEFINIT);
 
 		finish();
 
