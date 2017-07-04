@@ -285,6 +285,7 @@ public class AlgoritmComandaGed {
 			String[] oneCoef = arrayCoefs[Integer.parseInt(codDepart) - 1].split(":");
 			localCoef = Double.parseDouble(oneCoef[1]);
 		}
+
 		return localCoef;
 	}
 

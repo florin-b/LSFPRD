@@ -148,7 +148,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	Dialog dialog, dlgTransp;
 
 	private LinearLayout layoutHeader;
-	private NumberFormat nf3;
+	
 	private String selectedPretClient = "", selectedCodArticol = "", selectedCantClient = "", selectedDepozit = "", selectedUm = "";
 
 	private double existingStoc = 0;
@@ -272,10 +272,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			mProgress.setVisibility(View.INVISIBLE);
 
 			initLocale();
-			nf3 = NumberFormat.getInstance();
-			nf3.setMinimumFractionDigits(2);
-			nf3.setMaximumFractionDigits(2);
-			nf3.setGroupingUsed(false);
+			
 
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT).show();
@@ -620,6 +617,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	private double getValoareTransportSap() {
 
+		NumberFormat nf3 = NumberFormat.getInstance(new Locale("en", "US"));
+		nf3.setMinimumFractionDigits(2);
+		nf3.setMaximumFractionDigits(2);
+		nf3.setGroupingUsed(false);
+		
 		double totalTransp = UtilsComenziGed.getValoareTransportSap(listArticole);
 
 		if (valTransport <= valTransportSAP || valTransport < totalTransp) {
@@ -1712,6 +1714,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		dialogModifValTransp.setCancelable(false);
 		dialogModifValTransp.show();
 
+		final NumberFormat nf3 = NumberFormat.getInstance(new Locale("en", "US"));
+		nf3.setMinimumFractionDigits(2);
+		nf3.setMaximumFractionDigits(2);
+		nf3.setGroupingUsed(false);
+		
 		final EditText textValTransp = (EditText) dialogModifValTransp.findViewById(R.id.txtValTransp);
 
 		txtTranspSAP = (TextView) dialogModifValTransp.findViewById(R.id.txtTranspSAP);
