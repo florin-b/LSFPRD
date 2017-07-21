@@ -41,8 +41,8 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 	}
 
 	public static class ViewHolder {
-		TextView textNrCrt, textNumeArt, textCodArt, textCantArt, textUmArt, textPretArt, textMonedaArt, textDepozit, textStatusArt, textProcRed, textAddCond,
-				textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial, textIstoricPret;
+		TextView textNrCrt, textNumeArt, textCodArt, textCantArt, textUmArt, textPretArt, textMonedaArt, textDepozit, textStatusArt, textProcRed,
+				textAddCond, textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial, textIstoricPret;
 
 		LinearLayout layoutIstoricPret;
 	}
@@ -175,9 +175,10 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 
 			valoriComanda.setTotal(art.getPret() + valoriComanda.getTotal());
 
-			marja = (art.getPretUnit() - art.getCmp()) * Double.valueOf(art.getCantUmb());
-
-			valoriComanda.setMarja(marja + valoriComanda.getMarja());
+			if (art.getCmp() > 0) {
+				marja = (art.getPretUnit() - art.getCmp()) * Double.valueOf(art.getCantUmb());
+				valoriComanda.setMarja(marja + valoriComanda.getMarja());
+			}
 		}
 
 		return valoriComanda;

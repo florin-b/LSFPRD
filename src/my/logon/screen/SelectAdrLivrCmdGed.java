@@ -68,6 +68,7 @@ import com.google.android.gms.maps.model.LatLng;
 import dialogs.MapAddressDialog;
 import dialogs.SelectDateDialog;
 import enums.EnumClienti;
+import enums.EnumJudete;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 
@@ -273,7 +274,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			// tip plata
 			for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
 
-				strTipPlata = adapterSpinnerPlata.getItem(i).toString().substring(0, adapterSpinnerPlata.getItem(i).toString().indexOf("-") - 1).trim();
+				strTipPlata = adapterSpinnerPlata.getItem(i).toString().substring(0, adapterSpinnerPlata.getItem(i).toString().indexOf("-") - 1)
+						.trim();
 
 				if (strTipPlata.equals(dateLivrareInstance.getTipPlata())) {
 					spinnerPlata.setSelection(i);
@@ -553,8 +555,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			listJudeteLivrare = new ArrayList<HashMap<String, String>>();
 
-			adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
-					R.id.textNumeJudet, R.id.textCodJudet });
+			adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
+					new int[] { R.id.textNumeJudet, R.id.textCodJudet });
 
 			HashMap<String, String> temp = new HashMap<String, String>();
 			temp.put("numeJudet", UtilsGeneral.getNumeJudet(DateLivrare.getInstance().getCodJudetD()));
@@ -572,8 +574,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		listJudeteLivrare = new ArrayList<HashMap<String, String>>(listJudete);
 
-		adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
-				R.id.textNumeJudet, R.id.textCodJudet });
+		adapterJudeteLivrare = new SimpleAdapter(this, listJudeteLivrare, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
+				new int[] { R.id.textNumeJudet, R.id.textCodJudet });
 
 		spinnerJudetLivrare.setAdapter(adapterJudeteLivrare);
 		spinnerJudetLivrare.setSelection(0);
@@ -643,11 +645,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private void performGetJudete() {
-		try {
 
+		if (UtilsUser.isUserSite()) {
+
+			fillJudeteClient(EnumJudete.getRegionCodes());
+
+		} else {
 			String unitLog = UserInfo.getInstance().getUnitLog();
 
-			if (UtilsUser.isUserSite() && unitLog.equals("NN10"))
+			if (unitLog.equals("NN10"))
 				unitLog = "AG10";
 
 			HashMap<String, String> params = new HashMap<String, String>();
@@ -655,10 +661,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, METHOD_NAME, params);
 			call.getCallResults();
-
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
 		}
+
 	}
 
 	private void fillJudeteClient(String arrayJudete) {

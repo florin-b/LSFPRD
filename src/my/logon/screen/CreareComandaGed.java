@@ -148,7 +148,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	Dialog dialog, dlgTransp;
 
 	private LinearLayout layoutHeader;
-	
+
 	private String selectedPretClient = "", selectedCodArticol = "", selectedCantClient = "", selectedDepozit = "", selectedUm = "";
 
 	private double existingStoc = 0;
@@ -272,7 +272,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			mProgress.setVisibility(View.INVISIBLE);
 
 			initLocale();
-			
 
 		} catch (Exception ex) {
 			Toast.makeText(getApplicationContext(), ex.toString(), Toast.LENGTH_SHORT).show();
@@ -621,7 +620,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		nf3.setMinimumFractionDigits(2);
 		nf3.setMaximumFractionDigits(2);
 		nf3.setGroupingUsed(false);
-		
+
 		double totalTransp = UtilsComenziGed.getValoareTransportSap(listArticole);
 
 		if (valTransport <= valTransportSAP || valTransport < totalTransp) {
@@ -723,9 +722,9 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		nf.setMinimumFractionDigits(2);
 		nf.setMaximumFractionDigits(2);
 
-		textComisionGed.setVisibility(View.VISIBLE);
-		labelComisionClient.setVisibility(View.VISIBLE);
-		textComisionClient.setVisibility(View.VISIBLE);
+		textComisionGed.setVisibility(View.INVISIBLE);
+		labelComisionClient.setVisibility(View.INVISIBLE);
+		textComisionClient.setVisibility(View.INVISIBLE);
 		labelComisionClient.setText("Comision: ");
 
 		textComisionGed.setText("Comision: " + nf.format(algoritm.getMarjaBrutaGed() * algoritm.getCoefComision()));
@@ -1238,13 +1237,20 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		ArticolComanda articol = null;
 
+		String filialaSite = "", depozitSite = " ";
+
+		if (UtilsUser.isUserSite() && !listArticole.isEmpty()) {
+			filialaSite = listArticole.get(0).getFilialaSite();
+			depozitSite = listArticole.get(0).getDepozit();
+		}
+
 		// adaugare material transport
 		if (DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT")) {
 
 			articol = new ArticolComanda();
 			articol.setCodArticol("000000000030101050");
 			articol.setCantitate(1.0);
-			articol.setDepozit(" ");
+			articol.setDepozit(depozitSite);
 			articol.setPretUnit(valTransport);
 			articol.setProcent(0);
 			articol.setUm("BUC");
@@ -1258,7 +1264,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			articol.setCantUmb(1);
 			articol.setUmb("BUC");
 			articol.setPonderare(2);
-			articol.setFilialaSite("");
+			articol.setFilialaSite(filialaSite);
 			tempListArticole.add(articol);
 
 		}
@@ -1718,7 +1724,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		nf3.setMinimumFractionDigits(2);
 		nf3.setMaximumFractionDigits(2);
 		nf3.setGroupingUsed(false);
-		
+
 		final EditText textValTransp = (EditText) dialogModifValTransp.findViewById(R.id.txtValTransp);
 
 		txtTranspSAP = (TextView) dialogModifValTransp.findViewById(R.id.txtTranspSAP);
