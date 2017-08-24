@@ -4,6 +4,8 @@
  */
 package my.logon.screen;
 
+import helpers.HelperCostDescarcare;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.TimerTask;
 import listeners.ArticolModificareListener;
 import listeners.AsyncTaskListener;
 import listeners.ComenziDAOListener;
+import listeners.CostMacaraListener;
 import model.ArticolComanda;
 import model.Comanda;
 import model.ComenziDAO;
@@ -63,16 +66,20 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.ArticolCalculDesc;
 import beans.BeanArticoleAfisare;
 import beans.BeanComandaCreata;
 import beans.BeanConditii;
 import beans.BeanConditiiArticole;
 import beans.BeanConditiiHeader;
+import beans.CostDescarcare;
 import beans.DateLivrareAfisare;
 import dialogs.AprobariDialog;
+import dialogs.CostMacaraDialog;
 import enums.EnumComenziDAO;
 
-public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer {
+public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer,
+		CostMacaraListener {
 
 	Button quitBtn, stocBtn, clientBtn, articoleBtn, livrareBtn, salveazaComandaBtn, stergeComandaBtn, btnCommentariiCond, aprobareBtn;
 	String filiala = "", nume = "", cod = "", globalSubCmp = "0";
@@ -141,6 +148,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private ArticolModificareAdapter adapterArticole;
 	private String codTipReducere = "-1";
 	private LinearLayout layoutBV90;
+
+	private CostDescarcare costDescarcare;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -559,7 +568,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 						comandaJson = serializeComanda(comanda);
 
-						performSaveCmd();
+						verificaPretMacara();
 
 					}
 				});
@@ -570,6 +579,62 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			}
 
 		}
+	}
+
+	private void verificaPretMacara() {
+
+		HelperCostDescarcare.eliminaCostDescarcare(listArticoleComanda);
+
+		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
+
+			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(listArticoleComanda);
+
+			String listArtSer = operatiiComenzi.serializeArtCalcMacara(artCalcul);
+
+			HashMap<String, String> params = new HashMap<String, String>();
+
+			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
+
+			params.put("listArt", listArtSer);
+
+			operatiiComenzi.getCostMacara(params);
+		} else
+			performSaveCmd();
+
+	}
+
+	private void afiseazaPretMacaraDialog(String result) {
+
+		costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
+
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare.getValoareDescarcare());
+			macaraDialog.setCostMacaraListener(this);
+			macaraDialog.show();
+
+		} else {
+			if (!costDescarcare.getSePermite())
+				DateLivrare.getInstance().setMasinaMacara(false);
+
+			performSaveCmd();
+
+		}
+
+	}
+
+	private void trateazaPretMacara(boolean acceptaPret, double valoarePret) {
+
+		if (acceptaPret) {
+
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare.getArticoleDescarcare());
+
+			listArticoleComanda.addAll(articoleDescarcare);
+
+		}
+
+		performSaveCmd();
+
 	}
 
 	private boolean isReducere() {
@@ -1545,6 +1610,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		case SALVEAZA_COMANDA_DISTRIB:
 			saveCmdStatus((String) result);
 			break;
+		case GET_COST_MACARA:
+			afiseazaPretMacaraDialog((String) result);
+			break;
 		default:
 			break;
 		}
@@ -1570,6 +1638,12 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			adapterArticole.setListArticole(listArticoleComanda);
 			adapterArticole.notifyDataSetChanged();
 		}
+
+	}
+
+	@Override
+	public void acceptaCostMacara(boolean acceptaCost, double valoareCost) {
+		trateazaPretMacara(acceptaCost, valoareCost);
 
 	}
 }

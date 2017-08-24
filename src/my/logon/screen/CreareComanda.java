@@ -4,6 +4,8 @@
  */
 package my.logon.screen;
 
+import helpers.HelperCostDescarcare;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.TimerTask;
 import listeners.ArtComplDialogListener;
 import listeners.AsyncTaskListener;
 import listeners.ComenziDAOListener;
+import listeners.CostMacaraListener;
 import listeners.PaletAlertListener;
 import listeners.PretTransportDialogListener;
 import listeners.ValoareNegociataDialogListener;
@@ -66,15 +69,18 @@ import android.widget.SlidingDrawer.OnDrawerCloseListener;
 import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.ArticolCalculDesc;
+import beans.CostDescarcare;
 import dialogs.ArtComplDialog;
+import dialogs.CostMacaraDialog;
 import dialogs.PaletAlertDialog;
 import dialogs.PretTransportDialog;
 import dialogs.ValoareNegociataDialog;
 import enums.EnumComenziDAO;
 import enums.EnumDaNuOpt;
 
-public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener, PretTransportDialogListener,
-		ArtComplDialogListener, Observer, PaletAlertListener {
+public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener,
+		PretTransportDialogListener, ArtComplDialogListener, Observer, PaletAlertListener, CostMacaraListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd;
 	String filiala = "", nume = "", cod = "";
@@ -138,6 +144,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	private String comandaJson;
 	private Comanda comandaFinala = new Comanda();
 
+	private ComenziDAO comandaDAO;
+	private CostDescarcare costDescarcare;
+
 	public void onCreate(Bundle savedInstanceState) {
 
 		try {
@@ -150,6 +159,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			checkStaticVars();
 
 			ListaArticoleComanda.getInstance().addObserver(this);
+
+			comandaDAO = ComenziDAO.getInstance(this);
+			comandaDAO.setComenziDAOListener(this);
 
 			listArtCmd = (ListView) findViewById(R.id.listArtCmd);
 
@@ -349,21 +361,22 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
+			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false)
+					.setPositiveButton("Da", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
 
-					resetAllVars();
-					UserInfo.getInstance().setParentScreen("");
+							resetAllVars();
+							UserInfo.getInstance().setParentScreen("");
 
-					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
-					startActivity(nextScreen);
-					finish();
-				}
-			}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-			}).setTitle("Atentie!").setIcon(R.drawable.warning96);
+							Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
+							startActivity(nextScreen);
+							finish();
+						}
+					}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					}).setTitle("Atentie!").setIcon(R.drawable.warning96);
 
 			AlertDialog alert = builder.create();
 			alert.show();
@@ -510,10 +523,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				textNrFact.setText("1 factura (red. in pret)");
 			}
 
-			clientFinalStr += "#" + dateLivrareInstance.getStrada() + "^" + dateLivrareInstance.getOras() + "^" + dateLivrareInstance.getCodJudet() + "#"
-					+ tokenLivrare[1] + "#" + tokenLivrare[2] + "#" + tokenLivrare[3] + "#" + tokenLivrare[4].substring(0, 1).trim() + "#"
-					+ tokenLivrare[5].substring(0, 4).trim() + "#" + String.valueOf(totalComanda) + "#" + varUnitLog + "#" + UserInfo.getInstance().getCod()
-					+ "#" + factRed + "#";
+			clientFinalStr += "#" + dateLivrareInstance.getStrada() + "^" + dateLivrareInstance.getOras() + "^" + dateLivrareInstance.getCodJudet()
+					+ "#" + tokenLivrare[1] + "#" + tokenLivrare[2] + "#" + tokenLivrare[3] + "#" + tokenLivrare[4].substring(0, 1).trim() + "#"
+					+ tokenLivrare[5].substring(0, 4).trim() + "#" + String.valueOf(totalComanda) + "#" + varUnitLog + "#"
+					+ UserInfo.getInstance().getCod() + "#" + factRed + "#";
 
 			dateLivrareInstance.setPersContact(tokenLivrare[1]);
 			dateLivrareInstance.setNrTel(tokenLivrare[2]);
@@ -724,7 +737,6 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
-
 	private boolean isCondPF10_000() {
 		return CreareComanda.tipClientVar.equals("PF") && DateLivrare.getInstance().getTipPlata().equals("E") && totalComanda > 10000;
 	}
@@ -739,7 +751,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 						DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && CreareComanda.tipClientVar.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
+									.show();
 							return;
 						}
 
@@ -782,8 +795,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 								+ dateLivrareInstance.isAdrLivrNoua() + "#" + dateLivrareInstance.getTipDocInsotitor() + "#" + alerteKA + "#"
 								+ dateLivrareInstance.getObsPlata() + "#" + dateLivrareInstance.getAddrNumber() + "#" + localRedSeparat + "#"
 								+ CreareComanda.filialaAlternativa + "#" + dateLivrareInstance.getValoareIncasare() + "#"
-								+ UserInfo.getInstance().getUserSite() + "#" + userSiteMail + "#" + isValIncModif + "#" + codJ + "#" + adrLivrareGED + "@"
-								+ articoleFinaleStr;
+								+ UserInfo.getInstance().getUserSite() + "#" + userSiteMail + "#" + isValIncModif + "#" + codJ + "#" + adrLivrareGED
+								+ "@" + articoleFinaleStr;
 
 						// Comanda comanda = new Comanda();
 						comandaFinala.setCodClient(codClientVar);
@@ -801,7 +814,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 						comandaJson = serializeComanda(comandaFinala);
 						articoleFinaleStr = serializedResult;
 
-						trateazaConditiiSuplimentare();
+						verificaPretMacara();
 
 					}
 				});
@@ -820,6 +833,66 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			displayAlertPalet();
 		else
 			displayArtComplDialog();
+	}
+
+	private void afiseazaPretMacaraDialog(String result) {
+
+		costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
+
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare.getValoareDescarcare());
+			macaraDialog.setCostMacaraListener(this);
+			macaraDialog.show();
+
+		} else {
+			if (!costDescarcare.getSePermite())
+				DateLivrare.getInstance().setMasinaMacara(false);
+
+			trateazaConditiiSuplimentare();
+
+		}
+
+	}
+
+	private void trateazaPretMacara(boolean acceptaPret, double valoarePret) {
+
+		if (acceptaPret) {
+
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare.getArticoleDescarcare());
+
+			ListaArticoleComanda.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
+
+			prepareArtForDelivery();
+
+			articoleFinaleStr = serializedResult;
+		}
+
+		trateazaConditiiSuplimentare();
+
+	}
+
+	private void verificaPretMacara() {
+
+		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComanda.getInstance().getListArticoleComanda());
+
+		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
+
+			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComanda.getInstance()
+					.getListArticoleComanda());
+
+			String listArtSer = comandaDAO.serializeArtCalcMacara(artCalcul);
+
+			HashMap<String, String> params = new HashMap<String, String>();
+
+			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
+
+			params.put("listArt", listArtSer);
+
+			comandaDAO.getCostMacara(params);
+		} else
+			trateazaConditiiSuplimentare();
+
 	}
 
 	private boolean isReducere() {
@@ -1044,9 +1117,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 					articolCmd.setIstoricPret("");
 					listArticole.add(articolCmd);
 
-					retVal += "000000000000000000" + "#" + "1" + "#" + " " + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + "0" + "#" + "BUC" + "#" + "0"
-							+ "#" + " " + "#" + "0" + "#" + "0" + "#" + "1" + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + " " + "#" + "1" + "#" + "BUC"
-							+ "@";
+					retVal += "000000000000000000" + "#" + "1" + "#" + " " + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + "0" + "#" + "BUC" + "#"
+							+ "0" + "#" + " " + "#" + "0" + "#" + "0" + "#" + "1" + "#" + String.valueOf(dblLocalTaxaVerde) + "#" + " " + "#" + "1"
+							+ "#" + "BUC" + "@";
 
 				}
 			}
@@ -1442,7 +1515,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		filialaAlternativa = UserInfo.getInstance().getUnitLog();
 
 		ListaArticoleComanda.getInstance().clearArticoleComanda();
-		
+
 		initLocale();
 
 	}
@@ -1502,16 +1575,14 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		});
 	}
 
-	
-	private void initLocale()
-	{
+	private void initLocale() {
 		Locale locale = new Locale("en", "US");
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-	}	
-	
+	}
+
 	private void checkStaticVars() {
 
 		// restart app la idle
@@ -1553,6 +1624,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			break;
 		case SALVEAZA_COMANDA_GED:
 			displayCmdGEDStatus((String) result);
+			break;
+		case GET_COST_MACARA:
+			afiseazaPretMacaraDialog((String) result);
 			break;
 		default:
 			break;
@@ -1625,8 +1699,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
+	@Override
+	public void acceptaCostMacara(boolean acceptaCost, double valoareCost) {
+		trateazaPretMacara(acceptaCost, valoareCost);
 
-
-
+	}
 
 }
