@@ -138,6 +138,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	public static String divizieComanda = "";
 
 	private LinearLayout layoutDetaliiCmd;
+	
+	private Comanda comandaFinala;
 
 	String serializedResult;
 	private String comandaJson;
@@ -548,25 +550,25 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						if (dateLivrareInstance.isValIncModif())
 							isValIncModif = "X";
 
-						Comanda comanda = new Comanda();
-						comanda.setCodClient(selectedClientCode);
-						comanda.setComandaBlocata(comandaBlocata);
-						comanda.setNrCmdSap(selectedCmdSAP);
-						comanda.setConditieID(conditieID);
+						comandaFinala = new Comanda();
+						comandaFinala.setCodClient(selectedClientCode);
+						comandaFinala.setComandaBlocata(comandaBlocata);
+						comandaFinala.setNrCmdSap(selectedCmdSAP);
+						comandaFinala.setConditieID(conditieID);
 
-						comanda.setAlerteKA(alerteKA);
-						comanda.setFactRedSeparat(localRedSeparat);
-						comanda.setFilialaAlternativa(ModificareComanda.filialaAlternativaM);
-						comanda.setUserSite(localUserSite);
-						comanda.setUserSiteMail(dateLivrareInstance.getMail());
-						comanda.setIsValIncModif(isValIncModif);
-						comanda.setCodJ(codJ);
-						comanda.setAdresaLivrareGed(adrLivrareGED);
-						comanda.setNumeClient(dateLivrareInstance.getNumeClient());
-						comanda.setCnpClient(dateLivrareInstance.getCnpClient());
-						comanda.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
+						comandaFinala.setAlerteKA(alerteKA);
+						comandaFinala.setFactRedSeparat(localRedSeparat);
+						comandaFinala.setFilialaAlternativa(ModificareComanda.filialaAlternativaM);
+						comandaFinala.setUserSite(localUserSite);
+						comandaFinala.setUserSiteMail(dateLivrareInstance.getMail());
+						comandaFinala.setIsValIncModif(isValIncModif);
+						comandaFinala.setCodJ(codJ);
+						comandaFinala.setAdresaLivrareGed(adrLivrareGED);
+						comandaFinala.setNumeClient(dateLivrareInstance.getNumeClient());
+						comandaFinala.setCnpClient(dateLivrareInstance.getCnpClient());
+						comandaFinala.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
 
-						comandaJson = serializeComanda(comanda);
+						comandaJson = serializeComanda(comandaFinala);
 
 						verificaPretMacara();
 
@@ -594,7 +596,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			HashMap<String, String> params = new HashMap<String, String>();
 
 			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
-
+			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
+			params.put("codClient", comandaFinala.getCodClient());
 			params.put("listArt", listArtSer);
 
 			operatiiComenzi.getCostMacara(params);
@@ -609,7 +612,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
 
-			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare.getValoareDescarcare());
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, isComandaGed());
 			macaraDialog.setCostMacaraListener(this);
 			macaraDialog.show();
 
@@ -626,11 +629,14 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private void trateazaPretMacara(boolean acceptaPret, double valoarePret) {
 
 		if (acceptaPret) {
+			DateLivrare.getInstance().setMasinaMacara(true);
 
-			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare.getArticoleDescarcare());
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
 
 			listArticoleComanda.addAll(articoleDescarcare);
 
+		} else {
+			DateLivrare.getInstance().setMasinaMacara(false);
 		}
 
 		performSaveCmd();

@@ -841,7 +841,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
 
-			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare.getValoareDescarcare());
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, false);
 			macaraDialog.setCostMacaraListener(this);
 			macaraDialog.show();
 
@@ -859,13 +859,17 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		if (acceptaPret) {
 
-			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare.getArticoleDescarcare());
+			DateLivrare.getInstance().setMasinaMacara(true);
+
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
 
 			ListaArticoleComanda.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
 
 			prepareArtForDelivery();
 
 			articoleFinaleStr = serializedResult;
+		} else {
+			DateLivrare.getInstance().setMasinaMacara(false);
 		}
 
 		trateazaConditiiSuplimentare();
@@ -878,15 +882,15 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
-			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComanda.getInstance()
-					.getListArticoleComanda());
+			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComanda.getInstance().getListArticoleComanda());
 
 			String listArtSer = comandaDAO.serializeArtCalcMacara(artCalcul);
 
 			HashMap<String, String> params = new HashMap<String, String>();
 
 			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
-
+			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
+			params.put("codClient", comandaFinala.getCodClient());
 			params.put("listArt", listArtSer);
 
 			comandaDAO.getCostMacara(params);

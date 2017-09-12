@@ -1167,7 +1167,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			HashMap<String, String> params = new HashMap<String, String>();
 
 			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
-
+			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
+			params.put("codClient", comandaFinala.getCodClient());
 			params.put("listArt", listArtSer);
 
 			comandaDAO.getCostMacara(params);
@@ -1180,12 +1181,18 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		if (acceptaPret) {
 
-			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare.getArticoleDescarcare());
+			DateLivrare.getInstance().setMasinaMacara(true);
+
+			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret);
 
 			ListaArticoleComandaGed.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
 
+			recalculTotal();
+
 			serializeArticole(prepareArtForDelivery());
 
+		} else {
+			DateLivrare.getInstance().setMasinaMacara(false);
 		}
 
 		trateazaConditiiSuplimentare();
@@ -1198,7 +1205,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
 
-			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare.getValoareDescarcare());
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, true);
 			macaraDialog.setCostMacaraListener(this);
 			macaraDialog.show();
 

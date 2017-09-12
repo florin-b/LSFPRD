@@ -114,7 +114,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		performOperation(params);
 
 	}
-	
+
 	public void getCostMacara(HashMap<String, String> params) {
 		numeComanda = EnumComenziDAO.GET_COST_MACARA;
 		performOperation(params);
@@ -543,6 +543,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				jsonObjArt.put("cod", art.getCod());
 				jsonObjArt.put("um", art.getUm());
 				jsonObjArt.put("cant", art.getCant());
+				jsonObjArt.put("depoz", art.getDepoz());
 
 				jsonArrayArt.put(jsonObjArt);
 
