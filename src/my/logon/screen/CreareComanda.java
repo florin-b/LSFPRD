@@ -892,6 +892,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
 			params.put("codClient", comandaFinala.getCodClient());
 			params.put("listArt", listArtSer);
+			
+			
+			
 
 			comandaDAO.getCostMacara(params);
 		} else

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="my.logon.screen"
-    android:versionCode="231"
+    android:versionCode="232"
     android:versionName="1.1" >
 
     <uses-sdk
@@ -351,7 +351,7 @@
         <activity
             android:name=".Delegatii"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensorLandscape"
+            android:screenOrientation="fullSensor"
             android:windowSoftInputMode="adjustPan" >
         </activity>
 

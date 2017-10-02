@@ -532,29 +532,32 @@ public class InfoStrings {
 			if (filiala.equals("AG10"))
 				codClient = "4119000320";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000321";
 
-			if (filiala.equals("BV10"))
+			else if (filiala.equals("BV10"))
 				codClient = "4119000322";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000323";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000324";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000325";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000326";
 
-			if (filiala.equals("IS10"))
+			else if (filiala.equals("IS10"))
 				codClient = "4119000327";
 
-			if (filiala.equals("MM10"))
+			else if (filiala.equals("MM10"))
 				codClient = "4119000412";
+
+			else if (filiala.equals("BU10"))
+				codClient = "4119000430";
 
 		}
 
@@ -744,32 +747,35 @@ public class InfoStrings {
 			if (filiala.equals("AG10"))
 				codClient = "4119000225";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000210";
 
-			if (filiala.equals("BV10"))
+			else if (filiala.equals("BV10"))
 				codClient = "4119000201";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000179";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000216";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000247";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000175";
 
-			if (filiala.equals("IS10"))
+			else if (filiala.equals("IS10"))
 				codClient = "4119000195";
 
-			if (filiala.equals("TM10"))
+			else if (filiala.equals("TM10"))
 				codClient = "4119000251";
 
-			if (filiala.equals("MM10"))
+			else if (filiala.equals("MM10"))
 				codClient = "4119000357";
+
+			else if (filiala.equals("BU10"))
+				codClient = "4119000431";
 
 		}
 
@@ -777,32 +783,35 @@ public class InfoStrings {
 			if (filiala.equals("AG10"))
 				codClient = "4119000226";
 
-			if (filiala.equals("BH10"))
+			else if (filiala.equals("BH10"))
 				codClient = "4119000211";
 
-			if (filiala.equals("BV10"))
+			else if (filiala.equals("BV10"))
 				codClient = "4119000202";
 
-			if (filiala.equals("CJ10"))
+			else if (filiala.equals("CJ10"))
 				codClient = "4119000180";
 
-			if (filiala.equals("CT10"))
+			else if (filiala.equals("CT10"))
 				codClient = "4119000217";
 
-			if (filiala.equals("DJ10"))
+			else if (filiala.equals("DJ10"))
 				codClient = "4119000248";
 
-			if (filiala.equals("GL10"))
+			else if (filiala.equals("GL10"))
 				codClient = "4119000176";
 
-			if (filiala.equals("IS10"))
+			else if (filiala.equals("IS10"))
 				codClient = "4119000196";
 
-			if (filiala.equals("TM10"))
+			else if (filiala.equals("TM10"))
 				codClient = "4119000252";
 
-			if (filiala.equals("MM10"))
+			else if (filiala.equals("MM10"))
 				codClient = "4119000358";
+
+			else if (filiala.equals("BU10"))
+				codClient = "4119000432";
 
 		}
 
@@ -1018,8 +1027,8 @@ public class InfoStrings {
 
 		if (filiala.equals("BU12")) // Otopeni
 			codClient = "4119000271";
-		
-		if (filiala.equals("SB10")) 
+
+		if (filiala.equals("SB10"))
 			codClient = "4119000411";
 
 		return codClient;
@@ -1080,20 +1089,23 @@ public class InfoStrings {
 		if (filiala.equals("AG10"))
 			codClient = "4119000330";
 
-		if (filiala.equals("BH10"))
+		else if (filiala.equals("BH10"))
 			codClient = "4119000337";
 
-		if (filiala.equals("CJ10"))
+		else if (filiala.equals("CJ10"))
 			codClient = "4119000342";
 
-		if (filiala.equals("CT10"))
+		else if (filiala.equals("CT10"))
 			codClient = "4119000343";
 
-		if (filiala.equals("DJ10"))
+		else if (filiala.equals("DJ10"))
 			codClient = "4119000344";
 
-		if (filiala.equals("GL10"))
+		else if (filiala.equals("GL10"))
 			codClient = "4119000345";
+
+		else if (filiala.equals("BU10"))
+			codClient = "4119000433";
 
 		return codClient;
 

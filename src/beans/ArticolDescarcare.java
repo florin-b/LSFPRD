@@ -47,5 +47,7 @@ public class ArticolDescarcare {
 	public void setValoareMin(double valoareMin) {
 		this.valoareMin = valoareMin;
 	}
+	
+	
 
 }
