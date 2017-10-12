@@ -39,7 +39,7 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 
 		opAgent = OperatiiAgent.getInstance();
 		opAgent.setOperatiiAgentListener(this);
-		opAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), getUserDepart(), context, false);
+		opAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), getUserDepart(), context, false, null);
 
 	}
 
@@ -68,7 +68,7 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 
 		listViewAgenti.setOnItemClickListener(new OnItemClickListener() {
 
-			
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Agent agent = (Agent) parent.getAdapter().getItem(position);
 
@@ -91,7 +91,7 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 		});
 	}
 
-	
+	@Override
 	public void opAgentComplete(ArrayList<HashMap<String, String>> listAgenti) {
 		populateListViewAgenti(opAgent.getListObjAgenti());
 

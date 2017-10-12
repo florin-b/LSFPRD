@@ -7,11 +7,11 @@ import java.util.List;
 import listeners.DialogObiectiveKAListener;
 import listeners.ObiectiveListener;
 import listeners.OperatiiAgentListener;
-import my.logon.screen.R;
 import model.Agent;
 import model.OperatiiAgent;
 import model.OperatiiObiective;
 import model.UserInfo;
+import my.logon.screen.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -188,7 +188,7 @@ public class OptiuniObiectKaDialog extends Dialog implements OperatiiAgentListen
 	}
 
 	private void getListaAgenti(String filiala) {
-		operatiiAgent.getListaAgenti(filiala, getDepartUser(), getContext(), true);
+		operatiiAgent.getListaAgenti(filiala, getDepartUser(), getContext(), true, null);
 	}
 
 	private String getDepartUser() {

@@ -1185,44 +1185,53 @@ public class InfoStrings {
 	public static String getTipUser(String tipUser) {
 		String tipAcces = "NN";
 
-		// AGENTI
 		if (UserInfo.getInstance().getTipAcces().equals("9")) {
 			tipAcces = "AV";
 		}
 
 		// SEFI DE DEPARTAMENT
-		if (UserInfo.getInstance().getTipAcces().equals("10")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("10")) {
 			tipAcces = "SD";
 		}
 
 		// DIRECTORI DE VANZARI, DEPARTAMENT
-		if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
 			tipAcces = "DV";
 		}
 
 		// KEY ACCOUNTI
-		if (UserInfo.getInstance().getTipAcces().equals("27")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("27")) {
 			tipAcces = "KA";
 		}
 
 		// DIRECTOR KA
-		if (UserInfo.getInstance().getTipAcces().equals("35")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("35")) {
 			tipAcces = "DK";
 		}
 
 		// SD KA
-		if (UserInfo.getInstance().getTipAcces().equals("32")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("32")) {
 			tipAcces = "SK";
 		}
 
 		// CONSILIERI
-		if (UserInfo.getInstance().getTipAcces().equals("17")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("17")) {
 			tipAcces = "CV";
 		}
 
 		// SEFI DE MAGAZIN
-		if (UserInfo.getInstance().getTipAcces().equals("18")) {
+		else if (UserInfo.getInstance().getTipAcces().equals("18")) {
 			tipAcces = "SM";
+		}
+
+		// Consilier Vanzari Retail
+		else if (UserInfo.getInstance().getTipAcces().equals("41")) {
+			tipAcces = "CVR";
+		}
+
+		// Sef magazin Retail
+		else if (UserInfo.getInstance().getTipAcces().equals("44")) {
+			tipAcces = "SMR";
 		}
 
 		return tipAcces;

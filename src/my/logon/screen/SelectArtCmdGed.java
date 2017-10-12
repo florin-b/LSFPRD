@@ -375,7 +375,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	boolean isCV() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
+		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
+				|| UserInfo.getInstance().getTipUser().equals("CVR") || UserInfo.getInstance().getTipUser().equals("SMR")
+				|| UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
 
 	boolean isWood() {
@@ -1610,7 +1612,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private boolean userCannotModifyPrice() {
-		return UserInfo.getInstance().getTipUserSap().equals("CONS-GED");
+		return UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR");
 	}
 
 	private double getProcentTVA(PretArticolGed pretArticol) {

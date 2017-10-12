@@ -30,7 +30,6 @@ import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.CautareArticoleAdapter;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -125,7 +124,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		opArticol.setListener(this);
 
 		initLocale();
-		nf2 = NumberFormat.getInstance();
+		nf2 = NumberFormat.getInstance(new Locale("en_US"));
 
 		this.tglButton = (ToggleButton) v.findViewById(R.id.togglebuttonClp);
 		addListenerToggle();
@@ -475,11 +474,9 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		String localDep = UserInfo.getInstance().getCodDepart();
 
-		if (isCV()) {
-			localDep = CLPFragment1.departamentConsilier;
-		} else if (UtilsUser.isAgentOrSD()) {
+		if (UtilsUser.isAgentOrSD()) {
 			localDep = UserInfo.getInstance().getCodDepart();
-		} else if (UtilsUser.isKA()) {
+		} else if (UtilsUser.isKA() || isCV()) {
 			localDep = "00";
 		}
 
@@ -496,7 +493,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	}
 
 	boolean isCV() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
+		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
+				|| UserInfo.getInstance().getTipUser().equals("SMR");
 	}
 
 	public void populateListViewArticol(List<ArticolDB> listArticole) {
@@ -917,7 +915,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	private String validateDataToSave() {
 		String retVal = "-1";
 
-		if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
+		if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+				|| UserInfo.getInstance().getTipAcces().equals("44")) {
 
 			if (CLPFragment1.textSelClient.getText().toString().trim().equals("")) {
 				retVal = "Selectati clientul!";
@@ -1079,7 +1078,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 			String localCodClient = CreareClp.codClient;
 
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+					|| UserInfo.getInstance().getTipAcces().equals("44")) {
 				if (CLPFragment1.radioClientPF.isChecked()) {
 					localCodClient = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
 				}
@@ -1103,7 +1103,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			antetComandaCLP.setCodJudet(CreareClp.codJudet);
 			antetComandaCLP.setLocalitate(CreareClp.oras);
 			antetComandaCLP.setStrada(CreareClp.strada.isEmpty() ? " " : CreareClp.strada);
-			antetComandaCLP.setPersCont(CreareClp.persCont.isEmpty() ? " " : CreareClp.persCont );
+			antetComandaCLP.setPersCont(CreareClp.persCont.isEmpty() ? " " : CreareClp.persCont);
 			antetComandaCLP.setTelefon(CreareClp.telefon.isEmpty() ? " " : CreareClp.telefon);
 			antetComandaCLP.setCodFilialaDest(CreareClp.codFilialaDest);
 			antetComandaCLP.setDataLivrare(CreareClp.dataLivrare);
@@ -1213,7 +1213,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			String localDep = UserInfo.getInstance().getCodDepart();
 
 			// consilieri
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+					|| UserInfo.getInstance().getTipAcces().equals("44")) {
 				localDep = CLPFragment1.departamentConsilier;
 			}
 
@@ -1281,7 +1282,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		slidingDrawerSaveClp.close();
 		textValoareGreutate.setText("");
 		textTotalGreutate.setText("");
-		
+
 		initLocale();
 	}
 
@@ -1340,15 +1341,14 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 	}
 
-	private void initLocale()
-	{
+	private void initLocale() {
 		Locale locale = new Locale("en", "US");
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getActivity().getBaseContext().getResources().updateConfiguration(config, getActivity().getBaseContext().getResources().getDisplayMetrics());
 	}
-	
+
 	public void operationComplete(EnumArticoleDAO methodName, Object result) {
 
 		switch (methodName) {

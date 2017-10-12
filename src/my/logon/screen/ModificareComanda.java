@@ -78,12 +78,11 @@ import dialogs.AprobariDialog;
 import dialogs.CostMacaraDialog;
 import enums.EnumComenziDAO;
 
-public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer,
-		CostMacaraListener {
+public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer, CostMacaraListener {
 
 	Button quitBtn, stocBtn, clientBtn, articoleBtn, livrareBtn, salveazaComandaBtn, stergeComandaBtn, btnCommentariiCond, aprobareBtn;
 	String filiala = "", nume = "", cod = "", globalSubCmp = "0";
-	public static String unitLog = "";
+	public static String unitLogComanda = "";
 	public static String numeDepart = "";
 	public static String codDepart = "";
 
@@ -138,7 +137,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	public static String divizieComanda = "";
 
 	private LinearLayout layoutDetaliiCmd;
-	
+
 	private Comanda comandaFinala;
 
 	String serializedResult;
@@ -341,8 +340,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	}
 
 	boolean isUserCV() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
-				|| UserInfo.getInstance().getTipUserSap().equals("KA3");
+		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("CVR")
+				|| UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUserSap().equals("KA3")
+				|| UserInfo.getInstance().getTipUser().equals("SMR") || UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
 
 	@Override
@@ -410,6 +410,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			for (ArticolComanda articol : listArticoleComanda) {
 
 				localTotalComanda += articol.getPretUnit() * articol.getCantUmb();
+
 			}
 		}
 
@@ -427,6 +428,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				totalArtB += articol.getPret();
 
 			localTotalComanda += articol.getPretUnit() * articol.getCantUmb();
+
 		}
 
 		if (localTotalComanda == 0) {
@@ -510,8 +512,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						prepareArtForDelivery();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && tipClientVar.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
 							return;
 						}
 
@@ -658,7 +659,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 			HashMap<String, String> params = new HashMap<String, String>();
 
-			String tipUser = "AV";
+			String tipUser = "";
 			if (UserInfo.getInstance().getTipAcces().equals("27"))
 				tipUser = "KA";
 			else if (isComandaGed())
@@ -950,6 +951,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("tonaj", DateLivrare.getInstance().getTonaj());
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
+			obj.put("meserias", DateLivrare.getInstance().getCodMeserias());
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");
@@ -1400,13 +1402,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 				listViewSelPos = position;
 
-				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos)
-						|| (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
+				if ((listViewArticole.getFirstVisiblePosition() == listViewSelPos) || (listViewArticole.getFirstVisiblePosition() + 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewSelPos - 1, 0);
 				}
 
-				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos)
-						|| (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
+				if ((listViewArticole.getLastVisiblePosition() == listViewSelPos) || (listViewArticole.getLastVisiblePosition() - 1 == listViewSelPos)) {
 					listViewArticole.smoothScrollToPositionFromTop(listViewArticole.getFirstVisiblePosition() + 1, 0);
 				}
 
@@ -1543,6 +1543,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		textTotalCmd.setText("0.00");
 
 		comandaSelectata = comanda;
+		
+		unitLogComanda = comandaSelectata.getFiliala();
 
 		selectedCmd = comanda.getId();
 
