@@ -39,6 +39,7 @@ import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.AdapterAdreseLivrare;
 import adapters.AdapterObiective;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -84,8 +85,8 @@ import enums.EnumOperatiiAdresa;
 import enums.EnumOperatiiObiective;
 import enums.EnumZona;
 
-public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, OperatiiAdresaListener, ObiectiveListener, MapListener,
-		AutocompleteDialogListener {
+public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, OperatiiAdresaListener, ObiectiveListener,
+		MapListener, AutocompleteDialogListener {
 
 	private Button saveAdrLivrBtn;
 	private EditText txtPers, txtTel, txtObservatii, txtValoareIncasare;
@@ -231,7 +232,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		spinnerPlata.setAdapter(adapterSpinnerPlata);
 		addListenerTipPlata();
 
-		
 		if (HelperAdreseLivrare.isConditiiCurierRapid()) {
 
 			if (HelperAdreseLivrare.getLocalitatiAcceptate() == null) {
@@ -242,7 +242,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			tipTransport = HelperAdreseLivrare.adaugaTransportCurierRapid(tipTransport);
 		}
-		
 
 		spinnerTransp = (Spinner) findViewById(R.id.spinnerTransp);
 		ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
@@ -254,8 +253,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		spinnerJudet.setOnItemSelectedListener(new regionSelectedListener());
 
 		listJudete = new ArrayList<HashMap<String, String>>();
-		adapterJudete = new SimpleAdapter(this, listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet,
-				R.id.textCodJudet });
+		adapterJudete = new SimpleAdapter(this, listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" }, new int[] {
+				R.id.textNumeJudet, R.id.textCodJudet });
 
 		spinnerTermenPlata = (Spinner) findViewById(R.id.spinnerTermenPlata);
 		adapterTermenPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -745,7 +744,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdr1.setVisibility(View.VISIBLE);
 					layoutAdr2.setVisibility(View.VISIBLE);
 					layoutHarta.setVisibility(View.VISIBLE);
-					
 
 				}
 
@@ -992,12 +990,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		DateLivrare.getInstance().setTonaj(tonaj);
 
-		for (int i = 0; i < spinnerTonaj.getCount(); i++)
-			if (spinnerTonaj.getItemAtPosition(i).toString().toUpperCase().contains(tonaj)) {
-				spinnerTonaj.setSelection(i);
-				spinnerTonaj.setEnabled(false);
-				break;
-			}
+		int pos = HelperAdreseLivrare.getTonajSpinnerPos(tonaj);
+
+		if (pos > 0) {
+			spinnerTonaj.setSelection(pos);
+			spinnerTonaj.setEnabled(false);
+		}
 
 	}
 
@@ -1264,12 +1262,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		dateLivrareInstance.setTipPlata(spinnerPlata.getSelectedItem().toString().substring(0, 1));
 		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
 
-		
 		if (dateLivrareInstance.getTransport().equalsIgnoreCase("TERR") && !HelperAdreseLivrare.isAdresaLivrareRapida()) {
 			Toast.makeText(getApplicationContext(), "In aceasta localitate nu se face livrare rapida.", Toast.LENGTH_LONG).show();
 			return;
 		}
-		
 
 		if (!isAdresaCorecta()) {
 			Toast.makeText(getApplicationContext(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
@@ -1309,8 +1305,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
 
 		if (isConditiiTonaj(spinnerTransp, spinnerTonaj)) {
-			String[] tonaj = spinnerTonaj.getSelectedItem().toString().split(" ");
-			dateLivrareInstance.setTonaj(tonaj[0]);
+			dateLivrareInstance.setTonaj(HelperAdreseLivrare.getTonajSpinnerValue(spinnerTonaj.getSelectedItemPosition()));
 		} else
 			dateLivrareInstance.setTonaj("-1");
 
@@ -1320,7 +1315,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setPrelucrare("-1");
 
 		if (dateLivrareInstance.getOras().equalsIgnoreCase("bucuresti")) {
-			beans.LatLng coordAdresa = new beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude, dateLivrareInstance.getCoordonateAdresa().longitude);
+			beans.LatLng coordAdresa = new beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude,
+					dateLivrareInstance.getCoordonateAdresa().longitude);
 			EnumZona zona = ZoneBucuresti.getZonaBucuresti(coordAdresa);
 
 			dateLivrareInstance.setZonaBucuresti(zona);
@@ -1353,8 +1349,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private boolean isConditiiTonaj(Spinner spinnerTransp, Spinner spinnerTonaj) {
-		return spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque")
-				&& spinnerTonaj.getSelectedItem().toString().split(" ")[1].equals("T");
+		return spinnerTransp.getSelectedItem().toString().toLowerCase().contains("arabesque") && spinnerTonaj.getSelectedItemPosition() > 0;
 
 	}
 

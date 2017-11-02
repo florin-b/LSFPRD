@@ -882,7 +882,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
-			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComanda.getInstance().getListArticoleComanda());
+			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComanda.getInstance()
+					.getListArticoleComanda());
 
 			String listArtSer = comandaDAO.serializeArtCalcMacara(artCalcul);
 
@@ -892,9 +893,6 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
 			params.put("codClient", comandaFinala.getCodClient());
 			params.put("listArt", listArtSer);
-			
-			
-			
 
 			comandaDAO.getCostMacara(params);
 		} else
@@ -927,6 +925,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			ComenziDAO comanda = ComenziDAO.getInstance(this);
 			comanda.setComenziDAOListener(this);
 			comanda.salveazaComandaDistrib(params);
+			
+			
 
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
