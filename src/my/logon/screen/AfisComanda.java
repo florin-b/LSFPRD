@@ -27,6 +27,7 @@ import model.OperatiiAgent;
 import model.OperatiiFiliala;
 import model.UserInfo;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.ArticolAfisAdapter;
 import adapters.ComandaAfisAdapter;
 import android.app.ActionBar;
@@ -174,8 +175,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 		spinnerListener.setListener(this);
 
-		adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] { R.id.textNumeAgent,
-				R.id.textCodAgent });
+		adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
+				R.id.textNumeAgent, R.id.textCodAgent });
 
 		listViewArticole = (ListView) findViewById(R.id.listArt);
 
@@ -346,10 +347,10 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			selectedCodDepart = "11";
 		}
 
-		// smr
-		if (UserInfo.getInstance().getTipAcces().equals("44")) {
+		// smr, smw, smg
+		if (UtilsUser.isSMNou()) {
 			selectedCodDepart = "11";
-			tipAgent = "CVR";
+			tipAgent = UtilsUser.getTipSMNou();
 		}
 
 		agent.getListaAgenti(selectedFiliala, selectedCodDepart, this, true, tipAgent);
@@ -373,8 +374,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		spinnerTipUser.setVisibility(View.VISIBLE);
 		ArrayList<HashMap<String, String>> listTipUsers = new ArrayList<HashMap<String, String>>();
 
-		SimpleAdapter adapterTypes = new SimpleAdapter(this, listTipUsers, R.layout.generic_rowlayout, new String[] { "stringName", "stringId" }, new int[] {
-				R.id.textName, R.id.textId });
+		SimpleAdapter adapterTypes = new SimpleAdapter(this, listTipUsers, R.layout.generic_rowlayout, new String[] { "stringName", "stringId" },
+				new int[] { R.id.textName, R.id.textId });
 
 		HashMap<String, String> temp;
 
@@ -475,8 +476,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 		spinnerAgentiAfisCmd.setVisibility(View.VISIBLE);
 
-		adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] { R.id.textNumeAgent,
-				R.id.textCodAgent });
+		adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
+				R.id.textNumeAgent, R.id.textCodAgent });
 		spinnerAgentiAfisCmd.setAdapter(adapterAgenti);
 
 		if (listAgenti.size() > 0) {
