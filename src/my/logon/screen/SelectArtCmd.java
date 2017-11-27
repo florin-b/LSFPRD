@@ -24,7 +24,6 @@ import utils.DepartamentAgent;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import adapters.CautareArticoleAdapter;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -149,7 +148,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		resultLayout = (LinearLayout) findViewById(R.id.resLayout);
 		resultLayout.setVisibility(View.INVISIBLE);
 
-		nf2 = NumberFormat.getInstance(new Locale("en","US"));
+		nf2 = NumberFormat.getInstance(new Locale("en", "US"));
 
 		textStocKA = (TextView) findViewById(R.id.textStocKA);
 		textUmKA = (TextView) findViewById(R.id.textUmKA);
@@ -1056,6 +1055,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						unArticol.setObservatii(tipAlert);
 						unArticol.setDepartAprob(articolDBSelected.getDepartAprob());
 						unArticol.setUmPalet(articolDBSelected.isUmPalet());
+						unArticol.setCategorie(articolDBSelected.getCategorie());
+						unArticol.setLungime(articolDBSelected.getLungime());
 
 						if (procRedFin > 0)
 							unArticol.setIstoricPret(istoricPret);

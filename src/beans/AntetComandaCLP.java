@@ -22,6 +22,7 @@ public class AntetComandaCLP {
 	private String tipCamion;
 	private String tipIncarcare;
 	private String tonaj;
+	private String prelucrare;
 
 	public String getCodClient() {
 		return codClient;
@@ -183,13 +184,21 @@ public class AntetComandaCLP {
 		this.tonaj = tonaj;
 	}
 
+	public String getPrelucrare() {
+		return prelucrare;
+	}
+
+	public void setPrelucrare(String prelucrare) {
+		this.prelucrare = prelucrare;
+	}
+
 	@Override
 	public String toString() {
-		return "AntetComandaCLP [codClient=" + codClient + ", codJudet=" + codJudet + ", localitate=" + localitate + ", strada=" + strada + ", persCont="
-				+ persCont + ", telefon=" + telefon + ", codFilialaDest=" + codFilialaDest + ", dataLivrare=" + dataLivrare + ", tipPlata=" + tipPlata
-				+ ", tipTransport=" + tipTransport + ", depozDest=" + depozDest + ", selectedAgent=" + selectedAgent + ", cmdFasonate=" + cmdFasonate
-				+ ", numeClientCV=" + numeClientCV + ", observatiiCLP=" + observatiiCLP + ", tipMarfa=" + tipMarfa + ", masaMarfa=" + masaMarfa
-				+ ", tipCamion=" + tipCamion + ", tipIncarcare=" + tipIncarcare + ", tonaj=" + tonaj + "]";
+		return "AntetComandaCLP [codClient=" + codClient + ", codJudet=" + codJudet + ", localitate=" + localitate + ", strada=" + strada
+				+ ", persCont=" + persCont + ", telefon=" + telefon + ", codFilialaDest=" + codFilialaDest + ", dataLivrare=" + dataLivrare
+				+ ", tipPlata=" + tipPlata + ", tipTransport=" + tipTransport + ", depozDest=" + depozDest + ", selectedAgent=" + selectedAgent
+				+ ", cmdFasonate=" + cmdFasonate + ", numeClientCV=" + numeClientCV + ", observatiiCLP=" + observatiiCLP + ", tipMarfa=" + tipMarfa
+				+ ", masaMarfa=" + masaMarfa + ", tipCamion=" + tipCamion + ", tipIncarcare=" + tipIncarcare + ", tonaj=" + tonaj + "]";
 	}
 
 }

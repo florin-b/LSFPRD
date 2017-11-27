@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import my.logon.screen.CreareComanda;
-import my.logon.screen.ModificareComanda;
 import model.DateLivrare;
 import model.UserInfo;
+import my.logon.screen.CreareComanda;
+import my.logon.screen.ModificareComanda;
 import android.content.Context;
+import android.widget.Toast;
+import beans.BeanAdresaLivrare;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class HelperAdreseLivrare {
 
 	private static final String livrareRapida = "TERR - Curier rapid";
+	private static final double DIST_MIN_ADR_KM = 0.5;
 
 	private static String localitatiAcceptate;
 
@@ -82,6 +87,49 @@ public class HelperAdreseLivrare {
 			return "20";
 
 		}
+	}
+
+	public static String getTonajAdresaNoua(List<BeanAdresaLivrare> listAdrese, LatLng coordAdresa) {
+
+		String tonajAdresa = "0";
+
+		for (BeanAdresaLivrare adresa : listAdrese) {
+
+			String coords[] = adresa.getCoords().split(",");
+
+			double distAdresa = distanceXtoY(coordAdresa.latitude, coordAdresa.longitude, Double.valueOf(coords[0]), Double.valueOf(coords[1]), "K");
+
+			if (distAdresa <= DIST_MIN_ADR_KM) {
+				tonajAdresa = adresa.getTonaj();
+				break;
+			}
+
+		}
+
+		return tonajAdresa;
+	}
+
+	public static double distanceXtoY(double lat1, double lon1, double lat2, double lon2, String unit) {
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2))
+				* Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		dist = dist * 60 * 1.1515;
+		if (unit == "K") {
+			dist = dist * 1.609344;
+		} else if (unit == "N") {
+			dist = dist * 0.8684;
+		}
+		return (dist);
+	}
+
+	private static double deg2rad(double deg) {
+		return (deg * Math.PI / 180.0);
+	}
+
+	private static double rad2deg(double rad) {
+		return (rad * 180 / Math.PI);
 	}
 
 }

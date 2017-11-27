@@ -81,6 +81,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 	private String istoricPret;
 
 	private String vechime;
+	private String categorie;
+	private double lungime;
 
 	public int getNrCrt() {
 		return nrCrt;
@@ -577,6 +579,22 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 		this.vechime = vechime;
 	}
 
+	public String getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(String categorie) {
+		this.categorie = categorie;
+	}
+
+	public double getLungime() {
+		return lungime;
+	}
+
+	public void setLungime(double lungime) {
+		this.lungime = lungime;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -604,8 +622,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	@Override
 	public String toString() {
-		return "ArticolComanda [nrCrt=" + nrCrt + ", numeArticol=" + numeArticol + ", codArticol=" + codArticol + ", depozit=" + depozit + ", cantitate="
-				+ cantitate + ", um=" + um + ", pret=" + pret + "]";
+		return "ArticolComanda [nrCrt=" + nrCrt + ", numeArticol=" + numeArticol + ", codArticol=" + codArticol + ", depozit=" + depozit
+				+ ", cantitate=" + cantitate + ", um=" + um + ", pret=" + pret + "]";
 	}
 
 	public static Comparator<ArticolComanda> DepartComparator = new Comparator<ArticolComanda>() {
