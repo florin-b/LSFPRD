@@ -5,6 +5,8 @@
 package my.logon.screen;
 
 import helpers.HelperCostDescarcare;
+import helpers.HelperCreareComanda;
+import helpers.HelperDialog;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -48,6 +50,7 @@ import utils.UtilsComenziGed;
 import utils.UtilsUser;
 import adapters.ArticoleGedAdapter;
 import adapters.ArticolePretTransport;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -444,19 +447,20 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		} else {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false).setPositiveButton("Da", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
+			builder.setMessage("Datele se vor pierde. Continuati?").setCancelable(false)
+					.setPositiveButton("Da", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
 
-					resetAllVars();
-					UserInfo.getInstance().setParentScreen("");
+							resetAllVars();
+							UserInfo.getInstance().setParentScreen("");
 
-					backToMainMenu();
-				}
-			}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-			}).setTitle("Atentie!").setIcon(R.drawable.warning96);
+							backToMainMenu();
+						}
+					}).setNegativeButton("Nu", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+						}
+					}).setTitle("Atentie!").setIcon(R.drawable.warning96);
 
 			AlertDialog alert = builder.create();
 			alert.show();
@@ -1088,7 +1092,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
 						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && CreareComandaGed.tipClient.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
+									.show();
 							return;
 						}
 
@@ -1129,7 +1134,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 						comandaFinala.setValoareIncasare(valIncasare);
 
-						verificaPretMacara();
+						valideazaFinal();
 
 					}
 				});
@@ -1142,12 +1147,13 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		}
 	}
 
-	private void trateazaConditiiSuplimentare() {
+	private void valideazaFinal() {
 
-		if (comandaHasPalet())
-			displayAlertPalet();
-		else
-			displayArtComplDialog();
+		if (HelperCreareComanda.isConditiiAlertaIndoire(ListaArticoleComandaGed.getInstance().getListArticoleComanda())) {
+			HelperDialog.showInfoDialog(CreareComandaGed.this, "Atentie!", "Selectati tipul de prelucrare (indoire sau debitare).");
+		} else {
+			verificaPretMacara();
+		}
 
 	}
 
@@ -1157,7 +1163,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
-			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComandaGed.getInstance().getListArticoleComanda());
+			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComandaGed.getInstance()
+					.getListArticoleComanda());
 
 			String listArtSer = comandaDAO.serializeArtCalcMacara(artCalcul);
 
@@ -1171,6 +1178,15 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			comandaDAO.getCostMacara(params);
 		} else
 			trateazaConditiiSuplimentare();
+
+	}
+
+	private void trateazaConditiiSuplimentare() {
+
+		if (comandaHasPalet())
+			displayAlertPalet();
+		else
+			displayArtComplDialog();
 
 	}
 
@@ -1829,8 +1845,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 						valTransport = Double.parseDouble(textValTransp.getText().toString().trim());
 
 						if (valTransport < valTransportSAP) {
-							Toast.makeText(getApplicationContext(), "Valoarea transportului nu poate fi mai mica decat cea din SAP!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Valoarea transportului nu poate fi mai mica decat cea din SAP!",
+									Toast.LENGTH_SHORT).show();
 							valTransport = valTransportSAP;
 							textValTransp.setText(nf3.format(valTransport));
 						} else {
