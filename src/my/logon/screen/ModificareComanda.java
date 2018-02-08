@@ -958,6 +958,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			else
 				obj.put("factRed", codTipReducere.equals("-1") ? DateLivrare.getInstance().getFactRed() : codTipReducere);
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
+			
+			obj.put("factPaletiSeparat", DateLivrare.getInstance().isFactPaletSeparat());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();

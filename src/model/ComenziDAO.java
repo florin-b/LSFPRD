@@ -121,6 +121,12 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 	}
 
+	public void getStareComanda(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_STARE_COMANDA;
+		performOperation(params);
+
+	}
+	
 	private void performOperation(HashMap<String, String> params) {
 		AsyncTaskListener contextListener = (AsyncTaskListener) ComenziDAO.this;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(context, contextListener, numeComanda.getComanda(), params);
@@ -281,6 +287,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setClientRaft(jsonLivrare.getString("clientRaft").equals("X") ? true : false);
 
 				dateLivrare.setCodMeserias(jsonLivrare.getString("meserias"));
+				dateLivrare.setFactPaletSeparat(Boolean.valueOf(jsonLivrare.getString("factPaletiSeparat")));
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
