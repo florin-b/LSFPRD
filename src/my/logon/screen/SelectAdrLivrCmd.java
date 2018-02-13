@@ -363,7 +363,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		checkMacara = (CheckBox) findViewById(R.id.checkMacara);
 		setMacaraVisible();
 		setListenerCheckMacara();
-		
+
 		checkFactPaleti = (CheckBox) findViewById(R.id.chkFactPaleti);
 		checkFactPaleti.setChecked(DateLivrare.getInstance().isFactPaletSeparat());
 
@@ -1276,7 +1276,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
-		if (isAdresaText()) {
+		if (DateLivrare.getInstance().getTransport().equals("TRAP") && isAdresaText()) {
 			valideazaTonajAdresaNoua();
 
 		}
@@ -1332,9 +1332,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		} else
 			dateLivrareInstance.setZonaBucuresti(EnumZona.NEDEFINIT);
 
-		
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
-		
+
 		finish();
 
 	}
