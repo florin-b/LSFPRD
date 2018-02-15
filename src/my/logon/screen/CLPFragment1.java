@@ -699,10 +699,12 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		listFiliale.add(temp);
 
 		for (i = 0; i < numeFiliala.length; i++) {
-			temp = new HashMap<String, String>();
-			temp.put("numeJudet", numeFiliala[i]);
-			temp.put("codJudet", codFiliala[i]);
-			listFiliale.add(temp);
+			if (!codFiliala[i].equals(UserInfo.getInstance().getUnitLog())) {
+				temp = new HashMap<String, String>();
+				temp.put("numeJudet", numeFiliala[i]);
+				temp.put("codJudet", codFiliala[i]);
+				listFiliale.add(temp);
+			}
 
 		}
 
