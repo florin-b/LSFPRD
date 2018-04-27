@@ -83,6 +83,7 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 			viewHolder.textVechimeStoc = (TextView) convertView.findViewById(R.id.textVechimeStoc);
 			viewHolder.layoutIstoricPret = (LinearLayout) convertView.findViewById(R.id.layoutIstoricPret);
 			viewHolder.layoutVechimeStoc = (LinearLayout) convertView.findViewById(R.id.layoutVechimeStoc);
+			viewHolder.textMonedaArt = (TextView) convertView.findViewById(R.id.textMonedaArt);
 
 			convertView.setTag(viewHolder);
 
@@ -157,6 +158,8 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 		if (isPretSpecial(articol.getInfoArticol()))
 			viewHolder.textPretSpecial.setText("(*)");
 
+		viewHolder.textMonedaArt.setText(articol.getMoneda());
+		
 		if (colorPos % 2 == 0)
 			convertView.setBackgroundResource(R.drawable.shadow_dark);
 		else

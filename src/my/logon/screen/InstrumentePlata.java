@@ -58,7 +58,7 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 	private OperatiiClient operatiiClient;
 	private ListView listViewClienti, listViewNeincasate;
 	private LinearLayout layoutClient, layoutSelectieClient;
-	private TextView labelNumeClient, txtScadent, txtEmitere;
+	private TextView labelNumeClient, txtScadent, txtEmitere, txtGirant;
 	private BeanClient clientSelectat;
 	private OperatiiDocumente operatiiDocumente;
 	private RadioButton radioBO, radioCEC;
@@ -112,6 +112,7 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 		txtScadent = (TextView) findViewById(R.id.txtScadent);
 		txtEmitere = (TextView) findViewById(R.id.txtEmitere);
 		txtSerie = (EditText) findViewById(R.id.txtSerie);
+		txtGirant = (EditText) findViewById(R.id.txtGirant);
 
 		listViewNeincasate = (ListView) findViewById(R.id.listNeincasate);
 
@@ -136,8 +137,6 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 
 		radioBO = (RadioButton) findViewById(R.id.radioBO);
 		radioCEC = (RadioButton) findViewById(R.id.radioCEC);
-		setBOListener();
-		setCECListener();
 
 		btnSalveazaPlata = (Button) findViewById(R.id.salveazaPlataBtn);
 		setListenerSalveazaPlataBtn();
@@ -183,37 +182,6 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 			}
 		});
 
-	}
-
-	private void setBOListener() {
-		radioBO.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-				if (isChecked) {
-					((LinearLayout) findViewById(R.id.layoutEmitere)).setVisibility(View.GONE);
-					txtEmitere.setText("");
-				} else
-					((LinearLayout) findViewById(R.id.layoutEmitere)).setVisibility(View.VISIBLE);
-			}
-		});
-	}
-
-	private void setCECListener() {
-		radioCEC.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-				if (isChecked) {
-					((LinearLayout) findViewById(R.id.layoutEmitere)).setVisibility(View.VISIBLE);
-				} else {
-					((LinearLayout) findViewById(R.id.layoutEmitere)).setVisibility(View.GONE);
-					txtEmitere.setText("");
-				}
-			}
-		});
 	}
 
 	private void setListenerSchimbaClient() {
@@ -365,6 +333,7 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 		txtSerie.setText("");
 		txtEmitere.setText("");
 		txtScadent.setText("");
+		txtGirant.setText("");
 
 	}
 
@@ -430,11 +399,11 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 			tipDocument = "C";
 
 		plataNeincasata.setTipDocument(tipDocument);
-		plataNeincasata.setSeriaDocument(txtSerie.getText().toString());
-		plataNeincasata.setDataEmitere(txtEmitere.getText().toString());
-		plataNeincasata.setDataScadenta(txtScadent.getText().toString());
+		plataNeincasata.setSeriaDocument(txtSerie.getText().toString().trim());
+		plataNeincasata.setDataEmitere(txtEmitere.getText().toString().trim());
+		plataNeincasata.setDataScadenta(txtScadent.getText().toString().trim());
 		plataNeincasata.setCodAgent(UserInfo.getInstance().getCod());
-
+		plataNeincasata.setGirant(txtGirant.getText().toString().trim());
 		List<IncasareDocument> listDocumente = new ArrayList<IncasareDocument>();
 
 		for (FacturaNeincasataLite factura : listFacturi) {
@@ -529,6 +498,7 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 			((LinearLayout) findViewById(R.id.layoutTipPlata)).setVisibility(View.VISIBLE);
 			((LinearLayout) findViewById(R.id.layoutSerie)).setVisibility(View.VISIBLE);
 			((LinearLayout) findViewById(R.id.layoutScadenta)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutGirant)).setVisibility(View.VISIBLE);
 			((Button) findViewById(R.id.salveazaPlataBtn)).setVisibility(View.VISIBLE);
 
 		} else {
@@ -539,6 +509,7 @@ public class InstrumentePlata extends Activity implements OperatiiClientListener
 			((LinearLayout) findViewById(R.id.layoutEmitere)).setVisibility(View.INVISIBLE);
 			((LinearLayout) findViewById(R.id.layoutSerie)).setVisibility(View.INVISIBLE);
 			((LinearLayout) findViewById(R.id.layoutScadenta)).setVisibility(View.INVISIBLE);
+			((LinearLayout) findViewById(R.id.layoutGirant)).setVisibility(View.INVISIBLE);
 			((Button) findViewById(R.id.salveazaPlataBtn)).setVisibility(View.INVISIBLE);
 		}
 	}

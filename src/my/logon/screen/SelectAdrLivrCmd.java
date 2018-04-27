@@ -136,6 +136,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private TextView textDataLivrare;
 	private Button btnDataLivrare;
 	private CheckBox checkFactPaleti;
+	private CheckBox chkCamionDescoperit;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -366,6 +367,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		checkFactPaleti = (CheckBox) findViewById(R.id.chkFactPaleti);
 		checkFactPaleti.setChecked(DateLivrare.getInstance().isFactPaletSeparat());
+
+		chkCamionDescoperit = (CheckBox) findViewById(R.id.chkCamionDescoperit);
+		chkCamionDescoperit.setChecked(DateLivrare.getInstance().isCamionDescoperit());
 
 		spinnerTonaj = (Spinner) findViewById(R.id.spinnerTonaj);
 		setupSpinnerTonaj();
@@ -1333,7 +1337,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setZonaBucuresti(EnumZona.NEDEFINIT);
 
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
-
+		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());	
+		
 		finish();
 
 	}

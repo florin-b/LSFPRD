@@ -24,6 +24,15 @@
             android:layout_weight="0.6"
             android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/textFurnizor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_light_blue"
+                android:textSize="17sp"
+                android:typeface="sans"
+                android:visibility="gone" />
+            
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import listeners.CautaClientDialogListener;
+import listeners.DatePersListener;
 import listeners.OperatiiClientListener;
 import model.DateLivrare;
 import model.InfoStrings;
@@ -39,12 +40,14 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanClient;
+import beans.BeanDatePersonale;
 import beans.DetaliiClient;
 import beans.PlatitorTva;
 import dialogs.CautaClientDialog;
+import dialogs.DatePersClientDialog;
 import enums.EnumClienti;
 
-public class SelectClientCmdGed extends Activity implements OperatiiClientListener, CautaClientDialogListener {
+public class SelectClientCmdGed extends Activity implements OperatiiClientListener, CautaClientDialogListener, DatePersListener {
 
 	Button cautaClientBtn, saveClntBtn;
 	String filiala = "", nume = "", cod = "";
@@ -66,13 +69,16 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private LinearLayout layoutClientPersoana, layoutClientDistrib;
 	private ListView listViewClienti;
 	private BeanClient selectedClient;
-	private TextView textNumeClientDistrib, textCodClientDistrib, textAdrClient, textLimitaCredit, textRestCredit, textTipClient, clientBlocat, filialaClient;
+	private TextView textNumeClientDistrib, textCodClientDistrib, textAdrClient, textLimitaCredit, textRestCredit, textTipClient, clientBlocat,
+			filialaClient;
 
 	private RadioButton radioClMeserias;
 	private NumberFormat numberFormat;
 	private CheckBox checkPlatTva, checkFacturaPF;
 	private Button clientBtn, verificaID, verificaTva;
 	private TextView textClientParavan, labelIDClient;
+
+	private Button cautaClientPFBtn;
 
 	private enum EnumTipClient {
 		MESERIAS, PARAVAN;
@@ -131,6 +137,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		cautaClientBtn = (Button) findViewById(R.id.cautaClientBtn);
 		setListenerCautaClientBtn();
+
+		cautaClientPFBtn = (Button) findViewById(R.id.cautaClientPFBtn);
+		setListenerCautaClientPFBtn();
 
 		listViewClienti = (ListView) findViewById(R.id.listClienti);
 		setListViewClientiListener();
@@ -277,6 +286,35 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		});
 	}
 
+	private void setListenerCautaClientPFBtn() {
+		cautaClientPFBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				String textClient = txtNumeClientGed.getText().toString().trim();
+
+				if (!textClient.isEmpty()) {
+					HashMap<String, String> params = new HashMap<String, String>();
+					params.put("numeClient", textClient);
+					params.put("tipClient", getTipClient());
+					operatiiClient.getCnpClient(params);
+				}
+
+			}
+		});
+	}
+
+	private String getTipClient() {
+		String tipClient = " ";
+		if (radioClPF.isChecked())
+			tipClient = "PF";
+		else if (radioClPJ.isChecked())
+			tipClient = "PJ";
+
+		return tipClient;
+	}
+	
 	private boolean isNumeClientValid() {
 		if (txtNumeClientDistrib.getText().toString().trim().length() > 0) {
 			return true;
@@ -535,11 +573,12 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						if (!checkFacturaPF.isChecked()) {
 
 							if (UtilsUser.isConsWood()) {
-								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood_faraFact(UserInfo.getInstance().getUnitLog(), "PF");
+								CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood_faraFact(UserInfo.getInstance().getUnitLog(),
+										"PF");
 							} else {
 								if (UtilsUser.isUserExceptieCONSGED())
-									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED_faraFactura(UserInfo.getInstance().getUnitLog(),
-											"PF");
+									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED_faraFactura(UserInfo.getInstance()
+											.getUnitLog(), "PF");
 								else
 									CreareComandaGed.codClientVar = InfoStrings.getClientGed_FaraFactura(UserInfo.getInstance().getUnitLog());
 
@@ -554,7 +593,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 								if (hasCnp())
 									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
 								else
-									CreareComandaGed.codClientVar = InfoStrings.getClientCVO_cuFact_faraCnp(UserInfo.getInstance().getUnitLog(), "PF");
+									CreareComandaGed.codClientVar = InfoStrings
+											.getClientCVO_cuFact_faraCnp(UserInfo.getInstance().getUnitLog(), "PF");
 
 							}
 
@@ -563,7 +603,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood(UserInfo.getInstance().getUnitLog(), "PF");
 								else {
 									if (UtilsUser.isUserExceptieCONSGED())
-										CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PF");
+										CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(),
+												"PF");
 									else
 										CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF");
 								}
@@ -574,7 +615,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						}
 
 						CreareComandaGed.cnpClient = txtCNPClient.getText().toString().trim();
-						
+
 					}
 
 					if (radioClPJ.isChecked()) {
@@ -591,7 +632,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 								CreareComandaGed.cnpClient = "RO" + txtCNPClient.getText().toString().trim();
 
 								if (UtilsUser.isUserExceptieCONSGED())
-									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PJ");
+									CreareComandaGed.codClientVar = InfoStrings
+											.getClientGenericGed_CONSGED(UserInfo.getInstance().getUnitLog(), "PJ");
 								else
 									CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PJ");
 							} else {
@@ -619,8 +661,6 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 					if (layoutTextJ.getVisibility() == View.VISIBLE)
 						CreareComandaGed.codJ = txtCodJ.getText().toString().trim();
-
-					
 
 				}
 
@@ -675,6 +715,19 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		listViewClienti.setAdapter(adapterClienti);
 	}
 
+	private void afisDatePersSelectDialog(String strDatePersonale) {
+		List<BeanDatePersonale> listDatePers = operatiiClient.deserializeDatePersonale(strDatePersonale);
+
+		if (listDatePers.isEmpty()) {
+			Toast.makeText(getApplicationContext(), "Nu exista informatii.", Toast.LENGTH_LONG).show();
+		} else {
+			DatePersClientDialog datePersDialog = new DatePersClientDialog(this, listDatePers);
+			datePersDialog.setDatePersListener(this);
+			datePersDialog.show();
+		}
+
+	}
+
 	private void listClientDetails(DetaliiClient detaliiClient) {
 
 		layoutDetaliiClientDistrib.setVisibility(View.VISIBLE);
@@ -719,6 +772,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		case GET_STARE_TVA:
 			updateStareTva(operatiiClient.deserializePlatitorTva((String) result));
 			break;
+		case GET_CNP_CLIENT:
+			afisDatePersSelectDialog((String) result);
 		default:
 			break;
 		}
@@ -737,4 +792,22 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			textClientParavan.setText(CreareComandaGed.numeClientParavan);
 		}
 	}
+
+	private void populateDatePersonale(BeanDatePersonale datePersonale) {
+
+		txtNumeClientGed.setText(datePersonale.getNume());
+		txtCNPClient.setText(datePersonale.getCnp());
+
+		DateLivrare.getInstance().setCodJudet(datePersonale.getCodjudet());
+		DateLivrare.getInstance().setOras(datePersonale.getLocalitate());
+		DateLivrare.getInstance().setStrada(datePersonale.getStrada());
+
+	}
+
+	@Override
+	public void datePersSelected(Object result) {
+		populateDatePersonale((BeanDatePersonale) result);
+
+	}
+
 }

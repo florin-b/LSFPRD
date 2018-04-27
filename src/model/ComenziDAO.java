@@ -26,6 +26,7 @@ import beans.BeanConditii;
 import beans.BeanConditiiArticole;
 import beans.BeanConditiiHeader;
 import beans.DateLivrareAfisare;
+import beans.FurnizorComanda;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -126,7 +127,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		performOperation(params);
 
 	}
-	
+
 	private void performOperation(HashMap<String, String> params) {
 		AsyncTaskListener contextListener = (AsyncTaskListener) ComenziDAO.this;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(context, contextListener, numeComanda.getComanda(), params);
@@ -289,6 +290,13 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setCodMeserias(jsonLivrare.getString("meserias"));
 				dateLivrare.setFactPaletSeparat(Boolean.valueOf(jsonLivrare.getString("factPaletiSeparat")));
 
+				FurnizorComanda furnizor = new FurnizorComanda();
+				furnizor.setCodFurnizorMarfa(jsonLivrare.getString("furnizorMarfa"));
+				furnizor.setCodFurnizorProduse(jsonLivrare.getString("furnizorProduse"));
+				dateLivrare.setFurnizorComanda(furnizor);
+
+				dateLivrare.setCamionDescoperit(Boolean.valueOf(jsonLivrare.getString("isCamionDescoperit")));
+
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
 				for (int i = 0; i < jsonArticole.length(); i++) {
@@ -348,7 +356,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					articol.setDepartAprob(articolObject.getString("departAprob"));
 					articol.setIstoricPret(articolObject.getString("istoricPret").trim());
 					articol.setVechime(articolObject.getString("vechime"));
-
+					articol.setMoneda(articolObject.getString("moneda"));
+					articol.setValTransport(Double.valueOf(articolObject.getString("valTransport")));
+					articol.setProcTransport(0);
 					listArticole.add(articol);
 
 				}

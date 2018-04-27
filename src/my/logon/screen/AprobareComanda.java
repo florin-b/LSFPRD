@@ -462,6 +462,14 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 				slidingDrawerAprob.setVisibility(View.VISIBLE);
 				btnConditii.setChecked(false);
 
+				if (comandaCurenta.getMoneda().equals("RON")) {
+					tipOpCmd = 2;
+					opereazaComanda();
+				} else if (comandaCurenta.getMoneda().equals("BGN")) {
+					Toast.makeText(getApplicationContext(), "Operatie reusita.", Toast.LENGTH_SHORT).show();
+					getListComenzi();
+				}
+				
 				tipOpCmd = 2;
 				opereazaComanda();
 

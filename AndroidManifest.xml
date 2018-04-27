@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="my.logon.screen"
-    android:versionCode="236"
+    android:versionCode="237"
     android:versionName="1.1" >
 
     <uses-sdk
@@ -356,6 +356,12 @@
         </activity>
         <activity
             android:name=".InstrumentePlata"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SelectFurnizorCmd"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >

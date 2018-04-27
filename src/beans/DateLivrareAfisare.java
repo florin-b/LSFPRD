@@ -43,8 +43,10 @@ public class DateLivrareAfisare {
 	private LatLng coordonateAdresa;
 	private String tonaj;
 	private boolean isClientRaft;
-	private String codMeserias="";
-	private boolean isFactPaletSeparat = true;
+	private String codMeserias = "";
+	private boolean isFactPaletSeparat = false;
+	private FurnizorComanda furnizorComanda;
+	private boolean isCamionDescoperit;
 
 	public DateLivrareAfisare() {
 
@@ -153,8 +155,6 @@ public class DateLivrareAfisare {
 	public void setObsLivrare(String obsLivrare) {
 		this.obsLivrare = obsLivrare;
 	}
-
-
 
 	public boolean isAdrLivrNoua() {
 		return adrLivrNoua;
@@ -319,10 +319,11 @@ public class DateLivrareAfisare {
 	public String toString() {
 		return "DateLivrareAfisare [codJudet=" + codJudet + ", numeJudet=" + numeJudet + ", Oras=" + Oras + ", Strada=" + Strada + ", persContact="
 				+ persContact + ", nrTel=" + nrTel + ", redSeparat=" + redSeparat + ", Cantar=" + Cantar + ", tipPlata=" + tipPlata + ", Transport="
-				+ Transport + ", dateLivrare=" + dateLivrare + ", termenPlata=" + termenPlata + ", obsLivrare=" + obsLivrare + ", dataLivrare=" + dataLivrare
-				+ ", adrLivrNoua=" + adrLivrNoua + ", tipDocInsotitor=" + tipDocInsotitor + ", obsPlata=" + obsPlata + ", addrNumber=" + addrNumber
-				+ ", valoareIncasare=" + valoareIncasare + ", isValIncModif=" + isValIncModif + ", mail=" + mail + ", totalComanda=" + totalComanda
-				+ ", unitLog=" + unitLog + ", codAgent=" + codAgent + ", factRed=" + factRed + ", tipPersClient=" + tipPersClient + "]";
+				+ Transport + ", dateLivrare=" + dateLivrare + ", termenPlata=" + termenPlata + ", obsLivrare=" + obsLivrare + ", dataLivrare="
+				+ dataLivrare + ", adrLivrNoua=" + adrLivrNoua + ", tipDocInsotitor=" + tipDocInsotitor + ", obsPlata=" + obsPlata + ", addrNumber="
+				+ addrNumber + ", valoareIncasare=" + valoareIncasare + ", isValIncModif=" + isValIncModif + ", mail=" + mail + ", totalComanda="
+				+ totalComanda + ", unitLog=" + unitLog + ", codAgent=" + codAgent + ", factRed=" + factRed + ", tipPersClient=" + tipPersClient
+				+ "]";
 	}
 
 	public String getIdObiectiv() {
@@ -380,13 +381,29 @@ public class DateLivrareAfisare {
 	public void setCodMeserias(String codMeserias) {
 		this.codMeserias = codMeserias;
 	}
-	
+
 	public boolean isFactPaletSeparat() {
 		return isFactPaletSeparat;
 	}
 
 	public void setFactPaletSeparat(boolean isFactPaletSeparat) {
 		this.isFactPaletSeparat = isFactPaletSeparat;
+	}
+
+	public FurnizorComanda getFurnizorComanda() {
+		return furnizorComanda;
+	}
+
+	public void setFurnizorComanda(FurnizorComanda furnizorComanda) {
+		this.furnizorComanda = furnizorComanda;
+	}
+
+	public boolean isCamionDescoperit() {
+		return isCamionDescoperit;
+	}
+
+	public void setCamionDescoperit(boolean isCamionDescoperit) {
+		this.isCamionDescoperit = isCamionDescoperit;
 	}
 
 }

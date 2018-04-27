@@ -17,6 +17,7 @@ import android.content.Context;
 import android.widget.Toast;
 import beans.BeanAdresaLivrare;
 import beans.BeanClient;
+import beans.BeanDatePersonale;
 import beans.DetaliiClient;
 import beans.PlatitorTva;
 import enums.EnumClienti;
@@ -76,6 +77,12 @@ public class OperatiiClient implements AsyncTaskListener {
 		call.getCallResultsFromFragment();
 	}
 
+	public void getCnpClient(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_CNP_CLIENT;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}	
+	
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;
 		ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();
@@ -197,6 +204,40 @@ public class OperatiiClient implements AsyncTaskListener {
 		return platitorTva;
 	}
 
+	public List<BeanDatePersonale> deserializeDatePersonale(String result) {
+		List<BeanDatePersonale> listDate = new ArrayList<BeanDatePersonale>();
+
+		try {
+
+			Object json = new JSONTokener(result).nextValue();
+
+			if (json instanceof JSONArray) {
+				JSONArray jsonObject = new JSONArray(result);
+
+				for (int i = 0; i < jsonObject.length(); i++) {
+					JSONObject dateObject = jsonObject.getJSONObject(i);
+
+					BeanDatePersonale datePersonale = new BeanDatePersonale();
+
+					datePersonale.setCnp(dateObject.getString("cnp"));
+					datePersonale.setNume(dateObject.getString("nume"));
+					datePersonale.setCodjudet(dateObject.getString("codjudet"));
+					datePersonale.setLocalitate(dateObject.getString("localitate"));
+					datePersonale.setStrada(dateObject.getString("strada"));
+					listDate.add(datePersonale);
+
+				}
+
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return listDate;
+	}
+	
+	
 	public void onTaskComplete(String methodName, Object result) {
 		if (listener != null) {
 			listener.operationComplete(numeComanda, result);

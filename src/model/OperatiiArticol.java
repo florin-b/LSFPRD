@@ -54,6 +54,7 @@ public interface OperatiiArticol {
 	
 	public void getCodBare(HashMap<String, String> params);
 	
+	public void getArticoleStatistic(HashMap<String, String> params);
 	
 	
 

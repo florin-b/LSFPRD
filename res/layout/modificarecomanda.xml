@@ -6,7 +6,6 @@
     android:orientation="vertical" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -21,7 +20,6 @@
             android:background="@drawable/spinner_style_2" />
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
@@ -61,7 +59,6 @@
     </LinearLayout>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal" >
@@ -78,7 +75,6 @@
             android:dividerHeight="7.0sp" />
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/layoutDetaliiCmd"
             android:layout_width="0dip"
             android:layout_height="match_parent"
@@ -90,8 +86,34 @@
             android:background="@drawable/rounded_shape"
             android:orientation="vertical" >
 
+            <Button
+                android:id="@+id/valTransp"
+                style="@style/button_text_2"
+                android:layout_width="wrap_content"
+                android:layout_height="30dip"
+                android:layout_gravity="left"
+                android:layout_marginLeft="10dip"
+                android:background="@drawable/button_style_6"
+                android:gravity="center"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:text="Transport:"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/textAlertaMarja"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_margin="10dip"
+                android:gravity="center"
+                android:text="Info cmd"
+                android:textColor="@color/marjaAlert1"
+                android:textSize="17sp"
+                android:typeface="sans"
+                android:visibility="gone" />
+
             <ScrollView
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/myScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -100,15 +122,12 @@
                 android:scrollbars="none" >
 
                 <LinearLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|left"
                     android:orientation="vertical" >
 
                     <LinearLayout
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
