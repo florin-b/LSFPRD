@@ -47,6 +47,7 @@ public class DateLivrareAfisare {
 	private boolean isFactPaletSeparat = false;
 	private FurnizorComanda furnizorComanda;
 	private boolean isCamionDescoperit;
+	private String diviziiClient;
 
 	public DateLivrareAfisare() {
 
@@ -406,4 +407,12 @@ public class DateLivrareAfisare {
 		this.isCamionDescoperit = isCamionDescoperit;
 	}
 
+	public String getDiviziiClient() {
+		return diviziiClient;
+	}
+
+	public void setDiviziiClient(String diviziiClient) {
+		this.diviziiClient = diviziiClient;
+	}
+	
 }
