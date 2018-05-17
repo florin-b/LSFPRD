@@ -496,6 +496,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 					uInfo.setFilHome(Boolean.valueOf(token[12]));
 					uInfo.setFtpIP(token[13]);
+					uInfo.setInitDivizie(token[14]);
 
 					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
 					startActivity(nextScreen);
