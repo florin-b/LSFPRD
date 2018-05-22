@@ -1438,6 +1438,19 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		textLocalitate.getText().clear();
 		textStrada.getText().clear();
 		textNrStr.getText().clear();
+		
+		int nrJudete = spinnerJudet.getAdapter().getCount();
+
+		for (int j = 0; j < nrJudete; j++) {
+			HashMap<String, String> artMapLivr = (HashMap<String, String>) this.adapterJudete.getItem(j);
+			String numeJudet = artMapLivr.get("numeJudet").toString();
+
+			if (address.getSector().equals(numeJudet)) {
+				spinnerJudet.setSelection(j);
+				break;
+			}
+
+		}
 
 		if (address.getCity() != null && !address.getCity().isEmpty())
 			textLocalitate.setText(address.getCity());

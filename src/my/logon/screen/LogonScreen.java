@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
 
-import utils.UtilsUser;
-
 import listeners.AsyncTaskListener;
 import model.InfoStrings;
 import model.UserInfo;
+import utils.UtilsGeneral;
+import utils.UtilsUser;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -497,6 +497,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setFilHome(Boolean.valueOf(token[12]));
 					uInfo.setFtpIP(token[13]);
 					uInfo.setInitDivizie(token[14]);
+					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1]));
 
 					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
 					startActivity(nextScreen);

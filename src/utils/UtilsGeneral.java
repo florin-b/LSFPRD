@@ -544,7 +544,7 @@ public class UtilsGeneral {
 			dpt = "01";
 
 		if (numeDepart.equals("MATE"))
-			dpt = "04";
+			dpt = UserInfo.getInstance().getInitDivizie();
 
 		if (numeDepart.equals("PARC"))
 			dpt = "03";

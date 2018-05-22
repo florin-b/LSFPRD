@@ -676,7 +676,6 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					CreareComandaGed.rezervStoc = false;
 
 				}
-				Toast.makeText(getApplicationContext(), CreareComandaGed.codClientVar, Toast.LENGTH_LONG).show();
 				finish();
 
 			}
