@@ -380,7 +380,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		layoutPrelucrare04 = (LinearLayout) findViewById(R.id.layoutIndoire);
 		layoutPrelucrare04.setVisibility(View.INVISIBLE);
 
-		if (UtilsUser.isAgentOrSD() && UserInfo.getInstance().getCodDepart().equals("04"))
+		if (UtilsUser.isAgentOrSD() && UserInfo.getInstance().getCodDepart().startsWith("04"))
 			layoutPrelucrare04.setVisibility(View.VISIBLE);
 
 		if (UtilsUser.isKA())

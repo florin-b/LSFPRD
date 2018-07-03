@@ -450,6 +450,9 @@ public class InfoStrings {
 
 		if (numeUL.equals("DJ10"))
 			numeFil = "DOLJ";
+		
+		if (numeUL.equals("SB10"))
+			numeFil = "SIBIU";
 
 		return numeFil;
 

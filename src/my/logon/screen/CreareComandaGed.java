@@ -1408,18 +1408,21 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("istoricPret", listArticole.get(i).getIstoricPret());
 				obj.put("valTransport", listArticole.get(i).getValTransport());
 				obj.put("procTransport", listArticole.get(i).getProcTransport());
-				
+
 				myArray.put(obj);
 
 				if (listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) {
-					alertDV = true;
-					if (!comandaFinala.getComandaBlocata().equals("21"))
-						comandaFinala.setComandaBlocata("1");
 
-					if (UtilsUser.isAgentOrSD() && !UserInfo.getInstance().isFilHome())
-						aprobariCV.add(UserInfo.getInstance().getCodDepart());
-					else
-						aprobariCV.add(listArticole.get(i).getDepart());
+					if (listArticole.get(i).getProcent() > 0) {
+						alertDV = true;
+						if (!comandaFinala.getComandaBlocata().equals("21"))
+							comandaFinala.setComandaBlocata("1");
+
+						if (UtilsUser.isAgentOrSD() && !UserInfo.getInstance().isFilHome())
+							aprobariCV.add(UserInfo.getInstance().getCodDepart().substring(0, 2));
+						else
+							aprobariCV.add(listArticole.get(i).getDepart().substring(0, 2));
+					}
 				}
 
 				if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood()) {

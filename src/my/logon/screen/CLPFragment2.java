@@ -24,12 +24,14 @@ import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
 import patterns.ClpDepartComparator;
+import utils.DepartamentAgent;
 import utils.MapUtils;
 import utils.ScreenUtils;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.CautareArticoleAdapter;
+
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,6 +71,7 @@ import beans.BeanGreutateArticol;
 import beans.ComandaCreataCLP;
 import enums.EnumArticoleDAO;
 import enums.EnumClpDAO;
+import enums.EnumDepartExtra;
 
 public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOListener, OperatiiArticolListener {
 
@@ -114,6 +117,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 	OperatiiArticol opArticol;
 	private ComandaCreataCLP comandaCLP;
+	private String selectedDepartamentAgent = UserInfo.getInstance().getCodDepart();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -188,9 +192,10 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		listArtCmdClp = (ListView) v.findViewById(R.id.listArtCmdClp);
 
 		listArtSelClp = new ArrayList<HashMap<String, String>>();
-		adapterListArtClp = new SimpleAdapter(getActivity(), listArtSelClp, R.layout.articol_row_clp, new String[] { "nrCrt", "numeArt", "codArt", "cantArt",
-				"depozit", "Umb", "sintetic", "greutate", "umgreutate", "depart" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt,
-				R.id.textCantArt, R.id.textDepozit, R.id.textCantUmb, R.id.textSintetic, R.id.textGreutate, R.id.textUmGreutate, R.id.textDepart }
+		adapterListArtClp = new SimpleAdapter(getActivity(), listArtSelClp, R.layout.articol_row_clp, new String[] { "nrCrt", "numeArt", "codArt",
+				"cantArt", "depozit", "Umb", "sintetic", "greutate", "umgreutate", "depart" }, new int[] { R.id.textNrCrt, R.id.textNumeArt,
+				R.id.textCodArt, R.id.textCantArt, R.id.textDepozit, R.id.textCantUmb, R.id.textSintetic, R.id.textGreutate, R.id.textUmGreutate,
+				R.id.textDepart }
 
 		);
 
@@ -220,7 +225,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		spinnerUMClp = (Spinner) v.findViewById(R.id.spinnerUMClp);
 
 		listUmVanz = new ArrayList<HashMap<String, String>>();
-		adapterUmVanz = new SimpleAdapter(getActivity(), listUmVanz, R.layout.simplerowlayout, new String[] { "rowText" }, new int[] { R.id.textRowName });
+		adapterUmVanz = new SimpleAdapter(getActivity(), listUmVanz, R.layout.simplerowlayout, new String[] { "rowText" },
+				new int[] { R.id.textRowName });
 		spinnerUMClp.setAdapter(adapterUmVanz);
 		spinnerUMClp.setVisibility(View.GONE);
 		spinnerUMClp.setOnItemSelectedListener(new OnSelectUnitMas());
@@ -243,6 +249,47 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 
+	}
+
+	private void addSpinnerDepartamente() {
+
+		List<String> listDepart = DepartamentAgent.getDepartamenteAgentCLP(CLPFragment1.diviziiClient);
+
+		listDepart.remove("Magazin");
+
+		if (listDepart.size() == 1)
+			return;
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
+				listDepart);
+
+		LayoutInflater mInflater = LayoutInflater.from(getActivity());
+		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);
+		final Spinner spinnerDepartament = (Spinner) mCustomView.findViewById(R.id.spinnerDep);
+
+		spinnerDepartament.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				selectedDepartamentAgent = EnumDepartExtra.getCodDepart(spinnerDepartament.getSelectedItem().toString());
+				listViewArticole.setAdapter(null);
+				txtNumeArticol.setText("");
+				saveArtBtnClp.setVisibility(View.INVISIBLE);
+
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
+		spinnerDepartament.setAdapter(adapter);
+
+		getActivity().getActionBar().setCustomView(mCustomView);
+		getActivity().getActionBar().setDisplayShowCustomEnabled(true);
+
+	}
+
+	private void removeSpinnerDepartamente() {
+		getActivity().getActionBar().setCustomView(null);
+		getActivity().getActionBar().setDisplayShowCustomEnabled(true);
 	}
 
 	public void addListenerToggle() {
@@ -475,7 +522,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		String localDep = UserInfo.getInstance().getCodDepart();
 
 		if (UtilsUser.isAgentOrSD()) {
-			localDep = UserInfo.getInstance().getCodDepart();
+			localDep = selectedDepartamentAgent;
 		} else if (UtilsUser.isKA() || isCV()) {
 			localDep = "00";
 		}
@@ -486,6 +533,9 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			params.put("tipArticol", tipArticol);
 			params.put("tipCautare", tipCautare);
 			params.put("departament", localDep);
+			params.put("filiala", UserInfo.getInstance().getUnitLog());
+			params.put("codUser", UserInfo.getInstance().getCod());
+			params.put("modulCautare", "CLP");
 
 			opArticol.getArticoleDistributie(params);
 		}
@@ -674,6 +724,9 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		slidingDrawerArt.setOnDrawerOpenListener(new OnDrawerOpenListener() {
 			public void onDrawerOpened() {
 
+				if (UtilsUser.isAgentOrSD())
+					addSpinnerDepartamente();
+
 				layoutArtHeader.setVisibility(View.INVISIBLE);
 				layoutArtDet.setVisibility(View.INVISIBLE);
 				layoutSaveClp.setVisibility(View.INVISIBLE);
@@ -684,6 +737,9 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		slidingDrawerArt.setOnDrawerCloseListener(new OnDrawerCloseListener() {
 			public void onDrawerClosed() {
+
+				if (UtilsUser.isAgentOrSD())
+					removeSpinnerDepartamente();
 
 				layoutArtHeader.setVisibility(View.VISIBLE);
 				layoutArtDet.setVisibility(View.VISIBLE);
@@ -1074,7 +1130,8 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 			String numeClientCV = CLPFragment1.textSelClient.getText().toString().trim();
 
-			String observatiiCLP = CLPFragment1.txtObservatiiCLP.getText().toString().isEmpty() ? " " : CLPFragment1.txtObservatiiCLP.getText().toString();
+			String observatiiCLP = CLPFragment1.txtObservatiiCLP.getText().toString().isEmpty() ? " " : CLPFragment1.txtObservatiiCLP.getText()
+					.toString();
 
 			String localCodClient = CreareClp.codClient;
 
@@ -1101,7 +1158,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			if (CLPFragment1.spinnerIndoire.getVisibility() == View.VISIBLE && CLPFragment1.spinnerIndoire.getSelectedItemPosition() > 0) {
 				prelucrare04 = CLPFragment1.spinnerIndoire.getSelectedItem().toString();
 			}
-			
+
 			AntetComandaCLP antetComandaCLP = new AntetComandaCLP();
 
 			antetComandaCLP.setCodClient(localCodClient);
@@ -1128,12 +1185,13 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 			comandaCLP.setAntetComandaCLP(antetComandaCLP);
 
-			CreareClp.comandaFinala = localCodClient + "#" + CreareClp.codJudet + "#" + CreareClp.oras + "#" + CreareClp.strada + "#" + CreareClp.persCont
-					+ "#" + CreareClp.telefon + "#" + CreareClp.codFilialaDest + "#" + CreareClp.dataLivrare + "#" + CreareClp.tipPlata + "#"
-					+ CreareClp.tipTransport + "#" + depozDest + "#" + CreareClp.selectedAgent + "#" + cmdFasonate + "#" + numeClientCV + "#" + observatiiCLP
-					+ "#" + CreareClp.tipMarfa + "#" + CreareClp.masaMarfa + "#"
+			CreareClp.comandaFinala = localCodClient + "#" + CreareClp.codJudet + "#" + CreareClp.oras + "#" + CreareClp.strada + "#"
+					+ CreareClp.persCont + "#" + CreareClp.telefon + "#" + CreareClp.codFilialaDest + "#" + CreareClp.dataLivrare + "#"
+					+ CreareClp.tipPlata + "#" + CreareClp.tipTransport + "#" + depozDest + "#" + CreareClp.selectedAgent + "#" + cmdFasonate + "#"
+					+ numeClientCV + "#" + observatiiCLP + "#" + CreareClp.tipMarfa + "#" + CreareClp.masaMarfa + "#"
 					+ CLPFragment1.spinnerTipCamion.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#"
-					+ CLPFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#" + strTonaj + "@" + articoleFinale;
+					+ CLPFragment1.spinnerTipIncarcare.getSelectedItem().toString().toUpperCase(Locale.getDefault()) + "#" + strTonaj + "@"
+					+ articoleFinale;
 
 			performSaveClp();
 

@@ -171,6 +171,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	public static Spinner spinnerIndoire;
 	public static LinearLayout layoutPrelucrare04;
+	
+	private TextView textDiviziiClient;
+	public static String diviziiClient;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -349,6 +352,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			radioClientPJ = (RadioButton) v.findViewById(R.id.radioClientPJ);
 
 			txtObservatiiCLP = (EditText) v.findViewById(R.id.txtObservatiiCLP);
+			
+			textDiviziiClient = (TextView) v.findViewById(R.id.textDiviziiClient);
 
 			// consilieri, se face selectie departament
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
@@ -542,6 +547,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("codClient", codClient);
 		params.put("depart", departSel);
+		params.put("codUser", UserInfo.getInstance().getCod());
 
 		operatiiClient.getDetaliiClient(params);
 
@@ -567,7 +573,10 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			textLimitaCredit.setText(nf2.format(Double.valueOf(detaliiClient.getLimitaCredit())));
 			textRestCredit.setText(nf2.format(Double.valueOf(detaliiClient.getRestCredit())));
-
+			
+			textDiviziiClient.setText(detaliiClient.getDivizii());
+			diviziiClient = detaliiClient.getDivizii();
+			
 			if (detaliiClient.getStare().equals("X")) {
 				textRestCredit.setText("Client blocat - " + detaliiClient.getMotivBlocare());
 				saveClntBtn.setVisibility(View.INVISIBLE);
