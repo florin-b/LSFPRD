@@ -85,6 +85,10 @@ public class UtilsUser {
 				|| (UserInfo.getInstance().getTipAcces().equals("18") && UserInfo.getInstance().getTipUserSap().equals("WOOD"));
 	}
 
+	public static boolean isSuperAv() {
+		return !UserInfo.getInstance().getCodSuperUser().isEmpty();
+	}
+	
 	public static String getTipSMNou() {
 		String tipUser;
 

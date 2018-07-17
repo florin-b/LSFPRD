@@ -80,7 +80,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	private EditText txtNumeArticol, textCantArt;
 
 	String[] depozite = { "V1 - vanzare", "V2 - vanzare", "V3 - vanzare", "G1 - gratuite", "G2 - gratuite", "G3 - gratuite", "D1 - deteriorate",
-			"D2 - deteriorate", "D3 - deteriorate", "DESC", "TAMP", "GAR1" };
+			"D2 - deteriorate", "D3 - deteriorate", "DESC", "MAV1", "TAMP", "GAR1" };
 
 	private static ArrayList<HashMap<String, String>> listArtSelClp = null, listUmVanz = null;
 
@@ -255,24 +255,30 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		List<String> listDepart = DepartamentAgent.getDepartamenteAgentCLP(CLPFragment1.diviziiClient);
 
-		listDepart.remove("Magazin");
+		if (!UserInfo.getInstance().getUnitLog().startsWith("BU"))
+			listDepart.remove("Magazin");
 
 		if (listDepart.size() == 1)
 			return;
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
-				listDepart);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_spinner_dropdown_item, listDepart);
 
 		LayoutInflater mInflater = LayoutInflater.from(getActivity());
 		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);
 		final Spinner spinnerDepartament = (Spinner) mCustomView.findViewById(R.id.spinnerDep);
 
 		spinnerDepartament.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@SuppressWarnings("unchecked")
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				selectedDepartamentAgent = EnumDepartExtra.getCodDepart(spinnerDepartament.getSelectedItem().toString());
 				listViewArticole.setAdapter(null);
 				txtNumeArticol.setText("");
 				saveArtBtnClp.setVisibility(View.INVISIBLE);
+
+				if (selectedDepartamentAgent.equals("11"))
+					spinnerDepoz.setSelection(((ArrayAdapter<String>) spinnerDepoz.getAdapter()).getPosition("DSCM"));
+				else
+					spinnerDepoz.setSelection(0);
 
 			}
 
@@ -523,8 +529,11 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 
 		if (UtilsUser.isAgentOrSD()) {
 			localDep = selectedDepartamentAgent;
-		} else if (UtilsUser.isKA() || isCV()) {
+		} else if (UtilsUser.isKA()) {
 			localDep = "00";
+		} else if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+				|| UserInfo.getInstance().getTipAcces().equals("44")) {
+			localDep = CLPFragment1.departamentConsilier;
 		}
 
 		if (localDep.length() > 0) {
@@ -630,13 +639,27 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 	private void performListArtStoc() {
 		try {
 
+			if (CreareClp.codFilialaDest == null || CreareClp.codFilialaDest.isEmpty())
+				return;
+
 			HashMap<String, String> params = new HashMap<String, String>();
 
 			if (codArticol.length() == 8)
 				codArticol = "0000000000" + codArticol;
 
+			String varLocalUnitLog = "";
+
+			if (globalDepozSel.equals("MAV1")) {
+				if (CreareClp.codFilialaDest.equals("BV90"))
+					varLocalUnitLog = "BV92";
+				else
+					varLocalUnitLog = CreareClp.codFilialaDest.substring(0, 2) + "2" + CreareClp.codFilialaDest.substring(3, 4);
+			} else {
+				varLocalUnitLog = CreareClp.codFilialaDest;
+			}
+
 			params.put("codArt", codArticol);
-			params.put("filiala", CreareClp.codFilialaDest);
+			params.put("filiala", varLocalUnitLog);
 			params.put("depozit", globalDepozSel);
 
 			AsyncTaskListener contextListener = (AsyncTaskListener) CLPFragment2.this;
@@ -1288,6 +1311,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 			params.put("depart", localDep);
 			params.put("alertSD", localAlertSD);
 			params.put("serData", operatiiClp.serializeComandaClp(comandaCLP));
+			params.put("codSuperAgent", UserInfo.getInstance().getCodSuperUser());
 
 			operatiiClp.salveazaComanda(params);
 

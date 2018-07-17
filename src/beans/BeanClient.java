@@ -5,6 +5,8 @@ public class BeanClient {
 	private String numeClient;
 	private String codClient;
 	private String tipClient;
+	private String codAgent;
+	private String numeAgent;
 
 	public BeanClient() {
 
@@ -38,7 +40,21 @@ public class BeanClient {
 	public String toString() {
 		return numeClient;
 	}
-	
 
+	public String getCodAgent() {
+		return codAgent;
+	}
+
+	public void setCodAgent(String codAgent) {
+		this.codAgent = codAgent;
+	}
+
+	public String getNumeAgent() {
+		return numeAgent;
+	}
+
+	public void setNumeAgent(String numeAgent) {
+		this.numeAgent = numeAgent;
+	}
 
 }

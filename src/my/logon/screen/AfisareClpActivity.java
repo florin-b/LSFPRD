@@ -253,6 +253,9 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 		if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) {
 			localTipUser = "DV";
 		}
+		
+		if (UserInfo.getInstance().getTipAcces().equals("18"))
+			localTipUser = "SM";
 
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("filiala", UserInfo.getInstance().getUnitLog());

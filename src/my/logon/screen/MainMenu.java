@@ -125,6 +125,15 @@ public class MainMenu extends Activity {
 			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.colosseum,
 			R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.client_info,
 			R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+	
+	public String[] btnNamesSM = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Creare CLP", "Aprobare CLP",
+			"Afisare CLP", "Retur paleti", "Stare retur paleti", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Info client",
+			"Delegatii", "Despre", "Iesire" };
+
+	public int[] btnImageSM = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.simulate,
+			R.drawable.clp, R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.colosseum,
+			R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.client_info,
+			R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };	
 
 	public String[] btnNamesCONSGED = { "Utilizator", "Creare cmd GED", "Afisare comanda", "Comenzi simulate", "Retur paleti", "Stare retur paleti",
 			"Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta", "Info client", "Despre", "Iesire" };
@@ -1089,7 +1098,8 @@ public class MainMenu extends Activity {
 
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
 				|| UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("17")
-				|| UserInfo.getInstance().getTipAcces().equals("18")) // userul
+				|| UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("43")
+				|| UserInfo.getInstance().getTipAcces().equals("44") || UserInfo.getInstance().getTipAcces().equals("45")) // userul
 		// este
 		// agent
 		// sau
@@ -1121,7 +1131,7 @@ public class MainMenu extends Activity {
 
 		}
 		if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("12")
-				|| UserInfo.getInstance().getTipAcces().equals("14")) // sd,
+				|| UserInfo.getInstance().getTipAcces().equals("14") || UserInfo.getInstance().getTipAcces().equals("18")) // sd,
 		// sm
 		// comenzile
 		// ce
@@ -1158,7 +1168,7 @@ public class MainMenu extends Activity {
 
 			// cereri CLP -> SD, DV
 			if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("12")
-					|| UserInfo.getInstance().getTipAcces().equals("14")) {
+					|| UserInfo.getInstance().getTipAcces().equals("14") || UserInfo.getInstance().getTipAcces().equals("18")) {
 
 				this.aprobClp = (Button) gridview.findViewById(getBtnPosByName("Aprobare CLP"));
 
@@ -1310,10 +1320,13 @@ public class MainMenu extends Activity {
 			nrBtns = btnNamesDK.length;
 		}
 
-		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
-				.getTipUser().equals("SMR"))
+		if ((UserInfo.getInstance().getTipUser().equals("CV") )
 				&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
 			nrBtns = btnNamesCVA.length;
+		}
+		
+		if (UserInfo.getInstance().getTipUserSap().equals("SMR")) {
+			nrBtns = btnNamesSM.length;
 		}
 
 		if (UserInfo.getInstance().getTipUserSap().equals("KA3")) {
@@ -1355,10 +1368,13 @@ public class MainMenu extends Activity {
 			btnName = btnNamesDK[btnPos];
 		}
 
-		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
-				.getTipUser().equals("SMR"))
+		if ((UserInfo.getInstance().getTipUser().equals("CV") )
 				&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
 			btnName = btnNamesCVA[btnPos];
+		}
+		
+		if (UserInfo.getInstance().getTipUserSap().equals("SMR")) {
+			btnName = btnNamesSM[btnPos];
 		}
 
 		if (UserInfo.getInstance().getTipUserSap().equals("KA3")) {
@@ -1401,10 +1417,13 @@ public class MainMenu extends Activity {
 			btnImg = btnImageDK[btnPos];
 		}
 
-		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
-				.getTipUser().equals("SMR"))
+		if ((UserInfo.getInstance().getTipUser().equals("CV") )
 				&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
 			btnImg = btnImageCVA[btnPos];
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("SMR")) {
+			btnImg = btnImageSM[btnPos];
 		}
 
 		if (UserInfo.getInstance().getTipUserSap().equals("KA3")) {
@@ -1476,12 +1495,21 @@ public class MainMenu extends Activity {
 			}
 		}
 
-		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
-				.getTipUser().equals("SMR"))
+		if ((UserInfo.getInstance().getTipUser().equals("CV") )
 				&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
 
 			for (int i = 0; i < btnNamesCVA.length; i++) {
 				if (btnNamesCVA[i].equalsIgnoreCase(btnName)) {
+					position = i;
+					break;
+				}
+			}
+		}
+		
+		if (UserInfo.getInstance().getTipUserSap().equals("SMR")) {
+
+			for (int i = 0; i < btnNamesSM.length; i++) {
+				if (btnNamesSM[i].equalsIgnoreCase(btnName)) {
 					position = i;
 					break;
 				}

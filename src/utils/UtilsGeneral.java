@@ -54,6 +54,8 @@ public class UtilsGeneral {
 
 		if (UserInfo.getInstance().getCodDepart().equals("05"))
 			listDepozite.add("95V1");
+		
+		listDepozite.add("DSCM");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 	}
@@ -66,6 +68,8 @@ public class UtilsGeneral {
 		listDepozite.add("MAV2");
 		listDepozite.add("92V1");
 		listDepozite.add("95V1");
+		
+		listDepozite.add("DSCM");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 

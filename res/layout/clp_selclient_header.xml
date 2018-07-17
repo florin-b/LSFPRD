@@ -209,6 +209,30 @@
                 android:textStyle="bold"
                 android:typeface="monospace" />
 
+            <TextView
+                android:id="@+id/labelAgentClient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dip"
+                android:text="Agent"
+                android:textColor="@color/detColor1"
+                android:textSize="16sp"
+                android:typeface="sans"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/textAgentClient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dip"
+                android:textColor="@color/detColor1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:typeface="monospace"
+                android:visibility="invisible" />
+
             <Button
                 android:id="@+id/saveClntBtn"
                 style="@style/button_text_1"

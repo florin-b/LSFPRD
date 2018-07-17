@@ -27,6 +27,7 @@ import utils.MapUtils;
 import utils.ScreenUtils;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
+import adapters.CautareClientiAdapter;
 import android.app.DatePickerDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -174,6 +175,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	
 	private TextView textDiviziiClient;
 	public static String diviziiClient;
+	private TextView labelAgentClient, textAgentClient;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -355,6 +357,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			
 			textDiviziiClient = (TextView) v.findViewById(R.id.textDiviziiClient);
 
+			labelAgentClient = (TextView) v.findViewById(R.id.labelAgentClient);
+			textAgentClient = (TextView) v.findViewById(R.id.textAgentClient);
+
 			// consilieri, se face selectie departament
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
 					|| UserInfo.getInstance().getTipAcces().equals("44")) {
@@ -484,15 +489,21 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 	public class MyOnItemSelectedListener implements OnItemClickListener {
 
-		@SuppressWarnings("unchecked")
 		public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
 
-			HashMap<String, String> artMap = (HashMap<String, String>) adapterClienti.getItem(pos);
+			BeanClient client = (BeanClient) parent.getAdapter().getItem(pos);
+			numeClient = client.getNumeClient();
+			codClient = client.getCodClient();
 
-			numeClient = artMap.get("numeClient");
-			codClient = artMap.get("codClient");
+			CreareClp.codClient = client.getCodClient();
 
-			CreareClp.codClient = codClient;
+			if (UtilsUser.isSuperAv()) {
+				UserInfo.getInstance().setCod(client.getCodAgent());
+
+				labelAgentClient.setVisibility(View.VISIBLE);
+				textAgentClient.setVisibility(View.VISIBLE);
+				textAgentClient.setText(client.getNumeAgent());
+			}
 
 			performClientDetails();
 
@@ -601,6 +612,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		params.put("depart", departSel);
 		params.put("departAg", UserInfo.getInstance().getCodDepart());
 		params.put("unitLog", UserInfo.getInstance().getUnitLog());
+		params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 		operatiiClient.getListClienti(params);
 
@@ -622,16 +634,9 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		HandleJSONData objClientList = new HandleJSONData(getActivity(), clientResponse);
 		ArrayList<BeanClient> clientArray = objClientList.decodeJSONClientList();
 
-		if (clientArray.size() > 0) {
-			HashMap<String, String> temp;
+		if (!clientArray.isEmpty()) {
 
-			for (int i = 0; i < clientArray.size(); i++) {
-				temp = new HashMap<String, String>();
-				temp.put("numeClient", clientArray.get(i).getNumeClient());
-				temp.put("codClient", clientArray.get(i).getCodClient());
-				listClienti.add(temp);
-			}
-
+			CautareClientiAdapter adapterClienti = new CautareClientiAdapter(getActivity(), clientArray);
 			listViewClienti.setVisibility(View.VISIBLE);
 			listViewClienti.setAdapter(adapterClienti);
 
