@@ -1005,7 +1005,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		params.put("tip1", tipArticol1);
 		params.put("tip2", tipArticol2);
 		params.put("furnizor", DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa());
-		params.put("codDepart", UserInfo.getInstance().getCodDepart());
+		params.put("codDepart", selectedDepartamentAgent);
 		params.put("codUser", UserInfo.getInstance().getCod());
 
 		opArticol.getArticoleFurnizor(params);

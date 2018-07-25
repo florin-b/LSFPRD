@@ -209,14 +209,15 @@ public class UtilsGeneral {
 
 		if (codTransport.equals("TCLI")) {
 			tipTransport = "Transport client";
-		}
-		if (codTransport.equals("TRAP")) {
+		} else if (codTransport.equals("TRAP")) {
 			tipTransport = "Transport Arabesque";
-		}
-		if (codTransport.equals("TERT")) {
+		} else if (codTransport.equals("TERT")) {
 			tipTransport = "Transport terti";
+		} else if (codTransport.equals("TERR")) {
+			tipTransport = "Curier rapid";
+		}else if (codTransport.equals("TFRN")) {
+			tipTransport = "Transport furnizor";
 		}
-
 		return tipTransport;
 
 	}

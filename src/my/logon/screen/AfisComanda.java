@@ -552,7 +552,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 				paramDepart = "11";
 			}
 
-			if (UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("35")) // ka
+			if (UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("32")) // ka
 			{
 				tipUser = "KA";
 				paramDepart = "10";
