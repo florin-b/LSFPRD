@@ -237,6 +237,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		spinnerDepoz.setAdapter(adapterSpinnerDepozite);
 		spinnerDepoz.setOnItemSelectedListener(new OnSelectDepozit());
 
+		if (isLivrareCustodie())
+			spinnerDepoz.setVisibility(View.INVISIBLE);
+		else
+			spinnerDepoz.setVisibility(View.VISIBLE);
+
 		spinnerUnitMas = (Spinner) findViewById(R.id.spinnerUnitMas);
 
 		listUmVanz = new ArrayList<HashMap<String, String>>();
@@ -807,7 +812,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 		depSel = globalCodDepartSelectetItem.substring(0, 2);
 
-		if (CreareComanda.canalDistrib.equals("20") || globalDepozSel.equals("MAV1") || globalDepozSel.equals("MAV2")) {
+		if (CreareComanda.canalDistrib.equals("20") || globalDepozSel.equals("MAV1") || globalDepozSel.equals("MAV2")
+				|| globalDepozSel.equals("DSCM")) {
 			depSel = "11";
 			uLog = UserInfo.getInstance().getUnitLog().substring(0, 2) + "2" + UserInfo.getInstance().getUnitLog().substring(3, 4);
 		}
@@ -1018,6 +1024,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 				try {
 
+					if (isLivrareCustodie()) {
+						saveArticolCustodie();
+						return;
+					}
+
 					String localUnitMas = "";
 					String alteValori = "", subCmp = "0";
 					boolean altDepozit = false;
@@ -1060,7 +1071,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 					}
 
 					if (!isComandaDL()
-							&& Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString().replaceAll(",", ""))) {
+							&& Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString()
+									.replaceAll(",", ""))) {
 						Toast.makeText(getApplicationContext(), "Stoc insuficient!", Toast.LENGTH_LONG).show();
 						return;
 					}
@@ -1289,10 +1301,79 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private void saveArticolCustodie() {
+
+		if (textCant.getText().toString().isEmpty()) {
+			Toast.makeText(getApplicationContext(), "Cantitate invalida", Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		if (Double.parseDouble(textCant.getText().toString()) <= 0) {
+			Toast.makeText(getApplicationContext(), "Cantitate invalida", Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		if (Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString().replaceAll(",", ""))) {
+			Toast.makeText(getApplicationContext(), "Stoc insuficient.", Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		String cantArticol = textCant.getText().toString().trim();
+		String localUnitMas = textUM.getText().toString().trim();
+
+		if (codArticol.length() == 18)
+			codArticol = codArticol.substring(10, 18);
+
+		ArticolComanda unArticol = new ArticolComanda();
+		unArticol.setNumeArticol(numeArticol);
+		unArticol.setCodArticol(codArticol);
+		unArticol.setCantitate(Double.valueOf(cantArticol));
+		unArticol.setDepozit("");
+		unArticol.setPretUnit(0);
+		unArticol.setProcent(0);
+		unArticol.setUm(localUnitMas);
+		unArticol.setProcentFact(0);
+		unArticol.setConditie(false);
+		unArticol.setDiscClient(0);
+		unArticol.setProcAprob(0);
+		unArticol.setMultiplu(1);
+		unArticol.setPret(0);
+		unArticol.setMoneda("RON");
+		unArticol.setInfoArticol("");
+		unArticol.setCantUmb(Double.valueOf(cantArticol));
+		unArticol.setUmb(localUnitMas);
+		unArticol.setAlteValori("");
+		unArticol.setDepart("");
+		unArticol.setTipArt("");
+		unArticol.setPromotie(0);
+		unArticol.setObservatii("");
+		unArticol.setDepartAprob("");
+		unArticol.setUmPalet(false);
+		unArticol.setCategorie("");
+		unArticol.setLungime(0);
+		unArticol.setCmp(0);
+
+		ListaArticoleComanda listaComanda = ListaArticoleComanda.getInstance();
+		listaComanda.addArticolComanda(unArticol);
+
+		textNumeArticol.setText("");
+		textCodArticol.setText("");
+		textUM.setText("");
+		textStoc.setText("");
+		textCant.setText("");
+		txtNumeArticol.setText("");
+		resultLayout.setVisibility(View.INVISIBLE);
+
+	}
+
+	private boolean isLivrareCustodie() {
+		return DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE;
+	}
+
 	private boolean isComandaDL() {
 		return DateLivrare.getInstance().getFurnizorComanda() != null && DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa() != null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void listArtStoc(String pretResponse) {
 
@@ -1363,6 +1444,33 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			textStoc.setText("");
 		}
 
+	}
+
+	private void listArtStocCustodie(String stocResponse) {
+		if (!stocResponse.equals("-1")) {
+
+			nf2.setMinimumFractionDigits(3);
+			nf2.setMaximumFractionDigits(3);
+
+			resultLayout.setVisibility(View.VISIBLE);
+			String[] tokenStoc = stocResponse.split("#");
+
+			textNumeArticol.setVisibility(View.VISIBLE);
+			textCodArticol.setVisibility(View.VISIBLE);
+			textUM.setVisibility(View.VISIBLE);
+			textStoc.setVisibility(View.VISIBLE);
+			textCant.setVisibility(View.VISIBLE);
+			labelCant.setVisibility(View.VISIBLE);
+			labelStoc.setVisibility(View.VISIBLE);
+
+			textUM.setText(tokenStoc[1]);
+			textStoc.setText(nf2.format(Double.valueOf(tokenStoc[0])));
+
+			saveArtBtn.setVisibility(View.VISIBLE);
+
+		} else {
+			Toast.makeText(getApplicationContext(), "Nu exista informatii.", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	private void listArtPret(String pretResponse) {
@@ -1730,7 +1838,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			else
 				globalDepozSel = tokenDep[0].trim();
 
-			performListArtStoc();
+			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE) {
+				performListArtStocCustodie();
+			} else {
+				performListArtStoc();
+			}
 
 		} catch (Exception ex) {
 			Log.e("Error", ex.toString());
@@ -1739,6 +1851,18 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private void performListArtStocCustodie() {
+		if (codArticol.length() == 8)
+			codArticol = "0000000000" + codArticol;
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codArticol", codArticol);
+		params.put("codClient", CreareComanda.codClientVar);
+		params.put("filiala", CreareComanda.filialaAlternativa);
+
+		opArticol.getStocCustodie(params);
+	}
+	
 	private void performListArtStoc() {
 		try {
 
@@ -1752,7 +1876,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 			String varLocalUnitLog = "";
 
-			if (globalDepozSel.equals("MAV1")) {
+			if (globalDepozSel.equals("MAV1") || globalDepozSel.equals("DSCM")) {
 				if (CreareComanda.filialaAlternativa.equals("BV90"))
 					varLocalUnitLog = "BV92";
 				else
@@ -1812,6 +1936,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		case GET_ARTICOLE_FURNIZOR:
 			populateListViewArticol(opArticol.deserializeArticoleVanzare((String) result));
 			break;
+		case GET_STOC_CUSTODIE:
+			listArtStocCustodie((String) result);
+			break;			
 		default:
 			break;
 

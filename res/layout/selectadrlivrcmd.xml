@@ -290,6 +290,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutTipReducere"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -317,6 +318,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutDocInsot"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -343,6 +345,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutPlata"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -383,6 +386,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutResponsabil"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -567,6 +571,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutFactPaleti"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >

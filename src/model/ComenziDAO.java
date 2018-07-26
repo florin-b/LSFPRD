@@ -128,6 +128,12 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 	}
 
+	public void salveazaLivrareCustodie(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.SALVEAZA_LIVRARE_CUSTODIE;
+		performOperation(params);
+
+	}
+	
 	private void performOperation(HashMap<String, String> params) {
 		AsyncTaskListener contextListener = (AsyncTaskListener) ComenziDAO.this;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(context, contextListener, numeComanda.getComanda(), params);

@@ -122,7 +122,13 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		performOperation();
 
 	}
-	
+
+	public void getStocCustodie(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_STOC_CUSTODIE;
+		this.params = params;
+		performOperation();
+	}
+
 	@Override
 	public Object getDepartBV90(String codArticol) {
 		numeComanda = EnumArticoleDAO.GET_DEP_BV90;
@@ -334,8 +340,10 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 				pretArticol.setPretMediu(jsonObject.getString("pretMediu"));
 				pretArticol.setAdaosMediu(jsonObject.getString("adaosMediu"));
 				pretArticol.setUmPretMediu(jsonObject.getString("umPretMediu"));
-				pretArticol.setCoefCorectie(Double.valueOf(jsonObject.getString("coefCorectie") != "null" ? jsonObject.getString("coefCorectie") : "0"));
-				pretArticol.setProcTransport(Double.valueOf(jsonObject.getString("procTransport") != "null" ? jsonObject.getString("procTransport") : "0"));
+				pretArticol.setCoefCorectie(Double.valueOf(jsonObject.getString("coefCorectie") != "null" ? jsonObject.getString("coefCorectie")
+						: "0"));
+				pretArticol.setProcTransport(Double.valueOf(jsonObject.getString("procTransport") != "null" ? jsonObject.getString("procTransport")
+						: "0"));
 				pretArticol.setDiscMaxAV(Double.valueOf(jsonObject.getString("discMaxAV") != "null" ? jsonObject.getString("discMaxAV") : "0"));
 				pretArticol.setDiscMaxSD(Double.valueOf(jsonObject.getString("discMaxSD") != "null" ? jsonObject.getString("discMaxSD") : "0"));
 				pretArticol.setDiscMaxDV(Double.valueOf(jsonObject.getString("discMaxDV") != "null" ? jsonObject.getString("discMaxDV") : "0"));

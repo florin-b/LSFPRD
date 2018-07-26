@@ -34,6 +34,7 @@ import model.UserInfo;
 import utils.Exceptions;
 import utils.MapUtils;
 import utils.UtilsAddress;
+import utils.UtilsComenzi;
 import utils.UtilsDates;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
@@ -414,8 +415,28 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
 		addListenerDataLivrare();
 
+		setLivrareCustodieLayout();
+
 		performGetAdreseLivrare();
 
+	}
+
+	private void setLivrareCustodieLayout() {
+		if (UtilsComenzi.isLivrareCustodie()) {
+			((LinearLayout) findViewById(R.id.layoutTipReducere)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutDocInsot)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutPlata)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutResponsabil)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutClientRaft)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutFactPaleti)).setVisibility(View.GONE);
+		} else {
+			((LinearLayout) findViewById(R.id.layoutTipReducere)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutDocInsot)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutPlata)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutResponsabil)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutClientRaft)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutFactPaleti)).setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void addListenerDataLivrare() {
@@ -1310,7 +1331,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		dateLivrareInstance.setDateLivrare(adresa + "#" + pers + "#" + telefon + "#" + cantar + "#" + dateLivrareInstance.getTipPlata() + "#"
 				+ dateLivrareInstance.getTransport() + "#" + dateLivrareInstance.getRedSeparat() + "#");
 
-		dateLivrareInstance.setTermenPlata(spinnerTermenPlata.getSelectedItem().toString());
+		if (((LinearLayout) findViewById(R.id.layoutPlata)).getVisibility() == View.VISIBLE)
+			dateLivrareInstance.setTermenPlata(spinnerTermenPlata.getSelectedItem().toString());
 
 		dateLivrareInstance.setObsLivrare(observatii.replace("#", "-").replace("@", "-"));
 		dateLivrareInstance.setObsPlata(obsPlata);
@@ -1337,8 +1359,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			dateLivrareInstance.setZonaBucuresti(EnumZona.NEDEFINIT);
 
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
-		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());	
-		
+		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());
+
 		finish();
 
 	}
@@ -1438,7 +1460,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		textLocalitate.getText().clear();
 		textStrada.getText().clear();
 		textNrStr.getText().clear();
-		
+
 		int nrJudete = spinnerJudet.getAdapter().getCount();
 
 		for (int j = 0; j < nrJudete; j++) {

@@ -6,7 +6,8 @@ public enum EnumComenziDAO {
 			"getListMotiveRespingere"), OPERATIE_COMANDA("operatiiComenzi"), SALVEAZA_COMANDA_DISTRIB("saveNewCmdAndroid"), SALVEAZA_COMANDA_GED(
 			"saveCmdGED"), GET_ARTICOLE_COMANDA_JSON("getArticoleComandaVanzare"), SALVEAZA_CONDITII_COMANDA_SER("salveazaConditiiComanda"), SEND_OFERTA_GED_MAIL(
 			"sendMailOfertaGed"), GET_COMENZI_DESCHISE("getComenziDeschise"), GET_CLIENTI_BORD("getClientiBorderou"), GET_POZITIE_MASINA(
-			"getPozitieMasina"), GET_COST_MACARA("getCostMacara"), GET_STARE_COMANDA("getStareComanda");
+			"getPozitieMasina"), GET_COST_MACARA("getCostMacara"), GET_STARE_COMANDA("getStareComanda"), SALVEAZA_LIVRARE_CUSTODIE(
+			"saveLivrareCustodie");
 
 	private String numeComanda;
 
