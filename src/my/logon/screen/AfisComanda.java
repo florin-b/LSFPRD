@@ -584,6 +584,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			params.put("restrictii", String.valueOf(restrictiiAfisare));
 			params.put("codClient", selectedClient);
 			params.put("tipUser", tipUser);
+			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 			comenzi.getListComenzi(params);
 

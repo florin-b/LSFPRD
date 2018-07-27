@@ -16,6 +16,7 @@ import model.InfoStrings;
 import model.OperatiiClient;
 import model.UserInfo;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.CautareClientiAdapter;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -128,6 +129,10 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		nf2.setMinimumFractionDigits(2);
 		nf2.setMaximumFractionDigits(2);
 
+		if (UtilsUser.isSuperAv()) {
+			((LinearLayout) findViewById(R.id.layoutAgentClient)).setVisibility(View.VISIBLE);
+		}
+
 	}
 
 	@Override
@@ -212,6 +217,11 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		codClient = client.getCodClient();
 		tipClientVar = client.getTipClient();
 
+		if (UtilsUser.isSuperAv()) {
+			UserInfo.getInstance().setCod(client.getCodAgent());
+			((TextView) findViewById(R.id.agentClient)).setText(client.getNumeAgent());
+		}
+
 		performClientDetails();
 
 	}
@@ -294,6 +304,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 			params.put("departAg", UserInfo.getInstance().getCodDepart());
 			params.put("unitLog", UserInfo.getInstance().getUnitLog());
 			params.put("codUser", UserInfo.getInstance().getCod());
+			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 			
 			opClient.getListClienti(params);
 
@@ -341,7 +352,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		CreareComanda.cursValutar = Double.parseDouble(detaliiClient.getCursValutar());
 
 		((TextView) findViewById(R.id.diviziiClient)).setText(detaliiClient.getDivizii());
-		
+
 		if (detaliiClient.getStare().equals("X")) {
 			clientBlocatText.setVisibility(View.VISIBLE);
 			clientBlocatText.setText("Blocat : " + detaliiClient.getMotivBlocare());
@@ -367,7 +378,8 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 			numeClientVar = numeClient;
 
 			dateLivrareInstance.setDateLivrare(InfoStrings.numeJudet(dateLivrareInstance.getCodJudet()) + " " + dateLivrareInstance.getOras() + " "
-					+ dateLivrareInstance.getStrada() + "#" + dateLivrareInstance.getPersContact() + "#" + dateLivrareInstance.getNrTel() + "#NU#E#TRAP#NU");
+					+ dateLivrareInstance.getStrada() + "#" + dateLivrareInstance.getPersContact() + "#" + dateLivrareInstance.getNrTel()
+					+ "#NU#E#TRAP#NU");
 
 			clientBlocatText.setVisibility(View.INVISIBLE);
 			clientBlocatText.setText("");

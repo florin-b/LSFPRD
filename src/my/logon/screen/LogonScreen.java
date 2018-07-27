@@ -13,6 +13,7 @@ import java.util.Locale;
 import java.util.Timer;
 
 import listeners.AsyncTaskListener;
+import model.Constants;
 import model.InfoStrings;
 import model.UserInfo;
 import utils.UtilsGeneral;
@@ -498,6 +499,9 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setFtpIP(token[13]);
 					uInfo.setInitDivizie(token[14]);
 					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1]));
+					
+					if (uInfo.getTipUserSap().equals(Constants.tipSuperAv))
+						uInfo.setCodSuperUser(uInfo.getCod());
 
 					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);
 					startActivity(nextScreen);

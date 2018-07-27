@@ -310,6 +310,29 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.4" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutAgentClient"
+                    style="@style/dateLivrareDlLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:visibility="invisible" >
+
+                    <TextView
+                        style="@style/dateLivrareDlLabel"
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.15"
+                        android:text="Agent" />
+
+                    <TextView
+                        android:id="@+id/agentClient"
+                        style="@style/dateLivrareDlValori"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4" />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
