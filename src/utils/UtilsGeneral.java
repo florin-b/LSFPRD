@@ -49,7 +49,7 @@ public class UtilsGeneral {
 	public static String[] getDepoziteDistributie() {
 		List<String> listDepozite = new ArrayList<String>(Arrays.asList(depoziteDISTRIB));
 
-		if (UserInfo.getInstance().getCodDepart().equals("02"))
+		if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getDepartExtra().contains("02"))
 			listDepozite.add("92V1");
 
 		if (UserInfo.getInstance().getCodDepart().equals("05"))
