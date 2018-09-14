@@ -175,7 +175,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 	
 	private TextView textDiviziiClient;
 	public static String diviziiClient;
-	private TextView labelAgentClient, textAgentClient;
+	private TextView labelAgentClient;
+	private Spinner spinnerAgenti;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -358,7 +359,8 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			textDiviziiClient = (TextView) v.findViewById(R.id.textDiviziiClient);
 
 			labelAgentClient = (TextView) v.findViewById(R.id.labelAgentClient);
-			textAgentClient = (TextView) v.findViewById(R.id.textAgentClient);
+			spinnerAgenti = (Spinner) v.findViewById(R.id.spinnerAgenti);
+			setSpinnerAgentiListener();
 
 			// consilieri, se face selectie departament
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
@@ -498,11 +500,37 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			CreareClp.codClient = client.getCodClient();
 
 			if (UtilsUser.isSuperAv()) {
-				UserInfo.getInstance().setCod(client.getCodAgent());
+				UserInfo.getInstance().setCod(client.getAgenti());
 
 				labelAgentClient.setVisibility(View.VISIBLE);
-				textAgentClient.setVisibility(View.VISIBLE);
-				textAgentClient.setText(client.getNumeAgent());
+				spinnerAgenti.setVisibility(View.VISIBLE);
+
+				String[] tokAgenti = client.getAgenti().split("@");
+
+				ArrayList<HashMap<String, String>> listAgenti = new ArrayList<HashMap<String, String>>();
+
+				HashMap<String, String> agent = new HashMap<String, String>();
+				agent.put("numeAgent", "Selectati un agent");
+				agent.put("codAgent", "");
+
+				listAgenti.add(agent);
+
+				for (int i = 0; i < tokAgenti.length; i++) {
+					agent = new HashMap<String, String>();
+
+					agent.put("numeAgent", tokAgenti[i].split("#")[1]);
+					agent.put("codAgent", tokAgenti[i].split("#")[0]);
+					listAgenti.add(agent);
+				}
+
+				SimpleAdapter adapterAgenti = new SimpleAdapter(CLPFragment1.this.getActivity(), listAgenti, R.layout.rowlayoutagenti, new String[] {
+						"numeAgent", "codAgent" }, new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+
+				spinnerAgenti.setAdapter(adapterAgenti);
+
+				if (tokAgenti.length == 1)
+					spinnerAgenti.setSelection(1);
+
 			}
 
 			performClientDetails();
@@ -510,6 +538,26 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 		}
 
 	}
+
+	private void setSpinnerAgentiListener() {
+
+		spinnerAgenti.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> artMap = (HashMap<String, String>) arg0.getSelectedItem();
+				UserInfo.getInstance().setCod(artMap.get("codAgent"));
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
+
+	}	
 
 	private void setListnerBtnPozitieAdresa() {
 		btnPozitieAdresa.setOnClickListener(new View.OnClickListener() {
@@ -655,6 +703,12 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 					Toast.makeText(getActivity(), "Selectati un client!", Toast.LENGTH_SHORT).show();
 				} else {
 
+					
+					if (UtilsUser.isSuperAv() && spinnerAgenti.getSelectedItemPosition() == 0) {
+						Toast.makeText(getActivity(), "Selectati un agent.", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					
 					textSelClient.setText(numeClient);
 					CreareClp.codClient = codClient;
 					slidingDrawer.animateClose();

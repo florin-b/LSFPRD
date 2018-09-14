@@ -71,7 +71,7 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 				spinnerAgenti.setVisibility(View.GONE);
 				spinnerFiliale.setVisibility(View.GONE);
 			} else {
-				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")) // sd,
+				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")|| UserInfo.getInstance().getTipAcces().equals("32")) // sd,
 				// sm
 				{
 					spinnerAgenti.setVisibility(View.VISIBLE);
@@ -135,7 +135,7 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 			HashMap<String, String> params = new HashMap<String, String>();
 			String localDepart = UserInfo.getInstance().getCodDepart();
 
-			if (UserInfo.getInstance().getTipAcces().equals("35")) {
+			if (UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("32")) {
 				localDepart = "10";
 			}
 

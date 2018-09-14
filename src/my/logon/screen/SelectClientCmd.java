@@ -27,11 +27,14 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -67,6 +70,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 	LinearLayout resLayout;
 
 	OperatiiClient opClient;
+	private Spinner spinnerAgenti;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -129,6 +133,9 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		nf2.setMinimumFractionDigits(2);
 		nf2.setMaximumFractionDigits(2);
 
+		spinnerAgenti = ((Spinner) findViewById(R.id.spinnerAgenti));
+		setSpinnerAgentiListener();		
+		
 		if (UtilsUser.isSuperAv()) {
 			((LinearLayout) findViewById(R.id.layoutAgentClient)).setVisibility(View.VISIBLE);
 		}
@@ -218,11 +225,56 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		tipClientVar = client.getTipClient();
 
 		if (UtilsUser.isSuperAv()) {
-			UserInfo.getInstance().setCod(client.getCodAgent());
-			((TextView) findViewById(R.id.agentClient)).setText(client.getNumeAgent());
+
+			String[] tokAgenti = client.getAgenti().split("@");
+
+			ArrayList<HashMap<String, String>> listAgenti = new ArrayList<HashMap<String, String>>();
+
+			HashMap<String, String> agent = new HashMap<String, String>();
+			agent.put("numeAgent", "Selectati un agent");
+			agent.put("codAgent", "");
+
+			listAgenti.add(agent);
+
+			for (int i = 0; i < tokAgenti.length; i++) {
+				agent = new HashMap<String, String>();
+
+				agent.put("numeAgent", tokAgenti[i].split("#")[1]);
+				agent.put("codAgent", tokAgenti[i].split("#")[0]);
+				listAgenti.add(agent);
+			}
+
+			SimpleAdapter adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
+					R.id.textNumeAgent, R.id.textCodAgent });
+
+			spinnerAgenti.setAdapter(adapterAgenti);
+
+			if (tokAgenti.length == 1)
+				spinnerAgenti.setSelection(1);
+
 		}
 
 		performClientDetails();
+
+	}
+
+	private void setSpinnerAgentiListener() {
+
+		spinnerAgenti.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> artMap = (HashMap<String, String>) arg0.getSelectedItem();
+				UserInfo.getInstance().setCod(artMap.get("codAgent"));
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
 
 	}
 
@@ -249,6 +301,13 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 				if (codClientVar.length() == 0) {
 					Toast.makeText(getApplicationContext(), "Selectati un client!", Toast.LENGTH_SHORT).show();
 				} else {
+					
+					if (UtilsUser.isSuperAv() && spinnerAgenti.getSelectedItemPosition() == 0) {
+						Toast.makeText(getApplicationContext(), "Selectati un agent.", Toast.LENGTH_LONG).show();
+						return;
+					}
+					
+					
 					CreareComanda.codClientVar = codClientVar;
 					CreareComanda.numeClientVar = numeClientVar;
 					CreareComanda.tipClientVar = tipClientVar;

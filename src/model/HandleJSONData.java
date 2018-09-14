@@ -133,7 +133,7 @@ public class HandleJSONData {
 					unClient.setNumeClient(clienObject.getString("numeClient"));
 					unClient.setCodClient(clienObject.getString("codClient"));
 					unClient.setTipClient(clienObject.getString("tipClient"));
-
+					unClient.setAgenti(clienObject.getString("agenti"));
 					objectsList.add(unClient);
 
 				}

@@ -63,16 +63,17 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 			textAgentiVanzAg.setVisibility(View.VISIBLE);
 
 			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
-					|| UserInfo.getInstance().getTipAcces().equals("17")|| UserInfo.getInstance().getTipAcces().equals("41")) // ag,
-																			// ka,
-																			// cv
+					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("41")) // ag,
+			// ka,
+			// cv
 			{
 				textAgentiVanzAg.setText(UserInfo.getInstance().getNume() + ", " + UserInfo.getInstance().getCod());
 				spinnerAgenti.setVisibility(View.GONE);
 				spinnerFiliale.setVisibility(View.GONE);
 			} else {
-				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")) // sd,
-																															// sm
+				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
+						|| UserInfo.getInstance().getTipAcces().equals("32")) // sd,
+				// sm
 				{
 					spinnerAgenti.setVisibility(View.VISIBLE);
 					spinnerFiliale.setVisibility(View.GONE);
@@ -136,7 +137,7 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 
 			String localDepart = UserInfo.getInstance().getCodDepart();
 
-			if (UserInfo.getInstance().getTipAcces().equals("35")) // director
+			if (UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("32")) // director
 																	// keyacc
 			{
 				localDepart = "10";
