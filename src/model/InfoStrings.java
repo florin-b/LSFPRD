@@ -450,7 +450,7 @@ public class InfoStrings {
 
 		if (numeUL.equals("DJ10"))
 			numeFil = "DOLJ";
-		
+
 		if (numeUL.equals("SB10"))
 			numeFil = "SIBIU";
 
@@ -1249,6 +1249,11 @@ public class InfoStrings {
 		// Sef magazin Retail
 		else if (UserInfo.getInstance().getTipAcces().equals("44")) {
 			tipAcces = "SMR";
+		}
+
+		// SD CONS
+		else if (UserInfo.getInstance().getTipAcces().equals("39")) {
+			tipAcces = "SC";
 		}
 
 		return tipAcces;

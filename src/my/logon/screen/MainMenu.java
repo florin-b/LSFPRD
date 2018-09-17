@@ -1320,7 +1320,7 @@ public class MainMenu extends Activity {
 			nrBtns = btnNamesDK.length;
 		}
 
-		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM"))
+		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUser().equals("SC"))
 				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR"))) {
 			nrBtns = btnNamesCVA.length;
 		}
@@ -1368,7 +1368,7 @@ public class MainMenu extends Activity {
 			btnName = btnNamesDK[btnPos];
 		}
 
-		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM"))
+		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUser().equals("SC"))
 				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR"))) {
 			btnName = btnNamesCVA[btnPos];
 		}
@@ -1417,7 +1417,7 @@ public class MainMenu extends Activity {
 			btnImg = btnImageDK[btnPos];
 		}
 
-		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM"))
+		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUser().equals("SC"))
 				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR"))) {
 			btnImg = btnImageCVA[btnPos];
 		}

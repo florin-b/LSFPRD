@@ -398,7 +398,7 @@ public class User extends Activity implements HelperSiteListener {
 			retVal = "Administrator";
 		} else if (codAcc.equals("9")) {
 			retVal = "Agent";
-		} else if (codAcc.equals("10") || codAcc.equals("32")) {
+		} else if (codAcc.equals("10") || codAcc.equals("32") || codAcc.equals("39")) {
 			retVal = "Sef departament";
 		}
 

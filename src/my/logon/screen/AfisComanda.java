@@ -267,7 +267,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	boolean isSefDepart() {
 		return UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
-				|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("44");
+				|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("44")
+				|| UserInfo.getInstance().getTipAcces().equals("39");
 	}
 
 	boolean isAgent() {
@@ -374,6 +375,12 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		if (UtilsUser.isSMNou()) {
 			selectedCodDepart = "11";
 			tipAgent = UtilsUser.getTipSMNou();
+		}
+
+		// SDCVA
+		if (UserInfo.getInstance().getTipAcces().equals("39")) {
+			selectedCodDepart = "11";
+			tipAgent = "SDCVA";
 		}
 
 		agent.getListaAgenti(selectedFiliala, selectedCodDepart, this, true, tipAgent);
@@ -552,7 +559,8 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 				paramDepart = "11";
 			}
 
-			if (UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("35") || UserInfo.getInstance().getTipAcces().equals("32")) // ka
+			if (UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("35")
+					|| UserInfo.getInstance().getTipAcces().equals("32")) // ka
 			{
 				tipUser = "KA";
 				paramDepart = "10";
@@ -567,6 +575,12 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			if (selectedTipUser != null && selectedTipUser.getCodTip().equals("AG")) // ka
 			{
 				tipUser = "AV";
+			}
+
+			if (UserInfo.getInstance().getTipAcces().equals("39")) // sdcva
+			{
+				tipUser = "SDCVA";
+				paramDepart = "11";
 			}
 
 			String paramInterval = intervalAfisare;
@@ -672,7 +686,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		if (listComenziCreate.size() > 0) {
 
 			spinnerCmd.setVisibility(View.VISIBLE);
-			
+
 			btnStareComanda.setVisibility(View.VISIBLE);
 
 			layoutTotalCmd.setVisibility(View.VISIBLE);
@@ -834,13 +848,12 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	}
 
-	
 	private void showStareComanda(String stareComanda) {
 		CustomInfoDialog infoDialog = new CustomInfoDialog(this, "Stare comanda");
 		infoDialog.setInfoText(stareComanda);
 		infoDialog.show();
 	}
-	
+
 	public void opAgentComplete(ArrayList<HashMap<String, String>> listAgenti) {
 		populateAgentiList(listAgenti);
 

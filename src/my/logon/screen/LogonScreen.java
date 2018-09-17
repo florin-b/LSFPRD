@@ -349,12 +349,12 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 		if (numeFiliala.equals("CRAIOVA"))
 			fl = "DJ10";
-		
+
 		if (numeFiliala.equals("SIBIU"))
-			fl = "SB10";		
-		
+			fl = "SB10";
+
 		if (numeFiliala.equals("DEVA"))
-			fl = "HD10";		
+			fl = "HD10";
 
 		return fl;
 
@@ -433,7 +433,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 			if (token[0].equals("3")) {
 
 				if (token[5].equals("8") || token[5].equals("9") || token[5].equals("10") || token[5].equals("14") || token[5].equals("12")
-						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18") || token[5].equals("32")) // doar
+						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18") || token[5].equals("32")
+						|| token[5].equals("39")) // doar
 				// agentii,
 				// admin , sd , dv, dd, ka, dir ka, cons, sm
 				{
@@ -499,7 +500,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setFtpIP(token[13]);
 					uInfo.setInitDivizie(token[14]);
 					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1]));
-					
+
 					if (uInfo.getTipUserSap().equals(Constants.tipSuperAv))
 						uInfo.setCodSuperUser(uInfo.getCod());
 

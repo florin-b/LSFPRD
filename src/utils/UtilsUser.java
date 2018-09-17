@@ -61,7 +61,7 @@ public class UtilsUser {
 
 	public static boolean isAgentOrSD() {
 		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV")
-				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
+				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD") || UserInfo.getInstance().getTipUserSap().toUpperCase().equals("ASDL");
 
 	}
 

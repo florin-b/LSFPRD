@@ -71,7 +71,8 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 				spinnerAgenti.setVisibility(View.GONE);
 				spinnerFiliale.setVisibility(View.GONE);
 			} else {
-				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")|| UserInfo.getInstance().getTipAcces().equals("32")) // sd,
+				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
+						|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("39")) // sd,
 				// sm
 				{
 					spinnerAgenti.setVisibility(View.VISIBLE);
@@ -139,7 +140,7 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 				localDepart = "10";
 			}
 
-			if (UserInfo.getInstance().getTipAcces().equals("18")) {
+			if (UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("39")) {
 				localDepart = "11";
 			}
 

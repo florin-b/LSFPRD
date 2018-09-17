@@ -72,7 +72,7 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 				spinnerFiliale.setVisibility(View.GONE);
 			} else {
 				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
-						|| UserInfo.getInstance().getTipAcces().equals("32")) // sd,
+						|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("39")) // sd,
 				// sm
 				{
 					spinnerAgenti.setVisibility(View.VISIBLE);
@@ -143,7 +143,7 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 				localDepart = "10";
 			}
 
-			if (UserInfo.getInstance().getTipAcces().equals("18")) // sef
+			if (UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("39")) // sef
 																	// magazin
 			{
 				localDepart = "11";

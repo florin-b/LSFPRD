@@ -52,8 +52,8 @@ import android.widget.Toast;
 public class VanzariAgentiActivity extends Activity {
 
 	final String[] fragments = { "my.logon.screen.SelectArticolVanzariAg", "my.logon.screen.SelectClientVanzariAg",
-			"my.logon.screen.SelectAgentVanzariAg", "my.logon.screen.SelectIntervalVanzariAg",
-			"my.logon.screen.SelectTipComandaVanzariAg", "my.logon.screen.AfisRaportVanzariAg", };
+			"my.logon.screen.SelectAgentVanzariAg", "my.logon.screen.SelectIntervalVanzariAg", "my.logon.screen.SelectTipComandaVanzariAg",
+			"my.logon.screen.AfisRaportVanzariAg", };
 
 	public static String var1 = "Main var";
 	private static ArrayList<HashMap<String, String>> menuList = new ArrayList<HashMap<String, String>>();
@@ -89,8 +89,8 @@ public class VanzariAgentiActivity extends Activity {
 			}
 
 			if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("12")
-					|| UserInfo.getInstance().getTipAcces().equals("18")
-					|| UserInfo.getInstance().getTipAcces().equals("35")) // sd,sm
+					|| UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("35")
+					|| UserInfo.getInstance().getTipAcces().equals("32")) // sd,sm
 			{
 				vanzariInstance.selectedAgent = "0";
 				vanzariInstance.selectedFiliala = UserInfo.getInstance().getUnitLog();
@@ -102,8 +102,8 @@ public class VanzariAgentiActivity extends Activity {
 			vanzariInstance.startIntervalRap = currentDate;
 			vanzariInstance.stopIntervalRap = currentDate;
 
-			menuAdapter = new DrawerMenuAdapter(this, menuList, R.layout.rowlayout_menu_item, new String[] {
-					"menuName", "menuId" }, new int[] { R.id.textMenuName, R.id.textMenuId });
+			menuAdapter = new DrawerMenuAdapter(this, menuList, R.layout.rowlayout_menu_item, new String[] { "menuName", "menuId" }, new int[] {
+					R.id.textMenuName, R.id.textMenuId });
 
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.main, new FragmentOne()).commit();
@@ -286,7 +286,6 @@ public class VanzariAgentiActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-		
 
 			try {
 				if (dialog != null) {
@@ -354,8 +353,7 @@ public class VanzariAgentiActivity extends Activity {
 
 					for (int j = 0; j < AfisRaportVanzariAg.rapHeader1.length; j++) {
 						c = row.createCell(j);
-						c.setCellValue(AfisRaportVanzariAg.arrayListRapVanz.get(i).get(
-								AfisRaportVanzariAg.rapHeader1[j]));
+						c.setCellValue(AfisRaportVanzariAg.arrayListRapVanz.get(i).get(AfisRaportVanzariAg.rapHeader1[j]));
 
 					}
 
@@ -363,8 +361,7 @@ public class VanzariAgentiActivity extends Activity {
 					row = sheet1.createRow(i + 1);
 					for (int j = 0; j < AfisRaportVanzariAg.rapHeader2.length; j++) {
 						c = row.createCell(j);
-						c.setCellValue(AfisRaportVanzariAg.arrayListRapVanz.get(i).get(
-								AfisRaportVanzariAg.rapHeader2[j]));
+						c.setCellValue(AfisRaportVanzariAg.arrayListRapVanz.get(i).get(AfisRaportVanzariAg.rapHeader2[j]));
 
 					}
 
