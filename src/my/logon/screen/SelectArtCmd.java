@@ -355,6 +355,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
 			if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getCodDepart().equals("05"))
 				return true;
+			else if (UserInfo.getInstance().getCodDepart().equals("01") && UserInfo.getInstance().getDepartExtra().contains("02"))
+				return true;
 		} else if (UserInfo.getInstance().getTipUser().equals("KA"))
 			return true;
 
@@ -1890,7 +1892,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 			params.put("depozit", globalDepozSel);
 			params.put("depart", UserInfo.getInstance().getCodDepart());
-
 			opArticol.getStocDepozit(params);
 
 		} catch (Exception e) {
