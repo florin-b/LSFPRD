@@ -532,7 +532,7 @@ public class CLPFragment2 extends Fragment implements AsyncTaskListener, ClpDAOL
 		} else if (UtilsUser.isKA()) {
 			localDep = "00";
 		} else if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
-				|| UserInfo.getInstance().getTipAcces().equals("44")) {
+				|| UserInfo.getInstance().getTipAcces().equals("44") || UserInfo.getInstance().getTipAcces().equals("39")) {
 			localDep = CLPFragment1.departamentConsilier;
 		}
 

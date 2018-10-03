@@ -377,7 +377,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	boolean isCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
 				|| UserInfo.getInstance().getTipUser().equals("CVR") || UserInfo.getInstance().getTipUser().equals("SMR")
-				|| UserInfo.getInstance().getTipUser().equals("WOOD");
+				|| UserInfo.getInstance().getTipUser().equals("WOOD") || UserInfo.getInstance().getTipUser().equals("SC");
 	}
 
 	boolean isWood() {

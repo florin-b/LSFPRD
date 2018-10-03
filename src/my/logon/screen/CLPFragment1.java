@@ -364,7 +364,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 
 			// consilieri, se face selectie departament
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
-					|| UserInfo.getInstance().getTipAcces().equals("44")) {
+					|| UserInfo.getInstance().getTipAcces().equals("44") || UserInfo.getInstance().getTipAcces().equals("39")) {
 				layoutTipClient.setVisibility(View.VISIBLE);
 				spinnerDepartament = (Spinner) v.findViewById(R.id.spinnerDepartament);
 				loadDepartamentSpinner();
@@ -376,7 +376,7 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 			// pentru agenti fara selectie filiala
 			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
 					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
-					|| UserInfo.getInstance().getTipAcces().equals("44")) {
+					|| UserInfo.getInstance().getTipAcces().equals("44") || UserInfo.getInstance().getTipAcces().equals("39")) {
 				radioClient.setVisibility(View.GONE);
 				radioFiliala.setVisibility(View.GONE);
 				spinnerAgentiCLP.setVisibility(View.INVISIBLE);

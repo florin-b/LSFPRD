@@ -299,8 +299,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						valTransport = Double.parseDouble(textValTransp.getText().toString().trim());
 
 						if (valTransport < valTransportSAP) {
-							Toast.makeText(getApplicationContext(), "Valoarea transportului nu poate fi mai mica decat cea din SAP!", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Valoarea transportului nu poate fi mai mica decat cea din SAP!",
+									Toast.LENGTH_SHORT).show();
 							valTransport = valTransportSAP;
 							textValTransp.setText(nf3.format(valTransport));
 						} else {
@@ -437,7 +437,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	boolean isUserCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("CVR")
 				|| UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance().getTipUserSap().equals("KA3")
-				|| UserInfo.getInstance().getTipUser().equals("SMR") || UserInfo.getInstance().getTipUser().equals("WOOD");
+				|| UserInfo.getInstance().getTipUser().equals("SMR") || UserInfo.getInstance().getTipUser().equals("WOOD")
+				|| UserInfo.getInstance().getTipUser().equals("SC");
 	}
 
 	private boolean isUserCVExc() {
@@ -942,7 +943,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		if (!ModificareComanda.isComandaDistrib && !UtilsUser.isAgentOrSDorKA() && valTransport > 0) {
 			UtilsComenziGed.setValoareArticolTransport(listArticoleComanda, valTransport);
 		}
-		
+
 		try {
 			for (int i = 0; i < listArticoleComanda.size(); i++) {
 
@@ -1081,10 +1082,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("macara", DateLivrare.getInstance().isMasinaMacara() ? "X" : " ");
 
 			obj.put("factPaletiSeparat", DateLivrare.getInstance().isFactPaletSeparat());
-			
+
 			obj.put("furnizorMarfa", DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa());
 			obj.put("furnizorProduse", DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorProduse());
 			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
+			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1332,6 +1334,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		params.put("tipCmd", "1");
 		params.put("depart", UserInfo.getInstance().getCodDepart());
 		params.put("tipUser", UserInfo.getInstance().getTipUser());
+		params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 		displayCmdDetails(false);
 		operatiiComenzi.getListComenzi(params);

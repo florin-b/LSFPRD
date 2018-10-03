@@ -120,7 +120,8 @@ public class User extends Activity implements HelperSiteListener {
 
 			// afisare filiale BUC
 			listFiliala = new ArrayList<HashMap<String, String>>();
-			adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" }, new int[] { R.id.textRowName });
+			adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" },
+					new int[] { R.id.textRowName });
 
 			HashMap<String, String> temp;
 
@@ -139,7 +140,8 @@ public class User extends Activity implements HelperSiteListener {
 		}
 
 		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("32")
-				|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18"))
+				|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance()
+				.getTipAcces().equals("39"))
 				&& !UserInfo.getInstance().getUserSite().equals("X"))// KA,
 		// cons
 		// sau
@@ -150,7 +152,8 @@ public class User extends Activity implements HelperSiteListener {
 			if (UserInfo.getInstance().getUnitLog().contains("BU")) {
 				// afisare filiale BUC
 				listFiliala = new ArrayList<HashMap<String, String>>();
-				adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" }, new int[] { R.id.textRowName });
+				adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" },
+						new int[] { R.id.textRowName });
 
 				HashMap<String, String> temp;
 				temp = new HashMap<String, String>();
@@ -196,14 +199,9 @@ public class User extends Activity implements HelperSiteListener {
 
 			spinnerDepart.setEnabled(true);
 
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) // cons
-			// sau
-			// sm
-			// -
-			// nu
-			// se
-			// afiseaza
-			// depart
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
+					|| UserInfo.getInstance().getTipAcces().equals("39"))
+
 			{
 				spinnerDepart.setVisibility(View.INVISIBLE);
 			}
@@ -215,8 +213,8 @@ public class User extends Activity implements HelperSiteListener {
 		}
 
 		listDepart = new ArrayList<HashMap<String, String>>();
-		adapterDepart = new SimpleAdapter(this, listDepart, R.layout.simplerowlayout_2, new String[] { "rowText", "rowDesc" }, new int[] { R.id.textRowName,
-				R.id.textRowId });
+		adapterDepart = new SimpleAdapter(this, listDepart, R.layout.simplerowlayout_2, new String[] { "rowText", "rowDesc" }, new int[] {
+				R.id.textRowName, R.id.textRowId });
 
 		HashMap<String, String> temp;
 		temp = new HashMap<String, String>();
@@ -243,7 +241,7 @@ public class User extends Activity implements HelperSiteListener {
 		temp.put("rowText", "041");
 		temp.put("rowDesc", "Prafoase");
 		listDepart.add(temp);
-		
+
 		temp = new HashMap<String, String>();
 		temp.put("rowText", "04");
 		temp.put("rowDesc", "Materiale grele");
@@ -274,7 +272,6 @@ public class User extends Activity implements HelperSiteListener {
 		temp.put("rowDesc", "Hidroizolatii");
 		listDepart.add(temp);
 
-
 		spinnerDepart.setAdapter(adapterDepart);
 
 		spinnerDepart.setSelection(0);
@@ -297,12 +294,12 @@ public class User extends Activity implements HelperSiteListener {
 
 		if (UserInfo.getInstance().getCodDepart().equals("041")) {
 			spinnerDepart.setSelection(4);
-		}		
-		
+		}
+
 		if (UserInfo.getInstance().getCodDepart().equals("04")) {
 			spinnerDepart.setSelection(5);
 		}
-		
+
 		if (UserInfo.getInstance().getCodDepart().equals("05")) {
 			spinnerDepart.setSelection(6);
 		}
@@ -429,19 +426,19 @@ public class User extends Activity implements HelperSiteListener {
 		else if (codAcc.equals("41")) {
 			retVal = "Consilier vanzari retail";
 		}
-		
+
 		else if (codAcc.equals("43")) {
 			retVal = "Consilier wood";
 		}
-		
+
 		else if (codAcc.equals("44")) {
 			retVal = "Sef magazin retail";
 		}
-		
+
 		else if (codAcc.equals("45")) {
 			retVal = "Sef magazin wood";
 		}
-		
+
 		return retVal;
 	}
 

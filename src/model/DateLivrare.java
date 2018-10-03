@@ -74,6 +74,7 @@ public class DateLivrare {
 	private TipCmdDistrib tipComandaDistrib = TipCmdDistrib.COMANDA_VANZARE;
 	private boolean isCamionDescoperit;
 	private String diviziiClient;
+	private String programLivrare = "0";
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -128,6 +129,7 @@ public class DateLivrare {
 		this.furnizorComanda = dateLivrareAfisare.getFurnizorComanda();
 		this.isCamionDescoperit = dateLivrareAfisare.isCamionDescoperit();
 		this.diviziiClient = dateLivrareAfisare.getDiviziiClient();
+		this.programLivrare = dateLivrareAfisare.getProgramLivrare();
 	}
 
 	public boolean isClientRaft() {
@@ -543,6 +545,14 @@ public class DateLivrare {
 		this.diviziiClient = diviziiClient;
 	}
 	
+	public String getProgramLivrare() {
+		return programLivrare;
+	}
+
+	public void setProgramLivrare(String programLivrare) {
+		this.programLivrare = programLivrare;
+	}	
+	
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -588,6 +598,7 @@ public class DateLivrare {
 		tipComandaDistrib = TipCmdDistrib.COMANDA_VANZARE;
 		isCamionDescoperit = false;
 		diviziiClient = "";
+		programLivrare = "0";
 
 	}
 

@@ -48,6 +48,7 @@ public class DateLivrareAfisare {
 	private FurnizorComanda furnizorComanda;
 	private boolean isCamionDescoperit;
 	private String diviziiClient;
+	private String programLivrare = "0";
 
 	public DateLivrareAfisare() {
 
@@ -414,5 +415,13 @@ public class DateLivrareAfisare {
 	public void setDiviziiClient(String diviziiClient) {
 		this.diviziiClient = diviziiClient;
 	}
-	
+
+	public String getProgramLivrare() {
+		return programLivrare;
+	}
+
+	public void setProgramLivrare(String programLivrare) {
+		this.programLivrare = programLivrare;
+	}
+
 }

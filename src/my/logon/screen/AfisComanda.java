@@ -665,7 +665,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			textValoareMarja.setText(String.format("%.02f", valoriComanda.getMarja()) + "  RON");
 		}
 
-		if (textPondereArtBAfis.getVisibility() == View.VISIBLE) {
+		if (textPondereArtBAfis.getVisibility() == View.VISIBLE && valoriComanda.getTotal() != 0) {
 			textPondereArtBAfis.setText(String.format("%.02f", (valoriComanda.getPondereB() / valoriComanda.getTotal()) * 100) + "%");
 
 		}

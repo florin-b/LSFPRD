@@ -7,7 +7,8 @@ public enum EnumComenziDAO {
 			"saveCmdGED"), GET_ARTICOLE_COMANDA_JSON("getArticoleComandaVanzare"), SALVEAZA_CONDITII_COMANDA_SER("salveazaConditiiComanda"), SEND_OFERTA_GED_MAIL(
 			"sendMailOfertaGed"), GET_COMENZI_DESCHISE("getComenziDeschise"), GET_CLIENTI_BORD("getClientiBorderou"), GET_POZITIE_MASINA(
 			"getPozitieMasina"), GET_COST_MACARA("getCostMacara"), GET_STARE_COMANDA("getStareComanda"), SALVEAZA_LIVRARE_CUSTODIE(
-			"saveLivrareCustodie");
+			"saveLivrareCustodie"), GET_LIVRARI_CUSTODIE("getLivrariCustodie"), GET_ARTICOLE_CUSTODIE("getArticoleCustodie"), SET_CUSTODIE_DATA_LIVRARE(
+			"setCustodieDataLivrare"), STERGE_LIVRARE_CUSTODIE("stergeLivrareCustodie"), SET_CUSTODIE_ADRESA_LIVRARE("setCustodieAdresaLivrare");
 
 	private String numeComanda;
 
