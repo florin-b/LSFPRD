@@ -556,7 +556,7 @@
                     android:layout_gravity="bottom|left"
                     android:layout_marginLeft="3dip"
                     android:gravity="left"
-                    android:text="Obs. livrare"
+                    android:text="Obs. sofer"
                     android:textColor="@color/labelColor"
                     android:textSize="17sp"
                     android:typeface="serif" />
