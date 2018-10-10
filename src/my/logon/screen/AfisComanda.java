@@ -629,6 +629,14 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	}
 
+	private void performArtCmdCustodie()
+	{
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("nrCmd", selectedCmd);
+
+		comenzi.getArticoleCustodie(params);
+	}	
+	
 	boolean isCVorSM() {
 		return UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18");
 	}
@@ -794,7 +802,10 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 				if (!selectedCmd.equals("-1")) {
 					comandaCurenta = (BeanComandaCreata) arg0.getAdapter().getItem(arg2);
 					selectedCmd = comandaCurenta.getId();
-					performArtCmd();
+					if (comandaCurenta.getTipComanda() != null && comandaCurenta.getTipComanda().equals("CUST"))
+						performArtCmdCustodie();
+					else
+						performArtCmd();
 				}
 
 			}
@@ -888,6 +899,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			showListComenzi(comenzi.getComenziDivizie(selectedDivizie));
 			break;
 		case GET_ARTICOLE_COMANDA_JSON:
+		case GET_ARTICOLE_CUSTODIE:
 			populateArtCmdList(comenzi.deserializeArticoleComanda((String) result));
 			break;
 		case GET_STARE_COMANDA:

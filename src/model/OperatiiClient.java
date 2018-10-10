@@ -81,8 +81,14 @@ public class OperatiiClient implements AsyncTaskListener {
 		numeComanda = EnumClienti.GET_CNP_CLIENT;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
-	}	
-	
+	}
+
+	public void getClientiInstitPub(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_CLIENTI_INST_PUB;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
+
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;
 		ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();
@@ -237,8 +243,7 @@ public class OperatiiClient implements AsyncTaskListener {
 
 		return listDate;
 	}
-	
-	
+
 	public void onTaskComplete(String methodName, Object result) {
 		if (listener != null) {
 			listener.operationComplete(numeComanda, result);

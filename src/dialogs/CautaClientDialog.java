@@ -33,6 +33,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private Context context;
 	private boolean isMeserias;
 	private boolean isClientObiectivKA;
+	private boolean isInstitPublica;
 
 	public CautaClientDialog(Context context) {
 		super(context);
@@ -79,6 +80,8 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 				ScreenUtils.hideSoftKeyboard(context, textNumeClient);
 				if (isMeserias()) {
 					cautaMeserias();
+				} else if (isInstitPublica()) {
+					cautaInstitPub();
 				} else {
 					cautaClient();
 				}
@@ -90,7 +93,6 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private void setListenerListClienti() {
 		listClientiObiective.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				BeanClient client = (BeanClient) listClientiObiective.getItemAtPosition(arg2);
 				if (listener != null) {
@@ -133,6 +135,16 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 		opClient.getListMeseriasi(params);
 	}
 
+	private void cautaInstitPub() {
+		String numeClient = textNumeClient.getText().toString().trim().replace('*', '%');
+
+		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+		params.put("numeClient", numeClient);
+		params.put("unitLog", UserInfo.getInstance().getUnitLog());
+
+		opClient.getClientiInstitPub(params);
+	}
+
 	private void afisListClienti(List<BeanClient> listClienti) {
 		CautareClientiAdapter adapterClienti = new CautareClientiAdapter(getContext(), listClienti);
 		listClientiObiective.setAdapter(adapterClienti);
@@ -142,6 +154,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 		switch (methodName) {
 		case GET_LISTA_CLIENTI:
 		case GET_LISTA_MESERIASI:
+		case GET_CLIENTI_INST_PUB:
 			afisListClienti(opClient.deserializeListClienti((String) result));
 			break;
 		default:
@@ -164,6 +177,14 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 	public void setClientObiectivKA(boolean isClientObiectivKA) {
 		this.isClientObiectivKA = isClientObiectivKA;
+	}
+
+	public boolean isInstitPublica() {
+		return isInstitPublica;
+	}
+
+	public void setInstitPublica(boolean isInstitPublica) {
+		this.isInstitPublica = isInstitPublica;
 	}
 
 }

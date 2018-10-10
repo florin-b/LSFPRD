@@ -79,6 +79,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private TextView textClientParavan, labelIDClient;
 
 	private Button cautaClientPFBtn;
+	
+	private RadioButton radioClientInstPub;
 
 	private enum EnumTipClient {
 		MESERIAS, PARAVAN;
@@ -175,12 +177,16 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		radioClPF = (RadioButton) findViewById(R.id.radioClPF);
 		radioClMeserias = (RadioButton) findViewById(R.id.radioClMeserias);
 
+		radioClientInstPub = (RadioButton) findViewById(R.id.radioClInstPub);
+		setVisibilityRadioInstPublica(radioClientInstPub);
+		
 		setVisibilityRadioClMeserias(radioClMeserias);
 
 		addListenerRadioClDistrib();
 		addListenerRadioCLPF();
 		addListenerRadioCLPJ();
 		addListenerRadioMeseriasi();
+		addListenerRadioInstPub();
 
 		radioClDistrib.setChecked(false);
 		radioClDistrib.setVisibility(View.GONE);
@@ -324,6 +330,14 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		}
 	}
 
+	private void setVisibilityRadioInstPublica(RadioButton radioClientInstPub) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR"))
+			radioClientInstPub.setVisibility(View.VISIBLE);
+		else
+			radioClientInstPub.setVisibility(View.INVISIBLE);
+
+	}	
+	
 	private void setVisibilityRadioClMeserias(RadioButton radioClMeserias) {
 		if (UserInfo.getInstance().getTipUserSap().contains("CAG"))
 			radioClMeserias.setVisibility(View.VISIBLE);
@@ -482,6 +496,34 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	}
 
+	private void addListenerRadioInstPub() {
+		radioClientInstPub.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				layoutLabelJ.setVisibility(View.GONE);
+				layoutTextJ.setVisibility(View.GONE);
+				checkPlatTva.setVisibility(View.INVISIBLE);
+
+				verificaID.setVisibility(View.GONE);
+				checkFacturaPF.setVisibility(View.GONE);
+				labelIDClient.setText("COD");
+				txtCNPClient.setVisibility(View.VISIBLE);
+
+				setTextNumeClientEnabled(false);
+
+				tipClient = EnumTipClient.MESERIAS;
+				CautaClientDialog clientDialog = new CautaClientDialog(SelectClientCmdGed.this);
+				clientDialog.setInstitPublica(true);
+				clientDialog.setClientSelectedListener(SelectClientCmdGed.this);
+				clientDialog.show();
+
+				clearDateLivrare();
+
+			}
+		});
+	}
+	
+	
+	
 	private void setTextNumeClientEnabled(boolean isEnabled) {
 
 		txtNumeClientGed.setText("");
@@ -676,6 +718,15 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					CreareComandaGed.rezervStoc = false;
 
 				}
+				
+				if (radioClientInstPub.isChecked()) {
+
+					CreareComandaGed.tipComanda = "N";
+					CreareComandaGed.tipClient = "IP";
+					DateLivrare.getInstance().setTipPersClient("IP");
+
+				}
+				
 				finish();
 
 			}

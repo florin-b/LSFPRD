@@ -46,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import patterns.UlSiteComparator;
+import utils.UtilsComenzi;
 import utils.UtilsComenziGed;
 import utils.UtilsUser;
 import adapters.ArticoleGedAdapter;
@@ -633,6 +634,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	}
 
 	private double getValoareTransportSap() {
+
+		if (UtilsComenzi.isComandaInstPublica()) {
+			valTransport = 0;
+			return 0.0;
+		}
 
 		NumberFormat nf3 = NumberFormat.getInstance(new Locale("en", "US"));
 		nf3.setMinimumFractionDigits(2);
@@ -1808,6 +1814,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	public void addListenerValTranspBtn() {
 		valTranspBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+
+				if (UtilsComenzi.isComandaInstPublica())
+					return;
+
 				showModifValTranspDialogBox();
 
 			}
