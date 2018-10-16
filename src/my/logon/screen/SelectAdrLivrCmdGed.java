@@ -427,8 +427,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 				Calendar calendar = new GregorianCalendar(selectedYear, selectedMonth, selectedDay);
 
-				Calendar calendarNow = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar
-						.getInstance().get(Calendar.DAY_OF_MONTH));
+				Calendar calendarNow = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
+						Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 
 				int dayLivrare = calendar.get(Calendar.DAY_OF_WEEK);
 
@@ -522,8 +522,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-
-
 
 	private void addListenerClientLaRaft() {
 
@@ -1261,7 +1259,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		}
 
-		if (spinnerProgramLivrare.getSelectedItemPosition() == 0) {
+		if (spinnerProgramLivrare.getSelectedItemPosition() == 0 && spinnerTransp.getSelectedItem().toString().toLowerCase().contains("trap")) {
 			Toast.makeText(getApplicationContext(), "Selectati perioada de livrare", Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -1343,7 +1341,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
 		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());
 
-		dateLivrareInstance.setProgramLivrare(String.valueOf(spinnerProgramLivrare.getSelectedItemPosition()));
+		if (spinnerTransp.getSelectedItem().toString().toLowerCase().contains("trap"))
+			dateLivrareInstance.setProgramLivrare(String.valueOf(spinnerProgramLivrare.getSelectedItemPosition()));
+		else
+			dateLivrareInstance.setProgramLivrare("0");
 
 		finish();
 
