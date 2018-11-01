@@ -8,8 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import my.logon.screen.R;
+import model.DateLivrare;
 import model.UserInfo;
+import my.logon.screen.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import enums.EnumTipAlert;
+import enums.TipCmdDistrib;
 
 public class UtilsGeneral {
 
@@ -56,6 +58,9 @@ public class UtilsGeneral {
 			listDepozite.add("95V1");
 		
 		listDepozite.add("DSCM");
+		
+		if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.DISPOZITIE_LIVRARE)
+			listDepozite.remove("DESC");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 	}

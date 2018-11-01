@@ -264,6 +264,7 @@ public class AfisareClpActivity extends Activity implements ClpDAOListener {
 		params.put("interval", String.valueOf(intervalAfisare));
 		params.put("tipUser", localTipUser);
 		params.put("codUser", UserInfo.getInstance().getCod());
+		params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 		operatiiClp.getListComenzi(params);
 
