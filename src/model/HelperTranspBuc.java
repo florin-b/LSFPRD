@@ -52,7 +52,7 @@ public class HelperTranspBuc {
 		articolComanda.setDepartAprob("");
 		articolComanda.setIstoricPret("");
 		articolComanda.setAlteValori("");
-		articolComanda.setDepozit(codDepart.substring(0,2) + "V1");
+		articolComanda.setDepozit(codDepart.substring(0, 2) + "V1");
 		articolComanda.setTipArt("");
 		articolComanda.setDepart(codDepart);
 		articolComanda.setDepartSintetic(codDepart);
@@ -108,7 +108,7 @@ public class HelperTranspBuc {
 
 		if (depart.equals("040"))
 			codArticol = "30101926";
-		
+
 		if (depart.equals("041"))
 			codArticol = "30101749";
 
@@ -176,8 +176,8 @@ public class HelperTranspBuc {
 			codArticol = "30101748";
 
 		if (depart.equals("040"))
-			codArticol = "30101927";		
-		
+			codArticol = "30101927";
+
 		if (depart.equals("041"))
 			codArticol = "30101750";
 
@@ -217,7 +217,7 @@ public class HelperTranspBuc {
 		if (UtilsUser.isAgentOrSD())
 			codDepart = UserInfo.getInstance().getCodDepart();
 
-		if (UtilsUser.isUserKA()) {
+		if (UtilsUser.isUserKA() || UtilsUser.isUserSK()) {
 
 			if (!ListaArticoleComanda.getInstance().getListArticoleComanda().isEmpty())
 				codDepart = ListaArticoleComanda.getInstance().getListArticoleComanda().get(0).getDepart();
