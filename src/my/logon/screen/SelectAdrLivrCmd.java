@@ -140,6 +140,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private CheckBox checkFactPaleti;
 	private CheckBox chkCamionDescoperit;
 	private CheckBox checkObsSofer;
+	private TextView txtBlocScara;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -419,6 +420,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		if (!DateLivrare.getInstance().getDataLivrare().isEmpty())
 			textDataLivrare.setText(DateLivrare.getInstance().getDataLivrare());
+		
+		txtBlocScara = (TextView) findViewById(R.id.txtBlocScara);
+		if (!DateLivrare.getInstance().getBlocScara().isEmpty())
+			txtBlocScara.setText(DateLivrare.getInstance().getBlocScara());
 
 		btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
 		addListenerDataLivrare();
@@ -1477,6 +1482,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		dateLivrareInstance.setFactPaletSeparat(checkFactPaleti.isChecked());
 		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());
+		dateLivrareInstance.setBlocScara(txtBlocScara.getText().toString().trim());
 
 		if (radioText.isChecked() && adresaNouaExista())
 			return;		

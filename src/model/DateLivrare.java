@@ -76,6 +76,7 @@ public class DateLivrare {
 	private String diviziiClient;
 	private String programLivrare = "0";
 	private String livrareSambata = "";
+	private String blocScara = "";
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -132,6 +133,7 @@ public class DateLivrare {
 		this.diviziiClient = dateLivrareAfisare.getDiviziiClient();
 		this.programLivrare = dateLivrareAfisare.getProgramLivrare();
 		this.livrareSambata = dateLivrareAfisare.getLivrareSambata();
+		this.blocScara = dateLivrareAfisare.getBlocScara();
 	}
 
 	public boolean isClientRaft() {
@@ -563,6 +565,15 @@ public class DateLivrare {
 		this.livrareSambata = livrareSambata;
 	}	
 	
+	public String getBlocScara() {
+		return blocScara;
+	}
+
+	public void setBlocScara(String blocScara) {
+		this.blocScara = blocScara;
+	}
+	
+	
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -610,6 +621,7 @@ public class DateLivrare {
 		diviziiClient = "";
 		programLivrare = "0";
 		livrareSambata = "";
+		blocScara = "";
 
 	}
 

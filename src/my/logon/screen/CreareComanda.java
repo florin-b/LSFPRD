@@ -1418,6 +1418,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("codSuperAgent", UserInfo.getInstance().getCodSuperUser());
 			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 			obj.put("livrareSambata", DateLivrare.getInstance().getLivrareSambata());
+			obj.put("blocScara", DateLivrare.getInstance().getBlocScara());
 
 		} catch (JSONException ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
