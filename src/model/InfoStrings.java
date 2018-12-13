@@ -1256,6 +1256,18 @@ public class InfoStrings {
 			tipAcces = "SC";
 		}
 
+		else if (UserInfo.getInstance().getTipAcces().equals("51")) {
+			tipAcces = "SSCM";
+		}
+
+		else if (UserInfo.getInstance().getTipAcces().equals("50")) {
+			tipAcces = "CGED";
+		}
+
+		else if (UserInfo.getInstance().getTipAcces().equals("62")) {
+			tipAcces = "OIVPD";
+		}
+
 		return tipAcces;
 	}
 

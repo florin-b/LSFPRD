@@ -298,9 +298,15 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 					else
 						spinnerDepoz.setSelection(0);
 				} else {
-					adapterSpinnerDepozite.clear();
-					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteDistributie());
-					spinnerDepoz.setSelection(0);
+
+					if (UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED()) {
+						spinnerDepoz.setSelection(adapterSpinnerDepozite.getPosition("MAV1"));
+						spinnerDepoz.setEnabled(false);
+					} else {
+						adapterSpinnerDepozite.clear();
+						adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteDistributie());
+						spinnerDepoz.setSelection(0);
+					}
 				}
 
 				saveArtBtn.setVisibility(View.INVISIBLE);
@@ -324,7 +330,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		if (isCV())
 			selectedDepartamentAgent = "";
 
-		if (isKA())
+		if (isKA() || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD())
 			selectedDepartamentAgent = "00";
 	}
 
@@ -349,10 +355,13 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+
 	private boolean isUserExceptie() {
 
-		// pentru ag si sd de la 02 si 05 se ofera accesul la BV90
-		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
+		if (UserInfo.getInstance().getTipUserSap().equals(Constants.tipInfoAv) || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM()
+				|| UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
+			return false;
+		} else if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
 			if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getCodDepart().equals("05"))
 				return true;
 			else if (UserInfo.getInstance().getCodDepart().equals("01") && UserInfo.getInstance().getDepartExtra().contains("02"))
@@ -361,8 +370,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			return true;
 
 		return false;
-	}
-
+	}	
+	
 	private boolean isDepartExtra() {
 		return !UserInfo.getInstance().getDepartExtra().equals("");
 	}
@@ -379,7 +388,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	}
 
 	boolean isCV() {
-		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM");
+		return (UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")) && !UtilsUser.isSMR()
+				&& !UtilsUser.isCVR() && !UtilsUser.isSSCM() && !UtilsUser.isCGED() && !UtilsUser.isOIVPD();
 	}
 
 	// eveniment selectie depozit
@@ -820,17 +830,16 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			uLog = UserInfo.getInstance().getUnitLog().substring(0, 2) + "2" + UserInfo.getInstance().getUnitLog().substring(3, 4);
 		}
 
-		if (UserInfo.getInstance().getTipAcces().equals("9")) {
+		if (UserInfo.getInstance().getTipAcces().equals("9") || UtilsUser.isOIVPD()) {
 			tipUser = "AV";
-		}
-		if (UserInfo.getInstance().getTipAcces().equals("10")) {
+		} else if (UserInfo.getInstance().getTipAcces().equals("10")) {
 			tipUser = "SD";
-		}
-		if (UserInfo.getInstance().getTipAcces().equals("14") || UserInfo.getInstance().getTipAcces().equals("12")) {
+		} else if (UserInfo.getInstance().getTipAcces().equals("14") || UserInfo.getInstance().getTipAcces().equals("12")) {
 			tipUser = "DV";
-		}
-		if (UserInfo.getInstance().getTipAcces().equals("27"))
+		} else if (UserInfo.getInstance().getTipAcces().equals("27"))
 			tipUser = "KA";
+		else if (UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED())
+			tipUser = "CV";
 
 		String paramUnitMas = textUM.getText().toString();
 
@@ -1624,7 +1633,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				tglProc.setChecked(false);
 				tglProc.performClick();
 
-				if (noDiscount(tokenPret[3])) {
+				if (noDiscount(tokenPret[3]) || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED()) {
 					txtPretArt.setEnabled(false);
 					textProcRed.setFocusable(false);
 					tglProc.setEnabled(false);
@@ -1864,7 +1873,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 		opArticol.getStocCustodie(params);
 	}
-	
+
 	private void performListArtStoc() {
 		try {
 
@@ -1939,7 +1948,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			break;
 		case GET_STOC_CUSTODIE:
 			listArtStocCustodie((String) result);
-			break;			
+			break;
 		default:
 			break;
 

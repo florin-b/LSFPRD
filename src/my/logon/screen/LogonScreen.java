@@ -434,7 +434,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 				if (token[5].equals("8") || token[5].equals("9") || token[5].equals("10") || token[5].equals("14") || token[5].equals("12")
 						|| token[5].equals("27") || token[5].equals("35") || token[5].equals("17") || token[5].equals("18") || token[5].equals("32")
-						|| token[5].equals("39")) // doar
+						|| token[5].equals("41") || token[5].equals("43") || token[5].equals("44") || token[5].equals("45") || token[5].equals("39")
+						|| token[5].equals("51") || token[5].equals("50") || token[5].equals("62")) // doar
 				// agentii,
 				// admin , sd , dv, dd, ka, dir ka, cons, sm
 				{
@@ -501,7 +502,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setInitDivizie(token[14]);
 					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1]));
 
-					if (uInfo.getTipUserSap().equals(Constants.tipSuperAv))
+					if (uInfo.getTipUserSap().equals(Constants.tipSuperAv) || uInfo.getTipUserSap().equals(Constants.tipInfoAv) || UtilsUser.isSMR()
+							|| UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD())
 						uInfo.setCodSuperUser(uInfo.getCod());
 
 					Intent nextScreen = new Intent(getApplicationContext(), MainMenu.class);

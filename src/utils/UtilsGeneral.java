@@ -56,9 +56,11 @@ public class UtilsGeneral {
 
 		if (UserInfo.getInstance().getCodDepart().equals("05"))
 			listDepozite.add("95V1");
-		
+
 		listDepozite.add("DSCM");
-		
+
+		listDepozite.add("MAV1");
+
 		if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.DISPOZITIE_LIVRARE)
 			listDepozite.remove("DESC");
 
@@ -73,7 +75,7 @@ public class UtilsGeneral {
 		listDepozite.add("MAV2");
 		listDepozite.add("92V1");
 		listDepozite.add("95V1");
-		
+
 		listDepozite.add("DSCM");
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
@@ -220,7 +222,7 @@ public class UtilsGeneral {
 			tipTransport = "Transport terti";
 		} else if (codTransport.equals("TERR")) {
 			tipTransport = "Curier rapid";
-		}else if (codTransport.equals("TFRN")) {
+		} else if (codTransport.equals("TFRN")) {
 			tipTransport = "Transport furnizor";
 		}
 		return tipTransport;

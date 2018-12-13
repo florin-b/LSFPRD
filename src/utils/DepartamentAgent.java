@@ -84,7 +84,7 @@ public class DepartamentAgent {
 
 		ArrayList<String> depart = new ArrayList<String>();
 
-		if (isKA()) {
+		if (isKA() || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
 
 			for (EnumDepartExtra depKA : EnumDepartExtra.values()) {
 				if (depKA.getCod().equals("00") || depKA.getCod().equals("11"))
@@ -92,7 +92,7 @@ public class DepartamentAgent {
 			}
 		}
 
-		if (isAG()) {
+		else if (isAG()) {
 			depart.add(EnumDepartExtra.getNumeDepart(UserInfo.getInstance().getCodDepart()));
 
 			if (UserInfo.getInstance().getDepartExtra().length() > 0) {
@@ -130,7 +130,7 @@ public class DepartamentAgent {
 
 		ArrayList<String> depart = new ArrayList<String>();
 
-		if (isKA()) {
+		if (isKA() || UtilsUser.isInfoUser()) {
 
 			for (EnumDepartExtra depKA : EnumDepartExtra.values()) {
 				if (depKA.getCod().equals("00") || depKA.getCod().equals("11"))
@@ -138,7 +138,7 @@ public class DepartamentAgent {
 			}
 		}
 
-		if (isAG()) {
+		else if (isAG()) {
 			depart.add(EnumDepartExtra.getNumeDepart(UserInfo.getInstance().getCodDepart()));
 
 			if (UserInfo.getInstance().getDepartExtra().length() > 0) {

@@ -98,7 +98,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 
 	private boolean isSDorSM() {
 		return UserInfo.getInstance().getTipUserSap().equals("SD") || UserInfo.getInstance().getTipUserSap().equals("SM") || UtilsUser.isSMNou()
-				|| UserInfo.getInstance().getTipUserSap().equals("SDCVA");
+				|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipUserSap().equals("SDCVA");
 	}
 
 	private void displayComenziDeschise(List<BeanComandaDeschisa> listComenzi) {

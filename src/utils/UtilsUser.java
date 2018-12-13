@@ -3,6 +3,7 @@ package utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Constants;
 import model.UserInfo;
 
 import org.json.JSONArray;
@@ -92,6 +93,30 @@ public class UtilsUser {
 	public static boolean isSuperAv() {
 		return !UserInfo.getInstance().getCodSuperUser().isEmpty();
 	}
+	
+	public static boolean isInfoUser() {
+		return UserInfo.getInstance().getTipUserSap().equals(Constants.tipInfoAv);
+	}
+
+	public static boolean isSMR() {
+		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("SMR");
+	}
+
+	public static boolean isCVR() {
+		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("CVR");
+	}
+
+	public static boolean isSSCM() {
+		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("SSCM");
+	}
+
+	public static boolean isCGED() {
+		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("CGED");
+	}
+
+	public static boolean isOIVPD() {
+		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("OIVPD");
+	}	
 	
 	public static String getTipSMNou() {
 		String tipUser;

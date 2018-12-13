@@ -141,6 +141,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private CheckBox chkCamionDescoperit;
 	private CheckBox checkObsSofer;
 	private TextView txtBlocScara;
+	private ArrayAdapter<String> adapterSpinnerTransp;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -256,10 +257,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		}
 
 		spinnerTransp = (Spinner) findViewById(R.id.spinnerTransp);
-		ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
+		adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
 		adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerTransp.setAdapter(adapterSpinnerTransp);
 		addSpinnerTranspListener();
+		setTipTranspInfoAgent();
 
 		spinnerJudet = (Spinner) findViewById(R.id.spinnerJudet);
 		spinnerJudet.setOnItemSelectedListener(new regionSelectedListener());
@@ -420,7 +422,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		if (!DateLivrare.getInstance().getDataLivrare().isEmpty())
 			textDataLivrare.setText(DateLivrare.getInstance().getDataLivrare());
-		
+
 		txtBlocScara = (TextView) findViewById(R.id.txtBlocScara);
 		if (!DateLivrare.getInstance().getBlocScara().isEmpty())
 			txtBlocScara.setText(DateLivrare.getInstance().getBlocScara());
@@ -452,6 +454,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		}
 	}
 
+	private void setTipTranspInfoAgent() {
+		if (UserInfo.getInstance().getTipUserSap().equals(Constants.tipInfoAv)) {
+			DateLivrare.getInstance().setTransport("TCLI");
+			spinnerTransp.setEnabled(false);
+
+		}
+	}
+
 	private void addListenerDataLivrare() {
 		btnDataLivrare.setOnClickListener(new OnClickListener() {
 
@@ -480,8 +490,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 				Calendar calendar = new GregorianCalendar(selectedYear, selectedMonth, selectedDay);
 
-				Calendar calendarNow = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar
-						.getInstance().get(Calendar.DAY_OF_MONTH));
+				Calendar calendarNow = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
+						Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 
 				int dayLivrare = calendar.get(Calendar.DAY_OF_WEEK);
 				int dayNow = calendarNow.get(Calendar.DAY_OF_WEEK);
@@ -489,7 +499,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				String tipTransp = spinnerTransp.getSelectedItem().toString();
 
 				if (tipTransp.toLowerCase().contains("trap")) {
-					if (dayNow == 5 && dayLivrare == 6) {
+					if ((dayNow == 5 || dayNow == 6) && dayLivrare == 6) {
 						showDialogLivrareSambata(calendar);
 						setDataLivrare(calendar);
 					} else {
@@ -575,7 +585,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		AlertDialog alert = builder.create();
 		alert.show();
 	}
-
 
 	private void addListenerClientLaRaft() {
 
@@ -684,9 +693,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 			}
 		});
-	}	
-	
-	
+	}
+
 	private void displayObiective(boolean isVisible) {
 		if (isVisible) {
 			layoutObiective.setVisibility(View.VISIBLE);
@@ -859,7 +867,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					layoutAdr1.setVisibility(View.GONE);
 					layoutAdr2.setVisibility(View.GONE);
 					layoutHarta.setVisibility(View.GONE);
-					
+
 					if (adreseList == null || adreseList.isEmpty())
 						performGetAdreseLivrare();
 					else if (selectedAddrModifCmd != -1)
@@ -962,8 +970,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			spinnerAdreseLivrare.setAdapter(adapterAdrese);
 
 			if (selectedAddrModifCmd != -1)
-				spinnerAdreseLivrare.setSelection(selectedAddrModifCmd);			
-			
+				spinnerAdreseLivrare.setSelection(selectedAddrModifCmd);
+
 			if (!ModificareComanda.selectedCmd.equals("")) {
 				if (!adrNouaModifCmd)
 					getCmdDateLivrare();
@@ -1485,8 +1493,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		dateLivrareInstance.setBlocScara(txtBlocScara.getText().toString().trim());
 
 		if (radioText.isChecked() && adresaNouaExista())
-			return;		
-		
+			return;
+
 		finish();
 
 	}
@@ -1530,9 +1538,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		} else
 			return false;
 
-	}	
-	
-	
+	}
+
 	private boolean isAdresaText() {
 		return radioText != null && radioText.isChecked();
 	}

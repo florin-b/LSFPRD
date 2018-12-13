@@ -244,7 +244,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 		}
 
-		if (isAgent()) {
+		if (isAgent()  || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
 			selectedAgent = UserInfo.getInstance().getCod();
 			performGetComenzi();
 

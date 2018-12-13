@@ -200,7 +200,8 @@ public class User extends Activity implements HelperSiteListener {
 			spinnerDepart.setEnabled(true);
 
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")
-					|| UserInfo.getInstance().getTipAcces().equals("39"))
+					|| UserInfo.getInstance().getTipAcces().equals("39") || UserInfo.getInstance().getTipAcces().equals("51")
+					|| UserInfo.getInstance().getTipAcces().equals("50")) // CVA,SM
 
 			{
 				spinnerDepart.setVisibility(View.INVISIBLE);
@@ -438,6 +439,18 @@ public class User extends Activity implements HelperSiteListener {
 		else if (codAcc.equals("45")) {
 			retVal = "Sef magazin wood";
 		}
+		
+		else if (codAcc.equals("51")) {
+			retVal = "Sef supraveghere case";
+		}
+
+		else if (codAcc.equals("50")) {
+			retVal = "Casier ged";
+		}
+
+		else if (codAcc.equals("62")) {
+			retVal = "Operator facturare";
+		}		
 
 		return retVal;
 	}

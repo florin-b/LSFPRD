@@ -79,7 +79,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private TextView textClientParavan, labelIDClient;
 
 	private Button cautaClientPFBtn;
-	
+
 	private RadioButton radioClientInstPub;
 
 	private enum EnumTipClient {
@@ -179,7 +179,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		radioClientInstPub = (RadioButton) findViewById(R.id.radioClInstPub);
 		setVisibilityRadioInstPublica(radioClientInstPub);
-		
+
 		setVisibilityRadioClMeserias(radioClMeserias);
 
 		addListenerRadioClDistrib();
@@ -320,7 +320,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		return tipClient;
 	}
-	
+
 	private boolean isNumeClientValid() {
 		if (txtNumeClientDistrib.getText().toString().trim().length() > 0) {
 			return true;
@@ -336,8 +336,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		else
 			radioClientInstPub.setVisibility(View.INVISIBLE);
 
-	}	
-	
+	}
+
 	private void setVisibilityRadioClMeserias(RadioButton radioClMeserias) {
 		if (UserInfo.getInstance().getTipUserSap().contains("CAG"))
 			radioClMeserias.setVisibility(View.VISIBLE);
@@ -521,9 +521,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			}
 		});
 	}
-	
-	
-	
+
 	private void setTextNumeClientEnabled(boolean isEnabled) {
 
 		txtNumeClientGed.setText("");
@@ -685,15 +683,6 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					if (radioCmdNormala.isChecked())
 						CreareComandaGed.tipComanda = "N";
 
-					if (radioCmdSimulata.isChecked())
-						CreareComandaGed.tipComanda = "S";
-
-					if (radioRezervStocDa.isChecked())
-						CreareComandaGed.rezervStoc = true;
-
-					if (radioRezervStocNu.isChecked())
-						CreareComandaGed.rezervStoc = false;
-
 					CreareComandaGed.numeClientVar = txtNumeClientGed.getText().toString().trim();
 
 					if (layoutTextJ.getVisibility() == View.VISIBLE)
@@ -718,7 +707,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					CreareComandaGed.rezervStoc = false;
 
 				}
-				
+
 				if (radioClientInstPub.isChecked()) {
 
 					CreareComandaGed.tipComanda = "N";
@@ -726,7 +715,16 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					DateLivrare.getInstance().setTipPersClient("IP");
 
 				}
-				
+
+				if (radioCmdSimulata.isChecked()) {
+					CreareComandaGed.tipComanda = "S";
+
+					if (radioRezervStocDa.isChecked())
+						CreareComandaGed.rezervStoc = true;
+					else
+						CreareComandaGed.rezervStoc = false;
+				}
+
 				finish();
 
 			}

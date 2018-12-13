@@ -766,6 +766,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				tipUser = "KA";
 			else if (isComandaGed())
 				tipUser = "CV";
+			else if (UserInfo.getInstance().getTipAcces().equals("62"))
+				tipUser = "AV";
 			else
 				tipUser = UserInfo.getInstance().getTipUser();
 
@@ -776,6 +778,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			params.put("JSONDateLivrare", serializeDateLivrare());
 			params.put("alertSD", String.valueOf(alertSD));
 			params.put("alertDV", String.valueOf(alertDV));
+			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 			operatiiComenzi.salveazaComandaDistrib(params);
 
@@ -894,7 +897,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	// userul este agent, sd sau ka
 	boolean isUserExceptie() {
 		return UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")
-				|| UserInfo.getInstance().getTipAcces().equals("27");
+				|| UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("62");
 	}
 
 	private void updateTaxaVerde(double taxaVerde) {
@@ -976,7 +979,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				obj.put("valTransport", listArticoleComanda.get(i).getValTransport());
 
 				if (!UtilsUser.isAgentOrSDorKA()) {
-					if ((listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1) || comandaSelectata.isCmdInstPublica()) {
+					if ((listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1)
+							|| comandaSelectata.isCmdInstPublica()) {
 						alertDV = true;
 						if (!comandaFinala.getComandaBlocata().equals("21"))
 							comandaFinala.setComandaBlocata("1");
@@ -1089,6 +1093,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
 			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 			obj.put("livrareSambata", DateLivrare.getInstance().getLivrareSambata());
+			obj.put("codSuperAgent", UserInfo.getInstance().getCodSuperUser());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();
@@ -1769,7 +1774,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	private void calculValTransport(ArrayList<ArticolComanda> listArticole) {
 
-		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood() || comandaSelectata.isCmdInstPublica()) {
+		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood() || comandaSelectata.isCmdInstPublica() || UtilsUser.isOIVPD()) {
 			return;
 		}
 

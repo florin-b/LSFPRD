@@ -217,7 +217,8 @@ public class HelperTranspBuc {
 		if (UtilsUser.isAgentOrSD())
 			codDepart = UserInfo.getInstance().getCodDepart();
 
-		if (UtilsUser.isUserKA() || UtilsUser.isUserSK()) {
+		if (UtilsUser.isUserKA() || UtilsUser.isUserSK() || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM()
+				|| UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
 
 			if (!ListaArticoleComanda.getInstance().getListArticoleComanda().isEmpty())
 				codDepart = ListaArticoleComanda.getInstance().getListArticoleComanda().get(0).getDepart();
