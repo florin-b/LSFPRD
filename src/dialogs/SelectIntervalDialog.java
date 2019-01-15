@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import listeners.IntervalDialogListener;
@@ -125,6 +126,8 @@ public class SelectIntervalDialog extends Dialog {
 		SimpleAdapter adapterYear = new SimpleAdapter(context, listIntervalYear, R.layout.customrowintervalstart, new String[] { "startInterval" },
 				new int[] { R.id.textStartInterval });
 
+		years = getYears();
+		
 		for (int ii = 0; ii < years.length; ii++) {
 			temp = new HashMap<String, String>();
 			temp.put("startInterval", years[ii]);
@@ -152,6 +155,23 @@ public class SelectIntervalDialog extends Dialog {
 
 	}
 
+	private String[] getYears() {
+		String[] years;
+
+		int lYear = Calendar.getInstance().get(Calendar.YEAR);
+		int fYear = 2012;
+		int nrYears = lYear - fYear;
+
+		List<String> lYears = new ArrayList<String>();
+
+		for (int i = 0; i <= nrYears; i++) {
+			lYears.add(String.valueOf(fYear + i));
+		}
+
+		years = lYears.toArray(new String[0]);
+		return years;
+	}	
+	
 	private void setInitYear(int currentYear) {
 
 		for (int i = 0; i < yearStop.getAdapter().getCount(); i++) {
