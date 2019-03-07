@@ -44,9 +44,10 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 
 	public static class ViewHolder {
 		TextView textNrCrt, textNumeArt, textCodArt, textCantArt, textUmArt, textPretArt, textMonedaArt, textDepozit, textStatusArt, textProcRed, textAddCond,
-				textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial, textIstoricPret, textVechimeStoc;
+				textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial, textIstoricPret, textVechimeStoc,
+				textMarjaT1Proc, textMarjaT1Val;
 
-		LinearLayout layoutIstoricPret, layoutVechimeStoc;
+		LinearLayout layoutIstoricPret, layoutVechimeStoc, layoutMarjaT1;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -84,7 +85,10 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 			viewHolder.layoutIstoricPret = (LinearLayout) convertView.findViewById(R.id.layoutIstoricPret);
 			viewHolder.layoutVechimeStoc = (LinearLayout) convertView.findViewById(R.id.layoutVechimeStoc);
 			viewHolder.textMonedaArt = (TextView) convertView.findViewById(R.id.textMonedaArt);
-
+			viewHolder.layoutMarjaT1 = (LinearLayout) convertView.findViewById(R.id.layoutMarjaT1);
+			viewHolder.textMarjaT1Proc = (TextView) convertView.findViewById(R.id.textMarjaT1Proc);
+			viewHolder.textMarjaT1Val = (TextView) convertView.findViewById(R.id.textMarjaT1Val);
+			
 			convertView.setTag(viewHolder);
 
 		} else {
@@ -124,6 +128,11 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 		valoareCmp = articol.getCmp();
 
 		if (isDV()) {
+
+			viewHolder.layoutMarjaT1.setVisibility(View.VISIBLE);
+			viewHolder.textMarjaT1Val.setText(nf2.format(articol.getValT1()));
+			viewHolder.textMarjaT1Proc.setText(nf2.format(articol.getProcT1()) + "%");			
+			
 			if (valoareCmp > 0) {
 				if (UserInfo.getInstance().getCodDepart().equals("07")) {
 					procentCmp = (articol.getPretUnit() / (valoareCmp * multiplu) - 1) * 100;
@@ -134,6 +143,7 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 		} else {
 			valoareCmp = 0.0;
 			procentCmp = 0.0;
+			viewHolder.layoutMarjaT1.setVisibility(View.GONE);
 		}
 
 		viewHolder.textProcCmp.setText(nf2.format(procentCmp));

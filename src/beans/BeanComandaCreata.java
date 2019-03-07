@@ -37,7 +37,9 @@ public class BeanComandaCreata {
 	private boolean clientRaft;
 	private String tipComanda;
 	private boolean isCmdInstPublica;
-
+	private double bazaSalariala;
+	
+	
 	public BeanComandaCreata() {
 
 	}
@@ -320,6 +322,14 @@ public class BeanComandaCreata {
 
 	public void setCmdInstPublica(boolean isCmdInstPublica) {
 		this.isCmdInstPublica = isCmdInstPublica;
+	}	
+	
+	public double getBazaSalariala() {
+		return bazaSalariala;
+	}
+
+	public void setBazaSalariala(double bazaSalariala) {
+		this.bazaSalariala = bazaSalariala;
 	}	
 	
 	@Override

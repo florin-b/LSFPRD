@@ -51,7 +51,8 @@ public class DateLivrareAfisare {
 	private String programLivrare = "0";
 	private String livrareSambata = "";
 	private String blocScara = "";
-
+	private double marjaT1 = 0;
+	
 	public DateLivrareAfisare() {
 
 	}
@@ -442,5 +443,12 @@ public class DateLivrareAfisare {
 		this.blocScara = blocScara;
 	}
 		
+	public double getMarjaT1() {
+		return marjaT1;
+	}
+
+	public void setMarjaT1(double marjaT1) {
+		this.marjaT1 = marjaT1;
+	}	
 	
 }

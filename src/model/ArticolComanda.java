@@ -83,6 +83,9 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 	private String vechime;
 	private String categorie;
 	private double lungime;
+	
+	private double procT1;
+	private double valT1;	
 
 	public int getNrCrt() {
 		return nrCrt;
@@ -595,6 +598,22 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 		this.lungime = lungime;
 	}
 
+	public double getProcT1() {
+		return procT1;
+	}
+
+	public void setProcT1(double procT1) {
+		this.procT1 = procT1;
+	}
+
+	public double getValT1() {
+		return valT1;
+	}
+
+	public void setValT1(double valT1) {
+		this.valT1 = valT1;
+	}	
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

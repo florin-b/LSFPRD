@@ -337,6 +337,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setProgramLivrare(jsonLivrare.getString("programLivrare"));
 				dateLivrare.setLivrareSambata(jsonLivrare.getString("livrareSambata"));
 				dateLivrare.setBlocScara(jsonLivrare.getString("blocScara"));
+				
+				if (jsonLivrare.has("marjaT1"))
+					dateLivrare.setMarjaT1(Double.valueOf(jsonLivrare.getString("marjaT1")));
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
@@ -400,6 +403,12 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					articol.setMoneda(articolObject.getString("moneda"));
 					articol.setValTransport(Double.valueOf(articolObject.getString("valTransport")));
 					articol.setProcTransport(0);
+					
+					if (articolObject.has("valT1"))
+						articol.setValT1(Double.valueOf(articolObject.getString("valT1")));
+					if (articolObject.has("procT1"))
+						articol.setProcT1(Double.valueOf(articolObject.getString("procT1")));					
+					
 					listArticole.add(articol);
 
 				}
@@ -514,6 +523,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 					if (comandaObject.has("isCmdInstPublica"))
 						comanda.setCmdInstPublica(Boolean.valueOf(comandaObject.getString("isCmdInstPublica")));
+					
+					if (comandaObject.has("bazaSalariala"))
+						comanda.setBazaSalariala(Double.valueOf(comandaObject.getString("bazaSalariala")));					
 					
 					listComenzi.add(comanda);
 

@@ -43,6 +43,8 @@ public class ComandaAfisAdapter extends BaseAdapter {
 			viewHolder.textMonedaTVA = (TextView) convertView.findViewById(R.id.textMonedaTVA);
 			viewHolder.textCmdSap = (TextView) convertView.findViewById(R.id.textCmdSap);
 			viewHolder.textTipClient = (TextView) convertView.findViewById(R.id.textTipClient);
+			viewHolder.textBazaSal = (TextView) convertView.findViewById(R.id.textBazaSal);
+			viewHolder.textMonedaBS = (TextView) convertView.findViewById(R.id.textMonedaBS);			
 
 			convertView.setTag(viewHolder);
 		} else {
@@ -69,11 +71,21 @@ public class ComandaAfisAdapter extends BaseAdapter {
 		viewHolder.textCmdSap.setText(comanda.getCmdSap().equals("-1") ? " " : comanda.getCmdSap());
 		viewHolder.textTipClient.setText(comanda.getTipClient());
 
+		if (comanda.getBazaSalariala() > 0) {
+			viewHolder.textBazaSal.setVisibility(View.VISIBLE);
+			viewHolder.textMonedaBS.setVisibility(View.VISIBLE);
+			viewHolder.textBazaSal.setText("B.sal. " + numberFormat.format(comanda.getBazaSalariala()));
+		} else {
+			viewHolder.textBazaSal.setVisibility(View.INVISIBLE);
+			viewHolder.textMonedaBS.setVisibility(View.INVISIBLE);
+		}		
+		
 		return convertView;
 	}
 
 	static class ViewHolder {
-		public TextView textIdCmd, textClient, textData, textSuma, textStare, textMoneda, textSumaTVA, textMonedaTVA, textCmdSap, textTipClient;
+		public TextView textIdCmd, textClient, textData, textSuma, textStare, textMoneda, textSumaTVA, textMonedaTVA, textCmdSap, textTipClient, textBazaSal,
+		textMonedaBS;
 	}
 
 	public int getCount() {

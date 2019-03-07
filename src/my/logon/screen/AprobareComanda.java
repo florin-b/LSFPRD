@@ -120,6 +120,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 	private EnumTipReducere tipReducere;
 	private BeanComandaCreata comandaCurenta;
 	private TextView textTipReducere;
+	private TextView textValMarjaT1, textProcMarjaT1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -227,6 +228,9 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		textTipTransport = (TextView) findViewById(R.id.textTipTransport);
 
 		textTipReducere = (TextView) findViewById(R.id.textTipReducere);
+		
+		textValMarjaT1 = (TextView) findViewById(R.id.textValMarjaT1);
+		textProcMarjaT1 = (TextView) findViewById(R.id.textProcMarjaT1);		
 
 		textComandaBV90 = (TextView) findViewById(R.id.textComandaBV90);
 		textComandaBV90.setVisibility(View.INVISIBLE);
@@ -825,6 +829,12 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		else
 			textComandaBV90.setVisibility(View.INVISIBLE);
 
+		if (dateLivrare.getMarjaT1() > 0) {
+			textValMarjaT1.setText("Marja T1 comanda: " + String.format("%.02f", dateLivrare.getMarjaT1()) + " RON");
+			double procMarjaT1 = dateLivrare.getMarjaT1() / Double.valueOf(comandaCurenta.getSuma());
+			textProcMarjaT1.setText("Marja T1 : " + String.format("%.02f", (procMarjaT1 * 100)) + "%");
+		}		
+		
 		setupContextLayout(comandaCurenta);
 
 	}
