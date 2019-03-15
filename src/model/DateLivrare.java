@@ -5,6 +5,7 @@
 package model;
 
 import beans.DateLivrareAfisare;
+import beans.Delegat;
 import beans.FurnizorComanda;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -77,6 +78,7 @@ public class DateLivrare {
 	private String programLivrare = "0";
 	private String livrareSambata = "";
 	private String blocScara = "";
+	private Delegat delegat;
 
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -134,6 +136,7 @@ public class DateLivrare {
 		this.programLivrare = dateLivrareAfisare.getProgramLivrare();
 		this.livrareSambata = dateLivrareAfisare.getLivrareSambata();
 		this.blocScara = dateLivrareAfisare.getBlocScara();
+		this.delegat = dateLivrareAfisare.getDelegat();
 	}
 
 	public boolean isClientRaft() {
@@ -573,6 +576,13 @@ public class DateLivrare {
 		this.blocScara = blocScara;
 	}
 	
+	public Delegat getDelegat() {
+		return delegat;
+	}
+
+	public void setDelegat(Delegat delegat) {
+		this.delegat = delegat;
+	}	
 	
 	public void resetAll() {
 		codJudet = "";
@@ -622,6 +632,8 @@ public class DateLivrare {
 		programLivrare = "0";
 		livrareSambata = "";
 		blocScara = "";
+		delegat = new Delegat();
+
 
 	}
 

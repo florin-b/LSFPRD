@@ -52,6 +52,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -75,6 +76,7 @@ import beans.Address;
 import beans.BeanAdresaLivrare;
 import beans.BeanAdreseJudet;
 import beans.BeanObiectivDepartament;
+import beans.Delegat;
 import beans.GeocodeAddress;
 import beans.StatusIntervalLivrare;
 
@@ -142,6 +144,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private CheckBox checkObsSofer;
 	private TextView txtBlocScara;
 	private ArrayAdapter<String> adapterSpinnerTransp;
+	private List<String> listLocalitatiLivrare;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -427,6 +430,12 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		if (!DateLivrare.getInstance().getBlocScara().isEmpty())
 			txtBlocScara.setText(DateLivrare.getInstance().getBlocScara());
 
+		if (DateLivrare.getInstance().getDelegat() != null) {
+			((EditText) findViewById(R.id.txtNumeDelegat)).setText(DateLivrare.getInstance().getDelegat().getNume());
+			((EditText) findViewById(R.id.txtCIDelegat)).setText(DateLivrare.getInstance().getDelegat().getSerieNumarCI());
+			((EditText) findViewById(R.id.txtAutoDelegat)).setText(DateLivrare.getInstance().getDelegat().getNrAuto());
+		}		
+		
 		btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
 		addListenerDataLivrare();
 
@@ -657,7 +666,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					setMacaraVisible();
 					spinnerTonaj.setVisibility(View.VISIBLE);
 					spinnerTonaj.setSelection(0);
+					setDateDelegatVisibility(false);
 				} else {
+
+					if (arg2 == 1)
+						setDateDelegatVisibility(true);
+					else
+						setDateDelegatVisibility(false);
+
 					checkMacara.setChecked(false);
 					checkMacara.setVisibility(View.INVISIBLE);
 					spinnerTonaj.setVisibility(View.INVISIBLE);
@@ -669,6 +685,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 		});
 	}
+	
+	private void setDateDelegatVisibility(boolean isVisible) {
+		if (isVisible) {
+			((LinearLayout) findViewById(R.id.layoutDelegat)).setVisibility(View.VISIBLE);
+		} else {
+			((LinearLayout) findViewById(R.id.layoutDelegat)).setVisibility(View.INVISIBLE);
+		}
+	}	
 
 	private void setListenerCheckMacara() {
 		checkMacara.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -1223,6 +1247,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		textStrada.setThreshold(0);
 		textStrada.setAdapter(adapterStrazi);
 
+		listLocalitatiLivrare = listAdrese.getListLocalitati();		
+		
 		setListenerTextLocalitate();
 
 	}
@@ -1248,8 +1274,60 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 		});
 
+		textLocalitate.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!hasFocus) {
+					textLocalitate.setText(textLocalitate.getText().toString().trim().toUpperCase());
+					verificaLocalitate("LIVRARE");
+
+				}
+
+			}
+		});				
+		
 	}
 
+	private boolean verificaLocalitate(String tipLocalitate) {
+		boolean locExist = false;
+		List<String> listLocalitati = new ArrayList<String>();
+		String localitateCurenta = "";
+		String numeJudet = "";
+		EditText textLoc = null;
+
+		if (tipLocalitate.equals("LIVRARE")) {
+			textLoc = textLocalitate;
+			localitateCurenta = textLoc.getText().toString().trim();
+			listLocalitati = listLocalitatiLivrare;
+
+			@SuppressWarnings("unchecked")
+			HashMap<String, String> tempMap = (HashMap<String, String>) spinnerJudet.getSelectedItem();
+			numeJudet = tempMap.get("numeJudet");
+
+		} 
+
+		for (String localitate : listLocalitati) {
+			if (localitate.trim().equalsIgnoreCase(localitateCurenta)) {
+				locExist = true;
+				break;
+			}
+
+		}
+
+		if (!locExist && !localitateCurenta.isEmpty()) {
+			String alert = "Localitatea " + localitateCurenta + " nu exista in judetul " + numeJudet + ". Completati alta localitate.";
+			Toast.makeText(getApplicationContext(), alert, Toast.LENGTH_LONG).show();
+
+			textLoc.setText("");
+			textLoc.setFocusableInTouchMode(true);
+
+		}
+
+		return locExist;
+	}	
+	
+	
 	private void displayObiectiveDepartament(List<BeanObiectivDepartament> obiectiveDepart) {
 
 		if (obiectiveDepart.size() > 0) {
@@ -1359,6 +1437,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		} else {
 
+			verificaLocalitate("LIVRARE");
+			
 			String nrStrada = "";
 
 			if (textNrStr.getText().toString().trim().length() > 0)
@@ -1492,6 +1572,30 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		dateLivrareInstance.setCamionDescoperit(chkCamionDescoperit.isChecked());
 		dateLivrareInstance.setBlocScara(txtBlocScara.getText().toString().trim());
 
+		Delegat delegat = new Delegat();
+
+		if (UserInfo.getInstance().getTipUserSap().equals("ASDL") && DateLivrare.getInstance().getTransport().equals("TCLI")) {
+
+			if (((EditText) findViewById(R.id.txtNumeDelegat)).getText().toString().trim().isEmpty()) {
+				Toast.makeText(getApplicationContext(), "Completati numele delegatului.", Toast.LENGTH_LONG).show();
+				return;
+			}
+
+			if (((EditText) findViewById(R.id.txtCIDelegat)).getText().toString().trim().isEmpty()) {
+				Toast.makeText(getApplicationContext(), "Completati seria CI a delegatului.", Toast.LENGTH_LONG).show();
+				return;
+			}
+
+		}
+
+		if (DateLivrare.getInstance().getTransport().equals("TCLI")) {
+			delegat.setNume(((EditText) findViewById(R.id.txtNumeDelegat)).getText().toString().trim());
+			delegat.setSerieNumarCI(((EditText) findViewById(R.id.txtCIDelegat)).getText().toString().trim());
+			delegat.setNrAuto(((EditText) findViewById(R.id.txtAutoDelegat)).getText().toString().trim());
+		}
+
+		dateLivrareInstance.setDelegat(delegat);		
+		
 		if (radioText.isChecked() && adresaNouaExista())
 			return;
 

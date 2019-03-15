@@ -51,6 +51,7 @@ public class DateLivrareAfisare {
 	private String programLivrare = "0";
 	private String livrareSambata = "";
 	private String blocScara = "";
+	private Delegat delegat;
 	private double marjaT1 = 0;
 	
 	public DateLivrareAfisare() {
@@ -443,6 +444,14 @@ public class DateLivrareAfisare {
 		this.blocScara = blocScara;
 	}
 		
+	public Delegat getDelegat() {
+		return delegat;
+	}
+
+	public void setDelegat(Delegat delegat) {
+		this.delegat = delegat;
+	}	
+	
 	public double getMarjaT1() {
 		return marjaT1;
 	}

@@ -42,6 +42,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -126,7 +127,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private CheckBox chkCamionDescoperit;
 	private Spinner spinnerProgramLivrare;
 	private CheckBox checkObsSofer;
-
+	private List<String> listLocalitatiSediu;
+	private List<String> listLocalitatiLivrare;
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -979,6 +982,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textLocalitate.setThreshold(0);
 		textLocalitate.setAdapter(adapterLoc);
+		listLocalitatiSediu = listAdrese.getListLocalitati();
 		setListenerTextLocalitate();
 
 		String[] arrayStrazi = listAdrese.getListStrazi().toArray(new String[listAdrese.getListStrazi().size()]);
@@ -1014,8 +1018,68 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			}
 		});
 
+		textLocalitate.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!hasFocus) {
+					textLocalitate.setText(textLocalitate.getText().toString().trim().toUpperCase());
+					verificaLocalitate("SEDIU");
+
+				}
+
+			}
+		});		
+		
 	}
 
+	private boolean verificaLocalitate(String tipLocalitate) {
+		boolean locExist = false;
+		List<String> listLocalitati = new ArrayList<String>();
+		String localitateCurenta = "";
+		String numeJudet = "";
+		EditText textLoc = null;
+
+		if (tipLocalitate.equals("SEDIU")) {
+			textLoc = textLocalitate;
+			localitateCurenta = textLoc.getText().toString().trim();
+			listLocalitati = listLocalitatiSediu;
+
+			@SuppressWarnings("unchecked")
+			HashMap<String, String> tempMap = (HashMap<String, String>) spinnerJudet.getSelectedItem();
+			numeJudet = tempMap.get("numeJudet");
+
+		} else {
+			textLoc = textLocalitateLivrare;
+			localitateCurenta = textLoc.getText().toString().trim();
+			listLocalitati = listLocalitatiLivrare;
+
+			@SuppressWarnings("unchecked")
+			HashMap<String, String> tempMap = (HashMap<String, String>) spinnerJudetLivrare.getSelectedItem();
+			numeJudet = tempMap.get("numeJudet");
+		}
+
+		for (String localitate : listLocalitati) {
+			if (localitate.trim().equalsIgnoreCase(localitateCurenta)) {
+				locExist = true;
+				break;
+			}
+
+		}
+
+		if (!locExist && !localitateCurenta.isEmpty()) {
+			String alert = "Localitatea " + localitateCurenta + " nu exista in judetul " + numeJudet + ". Completati alta localitate.";
+			Toast.makeText(getApplicationContext(), alert, Toast.LENGTH_LONG).show();
+
+			textLoc.setText("");
+			textLoc.setFocusableInTouchMode(true);
+
+		}
+
+		return locExist;
+	}	
+	
+	
 	private void setListenerTextStrada() {
 
 		textStrada.addTextChangedListener(new TextWatcher() {
@@ -1049,6 +1113,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		textLocalitateLivrare.setThreshold(0);
 		textLocalitateLivrare.setAdapter(adapterLoc);
+		listLocalitatiLivrare = listAdrese.getListLocalitati();
 		setListenerTextLocalitateLivrare();
 
 		String[] arrayStrazi = listAdrese.getListStrazi().toArray(new String[listAdrese.getListStrazi().size()]);
@@ -1081,6 +1146,19 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			}
 		});
+		
+		textLocalitateLivrare.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!hasFocus) {
+					textLocalitateLivrare.setText(textLocalitateLivrare.getText().toString().trim().toUpperCase());
+					verificaLocalitate("LIVRARE");
+
+				}
+
+			}
+		});		
 
 	}
 
@@ -1203,6 +1281,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			strMailAddr = " ";
 
 		if (!(layoutListAdrese.getVisibility() == View.VISIBLE) && !(DateLivrare.getInstance().isAltaAdresa())) {
+			
+			verificaLocalitate("SEDIU");
+			
 			if (dateLivrareInstance.getCodJudet().equals("")) {
 				Toast.makeText(getApplicationContext(), "Selectati judetul!", Toast.LENGTH_SHORT).show();
 				return;
@@ -1252,6 +1333,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		if (radioAltaAdresa.isChecked()) {
 
+			verificaLocalitate("LIVRARE");			
+			
 			if (DateLivrare.getInstance().getOrasD().trim().equals("")) {
 				Toast.makeText(getApplicationContext(), "Completati localitatea!", Toast.LENGTH_SHORT).show();
 				return;

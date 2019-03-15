@@ -1156,8 +1156,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 					}
 
 					if (procRedFin > 80) {
-						Toast.makeText(getApplicationContext(), "Procentul de reducere depaseste pragul admis! ", Toast.LENGTH_SHORT).show();
-						return;
+						//Toast.makeText(getApplicationContext(), "Procentul de reducere depaseste pragul admis! ", Toast.LENGTH_SHORT).show();
+						//restrictie eliminata pentru a se putea vinde articole cu promotii de la dep 03. 12 martie 2019 
+						//return;
 					}
 
 					// sf. verificare
@@ -1416,7 +1417,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		if (globalDepozSel.substring(2, 3).equals("V")) {
 			if (initPrice / globalCantArt * valMultiplu < cmpArt && !UtilsArticole.isArticolPermitSubCmp(codArticol)) {
 				Toast.makeText(getApplicationContext(), "Pret sub cmp!", Toast.LENGTH_LONG).show();
-				return;
+				//eliminat pentru vanzare promotii 03
+				//return;
 			}
 
 		}

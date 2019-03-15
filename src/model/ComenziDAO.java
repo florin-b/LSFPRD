@@ -26,6 +26,7 @@ import beans.BeanConditii;
 import beans.BeanConditiiArticole;
 import beans.BeanConditiiHeader;
 import beans.DateLivrareAfisare;
+import beans.Delegat;
 import beans.FurnizorComanda;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -337,6 +338,12 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setProgramLivrare(jsonLivrare.getString("programLivrare"));
 				dateLivrare.setLivrareSambata(jsonLivrare.getString("livrareSambata"));
 				dateLivrare.setBlocScara(jsonLivrare.getString("blocScara"));
+				
+				Delegat delegat = new Delegat();
+				delegat.setNume(jsonLivrare.getString("numeDelegat"));
+				delegat.setSerieNumarCI(jsonLivrare.getString("ciDelegat"));
+				delegat.setNrAuto(jsonLivrare.getString("autoDelegat"));
+				dateLivrare.setDelegat(delegat);
 				
 				if (jsonLivrare.has("marjaT1"))
 					dateLivrare.setMarjaT1(Double.valueOf(jsonLivrare.getString("marjaT1")));

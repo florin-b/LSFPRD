@@ -719,6 +719,87 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutDelegat"
+                android:layout_width="match_parent"
+                android:layout_height="60dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:gravity="left"
+                    android:paddingLeft="5dip"
+                    android:text="Nume delegat"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <EditText
+                    android:id="@+id/txtNumeDelegat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.15"
+                    android:gravity="left"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="25"
+                    android:singleLine="true"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:gravity="left"
+                    android:paddingLeft="5dip"
+                    android:layout_marginLeft="10dip"
+                    android:text="Serie,nr CI"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <EditText
+                    android:id="@+id/txtCIDelegat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_weight="0.1"
+                    android:gravity="left"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="20"
+                    android:singleLine="true"
+                    android:textSize="18sp" />
+                
+               <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginLeft="10dip"
+                    android:gravity="left"
+                    android:paddingLeft="5dip"
+                    android:text="Nr. auto"
+                    android:textColor="@color/labelColor"
+                    android:textSize="17sp"
+                    android:typeface="serif" />
+
+                <EditText
+                    android:id="@+id/txtAutoDelegat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|left"
+                    android:layout_marginRight="180dip"
+                    android:layout_weight="0.1"
+                    android:gravity="left"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="15"
+                    android:singleLine="true"
+                    android:textSize="18sp" />                
+                
+            </LinearLayout>            
+            
+            
+            <LinearLayout
                 android:id="@+id/layoutObiective"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"

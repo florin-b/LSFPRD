@@ -1183,7 +1183,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 									.show();
 
 							subCmp = "1";
-							return;
+							//restrictie eliminata pentru a se putea vinde articole cu promotii de la dep 03. 12 martie 2019 
+							//return;
 
 						}
 
@@ -1552,7 +1553,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						if (layoutPretMaxKA.getVisibility() == View.VISIBLE)
 							layoutPretMaxKA.setVisibility(View.INVISIBLE);
 
-						return;
+						//eliminat pentru vanzare promotii 03
+						//return;
 					}
 
 				}
