@@ -63,7 +63,7 @@ public class MainMenu extends Activity {
 
 	public String[] btnNamesAgents = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Creare cmd GED", "Comenzi simulate",
 			"Cmz.blocate limita credit", "Creare CLP", "Afisare CLP", "Modificare custodie", "Creare DL", "Afisare DL", "Retur paleti",
-			"Stare retur paleti", "Retur comenzi", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Realizare target",
+			"Stare retur paleti", "Retur comenzi", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Realizare target","Ntcf",
 			"Urmarire sablon", "Info client", "Plati CEC", "Clienti inactivi", "Clienti semiactivi", "Adrese clienti", "Info venituri", "Delegatii",
 			"Despre", "Iesire" };
 
@@ -71,14 +71,14 @@ public class MainMenu extends Activity {
 			R.drawable.blue_basket_icon, R.drawable.simulate, R.drawable.cmd_bloc, R.drawable.clp, R.drawable.afis_clp, R.drawable.custody_48,
 			R.drawable.box_orange_48, R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda,
 			R.drawable.colosseum, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status,
-			R.drawable.target, R.drawable.chart_icon, R.drawable.client_info, R.drawable.payment, R.drawable.clienti_inactivi,
+			R.drawable.target, R.drawable.target,R.drawable.chart_icon, R.drawable.client_info, R.drawable.payment, R.drawable.clienti_inactivi,
 			R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon,
 			R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesSD = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Creare cmd GED",
 			"Cmz.blocate limita credit", "Creare CLP", "Aprobare CLP", "Afisare CLP", "Creare DL", "Aprobare DL", "Afisare DL", "Retur paleti",
 			"Stare retur paleti", "Retur comenzi", "Modificare custodie", "Vanzari", "Neincasate", "Stocuri", "Obiective", "Preturi",
-			"Preturi concurenta", "Stare comenzi", "Realizare target", "Articole avarie", "Creare sablon", "Afisare sablon", "Urmarire sablon",
+			"Preturi concurenta", "Stare comenzi", "Realizare target","Ntcf", "Articole avarie", "Creare sablon", "Afisare sablon", "Urmarire sablon",
 			"Aprobare comanda", "Comenzi conditionate", "Info client", "Plati CEC", "Clienti inactivi", "Clienti semiactivi", "Adrese clienti",
 			"Info venituri", "Delegatii", "Despre", "Iesire" };
 
@@ -86,7 +86,7 @@ public class MainMenu extends Activity {
 			R.drawable.blue_basket_icon, R.drawable.cmd_bloc, R.drawable.clp, R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.box_orange_48,
 			R.drawable.box_green_48, R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda,
 			R.drawable.custody_48, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.concurenta,
-			R.drawable.znecesar1_icon, R.drawable.status, R.drawable.target, R.drawable.reduceri_icon, R.drawable.viewreduceri_icon,
+			R.drawable.znecesar1_icon, R.drawable.status, R.drawable.target,R.drawable.target, R.drawable.reduceri_icon, R.drawable.viewreduceri_icon,
 			R.drawable.colosseum, R.drawable.chart_icon, R.drawable.agree_icon, R.drawable.constraints, R.drawable.client_info, R.drawable.payment,
 			R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.blank,
 			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
@@ -612,6 +612,16 @@ public class MainMenu extends Activity {
 
 				}
 
+				// clienti facturati
+				if (selectedBtnName.equalsIgnoreCase("Ntcf")) {
+
+					Intent nextScreen = new Intent(MainMenu.this, Ntcf.class);
+					startActivity(nextScreen);
+					finish();
+
+				}				
+								
+				
 				// articole avarie
 				if (selectedBtnName.equalsIgnoreCase("Articole avarie")) {
 

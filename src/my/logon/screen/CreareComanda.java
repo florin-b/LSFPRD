@@ -1853,10 +1853,22 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	private void verificaStocArticoleDistributie() {
 
+		List<BeanArticolStoc> listArticoleTemp = getArticoleComanda();
+
+		for (BeanArticolStoc articol : listArticoleTemp) {
+
+			if (articol.getDepozit() != null && articol.getDepozit().contains("MAV")) {
+				articol.setDepozit(articol.getDepart() + "V1");
+				articol.setUnitLog(articol.getUnitLog().substring(0, 2) + "1" + articol.getUnitLog().substring(3, 4));
+			}
+
+		}
+
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("listArticole", opArticol.serializeListArtStoc(getArticoleComanda()));
+		params.put("listArticole", opArticol.serializeListArtStoc(listArticoleTemp));
 
 		opArticol.getStocArticole(params);
+
 
 	}
 

@@ -74,7 +74,7 @@ public class ComandaAfisAdapter extends BaseAdapter {
 		if (comanda.getBazaSalariala() > 0) {
 			viewHolder.textBazaSal.setVisibility(View.VISIBLE);
 			viewHolder.textMonedaBS.setVisibility(View.VISIBLE);
-			viewHolder.textBazaSal.setText("B.sal. " + numberFormat.format(comanda.getBazaSalariala()));
+			viewHolder.textBazaSal.setText("M_T1: " + numberFormat.format(comanda.getBazaSalariala()));
 		} else {
 			viewHolder.textBazaSal.setVisibility(View.INVISIBLE);
 			viewHolder.textMonedaBS.setVisibility(View.INVISIBLE);

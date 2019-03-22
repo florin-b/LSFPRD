@@ -2,7 +2,7 @@ package enums;
 
 public enum EnumOperatiiVenit {
 
-	GET_VENIT_AG("salarizareAV");
+	GET_VENIT_AG("salarizareAV"), GET_VENIT_NTCF("getNTCF");
 
 	private String numeComanda;
 
