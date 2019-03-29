@@ -53,7 +53,8 @@ public class DateLivrareAfisare {
 	private String blocScara = "";
 	private Delegat delegat;
 	private double marjaT1 = 0;
-	
+	private double procentT1 = 0;
+
 	public DateLivrareAfisare() {
 
 	}
@@ -443,21 +444,29 @@ public class DateLivrareAfisare {
 	public void setBlocScara(String blocScara) {
 		this.blocScara = blocScara;
 	}
-		
+
 	public Delegat getDelegat() {
 		return delegat;
 	}
 
 	public void setDelegat(Delegat delegat) {
 		this.delegat = delegat;
-	}	
-	
+	}
+
 	public double getMarjaT1() {
 		return marjaT1;
 	}
 
 	public void setMarjaT1(double marjaT1) {
 		this.marjaT1 = marjaT1;
-	}	
-	
+	}
+
+	public double getProcentT1() {
+		return procentT1;
+	}
+
+	public void setProcentT1(double procentT1) {
+		this.procentT1 = procentT1;
+	}
+
 }

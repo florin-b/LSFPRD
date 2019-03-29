@@ -831,8 +831,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		if (dateLivrare.getMarjaT1() > 0) {
 			textValMarjaT1.setText("Marja T1 comanda: " + String.format("%.02f", dateLivrare.getMarjaT1()) + " RON");
-			double procMarjaT1 = dateLivrare.getMarjaT1() / Double.valueOf(comandaCurenta.getSuma());
-			textProcMarjaT1.setText("Marja T1 : " + String.format("%.02f", (procMarjaT1 * 100)) + "%");
+			textProcMarjaT1.setText("Marja T1 : " + String.format("%.02f", (dateLivrare.getProcentT1() * 100)) + "%");
 		}		
 		
 		setupContextLayout(comandaCurenta);

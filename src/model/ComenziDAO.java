@@ -348,6 +348,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				if (jsonLivrare.has("marjaT1"))
 					dateLivrare.setMarjaT1(Double.valueOf(jsonLivrare.getString("marjaT1")));
 
+				if (jsonLivrare.has("procentT1"))
+					dateLivrare.setProcentT1(Double.valueOf(jsonLivrare.getString("procentT1")));					
+				
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
 				for (int i = 0; i < jsonArticole.length(); i++) {
