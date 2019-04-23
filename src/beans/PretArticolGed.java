@@ -30,6 +30,7 @@ public class PretArticolGed {
 	private double valTrap;
 	private String errMsg;
 	private double procReducereCmp;
+	private double pretFaraTva;
 
 	public String getPret() {
 		return pret;
@@ -253,6 +254,14 @@ public class PretArticolGed {
 
 	public void setProcReducereCmp(double procReducereCmp) {
 		this.procReducereCmp = procReducereCmp;
+	}
+
+	public double getPretFaraTva() {
+		return pretFaraTva;
+	}
+
+	public void setPretFaraTva(double pretFaraTva) {
+		this.pretFaraTva = pretFaraTva;
 	}
 
 }

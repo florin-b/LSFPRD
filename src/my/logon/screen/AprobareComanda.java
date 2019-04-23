@@ -363,6 +363,9 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 						respingeCmd.setVisibility(View.GONE);
 						slidingDrawerAprob.setVisibility(View.INVISIBLE);
 
+						textValMarjaT1.setVisibility(View.INVISIBLE);
+						textProcMarjaT1.setVisibility(View.INVISIBLE);						
+						
 						if (!textAdrLivrNoua.getText().equals("")) {
 							textAdrLivrNoua.setVisibility(View.INVISIBLE);
 							labelAdresa.setVisibility(View.INVISIBLE);
@@ -830,6 +833,10 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			textComandaBV90.setVisibility(View.INVISIBLE);
 
 		if (dateLivrare.getMarjaT1() > 0) {
+			
+			textValMarjaT1.setVisibility(View.VISIBLE);
+			textProcMarjaT1.setVisibility(View.VISIBLE);
+			
 			textValMarjaT1.setText("Marja T1 comanda: " + String.format("%.02f", dateLivrare.getMarjaT1()) + " RON");
 			textProcMarjaT1.setText("Marja T1 : " + String.format("%.02f", (dateLivrare.getProcentT1() * 100)) + "%");
 		}		
@@ -937,6 +944,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			btnConditii.setVisibility(View.GONE);
 			spinnerComenzi.setVisibility(View.INVISIBLE);
 			listViewArticoleComanda.setVisibility(View.INVISIBLE);
+			textValMarjaT1.setVisibility(View.INVISIBLE);
+			textProcMarjaT1.setVisibility(View.INVISIBLE);
 		}
 
 	}

@@ -1465,6 +1465,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		double pretTransport = (initPrice) * (pretArticol.getProcTransport() / 100) + pretArticol.getValTrap();
 		textTransport.setText(nForm2.format(pretTransport));
 
+		((TextView) findViewById(R.id.textPretFaraTva)).setText(nf.format(pretArticol.getPretFaraTva()));		
+		
 		// agentii nu pot modifica pretul
 		if (userCannotModifyPrice()) {
 			txtPretArt.setEnabled(false);

@@ -1355,11 +1355,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		unArticol.setCantUmb(Double.valueOf(cantArticol));
 		unArticol.setUmb(localUnitMas);
 		unArticol.setAlteValori("");
-		unArticol.setDepart("");
+		unArticol.setDepart(globalCodDepartSelectetItem);
 		unArticol.setTipArt("");
 		unArticol.setPromotie(0);
 		unArticol.setObservatii("");
-		unArticol.setDepartAprob("");
+		unArticol.setDepartAprob(articolDBSelected.getDepartAprob());
 		unArticol.setUmPalet(false);
 		unArticol.setCategorie("");
 		unArticol.setLungime(0);

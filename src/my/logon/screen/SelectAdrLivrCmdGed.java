@@ -18,6 +18,7 @@ import listeners.AsyncTaskListener;
 import listeners.MapListener;
 import listeners.OperatiiAdresaListener;
 import listeners.OperatiiClientListener;
+import model.Constants;
 import model.DateLivrare;
 import model.ListaArticoleComandaGed;
 import model.OperatiiAdresa;
@@ -497,7 +498,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			Toast.makeText(getApplicationContext(), statusInterval.getMessage(), Toast.LENGTH_LONG).show();
 
 	}
-
+	
 	private void showDialogLivrareSambata(final Calendar dataLivrare) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -799,7 +800,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void performGetJudete() {
 
-		if (UtilsUser.isUserSite()) {
+		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP")) {
 
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
