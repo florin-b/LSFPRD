@@ -4,17 +4,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import model.UserInfo;
-import my.logon.screen.R;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 
 public class ObiectiveCva extends Activity {
 
@@ -75,6 +74,22 @@ public class ObiectiveCva extends Activity {
 		webView.setWebChromeClient(new WebChromeClient());
 
 		webView.getSettings().setUseWideViewPort(true);
+
+		webView.getSettings().setGeolocationEnabled(true);
+
+		webView.setWebChromeClient(new WebChromeClient() {
+
+			public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+				callback.invoke(origin, true, false);
+			}
+		}
+
+		);
+
+		webView.getSettings().setAppCacheEnabled(true);
+		webView.getSettings().setDatabaseEnabled(true);
+		webView.getSettings().setDomStorageEnabled(true);
+
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
