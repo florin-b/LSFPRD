@@ -140,12 +140,13 @@ public class MainMenu extends Activity {
 			R.drawable.blank };
 
 	public String[] btnNamesCONSGED = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Retur paleti",
-			"Stare retur paleti", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta", "Info client", "Despre",
-			"Iesire" };
+			"Stare retur paleti", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta", "Obiective", "Info client",
+			"Despre", "Iesire" };
 
 	public int[] btnImageCONSGED = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.simulate, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon,
-			R.drawable.dollar_icon, R.drawable.status, R.drawable.concurenta, R.drawable.client_info, R.drawable.despre_icon, R.drawable.exit_icon };
+			R.drawable.dollar_icon, R.drawable.status, R.drawable.concurenta, R.drawable.colosseum, R.drawable.client_info, R.drawable.despre_icon,
+			R.drawable.exit_icon };
 
 	public String[] btnNamesKA3 = { "Utilizator", "Creare comanda", "Afisare comanda", "Comenzi simulate", "Retur paleti", "Vanzari", "Neincasate",
 			"Stocuri", "Preturi", "Info client", "Despre", "Iesire" };
@@ -155,11 +156,11 @@ public class MainMenu extends Activity {
 			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.client_info, R.drawable.despre_icon,
 			R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesWOOD = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Stocuri", "Preturi", "Despre",
-			"Iesire" };
+	public String[] btnNamesWOOD = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Stocuri", "Preturi", "Obiective",
+			"Despre", "Iesire" };
 
 	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
-			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.colosseum, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesINFO = { "Utilizator", "Creare comanda", "Afisare comanda", "Stocuri", "Preturi", "Despre", "Iesire" };
 
@@ -540,7 +541,9 @@ public class MainMenu extends Activity {
 					} else if ((UserInfo.getInstance().getTipUser().equals(EnumTipUser.SD.getTipAcces()) || UserInfo.getInstance().getTipUser()
 							.equals(EnumTipUser.AV.getTipAcces()))) {
 						nextScreen = new Intent(MainMenu.this, AfiseazaObiectiveAgenti.class);
-					} else if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.CV.getTipAcces()) || UtilsUser.isDV_CONS()) {
+					} else if (UserInfo.getInstance().getTipUser().equals(EnumTipUser.CV.getTipAcces()) || UtilsUser.isDV_CONS()
+							|| UtilsUser.isSMNou() || UserInfo.getInstance().getTipUserSap().equals("SM")
+							|| UserInfo.getInstance().getTipUserSap().equals("WOOD")) {
 						nextScreen = new Intent(MainMenu.this, ObiectiveCva.class);
 
 					}
