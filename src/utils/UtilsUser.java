@@ -26,8 +26,8 @@ public class UtilsUser {
 
 	public static boolean isUserSK() {
 		return UserInfo.getInstance().getTipUser().equals("SK");
-	}		
-	
+	}
+
 	public static boolean isCV() {
 		return UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM")
 				|| UserInfo.getInstance().getTipUser().equals("CVR") || UserInfo.getInstance().getTipUser().equals("SMR");
@@ -66,16 +66,17 @@ public class UtilsUser {
 
 	public static boolean isAgentOrSD() {
 		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV")
-				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD") || UserInfo.getInstance().getTipUserSap().toUpperCase().equals("ASDL");
+				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD")
+				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("ASDL");
 
 	}
 
 	public static boolean isAgentOrSDorKA() {
-		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV") || UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD")
-				|| UserInfo.getInstance().getTipUser().equals("KA");
+		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV")
+				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD") || UserInfo.getInstance().getTipUser().equals("KA");
 
 	}
-	
+
 	public static boolean isSD() {
 		return UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD");
 	}
@@ -93,7 +94,7 @@ public class UtilsUser {
 	public static boolean isSuperAv() {
 		return !UserInfo.getInstance().getCodSuperUser().isEmpty();
 	}
-	
+
 	public static boolean isInfoUser() {
 		return UserInfo.getInstance().getTipUserSap().equals(Constants.tipInfoAv);
 	}
@@ -116,8 +117,8 @@ public class UtilsUser {
 
 	public static boolean isOIVPD() {
 		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("OIVPD");
-	}	
-	
+	}
+
 	public static String getTipSMNou() {
 		String tipUser;
 
@@ -184,9 +185,10 @@ public class UtilsUser {
 
 	public static boolean isUserExceptieBV90Ged() {
 
-		// pentru ag si sd de la 02 si 05 se ofera accesul la BV90
+		// pentru ag si sd de la 01, 02 si 05 se ofera accesul la BV90
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
-			if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getCodDepart().equals("05"))
+			if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getCodDepart().equals("05")
+					|| UserInfo.getInstance().getCodDepart().equals("01"))
 				return true;
 		}
 
