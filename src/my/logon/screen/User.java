@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
+import listeners.CodPinDialogListener;
 import listeners.HelperSiteListener;
+import listeners.OperatiiMeniuListener;
 import model.HelperUserSite;
 import model.InfoStrings;
+import model.OperatiiMeniu;
 import model.UserInfo;
 import utils.UtilsUser;
 import android.app.ActionBar;
@@ -23,12 +26,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import dialogs.PinSalarizareDialog;
 import enums.EnumFiliale;
+import enums.EnumOperatiiMeniu;
 
-public class User extends Activity implements HelperSiteListener {
+public class User extends Activity implements HelperSiteListener, CodPinDialogListener, OperatiiMeniuListener {
 
 	Button buttonUpdate, buttonInstall;
 	String filiala = "", nume = "", cod = "";
@@ -42,6 +49,7 @@ public class User extends Activity implements HelperSiteListener {
 	public SimpleAdapter adapterFiliala, adapterDepart;
 
 	private HelperUserSite helperSite;
+	private RadioButton radioSalPermis, radioSalBlocat;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,6 +87,21 @@ public class User extends Activity implements HelperSiteListener {
 		labelFiliala = (TextView) findViewById(R.id.labelFiliala);
 		labelFiliala.setVisibility(View.GONE);
 
+		if (UtilsUser.isAgentOrSD()) {
+			((LinearLayout) findViewById(R.id.layoutSalarizare)).setVisibility(View.VISIBLE);
+
+			radioSalPermis = (RadioButton) findViewById(R.id.radioSalPermis);
+			radioSalBlocat = (RadioButton) findViewById(R.id.radioSalBlocat);
+
+			if (UserInfo.getInstance().getIsMeniuBlocat())
+				radioSalBlocat.setChecked(true);
+			else
+				radioSalPermis.setChecked(true);
+
+			setListenerRadioSal();
+		}		
+		
+		
 		// exceptie pentru agenti si sd din BUC
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
 			if (UserInfo.getInstance().getUnitLog().equals("BU10") || UserInfo.getInstance().isAltaFiliala()) {
@@ -532,6 +555,43 @@ public class User extends Activity implements HelperSiteListener {
 		spinnerFiliala.setSelection(selectedItem);
 	}
 
+	private void setListenerRadioSal() {
+
+		radioSalPermis.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				PinSalarizareDialog pinSalarizare = new PinSalarizareDialog(User.this);
+				pinSalarizare.setPinDialogListener(User.this);
+				pinSalarizare.showDialog();
+
+			}
+		});
+
+		radioSalBlocat.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				blocheazaMeniuSalarizare();
+
+			}
+
+		});
+
+	}	
+	
+	public void blocheazaMeniuSalarizare() {
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codAgent", UserInfo.getInstance().getCod());
+
+		OperatiiMeniu opMeniu = new OperatiiMeniu(User.this);
+		opMeniu.setOperatiiMeniuListener(User.this);
+		opMeniu.blocheazaMeniu(params);
+
+	}	
+	
+	
 	public void onResume() {
 
 		super.onResume();
@@ -558,4 +618,26 @@ public class User extends Activity implements HelperSiteListener {
 
 	}
 
+	
+	@Override
+	public void codPinComplete(boolean isSuccess) {
+
+	}
+
+	@Override
+	public void pinCompleted(EnumOperatiiMeniu numeOp, boolean isSuccess) {
+		switch (numeOp) {
+		case BLOCHEAZA_MENIU:
+			if (isSuccess) {
+				UserInfo.getInstance().setIsMeniuBlocat(true);
+
+			}
+			break;
+		default:
+			break;
+
+		}
+
+	}	
+	
 }

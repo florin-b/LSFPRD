@@ -1524,6 +1524,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				istoricPret = UtilsFormatting.getIstoricPret(tokenPret[20], EnumTipComanda.DISTRIBUTIE);
 
 				procReducereCmp = Double.parseDouble(tokenPret[21]);
+				((TextView) findViewById(R.id.textPretGed)).setText(tokenPret[22]);
 
 				procDiscClient = 0;
 				minimKAPrice = 0;

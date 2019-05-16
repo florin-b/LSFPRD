@@ -1093,6 +1093,12 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						unitLogUnic = CreareComandaGed.filialaAlternativa;
 					}
 
+					if (totalNegociat && UtilsUser.isUserGed() && !globalCodDepartSelectetItem.substring(0, 2).equals("09")) {
+						Toast.makeText(getApplicationContext(), "Pentru comenzile cu valoare negociata adaugati doar articole din divizia 09.",
+								Toast.LENGTH_LONG).show();
+						return;
+					}					
+					
 					String cantArticol = textCant.getText().toString().trim();
 
 					if (selectedCant != Double.parseDouble(cantArticol)) {

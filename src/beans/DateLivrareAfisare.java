@@ -54,6 +54,12 @@ public class DateLivrareAfisare {
 	private Delegat delegat;
 	private double marjaT1 = 0;
 	private double procentT1 = 0;
+	private double mCantCmd = 0;
+	private double mCant30 = 0;
+	private double marjaBrutaPalVal = 0;
+	private double marjaBrutaCantVal = 0;
+	private double marjaBrutaPalProc = 0;
+	private double marjaBrutaCantProc = 0;
 
 	public DateLivrareAfisare() {
 
@@ -467,6 +473,54 @@ public class DateLivrareAfisare {
 
 	public void setProcentT1(double procentT1) {
 		this.procentT1 = procentT1;
+	}
+
+	public double getmCantCmd() {
+		return mCantCmd;
+	}
+
+	public void setmCantCmd(double mCantCmd) {
+		this.mCantCmd = mCantCmd;
+	}
+
+	public double getmCant30() {
+		return mCant30;
+	}
+
+	public void setmCant30(double mCant30) {
+		this.mCant30 = mCant30;
+	}
+
+	public double getMarjaBrutaPalVal() {
+		return marjaBrutaPalVal;
+	}
+
+	public void setMarjaBrutaPalVal(double marjaBrutaPalVal) {
+		this.marjaBrutaPalVal = marjaBrutaPalVal;
+	}
+
+	public double getMarjaBrutaCantVal() {
+		return marjaBrutaCantVal;
+	}
+
+	public void setMarjaBrutaCantVal(double marjaBrutaCantVal) {
+		this.marjaBrutaCantVal = marjaBrutaCantVal;
+	}
+
+	public double getMarjaBrutaPalProc() {
+		return marjaBrutaPalProc;
+	}
+
+	public void setMarjaBrutaPalProc(double marjaBrutaPalProc) {
+		this.marjaBrutaPalProc = marjaBrutaPalProc;
+	}
+
+	public double getMarjaBrutaCantProc() {
+		return marjaBrutaCantProc;
+	}
+
+	public void setMarjaBrutaCantProc(double marjaBrutaCantProc) {
+		this.marjaBrutaCantProc = marjaBrutaCantProc;
 	}
 
 }

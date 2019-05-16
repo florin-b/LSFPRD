@@ -13,12 +13,15 @@ import listeners.OperatiiSalarizareListener;
 import listeners.SituatieSalarizareListener;
 import model.OperatiiSalarizare;
 import model.UserInfo;
+import utils.UtilsUser;
 import adapters.Detalii08Adapter;
 import adapters.DetaliiBazaAdapter;
 import adapters.SalarizareCvsAdapter;
 import adapters.SalarizareDepartAdapter;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -45,8 +48,8 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 
 	private ActionBar actionBar;
 	private OperatiiSalarizare operatiiSalarizare;
-	private String[] listLuni = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie",
-			"Decembrie" };
+	private String[] listLuni = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie",
+			"Noiembrie", "Decembrie" };
 
 	private String lunaSelect, anSelect;
 	private boolean isDetaliiAgent;
@@ -73,6 +76,8 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		operatiiSalarizare = new OperatiiSalarizare(this);
 		operatiiSalarizare.setListener(Salarizare.this);
 
+		checkAccess();
+
 		nf = NumberFormat.getNumberInstance(Locale.US);
 		nf.setMaximumFractionDigits(2);
 
@@ -80,6 +85,24 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		setListenerBtnDetalii();
 
 		initData();
+
+	}
+
+	private void checkAccess() {
+
+		if (UtilsUser.isAgentOrSD() && UserInfo.getInstance().getIsMeniuBlocat()) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Acces blocat. Folositi modulul Utilizator pentru deblocare.").setCancelable(true)
+					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
+							returnToMainMenu();
+						}
+					});
+			AlertDialog alert = builder.create();
+			alert.show();
+
+		}
 
 	}
 

@@ -500,6 +500,8 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 					uInfo.setFilHome(Boolean.valueOf(token[12]));
 					uInfo.setFtpIP(token[13]);
 					uInfo.setInitDivizie(token[14]);
+					uInfo.setIsMeniuBlocat(Boolean.parseBoolean(UtilsGeneral.getStareMeniu(token[15])[0]));
+					uInfo.setCodPinMeniu(UtilsGeneral.getStareMeniu(token[15])[1]);
 					uInfo.setCodDepart(UtilsGeneral.getDepart(token[1]));
 
 					if (uInfo.getTipUserSap().equals(Constants.tipSuperAv) || uInfo.getTipUserSap().equals(Constants.tipInfoAv) || UtilsUser.isSMR()

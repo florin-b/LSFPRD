@@ -311,7 +311,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		if (UtilsUser.isAgentOrSD()) {
+		if (UtilsUser.isAgentOrSD() || UtilsUser.isUserGed() || UtilsUser.isConsWood()) {
 			MenuItem mnu4 = menu.add(0, 3, 3, "Valoare negociata");
 			mnu4.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		}
@@ -358,7 +358,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 					}
 
 				Intent nextScreen = new Intent(getApplicationContext(), SelectArtCmdGed.class);
-				nextScreen.putExtra("totalNegociat", isTotalNegociat);
+				nextScreen.putExtra("totalNegociat", String.valueOf(isTotalNegociat));
 				nextScreen.putExtra("codClientVar", codClientVar);
 				nextScreen.putExtra("depozitUnic", depozitUnic);
 				nextScreen.putExtra("tipComanda", tipComanda);
@@ -680,6 +680,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				}
 
+				if (isTotalNegociat) {
+					calculProcentReducere();
+				}
+				
 			}
 
 		}
@@ -721,9 +725,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				menu.add(Menu.NONE, 0, 0, "Sterge");
 				if (!UserInfo.getInstance().getTipAcces().equals("9") && !UserInfo.getInstance().getTipAcces().equals("10")
 						&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
-					menu.add(Menu.NONE, 1, 1, "Schimba pret");
+					if (!isTotalNegociat)
+						menu.add(Menu.NONE, 1, 1, "Schimba pret");
 				}
 
+				
 				menu.add(Menu.NONE, 2, 2, "Schimba cantitate");
 
 			} catch (Exception e) {
@@ -736,7 +742,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	public void calculProcente() {
 
-		if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood() || UtilsComenzi.isComandaInstPublica())
+		if (UtilsUser.isAgentOrSD() || UtilsUser.isConsWood() || UtilsComenzi.isComandaInstPublica() || isTotalNegociat)
 			return;
 
 		adapter.notifyDataSetChanged();
@@ -1417,7 +1423,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				myArray.put(obj);
 
-				if ((listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) || UtilsComenzi.isComandaInstPublica()) {
+				if ((listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) || UtilsComenzi.isComandaInstPublica()
+						|| (isTotalNegociat && !UtilsUser.isAgentOrSD() && !UtilsUser.isConsWood())) {
 
 					if (listArticole.get(i).getProcent() > 0) {
 						alertDV = true;
@@ -1724,6 +1731,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		codJ = "";
 		adresaLivrare = "";
 		valNegociat = 0;
+		isTotalNegociat = false;
 
 		DateLivrare.getInstance().resetAll();
 
@@ -2032,6 +2040,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		selectedCodArticol = "";
 
+		if (isTotalNegociat) {
+			calculProcentReducere();
+		}
+		
+		
 		recalculTotal();
 		calculProcente();
 
@@ -2200,6 +2213,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	public void update(Observable observable, Object data) {
 		if (observable instanceof ListaArticoleComandaGed) {
 			displayArticoleComanda();
+
+			if (isTotalNegociat) {
+				calculProcentReducere();
+			}
 		}
 
 	}

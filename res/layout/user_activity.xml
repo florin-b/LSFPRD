@@ -219,4 +219,51 @@
             android:typeface="monospace" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layoutSalarizare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="45dip"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="0.05"
+            android:gravity="left"
+            android:text="Acces salarizare"
+            android:textColor="@color/detColor4"
+            android:textSize="18sp" />
+
+        <RadioGroup
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:layout_weight="0.3"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioSalPermis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dip"
+                android:text="Permis"
+                android:textColor="@color/dropColor2"
+                android:textSize="17sp"
+                android:typeface="monospace" />
+
+            <RadioButton
+                android:id="@+id/radioSalBlocat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Blocat"
+                android:textColor="@color/dropColor2"
+                android:textSize="17sp"
+                android:typeface="monospace" />
+        </RadioGroup>
+    </LinearLayout>
+
 </LinearLayout>
