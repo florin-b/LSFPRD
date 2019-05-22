@@ -91,8 +91,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 	private int listViewSelPos = -1;
 	private String cmdNr = null, disClient = "", procAgent = "";
 
-	private TextView textNumeArt, textCodArt, textUmArt, textProcCalitAprob, textNrFacturiAprob, textMarjaCmd, textAdrLivrNoua, labelAdresa, textAdresaLivrare,
-			textPondereArtB, textCastigBrut, textPondereB_30, textTipTransport;
+	private TextView textNumeArt, textCodArt, textUmArt, textProcCalitAprob, textNrFacturiAprob, textMarjaCmd, textAdrLivrNoua, labelAdresa,
+			textAdresaLivrare, textPondereArtB, textCastigBrut, textPondereB_30, textTipTransport;
 	private LinearLayout condTable;
 	private LinearLayout conditiiArticolLayout;
 
@@ -203,9 +203,9 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		listViewArticoleConditii = (ListView) findViewById(R.id.listArtCondAprob);
 		arrayCndAprob = new ArrayList<HashMap<String, String>>();
-		adapterCndAprob = new SimpleAdapter(this, arrayCndAprob, R.layout.rowlayoutartcond, new String[] { "nrCrt", "numeArtCond", "codArtCond", "cantArtCond",
-				"umArtCond", "pretArtCond", "monedaArtCond" }, new int[] { R.id.textNrCrt, R.id.textNumeArtCond, R.id.textCodArtCond, R.id.textCantArtCond,
-				R.id.textUmArtCond, R.id.textPretArtCond, R.id.textMonArtCond });
+		adapterCndAprob = new SimpleAdapter(this, arrayCndAprob, R.layout.rowlayoutartcond, new String[] { "nrCrt", "numeArtCond", "codArtCond",
+				"cantArtCond", "umArtCond", "pretArtCond", "monedaArtCond" }, new int[] { R.id.textNrCrt, R.id.textNumeArtCond, R.id.textCodArtCond,
+				R.id.textCantArtCond, R.id.textUmArtCond, R.id.textPretArtCond, R.id.textMonArtCond });
 
 		listViewArticoleConditii.setAdapter(adapterCndAprob);
 
@@ -229,9 +229,9 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		textTipTransport = (TextView) findViewById(R.id.textTipTransport);
 
 		textTipReducere = (TextView) findViewById(R.id.textTipReducere);
-		
+
 		textValMarjaT1 = (TextView) findViewById(R.id.textValMarjaT1);
-		textProcMarjaT1 = (TextView) findViewById(R.id.textProcMarjaT1);		
+		textProcMarjaT1 = (TextView) findViewById(R.id.textProcMarjaT1);
 
 		textComandaBV90 = (TextView) findViewById(R.id.textComandaBV90);
 		textComandaBV90.setVisibility(View.INVISIBLE);
@@ -365,8 +365,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 						slidingDrawerAprob.setVisibility(View.INVISIBLE);
 
 						textValMarjaT1.setVisibility(View.INVISIBLE);
-						textProcMarjaT1.setVisibility(View.INVISIBLE);						
-						
+						textProcMarjaT1.setVisibility(View.INVISIBLE);
+
 						if (!textAdrLivrNoua.getText().equals("")) {
 							textAdrLivrNoua.setVisibility(View.INVISIBLE);
 							labelAdresa.setVisibility(View.INVISIBLE);
@@ -422,7 +422,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		}
 
 		conditiiComandaHeader.setId(Integer.valueOf(selectedCmd));
-		conditiiComandaHeader.setConditiiCalit(Double.valueOf(condCal.replace(',','.')));
+		conditiiComandaHeader.setConditiiCalit(Double.valueOf(condCal.replace(',', '.')));
 		conditiiComandaHeader.setNrFact(nrFact);
 		conditiiComandaHeader.setObservatii(commentsCondAprob);
 
@@ -477,7 +477,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 					Toast.makeText(getApplicationContext(), "Operatie reusita.", Toast.LENGTH_SHORT).show();
 					getListComenzi();
 				}
-				
+
 				tipOpCmd = 2;
 				opereazaComanda();
 
@@ -818,7 +818,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		textMarjaCmd.setText("Marja comanda: " + String.format("%.02f", valoriComanda.getMarja() / valoriComanda.getTotal() * 100).toString() + "%");
 
 		if (textPondereArtB.getVisibility() == View.VISIBLE) {
-			textPondereArtB.setText("Pondere art. B comanda: " + String.format("%.02f", (valoriComanda.getPondereB() / valoriComanda.getTotal()) * 100) + "%");
+			textPondereArtB.setText("Pondere art. B comanda: "
+					+ String.format("%.02f", (valoriComanda.getPondereB() / valoriComanda.getTotal()) * 100) + "%");
 			globalPondere30Cmd = valoriComanda.getPondereB() / valoriComanda.getTotal() * 100;
 		}
 
@@ -834,14 +835,17 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			textComandaBV90.setVisibility(View.INVISIBLE);
 
 		if (dateLivrare.getMarjaT1() > 0) {
-			
+
 			textValMarjaT1.setVisibility(View.VISIBLE);
 			textProcMarjaT1.setVisibility(View.VISIBLE);
-			
+
 			textValMarjaT1.setText("Marja T1 comanda: " + String.format("%.02f", dateLivrare.getMarjaT1()) + " RON");
 			textProcMarjaT1.setText("Marja T1 : " + String.format("%.02f", (dateLivrare.getProcentT1() * 100)) + "%");
-		}		
-		
+		} else {
+			textValMarjaT1.setVisibility(View.INVISIBLE);
+			textProcMarjaT1.setVisibility(View.INVISIBLE);
+		}
+
 		if (UserInfo.getInstance().getCodDepart().equals("01") && UtilsUser.isDV()) {
 			textPondereArtB.setVisibility(View.GONE);
 			textPondereB_30.setVisibility(View.GONE);
@@ -865,9 +869,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			((TextView) findViewById(R.id.textMarjaTotalProc)).setText(String.format("%.02f",
 					dateLivrare.getMarjaBrutaPalProc() + dateLivrare.getMarjaBrutaCantProc()));
 
-		}		
-		
-		
+		}
+
 		setupContextLayout(comandaCurenta);
 
 	}

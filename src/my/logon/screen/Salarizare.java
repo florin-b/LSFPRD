@@ -100,6 +100,7 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 						}
 					});
 			AlertDialog alert = builder.create();
+			alert.setCancelable(false);
 			alert.show();
 
 		}
