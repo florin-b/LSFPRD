@@ -1082,9 +1082,11 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			params.put("JSONDateLivrare", serializeDateLivrare());
 			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
+			
 			ComenziDAO comanda = ComenziDAO.getInstance(this);
 			comanda.setComenziDAOListener(this);
 			comanda.salveazaComandaDistrib(params);
+			
 
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();

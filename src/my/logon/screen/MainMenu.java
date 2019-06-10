@@ -1161,7 +1161,8 @@ public class MainMenu extends Activity {
 			this.modifCmdBtn = (Button) gridview.findViewById(getBtnPosByName("Modificare comanda"));
 
 			// butonul "Comenzi blocate limita credit"
-			this.blocLimCredBtn = (Button) gridview.findViewById(getBtnPosByName("Cmz.blocate limita credit"));
+			int pozComBlocate = getBtnPosByName("Cmz.blocate limita credit");
+			this.blocLimCredBtn = (Button) gridview.findViewById(pozComBlocate);
 
 			if (tipRes[0].equals("1")) {
 				this.modifCmdBtn.startAnimation(animation);
@@ -1169,7 +1170,7 @@ public class MainMenu extends Activity {
 				this.modifCmdBtn.clearAnimation();
 			}
 
-			if (tipRes[1].equals("1")) {
+			if (tipRes[1].equals("1") && pozComBlocate > 0) {
 				this.blocLimCredBtn.startAnimation(animation);
 			} else {
 				this.blocLimCredBtn.clearAnimation();
