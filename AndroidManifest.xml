@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="my.logon.screen"
-    android:versionCode="246"
+    android:versionCode="247"
     android:versionName="1.1" >
 
     <uses-sdk
@@ -399,7 +399,14 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-
+        <activity
+            android:name=".ClientiAlocati"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        
+        
         <uses-library
             android:name="com.google.android.maps"
             android:required="true" >

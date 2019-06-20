@@ -845,6 +845,10 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			txtCNPClient.setText(client.getCodClient());
 			CreareComandaGed.codClientVar = client.getCodClient();
 			CreareComandaGed.tipClient = client.getTipClient();
+			
+			if (client.getTermenPlata() != null)
+				CreareComandaGed.listTermenPlata = client.getTermenPlata();
+			
 		} else {
 			CreareComandaGed.codClientParavan = client.getCodClient();
 			CreareComandaGed.numeClientParavan = client.getNumeClient();

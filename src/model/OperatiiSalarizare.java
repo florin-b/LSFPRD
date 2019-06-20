@@ -22,6 +22,7 @@ import beans.SalarizareDetaliiBaza;
 import beans.SalarizareDetaliiCVS;
 import beans.SalarizareDetaliiCorectie;
 import beans.SalarizareDetaliiInc08;
+import beans.SalarizareDetaliiMalus;
 import beans.SalarizareDetaliiTCF;
 import enums.EnumOperatiiSalarizare;
 
@@ -51,6 +52,24 @@ public class OperatiiSalarizare implements AsyncTaskListener {
 	public void getSalarizareSD(HashMap<String, String> params) {
 		this.params = params;
 		this.numeComanda = EnumOperatiiSalarizare.GET_SALARIZARE_SD;
+		performOperation();
+	}
+
+	public void getSalarizareSDKA(HashMap<String, String> params) {
+		this.params = params;
+		this.numeComanda = EnumOperatiiSalarizare.GET_SALARIZARE_SDKA;
+		performOperation();
+	}
+
+	public void getSalarizareKA(HashMap<String, String> params) {
+		this.params = params;
+		this.numeComanda = EnumOperatiiSalarizare.GET_SALARIZARE_KA;
+		performOperation();
+	}
+
+	public void getSalarizareDepartamentKA(HashMap<String, String> params) {
+		this.params = params;
+		this.numeComanda = EnumOperatiiSalarizare.GET_SALARIZARE_DEPART_KA;
 		performOperation();
 	}
 
@@ -137,6 +156,34 @@ public class OperatiiSalarizare implements AsyncTaskListener {
 
 			salarizare.setDetaliiInc08(listDetaliiInc08);
 
+			List<SalarizareDetaliiMalus> listDetaliiMalus = new ArrayList<SalarizareDetaliiMalus>();
+			JSONArray jsonDetaliiMalus = new JSONArray(jsonObject.getString("detaliiMalus"));
+
+			for (int i = 0; i < jsonDetaliiMalus.length(); i++) {
+
+				SalarizareDetaliiMalus detaliiMalus = new SalarizareDetaliiMalus();
+				JSONObject detObjectMalus = jsonDetaliiMalus.getJSONObject(i);
+
+				detaliiMalus.setNumeClient(detObjectMalus.getString("numeClient"));
+				detaliiMalus.setCodClient(detObjectMalus.getString("codClient"));
+				detaliiMalus.setValoareFactura(Double.valueOf(detObjectMalus.getString("valoareFactura")));
+				detaliiMalus.setPenalizare(Double.valueOf(detObjectMalus.getString("penalizare")));
+
+				detaliiMalus.setNrFactura(detObjectMalus.getString("nrFactura"));
+				detaliiMalus.setDataFactura(detObjectMalus.getString("dataFactura"));
+				detaliiMalus.setTpFact(Integer.parseInt(detObjectMalus.getString("tpFact")));
+				detaliiMalus.setTpAgreat(Integer.parseInt(detObjectMalus.getString("tpAgreat")));
+				detaliiMalus.setTpIstoric(Integer.parseInt(detObjectMalus.getString("tpIstoric")));
+				detaliiMalus.setValIncasare(Double.parseDouble(detObjectMalus.getString("valIncasare")));
+				detaliiMalus.setDataIncasare(detObjectMalus.getString("dataIncasare"));
+				detaliiMalus.setZileIntarziere(Integer.parseInt(detObjectMalus.getString("zileIntarziere")));
+				detaliiMalus.setCoefPenalizare(Double.parseDouble(detObjectMalus.getString("coefPenalizare")));
+
+				listDetaliiMalus.add(detaliiMalus);
+			}
+
+			salarizare.setDetaliiMalus(listDetaliiMalus);
+
 		} catch (JSONException e) {
 			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
 		}
@@ -217,6 +264,34 @@ public class OperatiiSalarizare implements AsyncTaskListener {
 				listCVS.add(detaliuCVS);
 
 			}
+
+			List<SalarizareDetaliiMalus> listDetaliiMalus = new ArrayList<SalarizareDetaliiMalus>();
+			JSONArray jsonDetaliiMalus = new JSONArray(jsonObject.getString("detaliiMalus"));
+
+			for (int i = 0; i < jsonDetaliiMalus.length(); i++) {
+
+				SalarizareDetaliiMalus detaliiMalus = new SalarizareDetaliiMalus();
+				JSONObject detObjectMalus = jsonDetaliiMalus.getJSONObject(i);
+
+				detaliiMalus.setNumeClient(detObjectMalus.getString("numeClient"));
+				detaliiMalus.setCodClient(detObjectMalus.getString("codClient"));
+				detaliiMalus.setValoareFactura(Double.valueOf(detObjectMalus.getString("valoareFactura")));
+				detaliiMalus.setPenalizare(Double.valueOf(detObjectMalus.getString("penalizare")));
+
+				detaliiMalus.setNrFactura(detObjectMalus.getString("nrFactura"));
+				detaliiMalus.setDataFactura(detObjectMalus.getString("dataFactura"));
+				detaliiMalus.setTpFact(Integer.parseInt(detObjectMalus.getString("tpFact")));
+				detaliiMalus.setTpAgreat(Integer.parseInt(detObjectMalus.getString("tpAgreat")));
+				detaliiMalus.setTpIstoric(Integer.parseInt(detObjectMalus.getString("tpIstoric")));
+				detaliiMalus.setValIncasare(Double.parseDouble(detObjectMalus.getString("valIncasare")));
+				detaliiMalus.setDataIncasare(detObjectMalus.getString("dataIncasare"));
+				detaliiMalus.setZileIntarziere(Integer.parseInt(detObjectMalus.getString("zileIntarziere")));
+				detaliiMalus.setCoefPenalizare(Double.parseDouble(detObjectMalus.getString("coefPenalizare")));
+
+				listDetaliiMalus.add(detaliiMalus);
+			}
+
+			salarizareSD.setDetaliiMalus(listDetaliiMalus);
 
 			salarizareSD.setDatePrincipale(salarizareAgent.getDatePrincipale());
 			salarizareSD.setDetaliiBaza(salarizareAgent.getDetaliiBaza());

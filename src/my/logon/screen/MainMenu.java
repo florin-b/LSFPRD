@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.TimerTask;
 
 import model.UserInfo;
 
-import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
@@ -27,7 +25,6 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import utils.UtilsApps;
 import utils.UtilsConn;
 import utils.UtilsUser;
 import android.app.ActionBar.LayoutParams;
@@ -80,7 +77,7 @@ public class MainMenu extends Activity {
 			"Stare retur paleti", "Retur comenzi", "Modificare custodie", "Vanzari", "Neincasate", "Stocuri", "Obiective", "Preturi",
 			"Preturi concurenta", "Stare comenzi", "Realizare target", "Ntcf", "Salarizare", "Articole avarie", "Creare sablon", "Afisare sablon",
 			"Urmarire sablon", "Aprobare comanda", "Comenzi conditionate", "Info client", "Plati CEC", "Clienti inactivi", "Clienti semiactivi",
-			"Adrese clienti", "Info venituri", "Delegatii", "Despre", "Iesire" };
+			"Clienti alocati", "Adrese clienti", "Info venituri", "Delegatii", "Despre", "Iesire" };
 
 	public int[] btnImageSD = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.blue_basket_icon, R.drawable.cmd_bloc, R.drawable.clp, R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.box_orange_48,
@@ -88,8 +85,8 @@ public class MainMenu extends Activity {
 			R.drawable.custody_48, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.concurenta,
 			R.drawable.znecesar1_icon, R.drawable.status, R.drawable.target, R.drawable.target, R.drawable.money_gold_48, R.drawable.reduceri_icon,
 			R.drawable.viewreduceri_icon, R.drawable.colosseum, R.drawable.chart_icon, R.drawable.agree_icon, R.drawable.constraints,
-			R.drawable.client_info, R.drawable.payment, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon,
-			R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+			R.drawable.client_info, R.drawable.payment, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.clients,
+			R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",
 			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Articole avarie",
@@ -105,13 +102,14 @@ public class MainMenu extends Activity {
 	public String[] btnNamesKA = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Cmz.blocate limita credit",
 			"Creare CLP", "Afisare CLP", "Creare DL", "Afisare DL", "Obiective", "Modificare custodie", "Retur paleti", "Stare retur paleti",
 			"Retur comenzi", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Info client", "Plati CEC", "Clienti facturati",
-			"Adrese clienti", "Delegatii", "Despre", "Iesire" };
+			"Clienti alocati", "Salarizare", "Adrese clienti", "Delegatii", "Despre", "Iesire" };
 
 	public int[] btnImageKA = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.cmd_bloc, R.drawable.clp, R.drawable.afis_clp, R.drawable.box_orange_48, R.drawable.box_yellow_48, R.drawable.colosseum,
 			R.drawable.custody_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda, R.drawable.vanzari,
 			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.client_info, R.drawable.payment,
-			R.drawable.clienti_inactivi, R.drawable.location_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+			R.drawable.clienti_inactivi, R.drawable.clients, R.drawable.money_gold_48, R.drawable.location_icon, R.drawable.blank,
+			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesDK = { "Utilizator", "Afisare comanda", "Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri",
 			"Preturi", "Info client", "Adrese clienti", "Despre", "Iesire" };
@@ -614,6 +612,14 @@ public class MainMenu extends Activity {
 				if (selectedBtnName.equalsIgnoreCase("Ntcf")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, Ntcf.class);
+					startActivity(nextScreen);
+					finish();
+
+				}
+				
+				if (selectedBtnName.equalsIgnoreCase("Clienti alocati")) {
+
+					Intent nextScreen = new Intent(MainMenu.this, ClientiAlocati.class);
 					startActivity(nextScreen);
 					finish();
 

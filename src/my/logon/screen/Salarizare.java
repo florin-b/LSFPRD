@@ -2,11 +2,14 @@ package my.logon.screen;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
 import listeners.IntervalSalarizareListener;
 import listeners.OperatiiSalarizareListener;
@@ -16,6 +19,8 @@ import model.UserInfo;
 import utils.UtilsUser;
 import adapters.Detalii08Adapter;
 import adapters.DetaliiBazaAdapter;
+import adapters.DetaliiMalusAdapter;
+import adapters.DetaliiMalusClientAdapter;
 import adapters.SalarizareCvsAdapter;
 import adapters.SalarizareDepartAdapter;
 import android.app.ActionBar;
@@ -29,9 +34,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import beans.BeanSalarizareAgent;
@@ -39,10 +47,13 @@ import beans.BeanSalarizareAgentAfis;
 import beans.BeanSalarizareSD;
 import beans.SalarizareDetaliiBaza;
 import beans.SalarizareDetaliiInc08;
+import beans.SalarizareDetaliiMalus;
+import beans.SalarizareDetaliiMalusLite;
 import dialogs.SelectLunaSalarizareDialog;
 import dialogs.SelectSituatiiSalarizareDialog;
 import enums.EnumOperatiiSalarizare;
 import enums.EnumSituatieSalarizare;
+import filters.ClientMalusFilter;
 
 public class Salarizare extends Activity implements OperatiiSalarizareListener, IntervalSalarizareListener, SituatieSalarizareListener {
 
@@ -90,9 +101,10 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 
 	private void checkAccess() {
 
-		if (UtilsUser.isAgentOrSD() && UserInfo.getInstance().getIsMeniuBlocat()) {
+		if ((UtilsUser.isAgentOrSD() || UtilsUser.isUserKA() || UtilsUser.isUserSDKA() || UtilsUser.isUserSK())
+				&& UserInfo.getInstance().getIsMeniuBlocat()) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Acces blocat. Folositi modulul Utilizator pentru deblocare.").setCancelable(true)
+			builder.setMessage("Acces blocat. Folositi modulul Utilizator pentru deblocare.").setCancelable(false)
 					.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							dialog.cancel();
@@ -131,7 +143,7 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		MenuItem mnu1 = menu.add(0, 0, 0, "Luna");
 		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		if (UserInfo.getInstance().getTipUserSap().equals("SD")) {
+		if (UserInfo.getInstance().getTipUserSap().equals("SD") || UserInfo.getInstance().getTipUserSap().equals("SDKA") || UtilsUser.isUserSK()) {
 			MenuItem mnu2 = menu.add(0, 1, 1, "Salarizare");
 			mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		}
@@ -214,6 +226,34 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		}
 	}
 
+	private void setDetaliiMalusVisibility(boolean isVisible) {
+		if (isVisible) {
+			((LinearLayout) findViewById(R.id.labelDetaliiMalus)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layout_detalii_malus)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutListDetaliiMalus)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layout_total_detalii_malus)).setVisibility(View.VISIBLE);
+
+		} else {
+			((LinearLayout) findViewById(R.id.labelDetaliiMalus)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layout_detalii_malus)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutListDetaliiMalus)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layout_total_detalii_malus)).setVisibility(View.GONE);
+		}
+	}
+
+	private void setDetaliiMalusClientVisibility(boolean isVisible) {
+		if (isVisible) {
+			((LinearLayout) findViewById(R.id.labelDetaliiMalusClient)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layout_detalii_malus_client)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutListDetaliiMalusClient)).setVisibility(View.VISIBLE);
+
+		} else {
+			((LinearLayout) findViewById(R.id.labelDetaliiMalusClient)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layout_detalii_malus_client)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutListDetaliiMalusClient)).setVisibility(View.GONE);
+		}
+	}
+
 	private void setDetaliiCSVVisibility(boolean isVisible) {
 		if (isVisible) {
 			((TextView) findViewById(R.id.labelDetaliiCVS)).setVisibility(View.VISIBLE);
@@ -255,6 +295,7 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		setDetaliiTCFVisibility(isVisible);
 		setDetaliiCorectieVisibility(isVisible);
 		setDetalii08Visibility(isVisible);
+		setDetaliiMalusVisibility(isVisible);
 
 		if (UserInfo.getInstance().getTipUserSap().equals("SD"))
 			setDetaliiCSVVisibility(isVisible);
@@ -299,6 +340,10 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 			((LinearLayout) findViewById(R.id.layoutListDetalii0_8)).setVisibility(View.VISIBLE);
 			((LinearLayout) findViewById(R.id.layout_total_detalii_08)).setVisibility(View.VISIBLE);
 			((LinearLayout) findViewById(R.id.headerTotalDetaliiBaza)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.labelDetaliiMalus)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layout_detalii_malus)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layoutListDetaliiMalus)).setVisibility(View.VISIBLE);
+			((LinearLayout) findViewById(R.id.layout_total_detalii_malus)).setVisibility(View.VISIBLE);
 
 		} else {
 			((LinearLayout) findViewById(R.id.labelDetaliiBaza)).setVisibility(View.GONE);
@@ -313,6 +358,10 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 			((LinearLayout) findViewById(R.id.layoutListDetalii0_8)).setVisibility(View.GONE);
 			((LinearLayout) findViewById(R.id.layout_total_detalii_08)).setVisibility(View.GONE);
 			((LinearLayout) findViewById(R.id.headerTotalDetaliiBaza)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.labelDetaliiMalus)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layout_detalii_malus)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layoutListDetaliiMalus)).setVisibility(View.GONE);
+			((LinearLayout) findViewById(R.id.layout_total_detalii_malus)).setVisibility(View.GONE);
 
 		}
 
@@ -342,6 +391,28 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 
 	}
 
+	private void getSalarizareKA(String luna, String an) {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codAgent", UserInfo.getInstance().getCod());
+		params.put("ul", UserInfo.getInstance().getUnitLog());
+		params.put("an", an);
+		params.put("luna", luna);
+
+		operatiiSalarizare.getSalarizareKA(params);
+
+	}
+
+	private void getDetaliiKA(String codAgent, String luna, String an) {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codAgent", codAgent);
+		params.put("ul", UserInfo.getInstance().getUnitLog());
+		params.put("an", an);
+		params.put("luna", luna);
+
+		operatiiSalarizare.getSalarizareKA(params);
+
+	}
+
 	private void getSalarizareDepartament() {
 		HashMap<String, String> params = new HashMap<String, String>();
 
@@ -351,6 +422,16 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		params.put("luna", lunaSelect);
 
 		operatiiSalarizare.getSalarizareDepartament(params);
+	}
+
+	private void getSalarizareDepartamentKA() {
+		HashMap<String, String> params = new HashMap<String, String>();
+
+		params.put("ul", UserInfo.getInstance().getUnitLog());
+		params.put("an", anSelect);
+		params.put("luna", lunaSelect);
+
+		operatiiSalarizare.getSalarizareDepartamentKA(params);
 	}
 
 	private void getSalarizareSD() {
@@ -363,6 +444,17 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		params.put("luna", lunaSelect);
 
 		operatiiSalarizare.getSalarizareSD(params);
+	}
+
+	private void getSalarizareSDKA() {
+		HashMap<String, String> params = new HashMap<String, String>();
+
+		params.put("codAgent", UserInfo.getInstance().getCod());
+		params.put("ul", UserInfo.getInstance().getUnitLog());
+		params.put("an", anSelect);
+		params.put("luna", lunaSelect);
+
+		operatiiSalarizare.getSalarizareSDKA(params);
 	}
 
 	private void afisSalarizareAgent(String result, BeanSalarizareAgent salarizareAgent) {
@@ -388,7 +480,7 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 
 		((TextView) findViewById(R.id.labelDateGenerale)).setText(listLuni[Integer.parseInt(lunaSelect) - 1] + "  " + anSelect);
 
-		BeanSalarizareAgent salarizare;
+		final BeanSalarizareAgent salarizare;
 
 		if (salarizareAgent == null)
 			salarizare = operatiiSalarizare.deserializeSalarizareAgent(result);
@@ -442,6 +534,111 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 			}
 		});
 
+		// total malus pe client
+		List<SalarizareDetaliiMalusLite> listClientiLite = getUniqueClientMalus(salarizare.getDetaliiMalus());
+
+		DetaliiMalusAdapter detaliiMalusAdapter = new DetaliiMalusAdapter(listClientiLite, this);
+		ListView listDetaliiMalus = (ListView) findViewById(R.id.listDetaliiMalus);
+		listDetaliiMalus.setAdapter(detaliiMalusAdapter);
+
+		listDetaliiMalus.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				v.getParent().requestDisallowInterceptTouchEvent(true);
+				return false;
+			}
+		});
+
+		((TextView) findViewById(R.id.text_total_val_malus)).setText(nf.format(getTotalFactMalus(salarizare)));
+		((TextView) findViewById(R.id.text_total_pen_malus)).setText(nf.format(getTotalPenMalus(salarizare)));
+
+		listDetaliiMalus.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				String codClientMalus = ((SalarizareDetaliiMalusLite) parent.getAdapter().getItem(position)).getCodClient();
+				String numeClientMalus = ((SalarizareDetaliiMalusLite) parent.getAdapter().getItem(position)).getNumeClient();
+				((TextView) findViewById(R.id.labelDetaliiMalusClientSelect)).setText("Detalii malus " + numeClientMalus);
+
+				afiseazaMalusClient(codClientMalus, salarizare.getDetaliiMalus());
+
+			}
+		});
+
+	}
+
+	private List<SalarizareDetaliiMalusLite> getUniqueClientMalus(List<SalarizareDetaliiMalus> listMalus) {
+
+		List<String> listCodes = new ArrayList<String>();
+
+		List<SalarizareDetaliiMalusLite> listClientiLite = new ArrayList<SalarizareDetaliiMalusLite>();
+
+		for (SalarizareDetaliiMalus sal : listMalus) {
+			listCodes.add(sal.getCodClient());
+		}
+
+		Set<String> uniqueSet = new TreeSet<String>(listCodes);
+		double totalFact = 0;
+		double totalPen = 0;
+		String numeClient = "";
+
+		for (String uniqClient : uniqueSet) {
+
+			totalFact = 0;
+			totalPen = 0;
+			numeClient = "";
+
+			for (SalarizareDetaliiMalus sal : listMalus) {
+
+				if (uniqClient.equals(sal.getCodClient())) {
+					totalFact += sal.getValoareFactura();
+					totalPen += sal.getPenalizare();
+
+					numeClient = sal.getNumeClient();
+				}
+
+			}
+
+			SalarizareDetaliiMalusLite detaliiLite = new SalarizareDetaliiMalusLite();
+
+			detaliiLite.setCodClient(uniqClient);
+			detaliiLite.setNumeClient(numeClient);
+			detaliiLite.setValoareFactura(totalFact);
+			detaliiLite.setPenalizare(totalPen);
+
+			listClientiLite.add(detaliiLite);
+
+		}
+
+		return listClientiLite;
+
+	}
+
+	private void afiseazaMalusClient(String codClient, List<SalarizareDetaliiMalus> listMalus) {
+		setDetaliiMalusClientVisibility(true);
+
+		ListView listDetaliiMalusClient = (ListView) findViewById(R.id.listDetaliiMalusClient);
+
+		List<SalarizareDetaliiMalus> malusClient = new ClientMalusFilter().getMalusClient(listMalus, codClient);
+
+		DetaliiMalusClientAdapter detaliiMalusClientAdapter = new DetaliiMalusClientAdapter(malusClient, this);
+		listDetaliiMalusClient.setAdapter(detaliiMalusClientAdapter);
+
+		listDetaliiMalusClient.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				v.getParent().requestDisallowInterceptTouchEvent(true);
+				return false;
+			}
+		});
+
+		final ScrollView mainScroll = (ScrollView) findViewById(R.id.mainScroll);
+		mainScroll.post(new Runnable() {
+			@Override
+			public void run() {
+				mainScroll.fullScroll(View.FOCUS_DOWN);
+			}
+		});
 	}
 
 	private double getTotalDetaliiBaza(BeanSalarizareAgent salarizare) {
@@ -474,6 +671,26 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		return totalCor;
 	}
 
+	private double getTotalFactMalus(BeanSalarizareAgent salarizare) {
+		double totalFact = 0;
+
+		for (SalarizareDetaliiMalus detaliiMalus : salarizare.getDetaliiMalus()) {
+			totalFact += detaliiMalus.getValoareFactura();
+		}
+
+		return totalFact;
+	}
+
+	private double getTotalPenMalus(BeanSalarizareAgent salarizare) {
+		double totalPen = 0;
+
+		for (SalarizareDetaliiMalus detaliiMalus : salarizare.getDetaliiMalus()) {
+			totalPen += detaliiMalus.getPenalizare();
+		}
+
+		return totalPen;
+	}
+
 	private void afisSalarizareDepartament(String result) {
 
 		setSalAgentiVisibility(true);
@@ -492,6 +709,14 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		SalarizareDepartAdapter departAdapter = new SalarizareDepartAdapter(listAgenti, getApplicationContext());
 		departAdapter.setSalarizareDepartListener(this);
 		listViewAgenti.setAdapter(departAdapter);
+
+		listViewAgenti.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				v.getParent().requestDisallowInterceptTouchEvent(true);
+				return false;
+			}
+		});
 
 	}
 
@@ -541,12 +766,15 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 
 		switch (numeComanda) {
 		case GET_SALARIZARE_AGENT:
+		case GET_SALARIZARE_KA:
 			afisSalarizareAgent((String) result, null);
 			break;
 		case GET_SALARIZARE_DEPART:
+		case GET_SALARIZARE_DEPART_KA:
 			afisSalarizareDepartament((String) result);
 			break;
 		case GET_SALARIZARE_SD:
+		case GET_SALARIZARE_SDKA:
 			afisSalarizareSD((String) result);
 			break;
 		default:
@@ -564,6 +792,8 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 
 		if (UserInfo.getInstance().getTipUserSap().equals("AV"))
 			getSalarizareAgent(luna, an);
+		else if (UserInfo.getInstance().getTipUserSap().startsWith("KA"))
+			getSalarizareKA(luna, an);
 
 	}
 
@@ -572,10 +802,16 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 
 		switch (tipSituatie) {
 		case AGENTI:
-			getSalarizareDepartament();
+			if (UserInfo.getInstance().getTipUserSap().equals("SD"))
+				getSalarizareDepartament();
+			else if (UserInfo.getInstance().getTipUserSap().equals("SDKA") || UtilsUser.isUserSK())
+				getSalarizareDepartamentKA();
 			break;
 		case SEF_DEP:
-			getSalarizareSD();
+			if (UserInfo.getInstance().getTipUserSap().equals("SD"))
+				getSalarizareSD();
+			else if (UserInfo.getInstance().getTipUserSap().equals("SDKA") || UtilsUser.isUserSK())
+				getSalarizareSDKA();
 			break;
 		default:
 			break;
@@ -587,8 +823,11 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 	public void detaliiAgentSelected(String codAgent, String numeAgent) {
 		isDetaliiAgent = true;
 		numeAgentSelectat = numeAgent;
-		getDetaliiAgent(codAgent, lunaSelect, anSelect);
 
+		if (UserInfo.getInstance().getTipUserSap().equals("SD"))
+			getDetaliiAgent(codAgent, lunaSelect, anSelect);
+		else if (UserInfo.getInstance().getTipUserSap().equals("SDKA") || UtilsUser.isUserSK())
+			getDetaliiKA(codAgent, lunaSelect, anSelect);
 	}
 
 }

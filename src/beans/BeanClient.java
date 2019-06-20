@@ -1,12 +1,14 @@
 package beans;
 
+import java.util.List;
+
 public class BeanClient {
 
 	private String numeClient;
 	private String codClient;
 	private String tipClient;
 	private String agenti;
-	
+	private List<String> termenPlata;
 
 	public BeanClient() {
 
@@ -49,6 +51,12 @@ public class BeanClient {
 		this.agenti = agenti;
 	}
 
-	
+	public List<String> getTermenPlata() {
+		return termenPlata;
+	}
+
+	public void setTermenPlata(List<String> termenPlata) {
+		this.termenPlata = termenPlata;
+	}
 
 }

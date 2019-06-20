@@ -276,21 +276,25 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			adapterTermenPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerTermenPlata.setAdapter(adapterTermenPlata);
 
-			addAdresaLivrare();
 
-			adapterTermenPlata.add("C000");
-			if (DateLivrare.getInstance().getTermenPlata().trim().length() > 0) {
-				String[] tokTermen = DateLivrare.getInstance().getTermenPlata().split(";");
-				int nrLivr = 0;
-				for (nrLivr = 0; nrLivr < tokTermen.length; nrLivr++) {
-					if (!tokTermen[nrLivr].equals("C000"))
-						adapterTermenPlata.add(tokTermen[nrLivr]);
+			
+			if (CreareComandaGed.listTermenPlata != null && CreareComandaGed.listTermenPlata.size() > 0) {
+				adapterTermenPlata.addAll(CreareComandaGed.listTermenPlata);
+			} else {
+				adapterTermenPlata.add("C000");
+				if (DateLivrare.getInstance().getTermenPlata().trim().length() > 0) {
+					String[] tokTermen = DateLivrare.getInstance().getTermenPlata().split(";");
+					int nrLivr = 0;
+					for (nrLivr = 0; nrLivr < tokTermen.length; nrLivr++) {
+						if (!tokTermen[nrLivr].equals("C000"))
+							adapterTermenPlata.add(tokTermen[nrLivr]);
+					}
+
 				}
-
 			}
 
 			addListenerTermenPlata();
-
+			addAdresaLivrare();
 			int i = 0;
 
 			// document insotitor

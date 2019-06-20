@@ -137,6 +137,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginBottom="30dip"
                     android:layout_marginLeft="30dip"
+                    android:layout_marginTop="30dip"
                     android:gravity="left"
                     android:textColor="@color/salarizareHeaderTotal"
                     android:textSize="17sp"
@@ -293,9 +294,9 @@
                         style="@style/ok_button"
                         android:layout_width="wrap_content"
                         android:layout_height="35dip"
+                        android:layout_gravity="right"
                         android:background="@drawable/ok_button_style"
                         android:paddingLeft="70dip"
-                        android:layout_gravity="right"
                         android:paddingRight="70dip"
                         android:text="Detalii" />
                 </LinearLayout>
@@ -1040,6 +1041,345 @@
                         android:textSize="17sp"
                         android:textStyle="bold"
                         android:typeface="sans" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/labelDetaliiMalus"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="30dip"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="30dip"
+                        android:layout_weight="0.6"
+                        android:gravity="left"
+                        android:text="Detalii malus"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <LinearLayout
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="30dip"
+                            android:src="@drawable/vscroll_32" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_detalii_malus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dip"
+                    android:layout_marginRight="100dip"
+                    android:layout_marginTop="10dip"
+                    android:background="#D6DBDF"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.1"
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Client"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.12"
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:text="Valoare factura"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.12"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="Penalizare"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutListDetaliiMalus"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginLeft="30dip"
+                    android:layout_marginRight="100dip"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <ListView
+                        android:id="@+id/listDetaliiMalus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:choiceMode="singleChoice"
+                        android:drawSelectorOnTop="true"
+                        android:fadeScrollbars="false"
+                        android:scrollbarStyle="outsideInset" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_total_detalii_malus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="30dip"
+                    android:layout_marginLeft="30dip"
+                    android:layout_marginRight="100dip"
+                    android:background="#D6DBDF"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.1"
+                        android:gravity="left"
+                        android:padding="3dip"
+                        android:text="TOTAL:"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:id="@+id/text_total_val_malus"
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.12"
+                        android:gravity="center"
+                        android:padding="3dip"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:id="@+id/text_total_pen_malus"
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.12"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/labelDetaliiMalusClient"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="30dip"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:id="@+id/labelDetaliiMalusClientSelect"
+                        android:layout_width="0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="30dip"
+                        android:layout_weight="0.6"
+                        android:gravity="left"
+                        android:text="Detalii malus "
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <LinearLayout
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:orientation="vertical" >
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="30dip"
+                            android:src="@drawable/vscroll_32" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_detalii_malus_client"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dip"
+                    android:layout_marginRight="100dip"
+                    android:layout_marginTop="10dip"
+                    android:background="#D6DBDF"
+                    android:visibility="gone" >
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.15"
+                        android:gravity="left"
+                        android:padding="3dip"
+                        android:text="Nr.fact"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.1"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="Data fact"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.09"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="TP fact"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.09"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="TP agreat"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.09"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="TP istoric"
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.1"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="Val.inc."
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.1"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="Data inc."
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.07"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="Zile int."
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.09"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="Coef.pen."
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+
+                    <TextView
+                        android:layout_width="0dip"
+                        android:layout_height="40dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.09"
+                        android:gravity="right"
+                        android:padding="3dip"
+                        android:text="Val.penal."
+                        android:textColor="@color/salarizareHeaderTotal"
+                        android:textSize="17sp"
+                        android:typeface="sans" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutListDetaliiMalusClient"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginLeft="30dip"
+                    android:layout_marginRight="100dip"
+                    android:orientation="horizontal"
+                    android:visibility="gone" >
+
+                    <ListView
+                        android:id="@+id/listDetaliiMalusClient"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:choiceMode="singleChoice"
+                        android:drawSelectorOnTop="true"
+                        android:fadeScrollbars="false"
+                        android:scrollbarStyle="outsideInset" />
                 </LinearLayout>
 
                 <TextView

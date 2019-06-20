@@ -64,6 +64,10 @@ public class UtilsUser {
 				|| UserInfo.getInstance().getTipUser().equals("SMR");
 	}
 
+	public static boolean isUserSDKA() {
+		return UserInfo.getInstance().getTipUserSap().equals("SDKA");
+	}	
+	
 	public static boolean isAgentOrSD() {
 		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV")
 				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD")

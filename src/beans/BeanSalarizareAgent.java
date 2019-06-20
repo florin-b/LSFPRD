@@ -8,6 +8,7 @@ public class BeanSalarizareAgent {
 	private SalarizareDetaliiTCF detaliiTCF;
 	private SalarizareDetaliiCorectie detaliiCorectie;
 	private List<SalarizareDetaliiInc08> detaliiInc08;
+	private List<SalarizareDetaliiMalus> detaliiMalus;
 
 	public SalarizareDatePrincipale getDatePrincipale() {
 		return datePrincipale;
@@ -49,4 +50,12 @@ public class BeanSalarizareAgent {
 		this.detaliiInc08 = detaliiInc08;
 	}
 
+	public List<SalarizareDetaliiMalus> getDetaliiMalus() {
+		return detaliiMalus;
+	}
+
+	public void setDetaliiMalus(List<SalarizareDetaliiMalus> detaliiMalus) {
+		this.detaliiMalus = detaliiMalus;
+	}	
+	
 }

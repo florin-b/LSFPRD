@@ -143,6 +143,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	public static double valTransportSAP = 0;
 	public static String codJ = "";
 	public static String adresaLivrare = "";
+	public static List<String> listTermenPlata = new ArrayList<String>();
 
 	private boolean alertSD = false, alertDV = false;
 
@@ -1732,6 +1733,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		adresaLivrare = "";
 		valNegociat = 0;
 		isTotalNegociat = false;
+		
+		listTermenPlata = new ArrayList<String>();
 
 		DateLivrare.getInstance().resetAll();
 

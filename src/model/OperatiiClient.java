@@ -18,6 +18,7 @@ import android.widget.Toast;
 import beans.BeanAdresaLivrare;
 import beans.BeanClient;
 import beans.BeanDatePersonale;
+import beans.ClientAlocat;
 import beans.DetaliiClient;
 import beans.PlatitorTva;
 import enums.EnumClienti;
@@ -89,6 +90,13 @@ public class OperatiiClient implements AsyncTaskListener {
 		call.getCallResultsFromFragment();
 	}
 
+	public void getClientiAlocati(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_CLIENTI_ALOCATI;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}	
+	
+	
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;
 		ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();
@@ -108,6 +116,20 @@ public class OperatiiClient implements AsyncTaskListener {
 					client.setNumeClient(object.getString("numeClient"));
 					client.setTipClient(object.getString("tipClient"));
 					client.setAgenti(object.getString("agenti"));
+					
+					if (object.has("termenPlata") && object.getString("termenPlata") != "null") {
+						JSONArray arrayPlata = new JSONArray(object.getString("termenPlata"));
+
+						List<String> listPlata = new ArrayList<String>();
+
+						for (int j = 0; j < arrayPlata.length(); j++) {
+							listPlata.add(arrayPlata.getString(j));
+
+						}
+						client.setTermenPlata(listPlata);
+					}
+					
+					
 					listClienti.add(client);
 
 				}
@@ -244,6 +266,45 @@ public class OperatiiClient implements AsyncTaskListener {
 		return listDate;
 	}
 
+	
+	public List<ClientAlocat> deserializeClientiAlocati(String result) {
+		List<ClientAlocat> listClienti = new ArrayList<ClientAlocat>();
+
+		try {
+			Object json = new JSONTokener(result).nextValue();
+
+			if (json instanceof JSONArray) {
+				JSONArray jsonObject = new JSONArray(result);
+
+				for (int i = 0; i < jsonObject.length(); i++) {
+					JSONObject dateObject = jsonObject.getJSONObject(i);
+
+					ClientAlocat client = new ClientAlocat();
+
+					client.setNumeClient(dateObject.getString("numeClient"));
+					client.setTipClient01(dateObject.getString("tipClient01"));
+					client.setTipClient02(dateObject.getString("tipClient02"));
+					client.setTipClient03(dateObject.getString("tipClient03"));
+					client.setTipClient04(dateObject.getString("tipClient04"));
+					client.setTipClient05(dateObject.getString("tipClient05"));
+					client.setTipClient06(dateObject.getString("tipClient06"));
+					client.setTipClient07(dateObject.getString("tipClient07"));
+					client.setTipClient08(dateObject.getString("tipClient08"));
+					client.setTipClient09(dateObject.getString("tipClient09"));
+
+					listClienti.add(client);
+
+				}
+
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return listClienti;
+	}	
+	
 	public void onTaskComplete(String methodName, Object result) {
 		if (listener != null) {
 			listener.operationComplete(numeComanda, result);
