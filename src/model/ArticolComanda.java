@@ -86,6 +86,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 	
 	private double procT1;
 	private double valT1;	
+	
+	private double pretFaraTva;
 
 	public int getNrCrt() {
 		return nrCrt;
@@ -612,6 +614,14 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	public void setValT1(double valT1) {
 		this.valT1 = valT1;
+	}	
+	
+	public double getPretFaraTva() {
+		return pretFaraTva;
+	}
+
+	public void setPretFaraTva(double pretFaraTva) {
+		this.pretFaraTva = pretFaraTva;
 	}	
 	
 	@Override

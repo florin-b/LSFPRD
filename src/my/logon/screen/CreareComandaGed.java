@@ -979,18 +979,25 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		totalComanda = 0;
 		totalComandaGed = 0;
-
+		double totalFaraTva = 0;
+		
 		nrArticoleComanda = listArticole.size();
 
 		for (int i = 0; i < listArticole.size(); i++) {
 			totalComandaGed += listArticole.get(i).getPretUnitarGed() * listArticole.get(i).getCantUmb();
 			totalComanda += listArticole.get(i).getPretUnitarClient() * listArticole.get(i).getCantUmb();
+			totalFaraTva += listArticole.get(i).getPretFaraTva() * listArticole.get(i).getCantUmb();
 
 		}
 
 		DateLivrare.getInstance().setTotalComanda(String.valueOf(totalComanda));
 		textTotalCmd.setText(String.format("%.02f", totalComanda));
 		textTotalGed.setText("Total GED: " + String.format("%.02f", totalComandaGed));
+		
+		if (CreareComandaGed.tipClient.equals("IP")) {
+			((LinearLayout) findViewById(R.id.layoutTotalFaraTva)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.textTotalFaraTva)).setText(String.format("%.02f", totalFaraTva));
+		}
 
 	}
 

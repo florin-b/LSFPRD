@@ -765,6 +765,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 										textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100)
 												+ valoareTransport));
+										
+										((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()
+												* ((100 - varProc) / 100)));
 
 									}
 								}
@@ -773,6 +776,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 								txtPretArt.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
 								textPretGEDFTva.setText(nf2.format((initPrice / globalCantArt * valMultiplu) / procentTVA));
 								textTransport.setText(nForm2.format((initPrice) * (procentTransport / 100) + valoareTransport));
+								((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()));
 
 							}
 
@@ -789,12 +793,18 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 								finalPrice = Double.parseDouble(textProcRed.getText().toString());
 								textPretGEDFTva.setText(nf2.format(finalPrice / procentTVA));
 								textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100) + valoareTransport));
+								
+								if (procR == 0)
+									((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()));
+								else
+									((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva() * (100 - procR) / 100));
 
 							} else {
 								txtPretArt.setText("0");
 								finalPrice = 0;
 								textPretGEDFTva.setText("0");
 								textTransport.setText("0");
+								((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()));
 							}
 
 						}
@@ -1253,6 +1263,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setUmPalet(articolDBSelected.isUmPalet());
 						articol.setFilialaSite(CreareComandaGed.filialaAlternativa);
 						articol.setLungime(articolDBSelected.getLungime());
+						articol.setPretFaraTva(Double.valueOf(((TextView) findViewById(R.id.textPretFaraTva)).getText().toString()) / valMultiplu);
 
 						if (procRedFin > 0)
 							articol.setIstoricPret(selectedArticol.getIstoricPret());
