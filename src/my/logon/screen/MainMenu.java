@@ -88,6 +88,10 @@ public class MainMenu extends Activity {
 			R.drawable.client_info, R.drawable.payment, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.clients,
 			R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
+	public String[] btnNamesSDIP = { "Utilizator", "Afisare comanda", "Iesire" };
+
+	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.preview_icon, R.drawable.blank };
+
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",
 			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Articole avarie",
 			"Afisare sablon", "Urmarire sablon", "Info client", "Clienti inactivi", "Clienti semiactivi", "Adrese clienti", "Info venituri",
@@ -616,7 +620,7 @@ public class MainMenu extends Activity {
 					finish();
 
 				}
-				
+
 				if (selectedBtnName.equalsIgnoreCase("Clienti alocati")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, ClientiAlocati.class);
@@ -1379,8 +1383,8 @@ public class MainMenu extends Activity {
 
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
 				.getTipUser().equals("SC"))
-				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR") && !UserInfo
-						.getInstance().getTipUserSap().equals("CVR"))) {
+				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR")
+						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP"))) {
 			nrBtns = btnNamesCVA.length;
 		}
 
@@ -1410,6 +1414,10 @@ public class MainMenu extends Activity {
 
 		if (UserInfo.getInstance().getTipUserSap().equals("OIVPD")) {
 			nrBtns = btnNamesOIVPD.length;
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
+			nrBtns = btnNamesSDIP.length;
 		}
 
 		return nrBtns;
@@ -1445,8 +1453,8 @@ public class MainMenu extends Activity {
 
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
 				.getTipUser().equals("SC"))
-				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR") && !UserInfo
-						.getInstance().getTipUserSap().equals("CVR"))) {
+				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR")
+						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP"))) {
 			btnName = btnNamesCVA[btnPos];
 		}
 
@@ -1478,6 +1486,9 @@ public class MainMenu extends Activity {
 			btnName = btnNamesOIVPD[btnPos];
 		}
 
+		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
+			btnName = btnNamesSDIP[btnPos];
+		}
 		return btnName;
 
 	}
@@ -1512,8 +1523,8 @@ public class MainMenu extends Activity {
 
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
 				.getTipUser().equals("SC"))
-				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR") && !UserInfo
-						.getInstance().getTipUserSap().equals("CVR"))) {
+				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR")
+						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP"))) {
 			btnImg = btnImageCVA[btnPos];
 		}
 
@@ -1543,6 +1554,10 @@ public class MainMenu extends Activity {
 
 		if (UserInfo.getInstance().getTipUserSap().equals("OIVPD")) {
 			btnImg = btnImageOIVPD[btnPos];
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
+			btnImg = btnImageSDIP[btnPos];
 		}
 
 		return btnImg;
@@ -1613,7 +1628,8 @@ public class MainMenu extends Activity {
 		}
 
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SC"))
-				&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("CVR")) {
+				&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("CVR")
+				&& !UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
 
 			for (int i = 0; i < btnNamesCVA.length; i++) {
 				if (btnNamesCVA[i].equalsIgnoreCase(btnName)) {
@@ -1687,6 +1703,16 @@ public class MainMenu extends Activity {
 
 			for (int i = 0; i < btnNamesOIVPD.length; i++) {
 				if (btnNamesOIVPD[i].equalsIgnoreCase(btnName)) {
+					position = i;
+					break;
+				}
+			}
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
+
+			for (int i = 0; i < btnNamesOIVPD.length; i++) {
+				if (btnNamesSDIP[i].equalsIgnoreCase(btnName)) {
 					position = i;
 					break;
 				}

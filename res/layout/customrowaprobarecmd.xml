@@ -252,9 +252,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.02"
             android:textSize="1sp" />
-    </LinearLayout>    
-    
-    
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -341,8 +340,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginTop="8dip"
         android:layout_marginBottom="5dip"
+        android:layout_marginTop="8dip"
         android:orientation="horizontal" >
 
         <TextView
@@ -373,16 +372,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.05" />
     </LinearLayout>
-    
-    
-    
+
     <LinearLayout
         android:id="@+id/layoutVechimeStoc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
-        android:layout_marginTop="8dip"
         android:layout_marginBottom="5dip"
+        android:layout_marginTop="8dip"
         android:orientation="horizontal" >
 
         <TextView
@@ -413,8 +410,84 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.05" />
     </LinearLayout>
-    
-    
-    
+
+    <LinearLayout
+        android:id="@+id/layoutPretMediuDistrib"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="8dip"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="left|top"
+            android:layout_marginLeft="5dip"
+            android:layout_weight="0.03"
+            android:textSize="1sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_weight="0.25"
+            android:textColor="@color/statusCmdColor"
+            android:textSize="15sp"
+            android:typeface="sans" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_weight="0.15"
+            android:gravity="left"
+            android:textColor="@color/discountColor1"
+            android:textSize="15sp"
+            android:typeface="sans" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:layout_weight="0.08"
+            android:gravity="left"
+            android:text="PMD"
+            android:textColor="@color/antetColor1"
+            android:textSize="15sp"
+            android:typeface="sans" />
+
+        <TextView
+            android:id="@+id/textPMD"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right"
+            android:layout_weight="0.1"
+            android:gravity="right|top"
+            android:text="45"
+            android:textColor="@color/antetColor1"
+            android:textSize="15sp"
+            android:typeface="sans" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right"
+            android:layout_marginLeft="8dip"
+            android:layout_weight="0.05"
+            android:gravity="left|top"
+            android:text="RON"
+            android:textColor="@color/antetColor1"
+            android:textSize="15sp"
+            android:typeface="sans" />
+
+        <TextView
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.02"
+            android:textSize="1sp" />
+    </LinearLayout>
 
 </LinearLayout>

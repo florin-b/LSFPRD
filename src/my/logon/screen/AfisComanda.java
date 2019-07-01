@@ -239,12 +239,12 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			setUpDirectorLayoutOptions();
 		}
 
-		if (isSefDepart()) {
+		if (isSefDepart() || UtilsUser.isSDIP()) {
 			performGetAgenti();
 
 		}
 
-		if (isAgent()  || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
+		if (isAgent() || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
 			selectedAgent = UserInfo.getInstance().getCod();
 			performGetComenzi();
 
@@ -379,8 +379,16 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 		// SDCVA
 		if (UserInfo.getInstance().getTipAcces().equals("39")) {
+
 			selectedCodDepart = "11";
 			tipAgent = "SDCVA";
+
+		}
+
+		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
+			selectedCodDepart = "11";
+			tipAgent = "SDIP";
+
 		}
 
 		agent.getListaAgenti(selectedFiliala, selectedCodDepart, this, true, tipAgent);
@@ -629,14 +637,13 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 	}
 
-	private void performArtCmdCustodie()
-	{
+	private void performArtCmdCustodie() {
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("nrCmd", selectedCmd);
 
 		comenzi.getArticoleCustodie(params);
-	}	
-	
+	}
+
 	boolean isCVorSM() {
 		return UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18");
 	}

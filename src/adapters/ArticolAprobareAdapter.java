@@ -8,7 +8,7 @@ import model.ArticolComanda;
 import model.UserInfo;
 import my.logon.screen.R;
 import utils.UtilsGeneral;
-
+import utils.UtilsUser;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,9 +45,9 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 	public static class ViewHolder {
 		TextView textNrCrt, textNumeArt, textCodArt, textCantArt, textUmArt, textPretArt, textMonedaArt, textDepozit, textStatusArt, textProcRed, textAddCond,
 				textCmp, textProcCmp, textDisClient, textProcAprob, textMultipAprob, textInfoArticol, textPretSpecial, textIstoricPret, textVechimeStoc,
-				textMarjaT1Proc, textMarjaT1Val;
+				textMarjaT1Proc, textMarjaT1Val, textPMD;
 
-		LinearLayout layoutIstoricPret, layoutVechimeStoc, layoutMarjaT1;
+		LinearLayout layoutIstoricPret, layoutVechimeStoc, layoutMarjaT1, layoutPretMediuDistrib;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -88,6 +88,8 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 			viewHolder.layoutMarjaT1 = (LinearLayout) convertView.findViewById(R.id.layoutMarjaT1);
 			viewHolder.textMarjaT1Proc = (TextView) convertView.findViewById(R.id.textMarjaT1Proc);
 			viewHolder.textMarjaT1Val = (TextView) convertView.findViewById(R.id.textMarjaT1Val);
+			viewHolder.layoutPretMediuDistrib = (LinearLayout) convertView.findViewById(R.id.layoutPretMediuDistrib);
+			viewHolder.textPMD = (TextView) convertView.findViewById(R.id.textPMD);
 			
 			convertView.setTag(viewHolder);
 
@@ -169,6 +171,13 @@ public class ArticolAprobareAdapter extends BaseAdapter {
 			viewHolder.textPretSpecial.setText("(*)");
 
 		viewHolder.textMonedaArt.setText(articol.getMoneda());
+		
+		if (articol.getPretMediu() > 0 && UtilsUser.isDV() && UserInfo.getInstance().getInitDivizie().equals("11")) {
+			viewHolder.layoutPretMediuDistrib.setVisibility(View.VISIBLE);
+			viewHolder.textPMD.setText(nf2.format(articol.getPretMediu() * model.Constants.TVA));
+		} else {
+			viewHolder.layoutPretMediuDistrib.setVisibility(View.GONE);
+		}		
 		
 		if (colorPos % 2 == 0)
 			convertView.setBackgroundResource(R.drawable.shadow_dark);

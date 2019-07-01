@@ -66,8 +66,8 @@ public class UtilsUser {
 
 	public static boolean isUserSDKA() {
 		return UserInfo.getInstance().getTipUserSap().equals("SDKA");
-	}	
-	
+	}
+
 	public static boolean isAgentOrSD() {
 		return UserInfo.getInstance().getTipUserSap().toUpperCase().contains("AV")
 				|| UserInfo.getInstance().getTipUserSap().toUpperCase().equals("SD")
@@ -121,6 +121,10 @@ public class UtilsUser {
 
 	public static boolean isOIVPD() {
 		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("OIVPD");
+	}
+
+	public static boolean isSDIP() {
+		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("SDIP");
 	}
 
 	public static String getTipSMNou() {
