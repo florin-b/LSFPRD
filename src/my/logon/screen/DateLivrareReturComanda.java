@@ -81,7 +81,9 @@ public class DateLivrareReturComanda extends Fragment implements OnItemClickList
 
 		spinnerTransport = (Spinner) v.findViewById(R.id.spinnerTranspRetur);
 		populateSpinnerTransport();
+		spinnerTransport.setSelection(1);
 		setListenerSpinnerTransport();
+		
 
 		spinnerMotivRetur = (Spinner) v.findViewById(R.id.spinnerMotivRetur);
 		populateSpinnerMotivRetur();
@@ -137,7 +139,7 @@ public class DateLivrareReturComanda extends Fragment implements OnItemClickList
 					tipTransport = UtilsGeneral.getTipTransport(spinnerTransport.getSelectedItem().toString());
 					if (tipTransport.contains("TRAP")) {
 						layoutTranspBack.setVisibility(View.VISIBLE);
-						checkTranspBack.setChecked(false);
+						checkTranspBack.setChecked(true);
 					} else
 						layoutTranspBack.setVisibility(View.GONE);
 				} else {
