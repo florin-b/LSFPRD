@@ -96,16 +96,31 @@
                         style="@style/dateLivrareDlLabel"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
                         android:layout_weight="0.25"
                         android:text="Obs. transport" />
 
-                    <CheckBox
-                        android:id="@+id/checkTranspBack"
+                    <RadioGroup
+                        android:id="@+id/radioTranspRetur"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|bottom"
                         android:layout_weight="0.75"
-                        android:text="Transport cu aceeasi masina" />
+                        android:checkedButton="@+id/sound" >
+
+                        <RadioButton
+                            android:id="@+id/radioPropriu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="Retur cu aceeasi masina" />
+
+                        <RadioButton
+                            android:id="@+id/radioAlta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Retur cu alta masina" />
+                    </RadioGroup>
                 </LinearLayout>
 
                 <LinearLayout

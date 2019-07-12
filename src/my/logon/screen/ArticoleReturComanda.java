@@ -270,7 +270,7 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 		params.put("dateRetur", opRetur.serializeComandaRetur(comandaRetur));
 		params.put("tipRetur", EnumTipRetur.COMANDA.getTipRetur());
 
-		opRetur.saveComandaRetur(params);
+		//opRetur.saveComandaRetur(params);
 
 	}
 
