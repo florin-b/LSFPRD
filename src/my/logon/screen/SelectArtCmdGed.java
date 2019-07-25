@@ -111,8 +111,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private double pretMediuDistrib = 0, adaosMediuDistrib = 0;
 	private double valoareUmrez = 1, valoareUmren = 1;
 
-	
-
 	private static ArrayList<HashMap<String, String>> listUmVanz = null;
 	public SimpleAdapter adapterUmVanz;
 	private double varProc = 0, valMultiplu = 0, pretVanzare = 0;
@@ -144,7 +142,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	private TextView textPretGEDFTva, textTransport;
 	private double procentTVA, procentTransport, valoareTransport;
 	private PretArticolGed selectedArticol;
-	
+
 	private ArticolDB articolDBSelected;
 	private TextView txtImpachetare;
 
@@ -156,7 +154,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private String tipPersClient;
-	
+
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -173,9 +171,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		tipComanda = intent.getStringExtra("tipComanda");
 		rezervStoc = Boolean.valueOf(intent.getStringExtra("rezervStoc"));
 		filialaAlternativa = intent.getStringExtra("filialaAlternativa");
-		
+
 		tipPersClient = intent.getStringExtra("tipPersClient");
-		
+
 		if (isCV() && tipPersClient != null && !tipPersClient.isEmpty())
 			DateLivrare.getInstance().setTipPersClient(tipPersClient);
 
@@ -192,8 +190,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		resultLayout = (LinearLayout) findViewById(R.id.resLayout);
 		resultLayout.setVisibility(View.INVISIBLE);
-
-		
 
 		labelFactConv = (TextView) findViewById(R.id.labelFactConv);
 		labelFactConv.setVisibility(View.INVISIBLE);
@@ -274,6 +270,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		listUmVanz = new ArrayList<HashMap<String, String>>();
 		adapterUmVanz = new SimpleAdapter(this, listUmVanz, R.layout.simplerowlayout, new String[] { "rowText" }, new int[] { R.id.textRowName });
 		spinnerUnitMas.setVisibility(View.GONE);
+		spinnerUnitMas.setOnItemSelectedListener(new OnSelectUnitMas());
 
 		textNumeArticol.setVisibility(View.INVISIBLE);
 		textCodArticol.setVisibility(View.INVISIBLE);
@@ -305,8 +302,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		if (UserInfo.getInstance().getTipUserSap().equals("KA3") && DateLivrare.getInstance().getTipPersClient().equals("D")) {
 			layoutPretGEDFTva.setVisibility(View.VISIBLE);
 		}
-
-		
 
 	}
 
@@ -421,8 +416,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				artMap = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
 				selectedUnitMas = artMap.get("rowText");
 
-				if (!textCant.getText().toString().trim().equals(""))
-					getFactoriConversie();
+				getFactoriConversie();
 
 			}
 
@@ -665,12 +659,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
 				nForm2.setMinimumFractionDigits(2);
 				nForm2.setMaximumFractionDigits(2);
-				
+
 				if (globalCantArt > 0) {
 
 					if (tglProc.isChecked()) {
-
-						
 
 						varProc = -1;
 
@@ -691,8 +683,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						textTransport.setText(nForm2.format(initPrice * (procentTransport / 100) + valoareTransport));
 
 					} else {
-
-						
 
 						varProc = 0;
 						textProcRed.setText("");
@@ -738,7 +728,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 					NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
 					nf2.setMinimumFractionDigits(3);
 					nf2.setMaximumFractionDigits(3);
-					
+
 					NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
 					nForm2.setMinimumFractionDigits(2);
 					nForm2.setMaximumFractionDigits(2);
@@ -765,7 +755,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 										textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100)
 												+ valoareTransport));
-										
+
 										((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()
 												* ((100 - varProc) / 100)));
 
@@ -792,12 +782,14 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 								txtPretArt.setText(nf2.format(procR));
 								finalPrice = Double.parseDouble(textProcRed.getText().toString());
 								textPretGEDFTva.setText(nf2.format(finalPrice / procentTVA));
-								textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100) + valoareTransport));
-								
+								textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100)
+										+ valoareTransport));
+
 								if (procR == 0)
 									((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()));
 								else
-									((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva() * (100 - procR) / 100));
+									((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()
+											* (100 - procR) / 100));
 
 							} else {
 								txtPretArt.setText("0");
@@ -1107,8 +1099,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						Toast.makeText(getApplicationContext(), "Pentru comenzile cu valoare negociata adaugati doar articole din divizia 09.",
 								Toast.LENGTH_LONG).show();
 						return;
-					}					
-					
+					}
+
 					String cantArticol = textCant.getText().toString().trim();
 
 					if (selectedCant != Double.parseDouble(cantArticol)) {
@@ -1123,7 +1115,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						}
 					}
 
-					if (Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString().replaceAll(",", ""))) {
+					if (Double.parseDouble(textCant.getText().toString().trim()) * (valoareUmrez / valoareUmren) > Double.parseDouble(textStoc
+							.getText().toString().replaceAll(",", ""))) {
 						if (tipComanda.equalsIgnoreCase("S") && !rezervStoc) {
 
 						} else {
@@ -1172,9 +1165,12 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 					}
 
 					if (procRedFin > 80) {
-						//Toast.makeText(getApplicationContext(), "Procentul de reducere depaseste pragul admis! ", Toast.LENGTH_SHORT).show();
-						//restrictie eliminata pentru a se putea vinde articole cu promotii de la dep 03. 12 martie 2019 
-						//return;
+						// Toast.makeText(getApplicationContext(),
+						// "Procentul de reducere depaseste pragul admis! ",
+						// Toast.LENGTH_SHORT).show();
+						// restrictie eliminata pentru a se putea vinde articole
+						// cu promotii de la dep 03. 12 martie 2019
+						// return;
 					}
 
 					// sf. verificare
@@ -1338,7 +1334,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		if (!pretResponse.equals("-1")) {
 
 			NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
-			
+
 			nf2.setMinimumFractionDigits(3);
 			nf2.setMaximumFractionDigits(3);
 
@@ -1434,8 +1430,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		if (globalDepozSel.substring(2, 3).equals("V")) {
 			if (initPrice / globalCantArt * valMultiplu < cmpArt && !UtilsArticole.isArticolPermitSubCmp(codArticol)) {
 				Toast.makeText(getApplicationContext(), "Pret sub cmp!", Toast.LENGTH_LONG).show();
-				//eliminat pentru vanzare promotii 03
-				//return;
+				// eliminat pentru vanzare promotii 03
+				// return;
 			}
 
 		}
@@ -1472,7 +1468,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		nf.setMaximumFractionDigits(3);
 		nf.setMinimumFractionDigits(3);
 		textPretGEDFTva.setText(nf.format(valoareFaraTva));
-		
+
 		NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
 		nForm2.setMinimumFractionDigits(2);
 		nForm2.setMaximumFractionDigits(2);
@@ -1482,8 +1478,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		double pretTransport = (initPrice) * (pretArticol.getProcTransport() / 100) + pretArticol.getValTrap();
 		textTransport.setText(nForm2.format(pretTransport));
 
-		((TextView) findViewById(R.id.textPretFaraTva)).setText(nf.format(pretArticol.getPretFaraTva()));		
-		
+		((TextView) findViewById(R.id.textPretFaraTva)).setText(nf.format(pretArticol.getPretFaraTva()));
+
 		// agentii nu pot modifica pretul
 		if (userCannotModifyPrice()) {
 			txtPretArt.setEnabled(false);
@@ -1524,9 +1520,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				double pret2 = (Double.parseDouble(pretArticol.getPretArticolPromo()) / Double.parseDouble(pretArticol.getCantitateArticolPromo()))
 						* valMultiplu;
 
-				artPromoText = "Din cantitatea comandata " + pretArticol.getCantitate() + " " + pretArticol.getUm() + " au pretul de " + nf2.format(pret1)
-						+ " RON/" + pretArticol.getUm() + " si " + pretArticol.getCantitateArticolPromo() + " " + pretArticol.getUmArticolPromo()
-						+ " au pretul de " + nf2.format(pret2) + " RON/" + pretArticol.getUmArticolPromo() + ".";
+				artPromoText = "Din cantitatea comandata " + pretArticol.getCantitate() + " " + pretArticol.getUm() + " au pretul de "
+						+ nf2.format(pret1) + " RON/" + pretArticol.getUm() + " si " + pretArticol.getCantitateArticolPromo() + " "
+						+ pretArticol.getUmArticolPromo() + " au pretul de " + nf2.format(pret2) + " RON/" + pretArticol.getUmArticolPromo() + ".";
 			}
 
 		} else {
@@ -1553,7 +1549,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						// verificare cod articol promotie
 						// art. promo = art. din comanda
 						if (codArticol.equals(pretArticol.getCodArticolPromo())) {
-							artPromoText = pretArticol.getCantitateArticolPromo() + " " + pretArticol.getUmArticolPromo() + " x " + numeArticol + " gratuit. ";
+							artPromoText = pretArticol.getCantitateArticolPromo() + " " + pretArticol.getUmArticolPromo() + " x " + numeArticol
+									+ " gratuit. ";
 						} else// art. promo diferit de art. din cmd.
 						{
 							artPromoText = pretArticol.getCantitateArticolPromo() + " " + pretArticol.getUmArticolPromo() + " x "
@@ -1605,8 +1602,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
 
 				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
-				textIstoric1.setText(" " + df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
-						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric1.setText(" " + df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1619,8 +1616,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
 
 				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
-				textIstoric2.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
-						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric2.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 
@@ -1633,8 +1630,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
 
 				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
-				textIstoric3.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " " + arrayPret[2]
-						+ " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
+				textIstoric3.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
+						+ arrayPret[2] + " - " + UtilsFormatting.getMonthNameFromDate(arrayPret[3], 2));
 
 			}
 

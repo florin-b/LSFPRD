@@ -25,6 +25,7 @@ import beans.BeanObiectiveGenerale;
 import beans.BeanStadiuObiectiv;
 import beans.BeanUrmarireEveniment;
 import beans.BeanUrmarireObiectiv;
+import beans.ObiectivConsilier;
 import enums.EnumOperatiiObiective;
 import enums.EnumStadiuSubantrep;
 
@@ -98,6 +99,12 @@ public class OperatiiObiective implements AsyncTaskListener {
 		call.getCallResultsFromFragment();
 	}
 
+	public void getObiectiveConsilieri(HashMap<String, String> params) {
+		numeComanda = EnumOperatiiObiective.GET_OBIECTIVE_CONSILIERI;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getNume(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
+
 	public List<BeanObiectivAfisare> deserializeListaObiective(String result) {
 		List<BeanObiectivAfisare> listaObiective = new ArrayList<BeanObiectivAfisare>();
 		BeanObiectivAfisare obiectiv = null;
@@ -129,9 +136,7 @@ public class OperatiiObiective implements AsyncTaskListener {
 
 		return listaObiective;
 	}
-	
-	
-	
+
 	public List<BeanObiectivHarta> deserializeListaObiectiveHarta(String result) {
 		List<BeanObiectivHarta> listaObiective = new ArrayList<BeanObiectivHarta>();
 		BeanObiectivHarta obiectiv = null;
@@ -462,6 +467,38 @@ public class OperatiiObiective implements AsyncTaskListener {
 		}
 
 		return listObiective;
+	}
+
+	public List<ObiectivConsilier> deserializeObiectiveConsilieri(String result) {
+		List<ObiectivConsilier> listaObiective = new ArrayList<ObiectivConsilier>();
+		ObiectivConsilier obiectiv = null;
+
+		try {
+			Object json = new JSONTokener(result).nextValue();
+
+			if (json instanceof JSONArray) {
+
+				JSONArray jsonArray = new JSONArray(result);
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject object = jsonArray.getJSONObject(i);
+
+					obiectiv = new ObiectivConsilier();
+					obiectiv.setId(object.getString("id"));
+					obiectiv.setBeneficiar(object.getString("beneficiar"));
+					obiectiv.setDataCreare(object.getString("dataCreare"));
+					obiectiv.setAdresa(object.getString("adresa"));
+					obiectiv.setCodJudet(object.getString("codJudet"));
+					obiectiv.setCoordGps(object.getString("coordGps"));
+					listaObiective.add(obiectiv);
+				}
+
+			}
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return listaObiective;
 	}
 
 	public void setObiectiveListener(ObiectiveListener listener) {

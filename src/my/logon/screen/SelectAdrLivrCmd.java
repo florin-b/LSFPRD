@@ -434,8 +434,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			((EditText) findViewById(R.id.txtNumeDelegat)).setText(DateLivrare.getInstance().getDelegat().getNume());
 			((EditText) findViewById(R.id.txtCIDelegat)).setText(DateLivrare.getInstance().getDelegat().getSerieNumarCI());
 			((EditText) findViewById(R.id.txtAutoDelegat)).setText(DateLivrare.getInstance().getDelegat().getNrAuto());
-		}		
-		
+		}
+
 		btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
 		addListenerDataLivrare();
 
@@ -685,14 +685,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 		});
 	}
-	
+
 	private void setDateDelegatVisibility(boolean isVisible) {
 		if (isVisible) {
 			((LinearLayout) findViewById(R.id.layoutDelegat)).setVisibility(View.VISIBLE);
 		} else {
 			((LinearLayout) findViewById(R.id.layoutDelegat)).setVisibility(View.INVISIBLE);
 		}
-	}	
+	}
 
 	private void setListenerCheckMacara() {
 		checkMacara.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -1183,10 +1183,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private void setMacaraVisible() {
-		if (UtilsUser.isMacaraVisible() || isArtException())
-			checkMacara.setVisibility(View.VISIBLE);
-		else
-			checkMacara.setVisibility(View.INVISIBLE);
+
+		checkMacara.setVisibility(View.INVISIBLE);
 
 	}
 
@@ -1247,8 +1245,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		textStrada.setThreshold(0);
 		textStrada.setAdapter(adapterStrazi);
 
-		listLocalitatiLivrare = listAdrese.getListLocalitati();		
-		
+		listLocalitatiLivrare = listAdrese.getListLocalitati();
+
 		setListenerTextLocalitate();
 
 	}
@@ -1285,8 +1283,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				}
 
 			}
-		});				
-		
+		});
+
 	}
 
 	private boolean verificaLocalitate(String tipLocalitate) {
@@ -1305,7 +1303,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			HashMap<String, String> tempMap = (HashMap<String, String>) spinnerJudet.getSelectedItem();
 			numeJudet = tempMap.get("numeJudet");
 
-		} 
+		}
 
 		for (String localitate : listLocalitati) {
 			if (localitate.trim().equalsIgnoreCase(localitateCurenta)) {
@@ -1325,9 +1323,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		}
 
 		return locExist;
-	}	
-	
-	
+	}
+
 	private void displayObiectiveDepartament(List<BeanObiectivDepartament> obiectiveDepart) {
 
 		if (obiectiveDepart.size() > 0) {
@@ -1438,7 +1435,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		} else {
 
 			verificaLocalitate("LIVRARE");
-			
+
 			String nrStrada = "";
 
 			if (textNrStr.getText().toString().trim().length() > 0)
@@ -1594,8 +1591,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			delegat.setNrAuto(((EditText) findViewById(R.id.txtAutoDelegat)).getText().toString().trim());
 		}
 
-		dateLivrareInstance.setDelegat(delegat);		
-		
+		dateLivrareInstance.setDelegat(delegat);
+
 		if (radioText.isChecked() && adresaNouaExista())
 			return;
 

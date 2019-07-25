@@ -7,6 +7,7 @@ package model;
 import beans.DateLivrareAfisare;
 import beans.Delegat;
 import beans.FurnizorComanda;
+import beans.ObiectivConsilier;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -79,7 +80,8 @@ public class DateLivrare {
 	private String livrareSambata = "";
 	private String blocScara = "";
 	private Delegat delegat;
-
+	private ObiectivConsilier obiectivConsilier;
+	
 	private DateLivrareAfisare dateLivrareAfisare;
 
 	public DateLivrareAfisare getDateLivrareAfisare() {
@@ -584,6 +586,14 @@ public class DateLivrare {
 		this.delegat = delegat;
 	}	
 	
+	public ObiectivConsilier getObiectivConsilier() {
+		return obiectivConsilier;
+	}
+
+	public void setObiectivConsilier(ObiectivConsilier obiectivConsilier) {
+		this.obiectivConsilier = obiectivConsilier;
+	}	
+	
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -633,7 +643,7 @@ public class DateLivrare {
 		livrareSambata = "";
 		blocScara = "";
 		delegat = new Delegat();
-
+		obiectivConsilier = null;
 
 	}
 

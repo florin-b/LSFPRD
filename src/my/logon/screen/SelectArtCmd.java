@@ -21,6 +21,7 @@ import model.ListaArticoleComanda;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
+import my.logon.screen.SelectArtCmdGed.OnSelectUnitMas;
 import utils.DepartamentAgent;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
@@ -106,6 +107,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private double pretVanzare = 0, procentAprob = 0, selectedCant = 0;
 	private String istoricPret;
 	private double procReducereCmp = 0;
+	private double valoareUmrez = 1, valoareUmren = 1;
 
 	NumberFormat nf2;
 
@@ -247,6 +249,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		listUmVanz = new ArrayList<HashMap<String, String>>();
 		adapterUmVanz = new SimpleAdapter(this, listUmVanz, R.layout.simplerowlayout, new String[] { "rowText" }, new int[] { R.id.textRowName });
 		spinnerUnitMas.setVisibility(View.GONE);
+		spinnerUnitMas.setOnItemSelectedListener(new OnSelectUnitMas());
 
 		textNumeArticol.setVisibility(View.INVISIBLE);
 		textCodArticol.setVisibility(View.INVISIBLE);
@@ -330,7 +333,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		if (isCV())
 			selectedDepartamentAgent = "";
 
-		if (isKA() || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD())
+		if (isKA() || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED()
+				|| UtilsUser.isOIVPD())
 			selectedDepartamentAgent = "00";
 	}
 
@@ -355,7 +359,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
-
 	private boolean isUserExceptie() {
 
 		if (UserInfo.getInstance().getTipUserSap().equals(Constants.tipInfoAv) || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM()
@@ -370,8 +373,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			return true;
 
 		return false;
-	}	
-	
+	}
+
 	private boolean isDepartExtra() {
 		return !UserInfo.getInstance().getDepartExtra().equals("");
 	}
@@ -381,6 +384,46 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		super.onCreateOptionsMenu(menu);
 		CreateMenu(menu);
 		return true;
+	}
+
+	// eveniment selectie unitate masura alternativa
+	public class OnSelectUnitMas implements OnItemSelectedListener {
+		@SuppressWarnings("unchecked")
+		public void onItemSelected(AdapterView<?> parent, View v, int pos, long id) {
+
+			if (codArticol.length() > 0) {
+
+				artMap = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
+				selectedUnitMas = artMap.get("rowText");
+
+				getFactoriConversie();
+
+			}
+
+		}
+
+		public void onNothingSelected(AdapterView<?> parent) {
+
+		}
+	}
+
+	private void getFactoriConversie() {
+		try {
+
+			HashMap<String, String> params = new HashMap<String, String>();
+
+			if (codArticol.length() == 8)
+				codArticol = "0000000000" + codArticol;
+
+			params.put("codArt", codArticol);
+			params.put("unitMas", selectedUnitMas);
+
+			opArticol.getFactorConversie(params);
+
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
 	}
 
 	boolean isKA() {
@@ -1082,7 +1125,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 					}
 
 					if (!isComandaDL()
-							&& Double.parseDouble(textCant.getText().toString().trim()) > Double.parseDouble(textStoc.getText().toString()
+							&& Double.parseDouble(textCant.getText().toString().trim()) * (valoareUmrez / valoareUmren)  > Double.parseDouble(textStoc.getText().toString()
 									.replaceAll(",", ""))) {
 						Toast.makeText(getApplicationContext(), "Stoc insuficient!", Toast.LENGTH_LONG).show();
 						return;
@@ -1183,8 +1226,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 									.show();
 
 							subCmp = "1";
-							//restrictie eliminata pentru a se putea vinde articole cu promotii de la dep 03. 12 martie 2019 
-							//return;
+							// restrictie eliminata pentru a se putea vinde
+							// articole cu promotii de la dep 03. 12 martie 2019
+							// return;
 
 						}
 
@@ -1278,6 +1322,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						minimKAPrice = 0;
 						cmpArt = 0;
 						subCmp = "0";
+						
+						valoareUmrez = 1;
+						valoareUmren = 1;
 
 						redBtnTable.setVisibility(View.GONE);
 						labelStoc.setVisibility(View.GONE);
@@ -1554,8 +1601,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						if (layoutPretMaxKA.getVisibility() == View.VISIBLE)
 							layoutPretMaxKA.setVisibility(View.INVISIBLE);
 
-						//eliminat pentru vanzare promotii 03
-						//return;
+						// eliminat pentru vanzare promotii 03
+						// return;
 					}
 
 				}
@@ -1636,7 +1683,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				tglProc.setChecked(false);
 				tglProc.performClick();
 
-				if (noDiscount(tokenPret[3]) || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED()) {
+				if (noDiscount(tokenPret[3]) || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM()
+						|| UtilsUser.isCGED()) {
 					txtPretArt.setEnabled(false);
 					textProcRed.setFocusable(false);
 					tglProc.setEnabled(false);
@@ -1920,6 +1968,14 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		return retVal;
 	}
 
+	private void loadFactorConversie(String result) {
+		String[] convResult = result.split("#");
+
+		valoareUmrez = Integer.parseInt(convResult[0]);
+		valoareUmren = Integer.parseInt(convResult[1]);
+
+	}	
+	
 	@Override
 	public void onBackPressed() {
 		finish();
@@ -1952,6 +2008,10 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		case GET_STOC_CUSTODIE:
 			listArtStocCustodie((String) result);
 			break;
+		case GET_FACTOR_CONVERSIE:
+			loadFactorConversie((String) result);
+			break;
+			
 		default:
 			break;
 
