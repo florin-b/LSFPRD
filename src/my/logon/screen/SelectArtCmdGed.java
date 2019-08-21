@@ -655,6 +655,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
 				nf2.setMinimumFractionDigits(3);
 				nf2.setMaximumFractionDigits(3);
+				nf2.setGroupingUsed(false);
 
 				NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
 				nForm2.setMinimumFractionDigits(2);
@@ -1259,7 +1260,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setUmPalet(articolDBSelected.isUmPalet());
 						articol.setFilialaSite(CreareComandaGed.filialaAlternativa);
 						articol.setLungime(articolDBSelected.getLungime());
-						articol.setPretFaraTva(Double.valueOf(((TextView) findViewById(R.id.textPretFaraTva)).getText().toString()) / valMultiplu);
+						articol.setPretFaraTva(Double.valueOf(((TextView) findViewById(R.id.textPretFaraTva)).getText().toString().replace(",", "")) / valMultiplu);
 
 						if (procRedFin > 0)
 							articol.setIstoricPret(selectedArticol.getIstoricPret());
