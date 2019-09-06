@@ -1514,6 +1514,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
 
+		if (dateLivrareInstance.getTipDocInsotitor().equals("2") && dateLivrareInstance.getTipPlata().equals("E1")) {
+			Toast.makeText(getApplicationContext(), "Pentru avizul de expeditie selectati alta metoda de plata.", Toast.LENGTH_LONG).show();
+			return;
+		}		
+		
 		dateLivrareInstance.setTonaj("-1");
 
 		if (radioAltaAdresa.isChecked() && !DateLivrare.getInstance().isAltaAdresa()) {

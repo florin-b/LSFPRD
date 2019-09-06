@@ -88,19 +88,19 @@ public class MainMenu extends Activity {
 			R.drawable.client_info, R.drawable.payment, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.clients,
 			R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesSDIP = { "Utilizator", "Afisare comanda", "Iesire" };
+	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Iesire" };
 
-	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.preview_icon, R.drawable.blank };
+	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.blank };
 
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",
 			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Articole avarie",
-			"Afisare sablon", "Urmarire sablon", "Info client", "Clienti inactivi", "Clienti semiactivi", "Adrese clienti", "Info venituri",
+			"Afisare sablon", "Urmarire sablon", "Info client", "Clienti inactivi", "Clienti semiactivi", "NTCF", "Adrese clienti", "Info venituri",
 			"Delegatii", "Despre", "Iesire" };
 
 	public int[] btnImageDV = new int[] { R.drawable.id_icon, R.drawable.agree_icon, R.drawable.constraints, R.drawable.preview_icon,
 			R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.cmd_bloc, R.drawable.colosseum, R.drawable.vanzari, R.drawable.neincasate,
 			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.viewreduceri_icon,
-			R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon,
+			R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon,
 			R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesKA = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Cmz.blocate limita credit",
@@ -615,7 +615,8 @@ public class MainMenu extends Activity {
 				// clienti facturati
 				if (selectedBtnName.equalsIgnoreCase("Ntcf")) {
 
-					Intent nextScreen = new Intent(MainMenu.this, Ntcf.class);
+					//Intent nextScreen = new Intent(MainMenu.this, Ntcf.class);
+					Intent nextScreen = new Intent(MainMenu.this, PierderiVanzari.class);
 					startActivity(nextScreen);
 					finish();
 

@@ -37,6 +37,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,6 +68,7 @@ import beans.PretArticolGed;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
 import enums.EnumTipComanda;
+import filters.DecimalDigitsInputFilter;
 
 public class SelectArtCmdGed extends ListActivity implements OperatiiArticolListener {
 
@@ -223,6 +225,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		textProcRed = (EditText) findViewById(R.id.textProcRed);
 		textProcRed.setFocusableInTouchMode(true);
 		addListenerProcArt();
+
+		if (CreareComandaGed.tipClient.equals("IP"))
+			textProcRed.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2) });
+		else
+			textProcRed.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(3) });
 
 		procDisc = (TextView) findViewById(R.id.procDisc);
 
@@ -653,8 +660,13 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			public void onClick(View v) {
 
 				NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
-				nf2.setMinimumFractionDigits(3);
-				nf2.setMaximumFractionDigits(3);
+				if (CreareComandaGed.tipClient.equals("IP")) {
+					nf2.setMinimumFractionDigits(2);
+					nf2.setMaximumFractionDigits(2);
+				} else {
+					nf2.setMinimumFractionDigits(3);
+					nf2.setMaximumFractionDigits(3);
+				}
 				nf2.setGroupingUsed(false);
 
 				NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
@@ -727,8 +739,13 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				try {
 
 					NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
-					nf2.setMinimumFractionDigits(3);
-					nf2.setMaximumFractionDigits(3);
+					if (CreareComandaGed.tipClient.equals("IP")) {
+						nf2.setMinimumFractionDigits(2);
+						nf2.setMaximumFractionDigits(2);
+					} else {
+						nf2.setMinimumFractionDigits(3);
+						nf2.setMaximumFractionDigits(3);
+					}
 
 					NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
 					nForm2.setMinimumFractionDigits(2);
@@ -757,9 +774,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 										textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100)
 												+ valoareTransport));
 
-										((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()
-												* ((100 - varProc) / 100)));
-
 									}
 								}
 
@@ -767,7 +781,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 								txtPretArt.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
 								textPretGEDFTva.setText(nf2.format((initPrice / globalCantArt * valMultiplu) / procentTVA));
 								textTransport.setText(nForm2.format((initPrice) * (procentTransport / 100) + valoareTransport));
-								((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()));
 
 							}
 
@@ -786,18 +799,12 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 								textTransport.setText(nForm2.format(((finalPrice / valMultiplu) * globalCantArt) * (procentTransport / 100)
 										+ valoareTransport));
 
-								if (procR == 0)
-									((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()));
-								else
-									((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()
-											* (100 - procR) / 100));
-
 							} else {
 								txtPretArt.setText("0");
 								finalPrice = 0;
 								textPretGEDFTva.setText("0");
 								textTransport.setText("0");
-								((TextView) findViewById(R.id.textPretFaraTva)).setText(nf2.format(selectedArticol.getPretFaraTva()));
+
 							}
 
 						}
@@ -1260,7 +1267,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setUmPalet(articolDBSelected.isUmPalet());
 						articol.setFilialaSite(CreareComandaGed.filialaAlternativa);
 						articol.setLungime(articolDBSelected.getLungime());
-						articol.setPretFaraTva(Double.valueOf(((TextView) findViewById(R.id.textPretFaraTva)).getText().toString().replace(",", "")) / valMultiplu);
 
 						if (procRedFin > 0)
 							articol.setIstoricPret(selectedArticol.getIstoricPret());
@@ -1393,8 +1399,13 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		selectedArticol = pretArticol;
 
 		NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
-		nf2.setMinimumFractionDigits(3);
-		nf2.setMaximumFractionDigits(3);
+		if (CreareComandaGed.tipClient.equals("IP")) {
+			nf2.setMinimumFractionDigits(2);
+			nf2.setMaximumFractionDigits(2);
+		} else {
+			nf2.setMinimumFractionDigits(3);
+			nf2.setMaximumFractionDigits(3);
+		}
 		nf2.setGroupingUsed(false);
 
 		codPromo = "-1";
@@ -1453,6 +1464,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		txtPretArt.setText(nf2.format((initPrice / globalCantArt) * valMultiplu));
 		txtPretArt.setHint(nf2.format((initPrice / globalCantArt) * valMultiplu));
 
+		if (CreareComandaGed.tipClient.equals("IP"))
+			((TextView) findViewById(R.id.labelPretGED)).setText("Pret GED fara tva: ");
+
 		textPretGED.setText(String.valueOf(nf2.format((initPrice / globalCantArt) * valMultiplu)));
 		infoArticol = pretArticol.getConditiiPret().replace(',', '.');
 
@@ -1466,8 +1480,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		double valoareFaraTva = pretUnitar / procentTVA;
 
 		NumberFormat nf = NumberFormat.getInstance(new Locale("en", "US"));
-		nf.setMaximumFractionDigits(3);
-		nf.setMinimumFractionDigits(3);
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
 		textPretGEDFTva.setText(nf.format(valoareFaraTva));
 
 		NumberFormat nForm2 = NumberFormat.getInstance(new Locale("en", "US"));
@@ -1478,8 +1492,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		valoareTransport = pretArticol.getValTrap();
 		double pretTransport = (initPrice) * (pretArticol.getProcTransport() / 100) + pretArticol.getValTrap();
 		textTransport.setText(nForm2.format(pretTransport));
-
-		((TextView) findViewById(R.id.textPretFaraTva)).setText(nf.format(pretArticol.getPretFaraTva()));
 
 		// agentii nu pot modifica pretul
 		if (userCannotModifyPrice()) {

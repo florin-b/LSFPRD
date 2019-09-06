@@ -273,52 +273,6 @@
                     android:typeface="sans" />
             </LinearLayout>
 
-           <LinearLayout
-                android:id="@+id/layoutTotalFaraTva"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="5dip"
-                android:orientation="horizontal"
-                android:visibility="gone" >
-
-                <TextView
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:layout_weight="0.2"
-                    android:gravity="right"
-                    android:textColor="@color/marjaColor1"
-                    android:textSize="17sp"
-                    android:typeface="sans" />
-
-                <TextView
-                    android:id="@+id/labelTotalFaraTva"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="10dip"
-                    android:layout_weight="0.1"
-                    android:gravity="right"
-                    android:text="Total fara TVA:"
-                    android:textColor="@color/artRowColor"
-                    android:textSize="17sp"
-                    android:typeface="sans" />
-
-                <TextView
-                    android:id="@+id/textTotalFaraTva"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="10dip"
-                    android:layout_weight="0.1"
-                    android:gravity="left"
-                    android:textColor="@color/artRowColor"
-                    android:textSize="17sp"
-                    android:typeface="sans" />
-            </LinearLayout>            
-            
-            
             
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"

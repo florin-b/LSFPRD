@@ -340,7 +340,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	}
 
 	private void setVisibilityRadioInstPublica(RadioButton radioClientInstPub) {
-		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR"))
+		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR")
+				|| UserInfo.getInstance().getTipUserSap().equals("SDIP"))
 			radioClientInstPub.setVisibility(View.VISIBLE);
 		else
 			radioClientInstPub.setVisibility(View.INVISIBLE);
@@ -411,7 +412,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		}
 
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-		
+
 		if (!pressedTVAButton)
 			valideazaDateClient();
 
@@ -635,7 +636,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 						CreareComandaGed.codClientVar = InfoStrings.getClientGenericGedWood_faraFact(UserInfo.getInstance().getUnitLog(), "PF");
 					} else {
 						if (UtilsUser.isUserExceptieCONSGED())
-							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED_faraFactura(UserInfo.getInstance().getUnitLog(), "PF");
+							CreareComandaGed.codClientVar = InfoStrings.getClientGenericGed_CONSGED_faraFactura(UserInfo.getInstance().getUnitLog(),
+									"PF");
 						else
 							CreareComandaGed.codClientVar = InfoStrings.getClientGed_FaraFactura(UserInfo.getInstance().getUnitLog());
 
@@ -845,10 +847,10 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			txtCNPClient.setText(client.getCodClient());
 			CreareComandaGed.codClientVar = client.getCodClient();
 			CreareComandaGed.tipClient = client.getTipClient();
-			
+
 			if (client.getTermenPlata() != null)
 				CreareComandaGed.listTermenPlata = client.getTermenPlata();
-			
+
 		} else {
 			CreareComandaGed.codClientParavan = client.getCodClient();
 			CreareComandaGed.numeClientParavan = client.getNumeClient();
