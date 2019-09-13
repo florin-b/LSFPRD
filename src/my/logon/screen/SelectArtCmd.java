@@ -138,6 +138,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private EnumTipCautare tipCautareArticol = EnumTipCautare.NOMINAL;
 
 	private ArrayList<ArticolDB> listArticoleStatistic;
+	private double discountASDL;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -349,7 +350,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			}
 		}
 
-		if (UtilsUser.isAgentOrSD() && DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_VANZARE) {
+		if ((UtilsUser.isAgentOrSD() || UtilsUser.isOIVPD()) && DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_VANZARE) {
 			MenuItem mnu2 = menu.add(0, 1, 1, "Tip cautare");
 			{
 				mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -1232,6 +1233,10 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 						}
 
+						if ((UtilsUser.isASDL() || UtilsUser.isOIVPD()) && procentAprob <= discountASDL) {
+							tipAlert = " ";
+						}						
+						
 						double procRedFact = 0; // factura de reducere
 						if (listPrice != 0)
 							procRedFact = (initPrice / globalCantArt * valMultiplu - finalPrice) / (listPrice / globalCantArt * valMultiplu) * 100;
@@ -1683,6 +1688,23 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				tglProc.setChecked(false);
 				tglProc.performClick();
 
+				if ((UtilsUser.isASDL() || UtilsUser.isOIVPD()) && spinnerUnitMas.getVisibility() != View.VISIBLE) {
+
+					double istoricPret = Double.parseDouble(getPretIstoric(tokenPret[20]));
+					double valPret = initPrice;
+
+					if (istoricPret > 0) {
+						valPret = istoricPret;
+					} else {
+						valPret = valPret - valPret * (discMaxSD / 100);
+					}
+
+					textProcRed.setText(nf2.format(valPret));
+
+					discountASDL = Double.parseDouble(txtPretArt.getText().toString());
+				}				
+				
+				
 				if (noDiscount(tokenPret[3]) || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM()
 						|| UtilsUser.isCGED()) {
 					txtPretArt.setEnabled(false);
@@ -1772,6 +1794,24 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private String getPretIstoric(String infoIstoric) {
+
+		String pretIstoric = "0";
+		DecimalFormat df = new DecimalFormat("#0.00");
+
+		if (infoIstoric.contains(":")) {
+			String[] arrayIstoric = infoIstoric.split(":");
+
+			String[] arrayPret = arrayIstoric[0].split("@");
+
+			pretIstoric = df.format(Double.valueOf(arrayPret[0]));
+
+		}
+
+		return pretIstoric;
+
+	}	
+	
 	private void afisIstoricPret(String infoIstoric) {
 		LinearLayout layoutIstoric1 = (LinearLayout) findViewById(R.id.layoutIstoricPret1);
 		LinearLayout layoutIstoric2 = (LinearLayout) findViewById(R.id.layoutIstoricPret2);
