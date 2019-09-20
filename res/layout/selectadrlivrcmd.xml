@@ -571,6 +571,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutObsSofer"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >
@@ -637,6 +638,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layoutCamionDescoperit"
                 android:layout_width="match_parent"
                 android:layout_height="60dip"
                 android:orientation="horizontal" >

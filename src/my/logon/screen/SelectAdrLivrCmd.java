@@ -436,6 +436,16 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			((EditText) findViewById(R.id.txtAutoDelegat)).setText(DateLivrare.getInstance().getDelegat().getNrAuto());
 		}
 
+		if (UtilsUser.isASDL() || UtilsUser.isOIVPD()) {
+			((LinearLayout) findViewById(R.id.layoutObsSofer)).setVisibility(View.INVISIBLE);
+			((LinearLayout) findViewById(R.id.layoutCamionDescoperit)).setVisibility(View.INVISIBLE);
+			spinnerTransp.setSelection(1);
+			spinnerTransp.setEnabled(false);
+			chkbClientLaRaft.setChecked(true);
+			chkbClientLaRaft.setEnabled(false);
+
+		}
+
 		btnDataLivrare = (Button) findViewById(R.id.btnDataLivrare);
 		addListenerDataLivrare();
 

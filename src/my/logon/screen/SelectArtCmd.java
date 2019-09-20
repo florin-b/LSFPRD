@@ -1126,8 +1126,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 					}
 
 					if (!isComandaDL()
-							&& Double.parseDouble(textCant.getText().toString().trim()) * (valoareUmrez / valoareUmren)  > Double.parseDouble(textStoc.getText().toString()
-									.replaceAll(",", ""))) {
+							&& Double.parseDouble(textCant.getText().toString().trim()) * (valoareUmrez / valoareUmren) > Double.parseDouble(textStoc
+									.getText().toString().replaceAll(",", ""))) {
 						Toast.makeText(getApplicationContext(), "Stoc insuficient!", Toast.LENGTH_LONG).show();
 						return;
 					}
@@ -1233,10 +1233,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 						}
 
-						if ((UtilsUser.isASDL() || UtilsUser.isOIVPD()) && procentAprob <= discountASDL) {
+						if ((UtilsUser.isASDL() || UtilsUser.isOIVPD())
+								&& Math.round(procentAprob * 1000.0) / 1000.0 <= Math.round(discountASDL * 1000.0) / 1000.0) {
 							tipAlert = " ";
-						}						
-						
+						}
+
 						double procRedFact = 0; // factura de reducere
 						if (listPrice != 0)
 							procRedFact = (initPrice / globalCantArt * valMultiplu - finalPrice) / (listPrice / globalCantArt * valMultiplu) * 100;
@@ -1327,7 +1328,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						minimKAPrice = 0;
 						cmpArt = 0;
 						subCmp = "0";
-						
+
 						valoareUmrez = 1;
 						valoareUmren = 1;
 
@@ -1688,13 +1689,22 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				tglProc.setChecked(false);
 				tglProc.performClick();
 
-				if ((UtilsUser.isASDL() || UtilsUser.isOIVPD()) && spinnerUnitMas.getVisibility() != View.VISIBLE) {
+				if (UtilsUser.isASDL() || UtilsUser.isOIVPD()) {
 
-					double istoricPret = Double.parseDouble(getPretIstoric(tokenPret[20]));
-					double valPret = initPrice;
+					String rawIstoricPret = getPretIstoric(tokenPret[20]);
 
-					if (istoricPret > 0) {
-						valPret = istoricPret;
+					double istoricPretAsdl = Double.parseDouble(rawIstoricPret.split("#")[0]);
+					double valPret = initPrice / globalCantArt * valMultiplu;
+					String umIstoric = rawIstoricPret.split("#")[1];
+					String umVanzASDL = umIstoric;
+
+					if (spinnerUnitMas.getVisibility() == View.VISIBLE) {
+						HashMap<String, String> unitMasVanz = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
+						umVanzASDL = unitMasVanz.get("rowText");
+					}
+
+					if (istoricPretAsdl > 0 && umIstoric.equals(umVanzASDL)) {
+						valPret = istoricPretAsdl;
 					} else {
 						valPret = valPret - valPret * (discMaxSD / 100);
 					}
@@ -1702,9 +1712,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 					textProcRed.setText(nf2.format(valPret));
 
 					discountASDL = Double.parseDouble(txtPretArt.getText().toString());
-				}				
-				
-				
+				}
+
 				if (noDiscount(tokenPret[3]) || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM()
 						|| UtilsUser.isCGED()) {
 					txtPretArt.setEnabled(false);
@@ -1797,6 +1806,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private String getPretIstoric(String infoIstoric) {
 
 		String pretIstoric = "0";
+		String umIstoric = "-1";
+
 		DecimalFormat df = new DecimalFormat("#0.00");
 
 		if (infoIstoric.contains(":")) {
@@ -1805,13 +1816,13 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			String[] arrayPret = arrayIstoric[0].split("@");
 
 			pretIstoric = df.format(Double.valueOf(arrayPret[0]));
-
+			umIstoric = arrayPret[2].split(" ")[1].trim();
 		}
 
-		return pretIstoric;
+		return pretIstoric + "#" + umIstoric;
 
-	}	
-	
+	}
+
 	private void afisIstoricPret(String infoIstoric) {
 		LinearLayout layoutIstoric1 = (LinearLayout) findViewById(R.id.layoutIstoricPret1);
 		LinearLayout layoutIstoric2 = (LinearLayout) findViewById(R.id.layoutIstoricPret2);
@@ -2014,8 +2025,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		valoareUmrez = Integer.parseInt(convResult[0]);
 		valoareUmren = Integer.parseInt(convResult[1]);
 
-	}	
-	
+	}
+
 	@Override
 	public void onBackPressed() {
 		finish();
@@ -2051,7 +2062,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		case GET_FACTOR_CONVERSIE:
 			loadFactorConversie((String) result);
 			break;
-			
+
 		default:
 			break;
 
