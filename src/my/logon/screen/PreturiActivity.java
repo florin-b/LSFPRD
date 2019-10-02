@@ -139,6 +139,12 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 			spinnerFiliale.setVisibility(View.VISIBLE);
 		}
 
+		if (UtilsUser.isSDIP()) {
+			populateFilialeSDIP();
+			spinnerFiliale.setVisibility(View.VISIBLE);
+
+		}
+
 	}
 
 	private void addSpinnerDepartamente() {
@@ -232,6 +238,33 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 				R.id.textNumeAgent, R.id.textCodAgent });
 
 		spinnerFiliale.setAdapter(adapterFiliale);
+
+	}
+
+	private void populateFilialeSDIP() {
+
+		listFiliale.clear();
+
+		HashMap<String, String> temp;
+
+		int selectedItem = 0, i = 1;
+
+		for (String filiala : UserInfo.getInstance().getExtraFiliale()) {
+			temp = new HashMap<String, String>();
+
+			temp.put("numeFiliala", InfoStrings.getNumeUL(filiala));
+			temp.put("codFiliala", filiala);
+
+			listFiliale.add(temp);
+
+			if (UserInfo.getInstance().getUnitLog().equals(filiala))
+				selectedItem = i;
+
+			i++;
+		}
+
+		spinnerFiliale.setAdapter(adapterFiliale);
+		spinnerFiliale.setSelection(selectedItem - 1);
 
 	}
 

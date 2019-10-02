@@ -998,7 +998,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 						spinnerTermenPlata.setVisibility(View.VISIBLE);
 				}
 
-				if (pos == 2) {
+				if (pos == 2 || rawTipPlataStr.contains("E1")) {
 
 					if (DateLivrare.getInstance().getTipPersClient().equals("PJ"))
 						Toast.makeText(getApplicationContext(), "Valoare maxima comanda: 5000 RON", Toast.LENGTH_SHORT).show();

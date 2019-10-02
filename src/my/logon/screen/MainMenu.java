@@ -88,9 +88,10 @@ public class MainMenu extends Activity {
 			R.drawable.client_info, R.drawable.payment, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.clients,
 			R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Iesire" };
+	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Stocuri", "Preturi", "Iesire" };
 
-	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.blank };
+	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.blank };
 
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",
 			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Articole avarie",
