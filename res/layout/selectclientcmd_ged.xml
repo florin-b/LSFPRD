@@ -79,7 +79,7 @@
                 android:textStyle="bold"
                 android:typeface="serif" />
 
-  <RadioButton
+            <RadioButton
                 android:id="@+id/radioClInstPub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,9 +89,8 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:typeface="serif"
-                android:visibility="invisible"
-                 />            
-            
+                android:visibility="invisible" />
+
             <RadioButton
                 android:id="@+id/radioClMeserias"
                 android:layout_width="wrap_content"
@@ -116,6 +115,7 @@
         layout="@layout/client_ged_distrib" />
 
     <LinearLayout
+        android:id="@+id/layoutClientParavan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

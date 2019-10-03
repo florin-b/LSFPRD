@@ -101,8 +101,8 @@ public class MainMenu extends Activity {
 	public int[] btnImageDV = new int[] { R.drawable.id_icon, R.drawable.agree_icon, R.drawable.constraints, R.drawable.preview_icon,
 			R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.cmd_bloc, R.drawable.colosseum, R.drawable.vanzari, R.drawable.neincasate,
 			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.viewreduceri_icon,
-			R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.location_icon,
-			R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+			R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi, R.drawable.clienti_inactivi,
+			R.drawable.location_icon, R.drawable.line_chart_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesKA = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Cmz.blocate limita credit",
 			"Creare CLP", "Afisare CLP", "Creare DL", "Afisare DL", "Obiective", "Modificare custodie", "Retur paleti", "Stare retur paleti",
@@ -165,9 +165,9 @@ public class MainMenu extends Activity {
 	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.colosseum, R.drawable.despre_icon, R.drawable.exit_icon };
 
-	public String[] btnNamesINFO = { "Utilizator", "Creare comanda", "Afisare comanda", "Stocuri", "Preturi", "Despre", "Iesire" };
+	public String[] btnNamesINFO = { "Utilizator", "Creare cmd GED", "Afisare comanda", "Stocuri", "Preturi", "Despre", "Iesire" };
 
-	public int[] btnImageINFO = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.preview_icon, R.drawable.stoc_icon,
+	public int[] btnImageINFO = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.preview_icon, R.drawable.stoc_icon,
 			R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesCVR = { "Utilizator", "Creare comanda", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate",
@@ -616,7 +616,8 @@ public class MainMenu extends Activity {
 				// clienti facturati
 				if (selectedBtnName.equalsIgnoreCase("Ntcf")) {
 
-					//Intent nextScreen = new Intent(MainMenu.this, Ntcf.class);
+					// Intent nextScreen = new Intent(MainMenu.this,
+					// Ntcf.class);
 					Intent nextScreen = new Intent(MainMenu.this, PierderiVanzari.class);
 					startActivity(nextScreen);
 					finish();
@@ -887,9 +888,16 @@ public class MainMenu extends Activity {
 			File fVer = new File(Environment.getExternalStorageDirectory() + "/download/LiteReportsVer.txt");
 			FileInputStream fileIS = new FileInputStream(fVer);
 			BufferedReader buf = new BufferedReader(new InputStreamReader(fileIS));
+
 			String readString = buf.readLine();
-			String[] tokenVer = readString.split("#");
 			fileIS.close();
+
+			if (readString == null) {
+				check = null;
+				return;
+			}
+
+			String[] tokenVer = readString.split("#");
 
 			if (!tokenVer[2].equals("0")) // 1 - fisierul este gata pentru
 											// update, 0 - inca nu

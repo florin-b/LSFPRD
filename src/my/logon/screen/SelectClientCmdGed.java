@@ -5,6 +5,7 @@
 package my.logon.screen;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,7 +37,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanClient;
@@ -83,11 +86,13 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private RadioButton radioClientInstPub;
 
 	private enum EnumTipClient {
-		MESERIAS, PARAVAN;
+		MESERIAS, PARAVAN, DISTRIBUTIE;
 	}
 
 	private EnumTipClient tipClient;
 	private boolean pressedTVAButton = false;
+	private Spinner spinnerAgenti;
+	private RadioGroup radioSelectAgent;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -219,6 +224,66 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		clientBtn = (Button) findViewById(R.id.clientBtn);
 		addListenerClientBtn();
 
+		radioSelectAgent = (RadioGroup) findViewById(R.id.radio_select_agent);
+		setRadioSelectClientListener();
+
+		if (UserInfo.getInstance().getTipUserSap().equals("CGED")) {
+			radioClPF.setVisibility(View.INVISIBLE);
+			radioClPJ.setChecked(true);
+
+			((LinearLayout) findViewById(R.id.layoutClientParavan)).setVisibility(View.INVISIBLE);
+			((LinearLayout) findViewById(R.id.layoutDateClient)).setVisibility(View.INVISIBLE);
+
+			labelIDClient.setVisibility(View.INVISIBLE);
+
+			((LinearLayout) findViewById(R.id.layoutLabelJ)).setVisibility(View.INVISIBLE);
+			((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.INVISIBLE);
+			((LinearLayout) findViewById(R.id.layoutTipComanda)).setVisibility(View.INVISIBLE);
+			((LinearLayout) findViewById(R.id.layoutRadioTipComanda)).setVisibility(View.INVISIBLE);
+
+			spinnerAgenti = ((Spinner) findViewById(R.id.spinnerAgenti));
+
+			setSpinnerAgentiListener();
+
+			if (CreareComandaGed.codClientVar.isEmpty())
+				cautaClientDistributie();
+			else
+				txtNumeClientGed.setText(CreareComandaGed.numeClientVar);
+
+		}
+
+	}
+
+	private void setRadioSelectClientListener() {
+
+		radioSelectAgent.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				switch (checkedId) {
+
+				case R.id.radio_ag_lista:
+					break;
+				case R.id.radio_ag_det:
+					getAgentComanda();
+					break;
+				default:
+					break;
+
+				}
+
+			}
+		});
+
+	}
+
+	private void getAgentComanda() {
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codClient", CreareComandaGed.codClientVar);
+		params.put("filiala", UserInfo.getInstance().getUnitLog());
+		operatiiClient.getAgentComanda(params);
+
 	}
 
 	private void setListenerVerificaTva() {
@@ -305,19 +370,35 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 				String textClient = txtNumeClientGed.getText().toString().trim();
 
-				if (!textClient.isEmpty()) {
+				if (UtilsUser.isCGED()) {
+					cautaClientDistributie();
 
-					if (radioClPJ.isChecked())
-						pressedTVAButton = false;
-
-					HashMap<String, String> params = new HashMap<String, String>();
-					params.put("numeClient", textClient);
-					params.put("tipClient", getTipClient());
-					operatiiClient.getCnpClient(params);
-				}
+				} else if (!textClient.isEmpty())
+					cautaClientPF(textClient);
 
 			}
 		});
+	}
+
+	private void cautaClientDistributie() {
+		tipClient = EnumTipClient.DISTRIBUTIE;
+		CautaClientDialog clientDialog = new CautaClientDialog(SelectClientCmdGed.this);
+		clientDialog.setMeserias(false);
+		clientDialog.setClientObiectivKA(false);
+		clientDialog.setClientSelectedListener(SelectClientCmdGed.this);
+		clientDialog.show();
+	}
+
+	private void cautaClientPF(String textClient) {
+
+		if (radioClPJ.isChecked())
+			pressedTVAButton = false;
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("numeClient", textClient);
+		params.put("tipClient", getTipClient());
+		operatiiClient.getCnpClient(params);
+
 	}
 
 	private String getTipClient() {
@@ -598,7 +679,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		saveClntBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				if (radioClPJ.isChecked() && !pressedTVAButton) {
+				if (radioClPJ.isChecked() && !pressedTVAButton && !UtilsUser.isCGED()) {
 					performVerificareTVA();
 				} else
 					valideazaDateClient();
@@ -610,7 +691,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	private void valideazaDateClient() {
 
-		if (!radioClDistrib.isChecked()) {
+		if (!radioClDistrib.isChecked() && !UtilsUser.isCGED()) {
 			if (txtNumeClientGed.getText().toString().trim().length() == 0) {
 				Toast.makeText(getApplicationContext(), "Completati numele clientului!", Toast.LENGTH_SHORT).show();
 				return;
@@ -675,7 +756,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			}
 
-			if (radioClPJ.isChecked()) {
+			if (radioClPJ.isChecked() && !UtilsUser.isCGED()) {
 				CreareComandaGed.tipClient = "PJ";
 				DateLivrare.getInstance().setTipPersClient("PJ");
 
@@ -744,6 +825,13 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				CreareComandaGed.rezervStoc = true;
 			else
 				CreareComandaGed.rezervStoc = false;
+		}
+
+		if (radioClPJ.isChecked() && UtilsUser.isCGED()) {
+			if (spinnerAgenti.getSelectedItemPosition() == 0) {
+				Toast.makeText(getApplicationContext(), "Selectati un agent", Toast.LENGTH_SHORT).show();
+				return;
+			}
 		}
 
 		finish();
@@ -817,6 +905,91 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	}
 
+	private void setSpinnerAgentiListener() {
+
+		spinnerAgenti.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> artMap = (HashMap<String, String>) arg0.getSelectedItem();
+				UserInfo.getInstance().setCod(artMap.get("codAgent"));
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
+
+	}
+
+	private void loadListAgenti(String agenti) {
+		
+		String[] tokAgenti = agenti.split("@");
+
+		ArrayList<HashMap<String, String>> listAgenti = new ArrayList<HashMap<String, String>>();
+
+		HashMap<String, String> agent = new HashMap<String, String>();
+		agent.put("numeAgent", "Selectati un agent");
+		agent.put("codAgent", "");
+
+		listAgenti.add(agent);
+
+		for (int i = 0; i < tokAgenti.length; i++) {
+			agent = new HashMap<String, String>();
+
+			agent.put("numeAgent", tokAgenti[i].split("#")[1]);
+			agent.put("codAgent", tokAgenti[i].split("#")[0]);
+			listAgenti.add(agent);
+		}
+
+		SimpleAdapter adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" },
+				new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+
+		Spinner spinnerAgenti = ((Spinner) findViewById(R.id.spinnerAgenti));
+
+		spinnerAgenti.setAdapter(adapterAgenti);
+		spinnerAgenti.setVisibility(View.VISIBLE);
+
+		if (tokAgenti.length == 1)
+			spinnerAgenti.setSelection(1);
+
+		radioSelectAgent.setVisibility(View.VISIBLE);
+
+	}
+
+	public void afisAgentComanda(String agent) {
+
+		String[] tokAgent = agent.split("#");
+
+		Spinner spinnerAgenti = ((Spinner) findViewById(R.id.spinnerAgenti));
+		int nrAgenti = spinnerAgenti.getAdapter().getCount();
+
+		if (tokAgent.length == 0 && nrAgenti > 1) {
+			spinnerAgenti.setSelection(1);
+			return;
+		}
+
+		boolean agentFound = false;
+		for (int i = 0; i < nrAgenti; i++) {
+			@SuppressWarnings("unchecked")
+			HashMap<String, String> artMap = (HashMap<String, String>) spinnerAgenti.getAdapter().getItem(i);
+
+			if (artMap.get("codAgent").equals(tokAgent[1])) {
+				spinnerAgenti.setSelection(i);
+				agentFound = true;
+				break;
+			}
+
+		}
+
+		if (!agentFound && nrAgenti > 1)
+			spinnerAgenti.setSelection(1);
+
+	}
+
 	public void onBackPressed() {
 		finish();
 		return;
@@ -835,6 +1008,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			break;
 		case GET_CNP_CLIENT:
 			afisDatePersSelectDialog((String) result);
+		case GET_AGENT_COMANDA:
+			afisAgentComanda((String) result);
+			break;
 		default:
 			break;
 		}
@@ -850,6 +1026,19 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			if (client.getTermenPlata() != null)
 				CreareComandaGed.listTermenPlata = client.getTermenPlata();
+
+		}
+		if (tipClient == EnumTipClient.DISTRIBUTIE) {
+			txtNumeClientGed.setText(client.getNumeClient());
+			txtCNPClient.setText(client.getCodClient());
+			CreareComandaGed.codClientVar = client.getCodClient();
+			CreareComandaGed.numeClientVar = client.getNumeClient();
+			CreareComandaGed.tipClient = client.getTipClient();
+
+			CreareComandaGed.tipClient = "PJ";
+			DateLivrare.getInstance().setTipPersClient("PJ");
+
+			loadListAgenti(client.getAgenti());
 
 		} else {
 			CreareComandaGed.codClientParavan = client.getCodClient();

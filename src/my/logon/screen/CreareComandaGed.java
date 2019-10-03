@@ -1552,6 +1552,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			obj.put("furnizorMarfa", " ");
 			obj.put("furnizorProduse", " ");
 			obj.put("isCamionDescoperit", DateLivrare.getInstance().isCamionDescoperit());
+			obj.put("codSuperAgent", UserInfo.getInstance().getCodSuperUser());
 			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 			obj.put("livrareSambata", DateLivrare.getInstance().getLivrareSambata());
 
@@ -1740,6 +1741,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		filialaAlternativa = UserInfo.getInstance().getUnitLog();
 		ListaArticoleComandaGed.getInstance().clearArticoleComanda();
 
+		UserInfo.getInstance().setCodSuperUser("");
+		
 		initLocale();
 
 	}

@@ -41,7 +41,7 @@
         <EditText
             android:id="@+id/txtNumeClient"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="45dip"
             android:layout_weight="0.4"
             android:background="@drawable/edittext_style_1"
             android:inputType=""
@@ -51,7 +51,7 @@
             android:textSize="19sp"
             android:typeface="monospace" />
 
-            <Button
+        <Button
             android:id="@+id/cautaClientPFBtn"
             style="@style/ok_button"
             android:layout_width="wrap_content"
@@ -60,11 +60,42 @@
             android:paddingLeft="50dip"
             android:paddingRight="50dip"
             android:text="@string/strCauta" />
-        
+
+        <Spinner
+            android:id="@+id/spinnerAgenti"
+            android:layout_width="0dip"
+            android:layout_height="40dip"
+            android:layout_marginLeft="30dip"
+            android:layout_weight="0.25"
+            android:visibility="invisible" />
+
+        <RadioGroup
+            android:id="@+id/radio_select_agent"
+            android:layout_width="0dip"
+            android:layout_height="60dip"
+            android:layout_marginLeft="20dip"
+            android:layout_weight="0.35"
+            android:orientation="vertical"
+            android:visibility="invisible" >
+
+            <RadioButton
+                android:id="@+id/radio_ag_lista"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Selecteaza un agent din lista" />
+
+            <RadioButton
+                android:id="@+id/radio_ag_det"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Determina automat un agent" />
+        </RadioGroup>
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="40dip"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.1" />
     </LinearLayout>
 
     <LinearLayout
@@ -91,6 +122,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutDateClient"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -220,6 +252,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutTipComanda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -243,6 +276,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layoutRadioTipComanda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

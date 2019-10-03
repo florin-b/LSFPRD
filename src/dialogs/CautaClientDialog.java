@@ -121,6 +121,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 		params.put("depart", "00");
 		params.put("departAg", UserInfo.getInstance().getCodDepart());
 		params.put("unitLog", localUnitLog);
+		params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 		opClient.getListClienti(params);
 	}
