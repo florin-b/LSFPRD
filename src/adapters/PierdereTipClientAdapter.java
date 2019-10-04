@@ -1,6 +1,8 @@
 package adapters;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import listeners.OperatiiClientPierderiListener;
 import my.logon.screen.R;
@@ -20,6 +22,7 @@ public class PierdereTipClientAdapter extends BaseAdapter {
 
 	private int[] colors = new int[] { 0x30FFFFFF, 0x30D7DBDD };
 	private OperatiiClientPierderiListener listener;
+	private NumberFormat nf;
 
 	public void setPierderiVanzariListener(OperatiiClientPierderiListener listener) {
 		this.listener = listener;
@@ -29,6 +32,9 @@ public class PierdereTipClientAdapter extends BaseAdapter {
 		this.context = context;
 		this.listPierderi = listPierderi;
 
+		nf = NumberFormat.getNumberInstance(Locale.US);
+		nf.setMaximumFractionDigits(2);		
+		
 	}
 
 	static class ViewHolder {
@@ -58,9 +64,9 @@ public class PierdereTipClientAdapter extends BaseAdapter {
 		final PierdereTipClient pierdere = getItem(position);
 
 		viewHolder.textNumeClient.setText(pierdere.getNumeClient());
-		viewHolder.textVenitLC.setText(String.valueOf(pierdere.getVenitLC()));
-		viewHolder.textVenitLC_1.setText(String.valueOf(pierdere.getVenitLC1()));
-		viewHolder.textVenitLC_2.setText(String.valueOf(pierdere.getVenitLC2()));
+		viewHolder.textVenitLC.setText(nf.format(pierdere.getVenitLC()));
+		viewHolder.textVenitLC_1.setText(nf.format(pierdere.getVenitLC1()));
+		viewHolder.textVenitLC_2.setText(nf.format(pierdere.getVenitLC2()));
 
 		viewHolder.detaliiBtn.setOnClickListener(new View.OnClickListener() {
 

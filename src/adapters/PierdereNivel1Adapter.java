@@ -1,6 +1,8 @@
 package adapters;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import my.logon.screen.R;
 import android.content.Context;
@@ -17,11 +19,15 @@ public class PierdereNivel1Adapter extends BaseAdapter {
 	private List<PierdereNivel1> listPierderi;
 
 	private int[] colors = new int[] { 0x30FFFFFF, 0x30D7DBDD };
+	private NumberFormat nf;
 
 	public PierdereNivel1Adapter(List<PierdereNivel1> listPierderi, Context context) {
 		this.context = context;
 		this.listPierderi = listPierderi;
 
+		nf = NumberFormat.getNumberInstance(Locale.US);
+		nf.setMaximumFractionDigits(2);			
+		
 	}
 
 	static class ViewHolder {
@@ -50,9 +56,9 @@ public class PierdereNivel1Adapter extends BaseAdapter {
 		final PierdereNivel1 pierdere = getItem(position);
 
 		viewHolder.textNivel1.setText(pierdere.getNumeNivel1());
-		viewHolder.textVenitLC.setText(String.valueOf(pierdere.getVenitLC()));
-		viewHolder.textVenitLC_1.setText(String.valueOf(pierdere.getVenitLC1()));
-		viewHolder.textVenitLC_2.setText(String.valueOf(pierdere.getVenitLC2()));
+		viewHolder.textVenitLC.setText(nf.format(pierdere.getVenitLC()));
+		viewHolder.textVenitLC_1.setText(nf.format(pierdere.getVenitLC1()));
+		viewHolder.textVenitLC_2.setText(nf.format(pierdere.getVenitLC2()));
 
 		convertView.setBackgroundColor(colors[position % 2]);
 
