@@ -506,6 +506,8 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		});
 
 		((TextView) findViewById(R.id.textTotalVenitBaza)).setText(nf.format(getTotalDetaliiBaza(salarizare)));
+		
+		((TextView) findViewById(R.id.textTotalVenitT1)).setText(nf.format(getTotalDetaliiT1(salarizare)));
 
 		((TextView) findViewById(R.id.venitBazaTCF)).setText(nf.format(salarizare.getDetaliiTCF().getVenitBaza()));
 		((TextView) findViewById(R.id.clientiAnterior)).setText(nf.format(Double.valueOf(salarizare.getDetaliiTCF().getClientiAnterior())));
@@ -651,6 +653,16 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		return totalBaza;
 	}
 
+	private double getTotalDetaliiT1(BeanSalarizareAgent salarizare) {
+		double totalT1 = 0;
+
+		for (SalarizareDetaliiBaza detaliiBaza : salarizare.getDetaliiBaza()) {
+			totalT1 += detaliiBaza.getT1();
+		}
+
+		return totalT1;
+	}	
+	
 	private double getTotalInc08(BeanSalarizareAgent salarizare) {
 		double totalInc = 0;
 

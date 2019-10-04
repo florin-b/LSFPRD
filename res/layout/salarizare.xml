@@ -542,13 +542,15 @@
                         android:textSize="17sp" />
 
                     <TextView
+                        android:id="@+id/textTotalVenitT1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="0.08"
                         android:gravity="right"
                         android:textColor="@color/salarizareHeaderTotal"
-                        android:textSize="17sp" />
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textTotalVenitBaza"
