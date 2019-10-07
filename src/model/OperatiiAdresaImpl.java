@@ -17,6 +17,7 @@ import utils.UtilsFormatting;
 import android.content.Context;
 import android.widget.Toast;
 import beans.BeanAdreseJudet;
+import beans.BeanDateLivrareClient;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 
@@ -81,6 +82,13 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 
 	}
 
+	public void getDateLivrareClient(HashMap<String, String> params) {
+		this.params = params;
+		numeComanda = EnumOperatiiAdresa.GET_DATE_LIVRARE_CLIENT;
+		performOperation();
+
+	}	
+	
 	public List<String> deserializeListLocalitati(Object resultList) {
 
 		List<String> listLocalitati = new ArrayList<String>();
@@ -133,6 +141,32 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 		return adreseJudet;
 	}
 
+	public BeanDateLivrareClient deserializeDateLivrareClient(String result) {
+		BeanDateLivrareClient dateLivrare = new BeanDateLivrareClient();
+
+		try {
+
+			JSONObject jsonObject = new JSONObject((String) result);
+
+			if (jsonObject instanceof JSONObject) {
+
+				dateLivrare.setCodJudet(jsonObject.getString("codJudet"));
+				dateLivrare.setLocalitate(jsonObject.getString("localitate"));
+				dateLivrare.setStrada(jsonObject.getString("strada"));
+				dateLivrare.setNrStrada(jsonObject.getString("nrStrada"));
+				dateLivrare.setNumePersContact(jsonObject.getString("numePersContact"));
+				dateLivrare.setTelPersContact(jsonObject.getString("telPersContact"));
+				dateLivrare.setTermenPlata(jsonObject.getString("termenPlata"));
+
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+		return dateLivrare;
+	}	
+	
+	
 	public void setOperatiiAdresaListener(OperatiiAdresaListener listener) {
 		this.listener = listener;
 	}
