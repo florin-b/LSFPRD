@@ -786,12 +786,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 									} else {
 
 										Toast.makeText(getApplicationContext(), "Limita de credit a fost depasita!", Toast.LENGTH_SHORT).show();
-
-										if (UserInfo.getInstance().getTipUserSap().equals(Constants.tipInfoAv) || UtilsUser.isSMR()
-												|| UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD())
-											goSaveCmd = false;
-										else
-											goSaveCmd = true;
+										goSaveCmd = true;
 
 										alertCredite = true;
 
@@ -1082,11 +1077,9 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			params.put("JSONDateLivrare", serializeDateLivrare());
 			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
-			
 			ComenziDAO comanda = ComenziDAO.getInstance(this);
 			comanda.setComenziDAOListener(this);
 			comanda.salveazaComandaDistrib(params);
-			
 
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
@@ -1871,7 +1864,6 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		opArticol.getStocArticole(params);
 
-
 	}
 
 	private List<BeanArticolStoc> getArticoleComanda() {
@@ -1939,7 +1931,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		for (BeanArticolStoc artStoc : listArticoleStoc) {
 			for (ArticolComanda artCmd : articoleComanda) {
 
-				if (artStoc.getCod().equals(artCmd.getCodArticol()) && artCmd.getDepozit().contains("MAV") && artStoc.getStoc() > artCmd.getCantitate()) {
+				if (artStoc.getCod().equals(artCmd.getCodArticol()) && artCmd.getDepozit().contains("MAV")
+						&& artStoc.getStoc() > artCmd.getCantitate()) {
 					alertMsg = "Pentru articolul " + artCmd.getNumeArticol() + " exista stoc disponibil in depozitul din distributie.";
 					stocValidDistrib = true;
 					break;
@@ -1970,9 +1963,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		}
 
 		return hasMAV;
-	}	
-	
-	
+	}
+
 	private void setHeaderVisibility(boolean isVisible) {
 		if (isVisible) {
 			listArtCmd.setVisibility(View.VISIBLE);
@@ -2066,7 +2058,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			break;
 
 		}
-		
+
 	}
 
 }
