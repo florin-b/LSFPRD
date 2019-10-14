@@ -246,7 +246,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			setSpinnerAgentiListener();
 
 			if (CreareComandaGed.codClientVar.isEmpty())
-				cautaClientDistributie();
+				cautaClientDistributie("");
 			else
 				txtNumeClientGed.setText(CreareComandaGed.numeClientVar);
 
@@ -370,8 +370,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 				String textClient = txtNumeClientGed.getText().toString().trim();
 
-				if (UtilsUser.isCGED()) {
-					cautaClientDistributie();
+				if (UtilsUser.isCGED() || UtilsUser.isAgentOrSD()) {
+					cautaClientDistributie(textClient);
 
 				} else if (!textClient.isEmpty())
 					cautaClientPF(textClient);
@@ -380,11 +380,12 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		});
 	}
 
-	private void cautaClientDistributie() {
+	private void cautaClientDistributie(String numeClient) {
 		tipClient = EnumTipClient.DISTRIBUTIE;
 		CautaClientDialog clientDialog = new CautaClientDialog(SelectClientCmdGed.this);
 		clientDialog.setMeserias(false);
 		clientDialog.setClientObiectivKA(false);
+		clientDialog.setNumeClient(numeClient);
 		clientDialog.setClientSelectedListener(SelectClientCmdGed.this);
 		clientDialog.show();
 	}
@@ -525,17 +526,31 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		radioClPJ.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 				if (arg1) {
-					layoutLabelJ.setVisibility(View.VISIBLE);
-					layoutTextJ.setVisibility(View.VISIBLE);
-					checkPlatTva.setChecked(true);
-					checkPlatTva.setVisibility(View.VISIBLE);
-					verificaID.setVisibility(View.GONE);
-					checkFacturaPF.setVisibility(View.GONE);
-					verificaTva.setVisibility(View.VISIBLE);
-					labelIDClient.setText("CUI");
-					txtCodJ.setText("");
-					setTextNumeClientEnabled(true);
-					clearDateLivrare();
+
+					if (UtilsUser.isAgentOrSD()) {
+
+						((LinearLayout) findViewById(R.id.layoutClientParavan)).setVisibility(View.INVISIBLE);
+						((LinearLayout) findViewById(R.id.layoutDateClient)).setVisibility(View.INVISIBLE);
+
+						labelIDClient.setVisibility(View.INVISIBLE);
+
+						((LinearLayout) findViewById(R.id.layoutLabelJ)).setVisibility(View.INVISIBLE);
+						((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.INVISIBLE);
+
+					} else {
+
+						layoutLabelJ.setVisibility(View.VISIBLE);
+						layoutTextJ.setVisibility(View.VISIBLE);
+						checkPlatTva.setChecked(true);
+						checkPlatTva.setVisibility(View.VISIBLE);
+						verificaID.setVisibility(View.GONE);
+						checkFacturaPF.setVisibility(View.GONE);
+						verificaTva.setVisibility(View.VISIBLE);
+						labelIDClient.setText("CUI");
+						txtCodJ.setText("");
+						setTextNumeClientEnabled(true);
+						clearDateLivrare();
+					}
 				}
 
 			}
@@ -547,15 +562,23 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		radioClPF.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 				if (arg1) {
-					layoutLabelJ.setVisibility(View.GONE);
-					layoutTextJ.setVisibility(View.GONE);
-					checkPlatTva.setVisibility(View.INVISIBLE);
-					verificaID.setVisibility(View.VISIBLE);
-					verificaTva.setVisibility(View.GONE);
-					checkFacturaPF.setVisibility(View.VISIBLE);
-					labelIDClient.setText("CNP");
-					setTextNumeClientEnabled(true);
-					clearDateLivrare();
+
+					if (UtilsUser.isAgentOrSD()) {
+						labelIDClient.setVisibility(View.VISIBLE);
+						((LinearLayout) findViewById(R.id.layoutDateClient)).setVisibility(View.VISIBLE);
+						((LinearLayout) findViewById(R.id.layoutClientParavan)).setVisibility(View.VISIBLE);
+					} else {
+
+						layoutLabelJ.setVisibility(View.GONE);
+						layoutTextJ.setVisibility(View.GONE);
+						checkPlatTva.setVisibility(View.INVISIBLE);
+						verificaID.setVisibility(View.VISIBLE);
+						verificaTva.setVisibility(View.GONE);
+						checkFacturaPF.setVisibility(View.VISIBLE);
+						labelIDClient.setText("CNP");
+						setTextNumeClientEnabled(true);
+						clearDateLivrare();
+					}
 				}
 
 			}
@@ -679,7 +702,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		saveClntBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				if (radioClPJ.isChecked() && !pressedTVAButton && !UtilsUser.isCGED()) {
+				if (radioClPJ.isChecked() && !pressedTVAButton && !UtilsUser.isCGED() && !UtilsUser.isAgentOrSD()) {
 					performVerificareTVA();
 				} else
 					valideazaDateClient();
@@ -756,7 +779,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			}
 
-			if (radioClPJ.isChecked() && !UtilsUser.isCGED()) {
+			if (radioClPJ.isChecked() && !UtilsUser.isCGED() && !UtilsUser.isAgentOrSD()) {
 				CreareComandaGed.tipClient = "PJ";
 				DateLivrare.getInstance().setTipPersClient("PJ");
 
@@ -926,7 +949,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	}
 
 	private void loadListAgenti(String agenti) {
-		
+
 		String[] tokAgenti = agenti.split("@");
 
 		ArrayList<HashMap<String, String>> listAgenti = new ArrayList<HashMap<String, String>>();
@@ -965,6 +988,10 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		String[] tokAgent = agent.split("#");
 
 		Spinner spinnerAgenti = ((Spinner) findViewById(R.id.spinnerAgenti));
+
+		if (spinnerAgenti.getAdapter() == null)
+			return;
+
 		int nrAgenti = spinnerAgenti.getAdapter().getCount();
 
 		if (tokAgent.length == 0 && nrAgenti > 1) {
@@ -1038,7 +1065,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			CreareComandaGed.tipClient = "PJ";
 			DateLivrare.getInstance().setTipPersClient("PJ");
 
-			loadListAgenti(client.getAgenti());
+			if (UtilsUser.isCGED())
+				loadListAgenti(client.getAgenti());
 
 		} else {
 			CreareComandaGed.codClientParavan = client.getCodClient();
