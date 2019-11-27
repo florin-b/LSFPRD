@@ -60,6 +60,7 @@ public class DateLivrareAfisare {
 	private double marjaBrutaCantVal = 0;
 	private double marjaBrutaPalProc = 0;
 	private double marjaBrutaCantProc = 0;
+	private String refClient;
 
 	public DateLivrareAfisare() {
 
@@ -523,4 +524,12 @@ public class DateLivrareAfisare {
 		this.marjaBrutaCantProc = marjaBrutaCantProc;
 	}
 
+	public String getRefClient() {
+		return refClient;
+	}
+
+	public void setRefClient(String refClient) {
+		this.refClient = refClient;
+	}	
+	
 }

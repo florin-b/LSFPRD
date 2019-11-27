@@ -8,7 +8,8 @@ public enum EnumComenziDAO {
 			"sendMailOfertaGed"), GET_COMENZI_DESCHISE("getComenziDeschise"), GET_CLIENTI_BORD("getClientiBorderou"), GET_POZITIE_MASINA(
 			"getPozitieMasina"), GET_COST_MACARA("getCostMacara"), GET_STARE_COMANDA("getStareComanda"), SALVEAZA_LIVRARE_CUSTODIE(
 			"saveLivrareCustodie"), GET_LIVRARI_CUSTODIE("getLivrariCustodie"), GET_ARTICOLE_CUSTODIE("getArticoleCustodie"), SET_CUSTODIE_DATA_LIVRARE(
-			"setCustodieDataLivrare"), STERGE_LIVRARE_CUSTODIE("stergeLivrareCustodie"), SET_CUSTODIE_ADRESA_LIVRARE("setCustodieAdresaLivrare");
+			"setCustodieDataLivrare"), STERGE_LIVRARE_CUSTODIE("stergeLivrareCustodie"), SET_CUSTODIE_ADRESA_LIVRARE("setCustodieAdresaLivrare"), SET_CMD_VANZ_DATA_LIVRARE(
+			"setCmdVanzDataLivrare");
 
 	private String numeComanda;
 

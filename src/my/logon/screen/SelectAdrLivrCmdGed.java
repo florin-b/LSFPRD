@@ -101,7 +101,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	public SimpleAdapter adapterJudete, adapterJudeteLivrare, adapterAdreseLivrare;
 
-	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerDocInsot, spinnerJudetLivrare;
+	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerJudetLivrare;
 	private static ArrayList<HashMap<String, String>> listJudete = null, listJudeteLivrare = null;
 	private ArrayAdapter<String> adapterTermenPlata;
 	private LinearLayout layoutAdr1, layoutAdr2, layoutMail;
@@ -141,6 +141,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private ObiectivConsilier obiectivSelectat;
 	private ImageButton btnStergeObiectiv;
 	private BeanDateLivrareClient dateLivrareClient;
+
+	private CheckBox checkFactura, checkAviz;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -203,6 +205,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			txtPers.setText(dateLivrareInstance.getPersContact());
 			txtTel.setText(dateLivrareInstance.getNrTel());
 
+			checkFactura = (CheckBox) findViewById(R.id.checkFactura);
+			checkAviz = (CheckBox) findViewById(R.id.checkAviz);
+
 			checkObsSofer = (CheckBox) findViewById(R.id.chkObsSofer);
 			setListenerCheckObsSofer();
 
@@ -240,6 +245,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			if (!DateLivrare.getInstance().getTipPersClient().equalsIgnoreCase("PF"))
 				isRestrictieMetPlata = false;
 
+			if (ModificareComanda.codClientVar != null && !ModificareComanda.codClientVar.trim().isEmpty())
+				isRestrictieMetPlata = false;
+			
 			adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, UtilsComenzi.tipPlataGed(isRestrictieMetPlata));
 
 			adapterSpinnerPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -307,11 +315,16 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			int i = 0;
 
 			// document insotitor
-			spinnerDocInsot = (Spinner) findViewById(R.id.spinnerDocInsot);
-			ArrayAdapter<String> adapterSpinnerDocInsot = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, docInsot);
-			adapterSpinnerDocInsot.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinnerDocInsot.setAdapter(adapterSpinnerDocInsot);
-			spinnerDocInsot.setSelection(Integer.valueOf(dateLivrareInstance.getTipDocInsotitor()) - 1);
+			checkFactura.setChecked(false);
+			checkAviz.setChecked(false);
+			if (DateLivrare.getInstance().getTipDocInsotitor().equals("1"))
+				checkFactura.setChecked(true);
+			else if (DateLivrare.getInstance().getTipDocInsotitor().equals("2"))
+				checkAviz.setChecked(true);
+			else if (DateLivrare.getInstance().getTipDocInsotitor().equals("3")) {
+				checkFactura.setChecked(true);
+				checkAviz.setChecked(true);
+			}
 			// sf. doc insot
 
 			String strTipPlata = "";
@@ -412,12 +425,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 					btnStergeObiectiv.setVisibility(View.VISIBLE);
 				}
 			}
-			
-			if (UtilsUser.isCGED()) {
+
+			if (UtilsUser.isCGED() || CreareComandaGed.tipClient.equals("IP")) {
 				getDateLivrareClient();
 			}
-			
-			
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
@@ -431,8 +442,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		operatiiAdresa.getDateLivrareClient(params);
 
 	}
-	
-	
+
 	private void setListenerSelectObiectiv() {
 
 		btnSelectObiectiv.setOnClickListener(new OnClickListener() {
@@ -932,7 +942,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void performGetJudete() {
 
-		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP")) {
+		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP") || !DateLivrare.getInstance().getCodJudet().isEmpty()) {
 
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
@@ -1528,13 +1538,26 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		dateLivrareInstance.setMail(strMailAddr.replace("#", "-").replace("@", "~"));
 
-		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
+		String tipDocInsot = "";
+		if (checkFactura.isChecked() && checkAviz.isChecked())
+			tipDocInsot = "3";
+		else if (checkFactura.isChecked())
+			tipDocInsot = "1";
+		else if (checkAviz.isChecked())
+			tipDocInsot = "2";
+
+		dateLivrareInstance.setTipDocInsotitor(tipDocInsot);
+
+		if (dateLivrareInstance.getTipDocInsotitor().isEmpty()) {
+			Toast.makeText(getApplicationContext(), "Selectati documentul insotitor!", Toast.LENGTH_LONG).show();
+			return;
+		}
 
 		if (dateLivrareInstance.getTipDocInsotitor().equals("2") && dateLivrareInstance.getTipPlata().equals("E1")) {
 			Toast.makeText(getApplicationContext(), "Pentru avizul de expeditie selectati alta metoda de plata.", Toast.LENGTH_LONG).show();
 			return;
-		}		
-		
+		}
+
 		dateLivrareInstance.setTonaj("-1");
 
 		if (radioAltaAdresa.isChecked() && !DateLivrare.getInstance().isAltaAdresa()) {
@@ -1850,7 +1873,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void setDateLivrareClient() {
 
-		if (UtilsUser.isCGED() && dateLivrareClient != null) {
+		if ((UtilsUser.isCGED() || CreareComandaGed.tipClient.equals("IP")) && dateLivrareClient != null) {
 			textLocalitate.setText(dateLivrareClient.getLocalitate());
 
 			if (!dateLivrareClient.getStrada().isEmpty() && !dateLivrareClient.getStrada().equals("null")) {
@@ -1869,7 +1892,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				txtTel.setText(dateLivrareClient.getTelPersContact());
 			}
 
-			if (dateLivrareClient.getTermenPlata().trim().length() > 0) {
+			if (UtilsUser.isCGED() && dateLivrareClient.getTermenPlata().trim().length() > 0) {
 				String[] tokTermen = dateLivrareClient.getTermenPlata().split(";");
 				for (int nrLivr = 0; nrLivr < tokTermen.length; nrLivr++) {
 					if (!tokTermen[nrLivr].equals("C000") && !tokTermen[nrLivr].equals("null"))
@@ -1880,9 +1903,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		}
 
-	}	
-	
-	
+	}
+
 	public void operatiiAdresaComplete(EnumOperatiiAdresa numeComanda, Object result, EnumLocalitate tipLocalitate) {
 
 		if (numeComanda == EnumOperatiiAdresa.IS_ADRESA_VALIDA) {

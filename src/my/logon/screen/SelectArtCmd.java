@@ -1694,7 +1694,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 					String rawIstoricPret = getPretIstoric(tokenPret[20]);
 
 					double istoricPretAsdl = Double.parseDouble(rawIstoricPret.split("#")[0]);
-					double valPret = initPrice / globalCantArt * valMultiplu;
+					double valPret = listPrice / globalCantArt * valMultiplu;
 					String umIstoric = rawIstoricPret.split("#")[1];
 					String umVanzASDL = umIstoric;
 

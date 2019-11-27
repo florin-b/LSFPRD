@@ -105,8 +105,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	public SimpleAdapter adapterJudete, adapterAdreseLivrare;
 
-	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerAdreseLivrare, spinnerDocInsot, spinnerTipReducere,
-			spinnerResponsabil;
+	private Spinner spinnerPlata, spinnerTransp, spinnerJudet, spinnerTermenPlata, spinnerAdreseLivrare, spinnerTipReducere, spinnerResponsabil;
 	private static ArrayList<HashMap<String, String>> listJudete = null, listAdreseLivrare = null;
 	private ArrayAdapter<String> adapterDataLivrare, adapterTermenPlata, adapterResponsabil;
 	private LinearLayout layoutAdrese, layoutAdr1, layoutAdr2, layoutValoareIncasare;
@@ -145,6 +144,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private TextView txtBlocScara;
 	private ArrayAdapter<String> adapterSpinnerTransp;
 	private List<String> listLocalitatiLivrare;
+
+	private CheckBox checkFactura, checkAviz;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -329,11 +330,22 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		spinnerJudet.setAdapter(adapterJudete);
 
 		// document insotitor
-		spinnerDocInsot = (Spinner) findViewById(R.id.spinnerDocInsot);
-		ArrayAdapter<String> adapterSpinnerDocInsot = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, docInsot);
-		adapterSpinnerDocInsot.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerDocInsot.setAdapter(adapterSpinnerDocInsot);
-		spinnerDocInsot.setSelection(Integer.valueOf(DateLivrare.getInstance().getTipDocInsotitor()) - 1);
+
+		checkFactura = (CheckBox) findViewById(R.id.checkFactura);
+		checkAviz = (CheckBox) findViewById(R.id.checkAviz);
+
+		checkFactura.setChecked(false);
+		checkAviz.setChecked(false);
+
+		if (DateLivrare.getInstance().getTipDocInsotitor().equals("1"))
+			checkFactura.setChecked(true);
+		else if (DateLivrare.getInstance().getTipDocInsotitor().equals("2"))
+			checkAviz.setChecked(true);
+		else if (DateLivrare.getInstance().getTipDocInsotitor().equals("3")) {
+			checkFactura.setChecked(true);
+			checkAviz.setChecked(true);
+		}
+
 		// sf. doc insot
 
 		// tip plata
@@ -793,6 +805,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		spinnerPlata.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
+				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("E")) {
+					spinnerResponsabil.setSelection(1);
+				}
+
 				if (pos == 0 || pos == 1 || pos == 2 || pos == 3) {
 					spinnerTermenPlata.setVisibility(View.VISIBLE);
 				}
@@ -1100,10 +1116,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				spinnerTipReducere.setSelection(0);
 
 			// doc. insot
+			checkFactura.setChecked(false);
+			checkAviz.setChecked(false);
+
 			if (tokLivrare[12].equals("1"))
-				spinnerDocInsot.setSelection(0);
-			else
-				spinnerDocInsot.setSelection(1);
+				checkFactura.setChecked(true);
+			else if (tokLivrare[12].equals("2"))
+				checkAviz.setChecked(true);
+			else if (tokLivrare[12].equals("3")) {
+				checkFactura.setChecked(true);
+				checkAviz.setChecked(true);
+			}
 
 			// tip plata
 			if (tokLivrare[12].equals("B"))
@@ -1554,7 +1577,20 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		dateLivrareInstance.setObsLivrare(observatii.replace("#", "-").replace("@", "-"));
 		dateLivrareInstance.setObsPlata(obsPlata);
 
-		dateLivrareInstance.setTipDocInsotitor(String.valueOf(spinnerDocInsot.getSelectedItemPosition() + 1));
+		String tipDocInsot = "";
+		if (checkFactura.isChecked() && checkAviz.isChecked())
+			tipDocInsot = "3";
+		else if (checkFactura.isChecked())
+			tipDocInsot = "1";
+		else if (checkAviz.isChecked())
+			tipDocInsot = "2";
+
+		dateLivrareInstance.setTipDocInsotitor(tipDocInsot);
+
+		if (dateLivrareInstance.getTipDocInsotitor().isEmpty()) {
+			Toast.makeText(getApplicationContext(), "Selectati documentul insotitor!", Toast.LENGTH_LONG).show();
+			return;
+		}
 
 		if (isConditiiTonaj(spinnerTransp, spinnerTonaj)) {
 			dateLivrareInstance.setTonaj(HelperAdreseLivrare.getTonajSpinnerValue(spinnerTonaj.getSelectedItemPosition()));

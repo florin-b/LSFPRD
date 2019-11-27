@@ -83,7 +83,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	private Button cautaClientPFBtn;
 
-	private RadioButton radioClientInstPub;
+	private RadioButton radioClientInstPub, radioClientNominal;
 
 	private enum EnumTipClient {
 		MESERIAS, PARAVAN, DISTRIBUTIE;
@@ -186,6 +186,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		radioClientInstPub = (RadioButton) findViewById(R.id.radioClInstPub);
 		setVisibilityRadioInstPublica(radioClientInstPub);
 
+		radioClientNominal = (RadioButton) findViewById(R.id.radioClNominal);
+		setVisibilityRadioClientNominal();
+
 		setVisibilityRadioClMeserias(radioClMeserias);
 
 		addListenerRadioClDistrib();
@@ -193,6 +196,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		addListenerRadioCLPJ();
 		addListenerRadioMeseriasi();
 		addListenerRadioInstPub();
+		addListenerRadioClientNominal();
 
 		radioClDistrib.setChecked(false);
 		radioClDistrib.setVisibility(View.GONE);
@@ -370,7 +374,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 				String textClient = txtNumeClientGed.getText().toString().trim();
 
-				if (UtilsUser.isCGED() || UtilsUser.isAgentOrSD()) {
+				if (UtilsUser.isCGED() || (UtilsUser.isAgentOrSD() && radioClientNominal.isChecked())) {
 					cautaClientDistributie(textClient);
 
 				} else if (!textClient.isEmpty())
@@ -423,10 +427,19 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	private void setVisibilityRadioInstPublica(RadioButton radioClientInstPub) {
 		if (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR")
-				|| UserInfo.getInstance().getTipUserSap().equals("SDIP"))
+				|| UserInfo.getInstance().getTipUserSap().equals("SDIP") || UserInfo.getInstance().getTipUserSap().equals("CVIP"))
 			radioClientInstPub.setVisibility(View.VISIBLE);
 		else
 			radioClientInstPub.setVisibility(View.INVISIBLE);
+
+	}
+
+	private void setVisibilityRadioClientNominal() {
+
+		if (UtilsUser.isAgentOrSD())
+			radioClientNominal.setVisibility(View.VISIBLE);
+		else
+			radioClientNominal.setVisibility(View.INVISIBLE);
 
 	}
 
@@ -527,30 +540,46 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 				if (arg1) {
 
-					if (UtilsUser.isAgentOrSD()) {
+					((LinearLayout) findViewById(R.id.layoutClientParavan)).setVisibility(View.VISIBLE);
+					((LinearLayout) findViewById(R.id.layoutDateClient)).setVisibility(View.VISIBLE);
+					labelIDClient.setVisibility(View.VISIBLE);
+					((LinearLayout) findViewById(R.id.layoutLabelJ)).setVisibility(View.VISIBLE);
+					((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.VISIBLE);
 
-						((LinearLayout) findViewById(R.id.layoutClientParavan)).setVisibility(View.INVISIBLE);
-						((LinearLayout) findViewById(R.id.layoutDateClient)).setVisibility(View.INVISIBLE);
+					layoutLabelJ.setVisibility(View.VISIBLE);
+					layoutTextJ.setVisibility(View.VISIBLE);
+					checkPlatTva.setChecked(true);
+					checkPlatTva.setVisibility(View.VISIBLE);
+					verificaID.setVisibility(View.GONE);
+					checkFacturaPF.setVisibility(View.GONE);
+					verificaTva.setVisibility(View.VISIBLE);
+					labelIDClient.setText("CUI");
+					txtCodJ.setText("");
+					setTextNumeClientEnabled(true);
+					clearDateLivrare();
+				}
 
-						labelIDClient.setVisibility(View.INVISIBLE);
+			}
+		});
+	}
 
-						((LinearLayout) findViewById(R.id.layoutLabelJ)).setVisibility(View.INVISIBLE);
-						((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.INVISIBLE);
+	private void addListenerRadioClientNominal() {
+		radioClientNominal.setOnClickListener(new OnClickListener() {
 
-					} else {
+			@Override
+			public void onClick(View v) {
+				if (UtilsUser.isAgentOrSD()) {
 
-						layoutLabelJ.setVisibility(View.VISIBLE);
-						layoutTextJ.setVisibility(View.VISIBLE);
-						checkPlatTva.setChecked(true);
-						checkPlatTva.setVisibility(View.VISIBLE);
-						verificaID.setVisibility(View.GONE);
-						checkFacturaPF.setVisibility(View.GONE);
-						verificaTva.setVisibility(View.VISIBLE);
-						labelIDClient.setText("CUI");
-						txtCodJ.setText("");
-						setTextNumeClientEnabled(true);
-						clearDateLivrare();
-					}
+					((LinearLayout) findViewById(R.id.layoutClientParavan)).setVisibility(View.INVISIBLE);
+					((LinearLayout) findViewById(R.id.layoutDateClient)).setVisibility(View.INVISIBLE);
+
+					labelIDClient.setVisibility(View.INVISIBLE);
+
+					((LinearLayout) findViewById(R.id.layoutLabelJ)).setVisibility(View.INVISIBLE);
+					((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.INVISIBLE);
+
+					txtNumeClientGed.setText("");
+
 				}
 
 			}
@@ -563,22 +592,19 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 				if (arg1) {
 
-					if (UtilsUser.isAgentOrSD()) {
-						labelIDClient.setVisibility(View.VISIBLE);
-						((LinearLayout) findViewById(R.id.layoutDateClient)).setVisibility(View.VISIBLE);
-						((LinearLayout) findViewById(R.id.layoutClientParavan)).setVisibility(View.VISIBLE);
-					} else {
+					labelIDClient.setVisibility(View.VISIBLE);
+					((LinearLayout) findViewById(R.id.layoutDateClient)).setVisibility(View.VISIBLE);
+					((LinearLayout) findViewById(R.id.layoutClientParavan)).setVisibility(View.VISIBLE);
 
-						layoutLabelJ.setVisibility(View.GONE);
-						layoutTextJ.setVisibility(View.GONE);
-						checkPlatTva.setVisibility(View.INVISIBLE);
-						verificaID.setVisibility(View.VISIBLE);
-						verificaTva.setVisibility(View.GONE);
-						checkFacturaPF.setVisibility(View.VISIBLE);
-						labelIDClient.setText("CNP");
-						setTextNumeClientEnabled(true);
-						clearDateLivrare();
-					}
+					layoutLabelJ.setVisibility(View.GONE);
+					layoutTextJ.setVisibility(View.GONE);
+					checkPlatTva.setVisibility(View.INVISIBLE);
+					verificaID.setVisibility(View.VISIBLE);
+					verificaTva.setVisibility(View.GONE);
+					checkFacturaPF.setVisibility(View.VISIBLE);
+					labelIDClient.setText("CNP");
+					setTextNumeClientEnabled(true);
+					clearDateLivrare();
 				}
 
 			}
@@ -779,7 +805,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			}
 
-			if (radioClPJ.isChecked() && !UtilsUser.isCGED() && !UtilsUser.isAgentOrSD()) {
+			if (radioClPJ.isChecked() && !UtilsUser.isCGED()) {
 				CreareComandaGed.tipClient = "PJ";
 				DateLivrare.getInstance().setTipPersClient("PJ");
 

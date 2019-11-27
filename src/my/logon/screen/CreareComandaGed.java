@@ -1103,7 +1103,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 						DateLivrare dateLivrareInstance = DateLivrare.getInstance();
 
-						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && CreareComandaGed.tipClient.equals("PJ")) {
+						if ((dateLivrareInstance.getTipPlata().equals("E") || dateLivrareInstance.getTipPlata().equals("E1")) && totalComanda > 5000
+								&& CreareComandaGed.tipClient.equals("PJ")) {
 							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
 									.show();
 							return;
@@ -1742,7 +1743,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		ListaArticoleComandaGed.getInstance().clearArticoleComanda();
 
 		UserInfo.getInstance().setCodSuperUser("");
-		
+
 		initLocale();
 
 	}

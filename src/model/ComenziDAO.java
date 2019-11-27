@@ -129,8 +129,6 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 	}
 
-
-	
 	public void salveazaLivrareCustodie(HashMap<String, String> params) {
 		numeComanda = EnumComenziDAO.SALVEAZA_LIVRARE_CUSTODIE;
 		performOperation(params);
@@ -163,9 +161,14 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		numeComanda = EnumComenziDAO.STERGE_LIVRARE_CUSTODIE;
 		performOperation(params);
 
-	}	
-	
-	
+	}
+
+	public void setCmdVanzDataLivrare(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.SET_CMD_VANZ_DATA_LIVRARE;
+		performOperation(params);
+
+	}
+
 	private void performOperation(HashMap<String, String> params) {
 		AsyncTaskListener contextListener = (AsyncTaskListener) ComenziDAO.this;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(context, contextListener, numeComanda.getComanda(), params);
@@ -318,6 +321,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setCnpClient(jsonLivrare.getString("cnpClient"));
 				dateLivrare.setIdObiectiv(jsonLivrare.getString("idObiectiv"));
 				dateLivrare.setAdresaObiectiv(Boolean.valueOf(jsonLivrare.getString("isAdresaObiectiv")));
+				dateLivrare.setTipDocInsotitor(jsonLivrare.getString("tipDocInsotitor"));
 
 				String[] coords = jsonLivrare.getString("coordonateGps").split(",");
 				dateLivrare.setCoordonateAdresa(new LatLng(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
@@ -338,19 +342,19 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setProgramLivrare(jsonLivrare.getString("programLivrare"));
 				dateLivrare.setLivrareSambata(jsonLivrare.getString("livrareSambata"));
 				dateLivrare.setBlocScara(jsonLivrare.getString("blocScara"));
-				
+
 				Delegat delegat = new Delegat();
 				delegat.setNume(jsonLivrare.getString("numeDelegat"));
 				delegat.setSerieNumarCI(jsonLivrare.getString("ciDelegat"));
 				delegat.setNrAuto(jsonLivrare.getString("autoDelegat"));
 				dateLivrare.setDelegat(delegat);
-				
+
 				if (jsonLivrare.has("marjaT1"))
 					dateLivrare.setMarjaT1(Double.valueOf(jsonLivrare.getString("marjaT1")));
 
 				if (jsonLivrare.has("procentT1"))
-					dateLivrare.setProcentT1(Double.valueOf(jsonLivrare.getString("procentT1")));					
-				
+					dateLivrare.setProcentT1(Double.valueOf(jsonLivrare.getString("procentT1")));
+
 				if (jsonLivrare.has("mCantCmd"))
 					dateLivrare.setmCantCmd(Double.valueOf(jsonLivrare.getString("mCantCmd")));
 
@@ -360,8 +364,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setMarjaBrutaPalVal(Double.valueOf(jsonLivrare.getString("marjaBrutaPalVal")));
 				dateLivrare.setMarjaBrutaCantVal(Double.valueOf(jsonLivrare.getString("marjaBrutaCantVal")));
 				dateLivrare.setMarjaBrutaPalProc(Double.valueOf(jsonLivrare.getString("marjaBrutaPalProc")));
-				dateLivrare.setMarjaBrutaCantProc(Double.valueOf(jsonLivrare.getString("marjaBrutaCantProc")));				
-				
+				dateLivrare.setMarjaBrutaCantProc(Double.valueOf(jsonLivrare.getString("marjaBrutaCantProc")));
+				dateLivrare.setRefClient(jsonLivrare.getString("refClient"));
+
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
 				for (int i = 0; i < jsonArticole.length(); i++) {
@@ -424,11 +429,14 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					articol.setMoneda(articolObject.getString("moneda"));
 					articol.setValTransport(Double.valueOf(articolObject.getString("valTransport")));
 					articol.setProcTransport(0);
-					
+
 					if (articolObject.has("valT1"))
 						articol.setValT1(Double.valueOf(articolObject.getString("valT1")));
 					if (articolObject.has("procT1"))
-						articol.setProcT1(Double.valueOf(articolObject.getString("procT1")));					
+						articol.setProcT1(Double.valueOf(articolObject.getString("procT1")));
+
+					if (articolObject.has("filialaSite"))
+						articol.setFilialaSite(articolObject.getString("filialaSite"));					
 					
 					listArticole.add(articol);
 
@@ -538,16 +546,16 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 					if (comandaObject.has("telAgent"))
 						comanda.setTelAgent(comandaObject.getString("telAgent"));
-					
+
 					if (comandaObject.has("tipComanda"))
 						comanda.setTipComanda(comandaObject.getString("tipComanda"));
 
 					if (comandaObject.has("isCmdInstPublica"))
 						comanda.setCmdInstPublica(Boolean.valueOf(comandaObject.getString("isCmdInstPublica")));
-					
+
 					if (comandaObject.has("bazaSalariala"))
-						comanda.setBazaSalariala(Double.valueOf(comandaObject.getString("bazaSalariala")));					
-					
+						comanda.setBazaSalariala(Double.valueOf(comandaObject.getString("bazaSalariala")));
+
 					listComenzi.add(comanda);
 
 				}

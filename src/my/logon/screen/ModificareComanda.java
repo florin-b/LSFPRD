@@ -977,6 +977,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				obj.put("departAprob", listArticoleComanda.get(i).getDepartAprob());
 				obj.put("istoricPret", listArticoleComanda.get(i).getIstoricPret());
 				obj.put("valTransport", listArticoleComanda.get(i).getValTransport());
+				obj.put("filialaSite", listArticoleComanda.get(i).getFilialaSite());
 
 				if (!UtilsUser.isAgentOrSDorKA()) {
 					if ((listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1)
@@ -1097,6 +1098,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("numeDelegat", DateLivrare.getInstance().getDelegat().getNume());
 			obj.put("ciDelegat", DateLivrare.getInstance().getDelegat().getSerieNumarCI());
 			obj.put("autoDelegat", DateLivrare.getInstance().getDelegat().getNrAuto());	
+			obj.put("refClient", DateLivrare.getInstance().getRefClient());
 
 		} catch (Exception ex) {
 			Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show();

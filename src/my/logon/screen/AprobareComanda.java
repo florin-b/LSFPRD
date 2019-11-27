@@ -121,7 +121,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 	private EnumTipReducere tipReducere;
 	private BeanComandaCreata comandaCurenta;
 	private TextView textTipReducere;
-	private TextView textValMarjaT1, textProcMarjaT1;
+	private TextView textValMarjaT1, textProcMarjaT1, textMetodaPlata;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -232,6 +232,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		textValMarjaT1 = (TextView) findViewById(R.id.textValMarjaT1);
 		textProcMarjaT1 = (TextView) findViewById(R.id.textProcMarjaT1);
+		
+		textMetodaPlata = (TextView) findViewById(R.id.textMetodaPlata);
 
 		textComandaBV90 = (TextView) findViewById(R.id.textComandaBV90);
 		textComandaBV90.setVisibility(View.INVISIBLE);
@@ -345,6 +347,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 						textCastigBrut.setVisibility(View.INVISIBLE);
 						textPondereB_30.setVisibility(View.INVISIBLE);
 						textTipTransport.setVisibility(View.INVISIBLE);
+						textMetodaPlata.setVisibility(View.INVISIBLE);
 						textComandaBV90.setVisibility(View.INVISIBLE);
 						checkEliminaTransp.setVisibility(View.INVISIBLE);
 						textTipReducere.setVisibility(View.INVISIBLE);
@@ -775,6 +778,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		textAdresaLivrare.setVisibility(View.VISIBLE);
 		textTipTransport.setVisibility(View.VISIBLE);
+		textMetodaPlata.setVisibility(View.VISIBLE);
 		textTipReducere.setVisibility(View.VISIBLE);
 		textMarjaCmd.setVisibility(View.VISIBLE);
 		setCheckEliminaTranspVisibility();
@@ -809,6 +813,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		textAdresaLivrare.setText("Adresa livrare: " + strAdresaLivrare.toString());
 		textTipTransport.setText("Transport: " + UtilsGeneral.getDescTipTransport(dateLivrare.getTransport()));
+		textMetodaPlata.setText("Plata: " + UtilsGeneral.getDescTipPlata(dateLivrare.getTipPlata()));
 
 		String strTipReducere = UtilsGeneral.getTipReducere(dateLivrare.getFactRed()).isEmpty() ? " " : "Tip reducere: "
 				+ UtilsGeneral.getTipReducere(dateLivrare.getFactRed());
@@ -961,6 +966,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			slidingDrawerAprob.setVisibility(View.GONE);
 			textAdresaLivrare.setText("");
 			textTipTransport.setText("");
+			textMetodaPlata.setText("");
 			textTipReducere.setText("");
 			textMarjaCmd.setText("");
 			textCastigBrut.setText("");
@@ -1057,6 +1063,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 				textPondereB_30.setVisibility(View.INVISIBLE);
 				textCastigBrut.setVisibility(View.INVISIBLE);
 				textTipTransport.setVisibility(View.INVISIBLE);
+				textMetodaPlata.setVisibility(View.INVISIBLE);
 				checkEliminaTransp.setVisibility(View.INVISIBLE);
 				textTipReducere.setVisibility(View.INVISIBLE);
 
@@ -1091,6 +1098,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 				textPondereB_30.setVisibility(View.VISIBLE);
 				textCastigBrut.setVisibility(View.VISIBLE);
 				textTipTransport.setVisibility(View.VISIBLE);
+				textMetodaPlata.setVisibility(View.VISIBLE);
 				textTipReducere.setVisibility(View.VISIBLE);
 				slideButtonAprob.setBackgroundResource(R.drawable.slideleft32);
 				setCheckEliminaTranspVisibility();
@@ -1218,6 +1226,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		textAdrLivrNoua.setText("");
 		textAdresaLivrare.setText("");
 		textTipTransport.setText("");
+		textMetodaPlata.setText("");
 		textTipReducere.setText("");
 		textMarjaCmd.setText("");
 		textPondereArtB.setText("");

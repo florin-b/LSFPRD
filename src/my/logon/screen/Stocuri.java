@@ -138,12 +138,12 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		textCodBare = (TextView) findViewById(R.id.textCodBare);
 
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")
-				|| UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14")) // agenti,
+				|| UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14") || UtilsUser.isConsWood()) // agenti,
 		// sd, directori
 		{
 			// se ofera acces la unit.log. BV90
 			if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getCodDepart().equals("05")
-					|| UserInfo.getInstance().getCodDepart().equals("01")) {
+					|| UserInfo.getInstance().getCodDepart().equals("01") || UserInfo.getInstance().getInitDivizie().equals("11")) {
 				populateFilialeAgenti();
 				spinnerFiliale.setVisibility(View.VISIBLE);
 

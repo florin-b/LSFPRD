@@ -313,6 +313,8 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 					CreareComanda.tipClientVar = tipClientVar;
 
 					CreareComanda.cmdAngajament = false;
+					
+					DateLivrare.getInstance().setRefClient(((EditText) findViewById(R.id.textRefClient)).getText().toString().trim());
 
 					if (CreareComanda.canalDistrib.equals("10")) {
 

@@ -203,7 +203,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 		super.show();
 
-		if (numeClient != null || !numeClient.isEmpty()) {
+		if (numeClient != null && !numeClient.isEmpty()) {
 			textNumeClient.setText(numeClient);
 			cautaClient();
 		}

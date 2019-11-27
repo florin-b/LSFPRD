@@ -396,7 +396,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	private void CreateMenu(Menu menu) {
 
-		if (UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite()) {
+		if (UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite() || isWood()) {
 			MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
 			{
 				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -491,7 +491,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private void showFilialaDialogBox() {
-		if (UtilsUser.isUserExceptieBV90Ged()) {
+		if (UtilsUser.isUserExceptieBV90Ged() || isWood()) {
 			showFilialaDialogBV90();
 		} else if (UtilsUser.isUserSite()) {
 			showFilialaDialogUserSite();
@@ -680,8 +680,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						varProc = -1;
 
 						textProcRed.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
+						
 						textProcRed.requestFocus();
-						textProcRed.selectAll();
+						textProcRed.setSelection(textProcRed.getText().length());
+						
 
 						InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 						mgr.showSoftInput(textProcRed, InputMethodManager.SHOW_IMPLICIT);
@@ -700,9 +702,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						varProc = 0;
 						textProcRed.setText("");
 
-						textProcRed.setSelection(textProcRed.getText().length());
 						textProcRed.requestFocus();
-						textProcRed.selectAll();
+						textProcRed.setSelection(textProcRed.getText().length());
+						
+						
 						InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 						mgr.showSoftInput(textProcRed, InputMethodManager.SHOW_IMPLICIT);
 
@@ -1183,6 +1186,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 					// sf. verificare
 
+					//pt. unele articole care nu au pret (servicii) 
+					if (pretVanzare == 0)
+						pretVanzare = finalPrice;
+					
 					procentAprob = (1 - finalPrice / (pretVanzare / globalCantArt * valMultiplu)) * 100;
 
 					if (finalPrice != 0) {
