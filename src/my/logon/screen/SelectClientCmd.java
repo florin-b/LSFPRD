@@ -136,7 +136,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		spinnerAgenti = ((Spinner) findViewById(R.id.spinnerAgenti));
 		setSpinnerAgentiListener();		
 		
-		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
+		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD() || UtilsUser.isASDL()) {
 			((LinearLayout) findViewById(R.id.layoutAgentClient)).setVisibility(View.VISIBLE);
 		}
 
@@ -224,7 +224,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		codClient = client.getCodClient();
 		tipClientVar = client.getTipClient();
 
-		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
+		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD() || UtilsUser.isASDL()) {
 
 			String[] tokAgenti = client.getAgenti().split("@");
 
@@ -302,7 +302,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 					Toast.makeText(getApplicationContext(), "Selectati un client!", Toast.LENGTH_SHORT).show();
 				} else {
 					
-					if (UtilsUser.isSuperAv() && spinnerAgenti.getSelectedItemPosition() == 0) {
+					if ((UtilsUser.isSuperAv() || UtilsUser.isASDL()) && spinnerAgenti.getSelectedItemPosition() == 0) {
 						Toast.makeText(getApplicationContext(), "Selectati un agent.", Toast.LENGTH_LONG).show();
 						return;
 					}

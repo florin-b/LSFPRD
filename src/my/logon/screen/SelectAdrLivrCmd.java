@@ -452,7 +452,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			((LinearLayout) findViewById(R.id.layoutObsSofer)).setVisibility(View.INVISIBLE);
 			((LinearLayout) findViewById(R.id.layoutCamionDescoperit)).setVisibility(View.INVISIBLE);
 			spinnerTransp.setSelection(1);
-			spinnerTransp.setEnabled(false);
+
+			if (UtilsUser.isOIVPD())
+				spinnerTransp.setEnabled(false);
+
 			chkbClientLaRaft.setChecked(true);
 			chkbClientLaRaft.setEnabled(false);
 
