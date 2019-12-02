@@ -680,10 +680,9 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						varProc = -1;
 
 						textProcRed.setText(nf2.format(initPrice / globalCantArt * valMultiplu));
-						
+
 						textProcRed.requestFocus();
 						textProcRed.setSelection(textProcRed.getText().length());
-						
 
 						InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 						mgr.showSoftInput(textProcRed, InputMethodManager.SHOW_IMPLICIT);
@@ -704,8 +703,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 						textProcRed.requestFocus();
 						textProcRed.setSelection(textProcRed.getText().length());
-						
-						
+
 						InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 						mgr.showSoftInput(textProcRed, InputMethodManager.SHOW_IMPLICIT);
 
@@ -1186,10 +1184,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 					// sf. verificare
 
-					//pt. unele articole care nu au pret (servicii) 
+					// pt. unele articole care nu au pret (servicii)
 					if (pretVanzare == 0)
 						pretVanzare = finalPrice;
-					
+
 					procentAprob = (1 - finalPrice / (pretVanzare / globalCantArt * valMultiplu)) * 100;
 
 					if (finalPrice != 0) {
@@ -1455,6 +1453,29 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		}
 
+		String[] condPret = pretArticol.getConditiiPret().split(";");
+
+		int ii = 0;
+		String[] tokPret;
+		String stringCondPret = "";
+		Double valCondPret = 0.0;
+
+		// ZSTA taxa verde
+		for (ii = 0; ii < condPret.length; ii++) {
+			tokPret = condPret[ii].split(":");
+			valCondPret = Double.valueOf(tokPret[1].replace(',', '.').trim());
+			if (valCondPret != 0 && tokPret[0].equalsIgnoreCase("ZSTA")) {
+				stringCondPret += "Taxa verde" + addSpace(15 - "Taxa verde".length()) + ":"
+						+ addSpace(10 - String.valueOf(nf2.format(valCondPret)).length()) + nf2.format(valCondPret)
+						+ System.getProperty("line.separator");
+
+			}
+
+		}
+
+		textCondPret.setVisibility(View.VISIBLE);
+		textCondPret.setText(stringCondPret);
+
 		finalPrice = initPrice;
 		textProcRed.setText("");
 
@@ -1597,6 +1618,15 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	}
 
+	private String addSpace(int nrCars) {
+		String retVal = "";
+
+		for (int i = 0; i < nrCars; i++)
+			retVal += " ";
+
+		return retVal;
+	}
+
 	private void afisIstoricPret(String infoIstoric) {
 		LinearLayout layoutIstoric1 = (LinearLayout) findViewById(R.id.layoutIstoricPret1);
 		LinearLayout layoutIstoric2 = (LinearLayout) findViewById(R.id.layoutIstoricPret2);
@@ -1660,8 +1690,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private boolean userCannotModifyPrice() {
-		return (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isCGED())
-				&& !UtilsComenzi.isComandaInstPublica();
+		return (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser
+				.isCGED()) && !UtilsComenzi.isComandaInstPublica();
 	}
 
 	private double getProcentTVA(PretArticolGed pretArticol) {
