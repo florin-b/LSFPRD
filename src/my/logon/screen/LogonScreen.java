@@ -30,6 +30,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -114,7 +115,7 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 		addListenerUserName();
 		addListenerPassword();
 
-		globalMyIP = getIPConnection();
+		globalMyIP = getDeviceId();
 
 		checkBundleExtra();
 
@@ -202,6 +203,11 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 	}
 
+	private String getDeviceId() {
+		TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		return tm.getDeviceId();
+	}	
+	
 	private String GetLocalIpAddress() {
 		String retVal = "0.0.0.0";
 		try {

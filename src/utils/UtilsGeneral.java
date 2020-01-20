@@ -94,12 +94,14 @@ public class UtilsGeneral {
 	}
 
 	public static String[] getDepoziteWood() {
-		String[] depoziteGed = new String[depoziteDISTRIB.length + 1];
 
-		System.arraycopy(depoziteDISTRIB, 0, depoziteGed, 0, depoziteDISTRIB.length);
-		depoziteGed[depoziteDISTRIB.length] = "WOOD";
+		List<String> listDepozite = new ArrayList<String>(Arrays.asList(depoziteDISTRIB));
 
-		return depoziteGed;
+		listDepozite.add("WOOD");
+		listDepozite.add("92V1");
+
+		return listDepozite.toArray(new String[listDepozite.size()]);
+
 	}
 
 	public static void showCustomToast(Context context, String strMessage, EnumTipAlert tipAlert) {
