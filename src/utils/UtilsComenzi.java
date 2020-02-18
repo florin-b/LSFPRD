@@ -70,7 +70,7 @@ public class UtilsComenzi {
 	public static void setDefaultPlataMethod(Spinner spinnerPlata) {
 
 		for (int ii = 0; ii < spinnerPlata.getAdapter().getCount(); ii++) {
-			if (spinnerPlata.getAdapter().getItem(ii).toString().toUpperCase().contains("PLATA IN NUMERAR")) {
+			if (spinnerPlata.getAdapter().getItem(ii).toString().toUpperCase().contains("E1")) {
 				spinnerPlata.setSelection(ii);
 				break;
 			}

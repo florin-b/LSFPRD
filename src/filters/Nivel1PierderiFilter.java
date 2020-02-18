@@ -7,8 +7,8 @@ import beans.PierdereNivel1;
 
 public class Nivel1PierderiFilter {
 
-	public List<PierdereNivel1> getPierderiNivel1(List<PierdereNivel1> listPierderi, String numeClient) {
-		List<PierdereNivel1> newListPierderi = new ArrayList<PierdereNivel1>();
+	public ArrayList<PierdereNivel1> getPierderiNivel1(List<PierdereNivel1> listPierderi, String numeClient) {
+		ArrayList<PierdereNivel1> newListPierderi = new ArrayList<PierdereNivel1>();
 
 		for (PierdereNivel1 p : listPierderi) {
 			if (p.getNumeClient().equals(numeClient))

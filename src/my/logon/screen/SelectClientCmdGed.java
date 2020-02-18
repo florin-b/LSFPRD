@@ -93,6 +93,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private boolean pressedTVAButton = false;
 	private Spinner spinnerAgenti;
 	private RadioGroup radioSelectAgent;
+	private LinearLayout layoutLabelRefClient, layoutTextRefClient;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -130,6 +131,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		layoutDetaliiClientDistrib = (LinearLayout) findViewById(R.id.detaliiClientDistrib);
 		layoutDetaliiClientDistrib.setVisibility(View.GONE);
+		
+		layoutLabelRefClient = (LinearLayout) findViewById(R.id.layoutLabelRefClient);
+		layoutTextRefClient = (LinearLayout) findViewById(R.id.layoutTextRefClient);
 
 		textNumeClientDistrib = (TextView) findViewById(R.id.textNumeClientDistrib);
 		textCodClientDistrib = (TextView) findViewById(R.id.textCodClientDistrib);
@@ -231,7 +235,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		radioSelectAgent = (RadioGroup) findViewById(R.id.radio_select_agent);
 		setRadioSelectClientListener();
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CGED")) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CGED") || UtilsUser.isSSCM()) {
 			radioClPF.setVisibility(View.INVISIBLE);
 			radioClPJ.setChecked(true);
 
@@ -374,7 +378,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 				String textClient = txtNumeClientGed.getText().toString().trim();
 
-				if (UtilsUser.isCGED() || (UtilsUser.isAgentOrSD() && radioClientNominal.isChecked())) {
+				if (UtilsUser.isCGED() || UtilsUser.isSSCM() || (UtilsUser.isAgentOrSD() && radioClientNominal.isChecked())) {
 					cautaClientDistributie(textClient);
 
 				} else if (!textClient.isEmpty())
@@ -522,6 +526,10 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					verificaID.setVisibility(View.GONE);
 					verificaTva.setVisibility(View.GONE);
 					labelIDClient.setText("CUI");
+					
+					layoutLabelRefClient.setVisibility(View.GONE);
+					layoutTextRefClient.setVisibility(View.GONE);
+					
 					clearDateLivrare();
 
 				} else {
@@ -545,6 +553,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					labelIDClient.setVisibility(View.VISIBLE);
 					((LinearLayout) findViewById(R.id.layoutLabelJ)).setVisibility(View.VISIBLE);
 					((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.VISIBLE);
+					
+					layoutLabelRefClient.setVisibility(View.GONE);
+					layoutTextRefClient.setVisibility(View.GONE);
 
 					layoutLabelJ.setVisibility(View.VISIBLE);
 					layoutTextJ.setVisibility(View.VISIBLE);
@@ -579,6 +590,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.INVISIBLE);
 
 					txtNumeClientGed.setText("");
+					
+					layoutLabelRefClient.setVisibility(View.GONE);
+					layoutTextRefClient.setVisibility(View.GONE);
 
 				}
 
@@ -605,6 +619,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					labelIDClient.setText("CNP");
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
+					
+					layoutLabelRefClient.setVisibility(View.GONE);
+					layoutTextRefClient.setVisibility(View.GONE);
 				}
 
 			}
@@ -624,6 +641,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				checkFacturaPF.setVisibility(View.GONE);
 				labelIDClient.setText("COD");
 
+				layoutLabelRefClient.setVisibility(View.GONE);
+				layoutTextRefClient.setVisibility(View.GONE);
+				
 				setTextNumeClientEnabled(false);
 
 				tipClient = EnumTipClient.MESERIAS;
@@ -650,6 +670,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				checkFacturaPF.setVisibility(View.GONE);
 				labelIDClient.setText("COD");
 				txtCNPClient.setVisibility(View.VISIBLE);
+				
+				layoutLabelRefClient.setVisibility(View.VISIBLE);
+				layoutTextRefClient.setVisibility(View.VISIBLE);
 
 				setTextNumeClientEnabled(false);
 
@@ -728,7 +751,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		saveClntBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				if (radioClPJ.isChecked() && !pressedTVAButton && !UtilsUser.isCGED() && !UtilsUser.isAgentOrSD()) {
+				if (radioClPJ.isChecked() && !pressedTVAButton && !UtilsUser.isCGED() && !UtilsUser.isAgentOrSD() && !UtilsUser.isSSCM()) {
 					performVerificareTVA();
 				} else
 					valideazaDateClient();
@@ -740,7 +763,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 	private void valideazaDateClient() {
 
-		if (!radioClDistrib.isChecked() && !UtilsUser.isCGED()) {
+		if (!radioClDistrib.isChecked() && !UtilsUser.isCGED() && !UtilsUser.isSSCM()) {
 			if (txtNumeClientGed.getText().toString().trim().length() == 0) {
 				Toast.makeText(getApplicationContext(), "Completati numele clientului!", Toast.LENGTH_SHORT).show();
 				return;
@@ -805,7 +828,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			}
 
-			if (radioClPJ.isChecked() && !UtilsUser.isCGED()) {
+			if (radioClPJ.isChecked() && !UtilsUser.isCGED() && !UtilsUser.isSSCM()) {
 				CreareComandaGed.tipClient = "PJ";
 				DateLivrare.getInstance().setTipPersClient("PJ");
 
@@ -838,6 +861,8 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			if (layoutTextJ.getVisibility() == View.VISIBLE)
 				CreareComandaGed.codJ = txtCodJ.getText().toString().trim();
+			
+			DateLivrare.getInstance().setRefClient(((EditText) findViewById(R.id.textRefClient)).getText().toString().trim());
 
 		}
 
@@ -876,7 +901,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				CreareComandaGed.rezervStoc = false;
 		}
 
-		if (radioClPJ.isChecked() && UtilsUser.isCGED()) {
+		if (radioClPJ.isChecked() && (UtilsUser.isCGED() || UtilsUser.isSSCM())) {
 			if (spinnerAgenti.getSelectedItemPosition() == 0) {
 				Toast.makeText(getApplicationContext(), "Selectati un agent", Toast.LENGTH_SHORT).show();
 				return;
@@ -1076,6 +1101,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			txtCNPClient.setText(client.getCodClient());
 			CreareComandaGed.codClientVar = client.getCodClient();
 			CreareComandaGed.tipClient = client.getTipClient();
+			
+			layoutLabelRefClient.setVisibility(View.VISIBLE);
+			layoutTextRefClient.setVisibility(View.VISIBLE);
 
 			if (client.getTermenPlata() != null)
 				CreareComandaGed.listTermenPlata = client.getTermenPlata();
@@ -1091,7 +1119,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			CreareComandaGed.tipClient = "PJ";
 			DateLivrare.getInstance().setTipPersClient("PJ");
 
-			if (UtilsUser.isCGED())
+			if (UtilsUser.isCGED() || UtilsUser.isSSCM())
 				loadListAgenti(client.getAgenti());
 
 		} else {

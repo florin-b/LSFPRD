@@ -1,5 +1,7 @@
 package beans;
 
+import java.util.Comparator;
+
 public class PierdereTipClient {
 
 	public String codTipClient;
@@ -48,4 +50,70 @@ public class PierdereTipClient {
 		this.venitLC2 = venitLC2;
 	}
 
+	public static class CompareNumeClient implements Comparator<PierdereTipClient> {
+
+		private int mod = -1;
+
+		public CompareNumeClient(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		@Override
+		public int compare(PierdereTipClient client1, PierdereTipClient client2) {
+			return mod * client1.getNumeClient().compareToIgnoreCase(client2.getNumeClient());
+		}
+
+	}
+
+	public static class ComparePierderiLC implements Comparator<PierdereTipClient> {
+
+		private int mod = -1;
+
+		public ComparePierderiLC(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		@Override
+		public int compare(PierdereTipClient client1, PierdereTipClient client2) {
+			return mod * (int) (Double.valueOf(client1.getVenitLC()) - Double.valueOf(client2.getVenitLC()));
+		}
+
+	}
+
+	
+	
+	public static class ComparePierderiLC1 implements Comparator<PierdereTipClient> {
+
+		private int mod = -1;
+
+		public ComparePierderiLC1(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		@Override
+		public int compare(PierdereTipClient client1, PierdereTipClient client2) {
+			return mod * (int) (Double.valueOf(client1.getVenitLC1()) - Double.valueOf(client2.getVenitLC1()));
+		}
+
+	}	
+	
+	public static class ComparePierderiLC2 implements Comparator<PierdereTipClient> {
+
+		private int mod = -1;
+
+		public ComparePierderiLC2(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		@Override
+		public int compare(PierdereTipClient client1, PierdereTipClient client2) {
+			return mod * (int) (Double.valueOf(client1.getVenitLC2()) - Double.valueOf(client2.getVenitLC2()));
+		}
+
+	}	
+	
 }

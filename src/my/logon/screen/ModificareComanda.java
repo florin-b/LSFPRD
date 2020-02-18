@@ -541,6 +541,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		textPondereB.setText(String.format("%.02f", procentB) + "%");
 		textTotalCmd.setText(String.format("%.02f", localTotalComanda));
+		totalComanda = localTotalComanda;
 
 	}
 

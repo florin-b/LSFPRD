@@ -251,6 +251,67 @@
             android:layout_weight="0.6" />
     </LinearLayout>
 
+    
+     <LinearLayout
+        android:id="@+id/layoutLabelRefClient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.02" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="0.9"
+            android:gravity="left"
+            android:maxLength="30"
+            android:text="Referinta client"
+            android:textColor="#A2B5CD"
+            android:textSize="16sp"
+            android:typeface="serif" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutTextRefClient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="45dip"
+            android:layout_weight="0.02" />
+
+        <EditText
+            android:id="@+id/textRefClient"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:background="@drawable/edittext_style_1"
+            android:inputType="text"
+            android:maxLength="30"
+            android:singleLine="true"
+            android:textColor="@color/editTextColor1"
+            android:textSize="19sp"
+            android:typeface="monospace" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="40dip"
+            android:layout_weight="0.6" />
+    </LinearLayout>
+    
+    
+    
     <LinearLayout
         android:id="@+id/layoutTipComanda"
         android:layout_width="match_parent"

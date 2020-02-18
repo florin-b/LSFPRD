@@ -217,7 +217,15 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			txtValoareIncasare.setText(DateLivrare.getInstance().getValoareIncasare());
 			checkModifValInc.setChecked(true);
 		} else {
-			txtValoareIncasare.setText(nf2.format(CreareComanda.totalComanda * Constants.TVA));
+
+			double localValCmd = 0;
+			if (!CreareComanda.codClientVar.equals(""))
+				localValCmd = CreareComanda.totalComanda * Constants.TVA;
+			else
+				localValCmd = ModificareComanda.totalComanda * Constants.TVA;
+
+			txtValoareIncasare.setText(nf2.format(localValCmd));
+
 			checkModifValInc.setChecked(false);
 		}
 
@@ -1164,6 +1172,26 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			// obs livrare
 			txtObservatii.setText(tokLivrare[10]);
 
+			DateLivrare.getInstance().setValoareIncasare(tokLivrare[16]);
+
+			double localValCmd = Double.parseDouble(DateLivrare.getInstance().getValoareIncasare());
+
+			if (tokLivrare[17].equals("X")) {
+				DateLivrare.getInstance().setValIncModif(true);
+				checkModifValInc.setChecked(true);
+			} else {
+				DateLivrare.getInstance().setValIncModif(false);
+				checkModifValInc.setChecked(false);
+
+				if (!CreareComanda.codClientVar.equals(""))
+					localValCmd = CreareComanda.totalComanda * Constants.TVA;
+				else
+					localValCmd = ModificareComanda.totalComanda * Constants.TVA;
+
+			}
+
+			txtValoareIncasare.setText(nf2.format(localValCmd));
+
 			// obs. plata (responsabil livrare)
 			spinnerResponsabil.setSelection(0);
 
@@ -1173,15 +1201,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 				spinnerResponsabil.setSelection(1);
 			} else if (tokLivrare[14].equals("OC")) {
 				spinnerResponsabil.setSelection(2);
-			}
-
-			DateLivrare.getInstance().setValoareIncasare(tokLivrare[16]);
-			if (tokLivrare[17].equals("X")) {
-				DateLivrare.getInstance().setValIncModif(true);
-				checkModifValInc.setChecked(true);
-			} else {
-				DateLivrare.getInstance().setValIncModif(false);
-				checkModifValInc.setChecked(false);
 			}
 
 			DateLivrare.getInstance().setPrelucrare(tokLivrare[18]);

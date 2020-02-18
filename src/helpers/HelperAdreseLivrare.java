@@ -8,8 +8,6 @@ import model.DateLivrare;
 import model.UserInfo;
 import my.logon.screen.CreareComanda;
 import my.logon.screen.ModificareComanda;
-import android.content.Context;
-import android.widget.Toast;
 import beans.BeanAdresaLivrare;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -18,7 +16,7 @@ public class HelperAdreseLivrare {
 
 	private static final String livrareRapida = "TERR - Curier rapid";
 	private static final double DIST_MIN_ADR_KM = 0.5;
-	private static final double DIST_MIN_ADR_NOUA_KM = 0.15;
+	private static final double DIST_MIN_ADR_NOUA_KM = 0.2;
 
 	private static String localitatiAcceptate;
 

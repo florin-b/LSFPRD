@@ -426,7 +426,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				}
 			}
 
-			if (UtilsUser.isCGED() || CreareComandaGed.tipClient.equals("IP")) {
+			if (UtilsUser.isCGED() || UtilsUser.isSSCM() || CreareComandaGed.tipClient.equals("IP")) {
 				getDateLivrareClient();
 			}
 
@@ -1873,7 +1873,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void setDateLivrareClient() {
 
-		if ((UtilsUser.isCGED() || CreareComandaGed.tipClient.equals("IP")) && dateLivrareClient != null) {
+		if ((UtilsUser.isCGED() || UtilsUser.isSSCM() || CreareComandaGed.tipClient.equals("IP")) && dateLivrareClient != null) {
 			textLocalitate.setText(dateLivrareClient.getLocalitate());
 
 			if (!dateLivrareClient.getStrada().isEmpty() && !dateLivrareClient.getStrada().equals("null")) {
@@ -1892,7 +1892,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				txtTel.setText(dateLivrareClient.getTelPersContact());
 			}
 
-			if (UtilsUser.isCGED() && dateLivrareClient.getTermenPlata().trim().length() > 0) {
+			if ( (UtilsUser.isCGED() || UtilsUser.isSSCM()) && dateLivrareClient.getTermenPlata().trim().length() > 0) {	
 				String[] tokTermen = dateLivrareClient.getTermenPlata().split(";");
 				for (int nrLivr = 0; nrLivr < tokTermen.length; nrLivr++) {
 					if (!tokTermen[nrLivr].equals("C000") && !tokTermen[nrLivr].equals("null"))

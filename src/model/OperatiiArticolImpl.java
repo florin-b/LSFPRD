@@ -123,6 +123,14 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 
 	}
 
+	@Override
+	public void getArticoleCustodie(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_ARTICOLE_CUSTODIE;
+		this.params = params;
+		performOperation();
+
+	}		
+	
 	public void getStocCustodie(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_STOC_CUSTODIE;
 		this.params = params;

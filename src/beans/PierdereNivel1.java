@@ -1,5 +1,7 @@
 package beans;
 
+import java.util.Comparator;
+
 public class PierdereNivel1 {
 	private String numeClient;
 	private String numeNivel1;
@@ -45,6 +47,70 @@ public class PierdereNivel1 {
 
 	public void setVenitLC2(double venitLC2) {
 		this.venitLC2 = venitLC2;
+	}
+
+	public static class CompareNumeNivel1 implements Comparator<PierdereNivel1> {
+
+		private int mod = -1;
+
+		public CompareNumeNivel1(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		@Override
+		public int compare(PierdereNivel1 client1, PierdereNivel1 client2) {
+			return mod * client1.getNumeNivel1().compareToIgnoreCase(client2.getNumeNivel1());
+		}
+
+	}
+
+	public static class CompareVenitLC implements Comparator<PierdereNivel1> {
+
+		private int mod = -1;
+
+		public CompareVenitLC(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		@Override
+		public int compare(PierdereNivel1 client1, PierdereNivel1 client2) {
+			return mod * (int) (Double.valueOf(client1.getVenitLC()) - Double.valueOf(client2.getVenitLC()));
+		}
+
+	}
+
+	public static class CompareVenitLC1 implements Comparator<PierdereNivel1> {
+
+		private int mod = -1;
+
+		public CompareVenitLC1(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		@Override
+		public int compare(PierdereNivel1 client1, PierdereNivel1 client2) {
+			return mod * (int) (Double.valueOf(client1.getVenitLC1()) - Double.valueOf(client2.getVenitLC1()));
+		}
+
+	}
+
+	public static class CompareVenitLC2 implements Comparator<PierdereNivel1> {
+
+		private int mod = -1;
+
+		public CompareVenitLC2(boolean asc) {
+			if (asc)
+				mod = 1;
+		}
+
+		@Override
+		public int compare(PierdereNivel1 client1, PierdereNivel1 client2) {
+			return mod * (int) (Double.valueOf(client1.getVenitLC2()) - Double.valueOf(client2.getVenitLC2()));
+		}
+
 	}
 
 }

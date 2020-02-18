@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="my.logon.screen"
-    android:versionCode="247"
+    android:versionCode="254"
     android:versionName="1.1" >
 
     <uses-sdk
@@ -33,7 +33,9 @@
         android:label="@string/app_name" >
         <uses-library android:name="com.google.android.maps" />
 
-    
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAbV0msHeHVPtAe973EiKdDbexKjmBRlk4" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -403,9 +405,19 @@
             android:screenOrientation="sensorLandscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
-        
-        
-        <uses-library
+        <activity
+            android:name=".PierderiVanzari"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".ModificareDataLivrare"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <uses-library
             android:name="com.google.android.maps"
             android:required="true" >
         </uses-library>

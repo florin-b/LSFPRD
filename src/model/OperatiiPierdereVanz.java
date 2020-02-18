@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,9 +59,9 @@ public class OperatiiPierdereVanz implements AsyncTaskListener {
 
 		PierderiVanzariAV pierderiAV = new PierderiVanzariAV();
 
-		List<PierdereVanz> listPierderi = new ArrayList<PierdereVanz>();
-		List<PierdereTipClient> listTip = new ArrayList<PierdereTipClient>();
-		List<PierdereNivel1> listNivel1 = new ArrayList<PierdereNivel1>();
+		ArrayList<PierdereVanz> listPierderi = new ArrayList<PierdereVanz>();
+		ArrayList<PierdereTipClient> listTip = new ArrayList<PierdereTipClient>();
+		ArrayList<PierdereNivel1> listNivel1 = new ArrayList<PierdereNivel1>();
 
 		try {
 
@@ -157,7 +158,6 @@ public class OperatiiPierdereVanz implements AsyncTaskListener {
 		return listPierderi;
 	}
 
-	
 	public List<PierdereTotal> deserializePierdereTotal(String result) {
 
 		List<PierdereTotal> listPierderi = new ArrayList<PierdereTotal>();
@@ -187,9 +187,8 @@ public class OperatiiPierdereVanz implements AsyncTaskListener {
 		}
 
 		return listPierderi;
-	}	
-	
-	
+	}
+
 	public void setOperatiiPierdListener(OperatiiPierdVanzListener listener) {
 		this.opPierdListener = listener;
 	}
@@ -202,4 +201,44 @@ public class OperatiiPierdereVanz implements AsyncTaskListener {
 
 	}
 
+	public ArrayList<PierdereTipClient> sortByNumeClient(ArrayList<PierdereTipClient> listaClienti, boolean tipSort) {
+		Collections.sort(listaClienti, new PierdereTipClient.CompareNumeClient(tipSort));
+		return listaClienti;
+	}
+
+	public ArrayList<PierdereTipClient> sortByPierderiLC(ArrayList<PierdereTipClient> listaClienti, boolean tipSort) {
+		Collections.sort(listaClienti, new PierdereTipClient.ComparePierderiLC(tipSort));
+		return listaClienti;
+	}
+
+	public ArrayList<PierdereTipClient> sortByPierderiLC1(ArrayList<PierdereTipClient> listaClienti, boolean tipSort) {
+		Collections.sort(listaClienti, new PierdereTipClient.ComparePierderiLC1(tipSort));
+		return listaClienti;
+	}
+
+	public ArrayList<PierdereTipClient> sortByPierderiLC2(ArrayList<PierdereTipClient> listaClienti, boolean tipSort) {
+		Collections.sort(listaClienti, new PierdereTipClient.ComparePierderiLC2(tipSort));
+		return listaClienti;
+	}
+
+	public ArrayList<PierdereNivel1> sortByNumeNivel1(ArrayList<PierdereNivel1> listaPierderi, boolean tipSort) {
+		Collections.sort(listaPierderi, new PierdereNivel1.CompareNumeNivel1(tipSort));
+		return listaPierderi;
+	}
+
+	public ArrayList<PierdereNivel1> sortByVenitLC(ArrayList<PierdereNivel1> listaPierderi, boolean tipSort) {
+		Collections.sort(listaPierderi, new PierdereNivel1.CompareVenitLC(tipSort));
+		return listaPierderi;
+	}
+	
+	public ArrayList<PierdereNivel1> sortByVenitLC1(ArrayList<PierdereNivel1> listaPierderi, boolean tipSort) {
+		Collections.sort(listaPierderi, new PierdereNivel1.CompareVenitLC1(tipSort));
+		return listaPierderi;
+	}	
+
+	public ArrayList<PierdereNivel1> sortByVenitLC2(ArrayList<PierdereNivel1> listaPierderi, boolean tipSort) {
+		Collections.sort(listaPierderi, new PierdereNivel1.CompareVenitLC2(tipSort));
+		return listaPierderi;
+	}		
+	
 }

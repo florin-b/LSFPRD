@@ -39,7 +39,10 @@ public class MapUtils {
 		}
 
 		if (address.getCity() != null && !address.getCity().equals("")) {
-			strAddress.append(address.getCity());
+			if (address.getCity().contains("SECTOR") && address.getSector().equals("BUCURESTI"))
+				strAddress.append("BUCURESTI");
+			else
+				strAddress.append(address.getCity());
 			strAddress.append(",");
 		}
 
