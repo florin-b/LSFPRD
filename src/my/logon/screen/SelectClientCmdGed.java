@@ -1118,6 +1118,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			CreareComandaGed.tipClient = "PJ";
 			DateLivrare.getInstance().setTipPersClient("PJ");
+			
+			if (client.getTermenPlata() != null)
+				CreareComandaGed.listTermenPlata = client.getTermenPlata();
 
 			if (UtilsUser.isCGED() || UtilsUser.isSSCM())
 				loadListAgenti(client.getAgenti());
