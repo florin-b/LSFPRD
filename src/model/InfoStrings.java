@@ -69,6 +69,9 @@ public class InfoStrings {
 			retVal = "Comanda alocata pe borderou";
 			break;
 
+		case 98:
+			retVal = "CLP-ul nu se poate salva.";
+			break;						
 		case 99:
 			retVal = "Atentie! Clientul nu apartine diviziei din document.";
 			break;
