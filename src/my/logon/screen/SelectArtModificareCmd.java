@@ -15,6 +15,7 @@ import java.util.Locale;
 import listeners.OperatiiArticolListener;
 import model.ArticolComandaGed;
 import model.Constants;
+import model.DateLivrare;
 import model.ListaArticoleModificareComanda;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
@@ -295,11 +296,16 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 		// pentru ag si sd de la 02 si 05 se ofera accesul la BV90
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
 			if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getCodDepart().equals("05")) {
-				MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
-				{
 
-					mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+				if (DateLivrare.getInstance().getCodFilialaCLP().length() == 4)
+					return;
+				else {
+					MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
+					{
 
+						mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+					}
 				}
 			}
 		}
@@ -1499,12 +1505,17 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 		if (codArticol.length() == 8)
 			codArticol = "0000000000" + codArticol;
 
-		String localFiliala = "";
+		String localFiliala;
 
-		if (ModificareComanda.filialaAlternativaM.equals("BV90") && globalDepozSel.equals("MAV1"))
-			localFiliala = "BV92";
-		else
-			localFiliala = ModificareComanda.filialaAlternativaM;
+		if (DateLivrare.getInstance().getCodFilialaCLP().length() == 4)
+			localFiliala = DateLivrare.getInstance().getCodFilialaCLP();
+		else {
+			if (ModificareComanda.filialaAlternativaM.equals("BV90") && globalDepozSel.equals("MAV1"))
+				localFiliala = "BV92";
+			else
+				localFiliala = ModificareComanda.filialaAlternativaM;
+		}
+
 
 		HashMap<String, String> params = new HashMap<String, String>();
 

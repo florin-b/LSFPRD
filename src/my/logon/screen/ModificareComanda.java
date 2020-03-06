@@ -1096,6 +1096,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 			obj.put("livrareSambata", DateLivrare.getInstance().getLivrareSambata());
 			obj.put("codSuperAgent", UserInfo.getInstance().getCodSuperUser());
+			obj.put("filialaCLP", DateLivrare.getInstance().getCodFilialaCLP());
 			obj.put("numeDelegat", DateLivrare.getInstance().getDelegat().getNume());
 			obj.put("ciDelegat", DateLivrare.getInstance().getDelegat().getSerieNumarCI());
 			obj.put("autoDelegat", DateLivrare.getInstance().getDelegat().getNrAuto());	

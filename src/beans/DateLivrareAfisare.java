@@ -51,6 +51,7 @@ public class DateLivrareAfisare {
 	private String programLivrare = "0";
 	private String livrareSambata = "";
 	private String blocScara = "";
+	private String codFilialaCLP = "";
 	private Delegat delegat;
 	private double marjaT1 = 0;
 	private double procentT1 = 0;
@@ -452,6 +453,14 @@ public class DateLivrareAfisare {
 		this.blocScara = blocScara;
 	}
 
+	public String getCodFilialaCLP() {
+		return codFilialaCLP;
+	}
+
+	public void setCodFilialaCLP(String codFilialaCLP) {
+		this.codFilialaCLP = codFilialaCLP;
+	}	
+	
 	public Delegat getDelegat() {
 		return delegat;
 	}

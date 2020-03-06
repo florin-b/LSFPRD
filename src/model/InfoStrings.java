@@ -69,9 +69,12 @@ public class InfoStrings {
 			retVal = "Comanda alocata pe borderou";
 			break;
 
+		case 96:
+			retVal = "Comanda salvata. Tipul de transport a fost redeterminat.";
+			break;	
 		case 98:
-			retVal = "CLP-ul nu se poate salva.";
-			break;						
+			retVal = "Comanda nu a fost salvata. Tipul de transport nu s-a putut determina.";
+			break;							
 		case 99:
 			retVal = "Atentie! Clientul nu apartine diviziei din document.";
 			break;

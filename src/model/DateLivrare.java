@@ -79,6 +79,7 @@ public class DateLivrare {
 	private String programLivrare = "0";
 	private String livrareSambata = "";
 	private String blocScara = "";
+	private String codFilialaCLP = "";
 	private Delegat delegat;
 	private ObiectivConsilier obiectivConsilier;
 	private String refClient;
@@ -139,6 +140,7 @@ public class DateLivrare {
 		this.programLivrare = dateLivrareAfisare.getProgramLivrare();
 		this.livrareSambata = dateLivrareAfisare.getLivrareSambata();
 		this.blocScara = dateLivrareAfisare.getBlocScara();
+		this.codFilialaCLP = dateLivrareAfisare.getCodFilialaCLP();
 		this.delegat = dateLivrareAfisare.getDelegat();
 		this.refClient = dateLivrareAfisare.getRefClient();
 	}
@@ -580,6 +582,14 @@ public class DateLivrare {
 		this.blocScara = blocScara;
 	}
 	
+	public String getCodFilialaCLP() {
+		return codFilialaCLP;
+	}
+
+	public void setCodFilialaCLP(String codFilialaCLP) {
+		this.codFilialaCLP = codFilialaCLP;
+	}	
+	
 	public Delegat getDelegat() {
 		return delegat;
 	}
@@ -652,6 +662,7 @@ public class DateLivrare {
 		programLivrare = "0";
 		livrareSambata = "";
 		blocScara = "";
+		codFilialaCLP = "";
 		delegat = new Delegat();
 		obiectivConsilier = null;
 		refClient = "";

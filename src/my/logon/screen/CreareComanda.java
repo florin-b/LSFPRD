@@ -359,7 +359,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			return true;
 		case 3:
 			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_VANZARE
-					|| DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE) {
+					|| DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE
+					|| DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE) {
 				if (codClientVar.length() > 0) {
 					Intent nextScreen = new Intent(getApplicationContext(), SelectArtCmd.class);
 					startActivity(nextScreen);
@@ -777,6 +778,12 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 							return true;
 						}
 
+						if (isRestrictieCLP()) {
+							Toast.makeText(getApplicationContext(), "Nu se poate salva o comanda CLP cu articole din MAV, transport TCLI si plata in numerar.",
+									Toast.LENGTH_SHORT).show();
+							return true;
+						}						
+						
 						if (count > 0 && !textAdrLivr.getText().toString().equals("")) {
 
 							if (CreareComanda.canalDistrib.equals("10")) {
@@ -837,6 +844,29 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		return DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.LIVRARE_CUSTODIE;
 	}
 
+	private boolean isRestrictieCLP() {
+
+		boolean isCLP = DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE;
+
+		boolean hasArtMAV = false;
+
+		List<ArticolComanda> listaArticole = ListaArticoleComanda.getInstance().getListArticoleComanda();
+
+		for (ArticolComanda articol : listaArticole) {
+			if (articol.getDepozit().contains("MAV")) {
+				hasArtMAV = true;
+				break;
+			}
+		}
+
+		boolean isTranspTCLI = DateLivrare.getInstance().getTransport().equals("TCLI");
+		boolean isPlataNumerar = DateLivrare.getInstance().getTipPlata().equals("E");
+
+		return isCLP && hasArtMAV && isTranspTCLI && isPlataNumerar;
+
+	}	
+	
+	
 	private void trateazaLivrareCustodie() {
 		mProgress.setVisibility(View.VISIBLE);
 		mProgress.setProgress(0);
@@ -1438,6 +1468,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			obj.put("programLivrare", DateLivrare.getInstance().getProgramLivrare());
 			obj.put("livrareSambata", DateLivrare.getInstance().getLivrareSambata());
 			obj.put("blocScara", DateLivrare.getInstance().getBlocScara());
+			obj.put("filialaCLP", DateLivrare.getInstance().getCodFilialaCLP());
 			obj.put("numeDelegat", DateLivrare.getInstance().getDelegat().getNume());
 			obj.put("ciDelegat", DateLivrare.getInstance().getDelegat().getSerieNumarCI());
 			obj.put("autoDelegat", DateLivrare.getInstance().getDelegat().getNrAuto());
@@ -2027,10 +2058,11 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	}
 
 	@Override
-	public void tipComandaSelected(TipCmdDistrib tipSelected) {
+	public void tipComandaSelected(TipCmdDistrib tipSelected, String codFilialaDest) {
 
 		tipComandaDistributie = tipSelected;
 		DateLivrare.getInstance().setTipComandaDistrib(tipSelected);
+		DateLivrare.getInstance().setCodFilialaCLP(codFilialaDest);
 
 		ActionBar actionBar = getActionBar();
 		if (tipSelected == TipCmdDistrib.DISPOZITIE_LIVRARE) {
@@ -2043,6 +2075,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		else if (tipSelected == TipCmdDistrib.LIVRARE_CUSTODIE) {
 			actionBar.setTitle("Livrare din custodie");
+		}
+		
+		else if (tipSelected == TipCmdDistrib.COMANDA_LIVRARE) {
+			actionBar.setTitle("Comanda livrare" + " " + codFilialaDest);
 		}
 
 		invalidateOptionsMenu();
