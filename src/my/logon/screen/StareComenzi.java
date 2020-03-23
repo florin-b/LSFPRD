@@ -4,11 +4,13 @@
  */
 package my.logon.screen;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import listeners.ComenziDAOListener;
 import listeners.SelectAgentDialogListener;
+import listeners.StareComandaListener;
 import model.Agent;
 import model.ComenziDAO;
 import model.UserInfo;
@@ -42,9 +44,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import dialogs.SelectAgentDialog;
+import dialogs.StareComandaDialog;
 import enums.EnumComenziDAO;
 
-public class StareComenzi extends Activity implements ComenziDAOListener, SelectAgentDialogListener {
+public class StareComenzi extends Activity implements ComenziDAOListener, SelectAgentDialogListener, StareComandaListener {
 
 	private Spinner spinnerComenzi;
 	private ComenziDAO operatiiComenzi;
@@ -54,6 +57,8 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 	private Button hartaButton;
 	private GoogleMap googleMap;
 	private ActionBar actionBar;
+	private String codAgent;
+	private List<BeanComandaDeschisa> listComenzi;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,9 +89,10 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 		operatiiComenzi = ComenziDAO.getInstance(this);
 		operatiiComenzi.setComenziDAOListener(this);
 
-		if (!isSDorSM())
+		if (!isSDorSM() && !isSDCVO()) {
+			codAgent = UserInfo.getInstance().getCod();
 			getComenziDeschise(UserInfo.getInstance().getCod());
-
+		}
 	}
 
 	private void getComenziDeschise(String codAgent) {
@@ -114,6 +120,18 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 			mapFragment.getView().setVisibility(View.GONE);
 			hartaButton.setVisibility(View.GONE);
 		}
+
+	}
+
+	private void afiseazaComenziClient(String telefonClient) {
+		List<BeanComandaDeschisa> listComenziClient = new ArrayList<BeanComandaDeschisa>();
+
+		for (BeanComandaDeschisa comanda : listComenzi) {
+			if (comanda.getTelClient().equals(telefonClient))
+				listComenziClient.add(comanda);
+		}
+
+		displayComenziDeschise(listComenziClient);
 
 	}
 
@@ -146,16 +164,26 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 	}
 
 	private void CreateMenu(Menu menu) {
-		MenuItem mnu1 = menu.add(0, 0, 0, "Agenti");
-		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		MenuItem mnu2 = menu.add(0, 0, 0, "Afiseaza");
+		mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		if (isSDorSM() || isSDCVO()) {
+			MenuItem mnu1 = menu.add(0, 1, 1, "Agenti");
+			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		}
 
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		if (isSDorSM())
-			CreateMenu(menu);
+
+		CreateMenu(menu);
 		return true;
+	}
+
+	private boolean isSDCVO() {
+		return UserInfo.getInstance().getCod().equals("00059566");
 	}
 
 	private void initMap() {
@@ -261,6 +289,9 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 		switch (item.getItemId()) {
 
 		case 0:
+			showSelectComenziDialog();
+			break;
+		case 1:
 			showSelectAgentDialog();
 			break;
 
@@ -276,6 +307,12 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 		SelectAgentDialog selectAgent = new SelectAgentDialog(StareComenzi.this);
 		selectAgent.setAgentDialogListener(this);
 		selectAgent.show();
+	}
+
+	private void showSelectComenziDialog() {
+		StareComandaDialog stareDialog = new StareComandaDialog(this, "", "");
+		stareDialog.setStareComandaListener(this);
+		stareDialog.showDialog();
 	}
 
 	private void returnToMainMenu() {
@@ -295,7 +332,8 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 	public void operationComenziComplete(EnumComenziDAO methodName, Object result) {
 		switch (methodName) {
 		case GET_COMENZI_DESCHISE:
-			displayComenziDeschise(operatiiComenzi.deserializeComenziDeschise((String) result));
+			listComenzi = operatiiComenzi.deserializeComenziDeschise((String) result);
+			displayComenziDeschise(listComenzi);
 			break;
 		case GET_CLIENTI_BORD:
 			displayClientiBorderou(operatiiComenzi.deserializeClientiBorderou((String) result));
@@ -312,8 +350,22 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 
 	@Override
 	public void agentSelected(Agent agent) {
+		codAgent = agent.getCod();
 		getComenziDeschise(agent.getCod());
 		actionBar.setTitle("Stare comenzi" + " - " + agent.getNume());
+
+	}
+
+	@Override
+	public void selectedClientTelefon(String telefonClient) {
+
+		if (listComenzi == null)
+			return;
+
+		if (telefonClient.equals("-1"))
+			getComenziDeschise(codAgent);
+		else
+			afiseazaComenziClient(telefonClient);
 
 	}
 

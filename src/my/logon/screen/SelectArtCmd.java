@@ -21,12 +21,12 @@ import model.ListaArticoleComanda;
 import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
-import my.logon.screen.SelectArtCmdGed.OnSelectUnitMas;
 import utils.DepartamentAgent;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.CautareArticoleAdapter;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -283,10 +283,10 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	}
 
 	private void addSpinnerDepartamente() {
-		
+
 		if (isLivrareCustodie())
 			return;
-		
+
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
 				DepartamentAgent.getDepartamenteAgent());
 
@@ -351,7 +351,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	private void CreateMenu(Menu menu) {
 
-		if (isUserExceptie() && DateLivrare.getInstance().getTipComandaDistrib() != TipCmdDistrib.COMANDA_LIVRARE && !isLivrareCustodie()) {			
+		if (isUserExceptie() && DateLivrare.getInstance().getTipComandaDistrib() != TipCmdDistrib.COMANDA_LIVRARE && !isLivrareCustodie()) {
 			MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
 			{
 				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -580,8 +580,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		params.put("departament", selectedDepartamentAgent);
 
 		opArticol.getArticoleCustodie(params);
-	}	
-	
+	}
+
 	public void showSelectFilArtDialogBox() {
 		dialogSelFilArt = new Dialog(SelectArtCmd.this);
 		dialogSelFilArt.setContentView(R.layout.selectfilartdialogbox);
@@ -2086,7 +2086,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 			listArticoleCustodie = opArticol.deserializeArticoleVanzare((String) result);
 			populateListViewArticol(listArticoleCustodie);
-			break;			
+			break;
 		case GET_ARTICOLE_FURNIZOR:
 			populateListViewArticol(opArticol.deserializeArticoleVanzare((String) result));
 			break;

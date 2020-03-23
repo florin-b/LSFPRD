@@ -1201,14 +1201,10 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 				minimKAPrice = 0;
 				if (UserInfo.getInstance().getTipAcces().equals("27")) {
 
-					minimKAPrice = initPrice / globalCantArt * valMultiplu;
+					minimKAPrice = listPrice / globalCantArt * valMultiplu - (listPrice / globalCantArt * valMultiplu) * Double.valueOf(tokenPret[16]) / 100;
 
 					if (listPrice > 0)
 						procDiscClient = 100 - (initPrice / listPrice) * 100;
-
-					initPrice = listPrice - listPrice * (Double.valueOf(tokenPret[16]) / 100);
-
-					listPrice = initPrice;
 
 					layoutPretMaxKA.setVisibility(View.VISIBLE);
 					textPretMinKA.setText(String.valueOf(nf2.format(minimKAPrice)));

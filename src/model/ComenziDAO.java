@@ -595,7 +595,8 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					comanda.setNumeSofer(comandaObject.getString("numeSofer"));
 					comanda.setTelSofer(comandaObject.getString("telSofer"));
 					comanda.setCodStareComanda(Integer.valueOf(comandaObject.getString("stareComanda")));
-
+					comanda.setTelClient(comandaObject.getString("telClient"));
+					
 					listComenzi.add(comanda);
 
 				}

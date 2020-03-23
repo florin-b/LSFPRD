@@ -13,6 +13,7 @@ public class BeanComandaDeschisa {
 	private String numeSofer;
 	private String telSofer;
 	private int codStareComanda;
+	private String telClient;
 
 	public String getIdCmdSap() {
 		return idCmdSap;
@@ -110,11 +111,12 @@ public class BeanComandaDeschisa {
 		this.codStareComanda = codStareComanda;
 	}
 
-	@Override
-	public String toString() {
-		return "BeanComandaDeschisa [idCmdSap=" + idCmdSap + ", numeClient=" + numeClient + ", codClient=" + codClient + ", valoare=" + valoare
-				+ ", localitate=" + localitate + ", strada=" + strada + ", codBorderou=" + codBorderou + ", nrMasina=" + nrMasina + ", codJudet=" + codJudet
-				+ ", numeSofer=" + numeSofer + ", telSofer=" + telSofer + ", codStareComanda=" + codStareComanda + "]";
+	public String getTelClient() {
+		return telClient;
+	}
+
+	public void setTelClient(String telClient) {
+		this.telClient = telClient;
 	}
 
 }

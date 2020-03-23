@@ -664,7 +664,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						comandaFinala.setAlerteKA(alerteKA);
 						comandaFinala.setFactRedSeparat(localRedSeparat);
 						comandaFinala.setFilialaAlternativa(ModificareComanda.filialaAlternativaM);
-						comandaFinala.setUserSite(localUserSite);
+						comandaFinala.setUserSite(UserInfo.getInstance().getUserSite());
 						comandaFinala.setUserSiteMail(dateLivrareInstance.getMail());
 						comandaFinala.setIsValIncModif(isValIncModif);
 						comandaFinala.setCodJ(codJ);

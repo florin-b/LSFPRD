@@ -1624,7 +1624,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		} else
 			dateLivrareInstance.setPrelucrare("-1");
 
-		if (dateLivrareInstance.getOras().equalsIgnoreCase("bucuresti")) {
+		if (dateLivrareInstance.getOras().equalsIgnoreCase("bucuresti") || dateLivrareInstance.getOras().toLowerCase().contains("sector")) {
 			beans.LatLng coordAdresa = new beans.LatLng(dateLivrareInstance.getCoordonateAdresa().latitude,
 					dateLivrareInstance.getCoordonateAdresa().longitude);
 			EnumZona zona = ZoneBucuresti.getZonaBucuresti(coordAdresa);
