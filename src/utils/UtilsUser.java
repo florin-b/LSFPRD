@@ -131,6 +131,10 @@ public class UtilsUser {
 		return UserInfo.getInstance().getTipUserSap().equalsIgnoreCase("ASDL");
 	}	
 	
+	public static boolean isUserSapKA() {
+		return UserInfo.getInstance().getTipUserSap().equals("KA");
+	}
+	
 	public static String getTipSMNou() {
 		String tipUser;
 

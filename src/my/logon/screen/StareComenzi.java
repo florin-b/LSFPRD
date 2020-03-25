@@ -165,8 +165,10 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 
 	private void CreateMenu(Menu menu) {
 
-		MenuItem mnu2 = menu.add(0, 0, 0, "Afiseaza");
-		mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		if (!UtilsUser.isAgentOrSD() && !UtilsUser.isKA()) {
+			MenuItem mnu2 = menu.add(0, 0, 0, "Afiseaza");
+			mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		}
 
 		if (isSDorSM() || isSDCVO()) {
 			MenuItem mnu1 = menu.add(0, 1, 1, "Agenti");

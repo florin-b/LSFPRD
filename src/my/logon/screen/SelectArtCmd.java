@@ -26,7 +26,6 @@ import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.CautareArticoleAdapter;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -62,6 +61,7 @@ import android.widget.ToggleButton;
 import beans.ArticolDB;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
+import enums.EnumFiliale;
 import enums.EnumTipComanda;
 import enums.TipCmdDistrib;
 
@@ -140,6 +140,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private ArrayList<ArticolDB> listArticoleStatistic;
 	private ArrayList<ArticolDB> listArticoleCustodie;
 	private double discountASDL;
+	
+	private Spinner spinnerFilialeCustodie;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -244,6 +246,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		if (isLivrareCustodie()) {
 			spinnerDepoz.setVisibility(View.INVISIBLE);
 			((LinearLayout) findViewById(R.id.layoutHeaderArt)).setVisibility(View.INVISIBLE);
+			addSpinnerFilialeCustodie();
 			getArticoleCustodie();
 
 		} else {
@@ -282,6 +285,43 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private void addSpinnerFilialeCustodie() {
+
+		ArrayAdapter<EnumFiliale> adapterFil = new ArrayAdapter<EnumFiliale>(getBaseContext(), android.R.layout.simple_list_item_1, EnumFiliale.values());
+		LayoutInflater mInflater = LayoutInflater.from(this);
+		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);
+		spinnerFilialeCustodie = (Spinner) mCustomView.findViewById(R.id.spinnerDep);
+
+		spinnerFilialeCustodie.setAdapter(adapterFil);
+
+		for (int i = 0; i < spinnerFilialeCustodie.getAdapter().getCount(); i++) {
+			if (EnumFiliale.getCodFiliala(spinnerFilialeCustodie.getAdapter().getItem(i).toString()).equals(DateLivrare.getInstance().getUnitLog())) {
+				spinnerFilialeCustodie.setSelection(i);
+				break;
+			}
+
+		}
+
+		spinnerFilialeCustodie.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				CreareComanda.filialaCustodie = EnumFiliale.getCodFiliala(spinnerFilialeCustodie.getAdapter().getItem(position).toString());
+				getArticoleCustodie();
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
+
+		getActionBar().setCustomView(mCustomView);
+		getActionBar().setDisplayShowCustomEnabled(true);
+
+	}	
+	
 	private void addSpinnerDepartamente() {
 
 		if (isLivrareCustodie())
@@ -576,7 +616,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("codClient", CreareComanda.codClientVar);
-		params.put("filiala", UserInfo.getInstance().getUnitLog());
+		params.put("filiala", EnumFiliale.getCodFiliala(spinnerFilialeCustodie.getSelectedItem().toString()));
 		params.put("departament", selectedDepartamentAgent);
 
 		opArticol.getArticoleCustodie(params);
@@ -1991,7 +2031,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("codArticol", codArticol);
 		params.put("codClient", CreareComanda.codClientVar);
-		params.put("filiala", CreareComanda.filialaAlternativa);
+		params.put("filiala", EnumFiliale.getCodFiliala(spinnerFilialeCustodie.getSelectedItem().toString()));
 
 		opArticol.getStocCustodie(params);
 	}

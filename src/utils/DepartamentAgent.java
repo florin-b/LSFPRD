@@ -80,11 +80,14 @@ public class DepartamentAgent {
 		return UserInfo.getInstance().getTipUser().equals("AV") || UserInfo.getInstance().getTipUser().equals("SD");
 	}
 
+	
+
 	public static List<String> getDepartamenteAgent() {
 
 		ArrayList<String> depart = new ArrayList<String>();
 
-		if (isKA() || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD()) {
+		if (isKA() || UtilsUser.isInfoUser() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED()
+				|| UtilsUser.isOIVPD() || UtilsUser.isUserSapKA()) {
 
 			for (EnumDepartExtra depKA : EnumDepartExtra.values()) {
 				if (depKA.getCod().equals("00") || depKA.getCod().equals("11"))
