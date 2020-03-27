@@ -75,7 +75,7 @@
                         android:layout_weight="0.08"
                         android:gravity="center"
                         android:padding="3dip"
-                        android:text="Venit TCF"
+                        android:text="Venit recurent"
                         android:textColor="@color/salarizareHeaderTotal"
                         android:textSize="17sp"
                         android:typeface="sans" />
@@ -180,7 +180,7 @@
                                 android:layout_weight="0.1"
                                 android:gravity="center"
                                 android:padding="3dip"
-                                android:text="Venit TCF"
+                                android:text="Venit recurent"
                                 android:textColor="@color/salarizareHeaderTotal"
                                 android:textSize="17sp"
                                 android:typeface="sans" />
@@ -579,7 +579,7 @@
                         android:layout_marginLeft="30dip"
                         android:layout_weight="0.6"
                         android:gravity="left"
-                        android:text="Detalii venit TCF"
+                        android:text="Detalii venit recurent"
                         android:textColor="@color/salarizareHeaderTotal"
                         android:textSize="17sp"
                         android:textStyle="bold"
@@ -651,7 +651,7 @@
                             android:layout_weight="0.07"
                             android:gravity="center"
                             android:padding="3dip"
-                            android:text="Clienti an curent"
+                            android:text="Clienti recurenti"
                             android:textColor="@color/salarizareHeaderTotal"
                             android:textSize="17sp"
                             android:typeface="sans" />
@@ -673,7 +673,7 @@
                             android:layout_weight="0.1"
                             android:gravity="center"
                             android:padding="3dip"
-                            android:text="Venit TCF"
+                            android:text="Venit recurent"
                             android:textColor="@color/salarizareHeaderTotal"
                             android:textSize="17sp"
                             android:typeface="sans" />

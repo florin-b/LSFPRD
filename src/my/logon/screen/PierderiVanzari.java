@@ -115,8 +115,12 @@ public class PierderiVanzari extends Activity implements OperatiiPierdVanzListen
 
 		if (UserInfo.getInstance().getTipUser().equals("AV"))
 			getPierderiVanzariData(UserInfo.getInstance().getCod(), UserInfo.getInstance().getUnitLog(), UserInfo.getInstance().getCodDepart());
+		else if (UserInfo.getInstance().getTipUser().equals("KA"))
+			getPierderiVanzariData(UserInfo.getInstance().getCod(), UserInfo.getInstance().getUnitLog(), "10");
 		else if (UserInfo.getInstance().getTipUser().equals("SD"))
 			getPierderiVanzariDepart(UserInfo.getInstance().getUnitLog(), UserInfo.getInstance().getCodDepart());
+		else if (UtilsUser.isUserSK() || UtilsUser.isUserSDKA())
+			getPierderiVanzariDepart(UserInfo.getInstance().getUnitLog(), "10");
 		else if (UtilsUser.isDV())
 			getPierderiVanzariTotal();
 
@@ -653,6 +657,8 @@ public class PierderiVanzari extends Activity implements OperatiiPierdVanzListen
 
 		if (UtilsUser.isDV())
 			getPierderiVanzariData(codAgent, ulDV, UserInfo.getInstance().getCodDepart());
+		else if (UtilsUser.isUserSK() || UtilsUser.isUserSDKA())
+			getPierderiVanzariData(codAgent, UserInfo.getInstance().getUnitLog(), "10");
 		else
 			getPierderiVanzariData(codAgent, UserInfo.getInstance().getUnitLog(), UserInfo.getInstance().getCodDepart());
 
