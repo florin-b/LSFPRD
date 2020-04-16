@@ -233,7 +233,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			setTipTransportOptions();
 
-			if (UserInfo.getInstance().getUserSite().equals("X")) {
+			if (UserInfo.getInstance().getUserSite().equals("X") || UtilsUser.isConsWood()) {
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransportOnline);
 
 			} else {
@@ -1057,6 +1057,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 					checkMacara.setVisibility(View.INVISIBLE);
 					spinnerTonaj.setVisibility(View.INVISIBLE);
 					spinnerTonaj.setSelection(0);
+					spinnerPlata.setSelection(0);
 
 				}
 

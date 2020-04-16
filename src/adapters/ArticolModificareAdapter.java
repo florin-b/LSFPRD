@@ -165,6 +165,7 @@ public class ArticolModificareAdapter extends BaseAdapter implements OperatiiArt
 			if (!areConditions(articol, conditieArticol)) {
 				viewHolder.textConditie.setVisibility(View.INVISIBLE);
 				viewHolder.acceptaConditiiBtn.setVisibility(View.INVISIBLE);
+				articol.setConditii(false);
 			} else {
 				viewHolder.textStatusArt.setText("Articol supus unor conditii");
 				articol.setConditii(true);

@@ -1694,17 +1694,20 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private boolean adresaNouaExista() {
 		int posAdresa = HelperAdreseLivrare.verificaDistantaAdresaNoua(adreseList, DateLivrare.getInstance().getCoordonateAdresa());
+		boolean adresaExista = HelperAdreseLivrare.adresaExista(adreseList);
 
-		if (posAdresa != -1) {
-
+		if (adresaExista) {
 			Toast.makeText(getApplicationContext(), "Aceasta adresa exista deja in lista de adrese.", Toast.LENGTH_LONG).show();
-
 			selectedAddrModifCmd = posAdresa;
 			radioLista.setChecked(true);
 			spinnerAdreseLivrare.setSelection(posAdresa);
-
 			return true;
-		} else
+		}
+		else if (posAdresa != -1){
+			valideazaTonajAdresaNoua();
+			return false;
+		}
+		else
 			return false;
 
 	}

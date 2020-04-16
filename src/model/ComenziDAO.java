@@ -168,6 +168,12 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		performOperation(params);
 
 	}
+	
+	public void updateComandaSimulata(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.UPDATE_COM_SIM;
+		performOperation(params);
+
+	}
 
 	private void performOperation(HashMap<String, String> params) {
 		AsyncTaskListener contextListener = (AsyncTaskListener) ComenziDAO.this;

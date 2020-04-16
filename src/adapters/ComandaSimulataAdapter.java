@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
+import model.Constants;
 import my.logon.screen.R;
 import utils.UtilsFormatting;
 import android.content.Context;
@@ -66,10 +67,12 @@ public class ComandaSimulataAdapter extends BaseAdapter {
 		viewHolder.textTipClient.setText(comanda.getTipClient());
 		comanda.setAprobata(isAprobata(comanda));
 
-		if (comanda.isAprobata())
-			viewHolder.textAprobata.setText("Aprobata");
-		else
-			viewHolder.textAprobata.setText("In curs de aprobare");
+		if (!comanda.getCodStare().equals(Constants.CMD_SIM_CONDITII)) {
+			if (comanda.isAprobata())
+				viewHolder.textAprobata.setText("Aprobata");
+			else
+				viewHolder.textAprobata.setText("In curs de aprobare");
+		}
 
 		if (comanda.getCodStare().equals("21")) {
 			viewHolder.textValAvans.setText("Avans: " + String.valueOf(comanda.getAvans()));

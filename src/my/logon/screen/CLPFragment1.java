@@ -385,6 +385,21 @@ public class CLPFragment1 extends Fragment implements OperatiiClientListener, Op
 				labelAgentiClp.setVisibility(View.VISIBLE);
 				performGetAgenti();
 			}
+			
+			/*
+			if (UtilsUser.isSD()) {
+				radioFiliala.performClick();
+				radioClient.setVisibility(View.INVISIBLE);
+				radioFiliala.setVisibility(View.INVISIBLE);
+				
+				((LinearLayout) (v.findViewById(R.id.layoutFiliala))).setVisibility(View.GONE);
+				((LinearLayout) (v.findViewById(R.id.layoutAdr1))).setVisibility(View.GONE);
+				((LinearLayout) (v.findViewById(R.id.layoutAdr2))).setVisibility(View.GONE);
+				((LinearLayout) (v.findViewById(R.id.layoutPersCont))).setVisibility(View.GONE);
+				((LinearLayout) (v.findViewById(R.id.layoutTel))).setVisibility(View.GONE);
+				
+			}
+			*/
 
 		} catch (Exception e) {
 			Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();

@@ -6,8 +6,12 @@ package my.logon.screen;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,11 +25,17 @@ import listeners.OperatiiArticolListener;
 import listeners.SelectClientListener;
 import model.ArticolComanda;
 import model.ComenziDAO;
+import model.Constants;
 import model.InfoStrings;
 import model.OperatiiArticol;
 import model.OperatiiArticolImpl;
 import model.UserInfo;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import patterns.CriteriuComenziSimulate;
+import utils.UtilsDates;
 import utils.UtilsGeneral;
 import adapters.ArticolSimulatAdapter;
 import adapters.ComandaSimulataAdapter;
@@ -132,9 +142,9 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 		spinnerCmd = (Spinner) findViewById(R.id.spinnerCmd);
 
-		adapterComenzi = new SimpleAdapter(this, listComenzi, R.layout.comsimulatecustomview, new String[] { "idCmd", "codClient", "numeClient",
-				"data", "suma", "stare", "tipCmd", "ul", "cmdSap" }, new int[] { R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData,
-				R.id.textSuma, R.id.textStare, R.id.textTipCmd, R.id.textUL, R.id.textCmdSAP });
+		adapterComenzi = new SimpleAdapter(this, listComenzi, R.layout.comsimulatecustomview, new String[] { "idCmd", "codClient", "numeClient", "data",
+				"suma", "stare", "tipCmd", "ul", "cmdSap" }, new int[] { R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData, R.id.textSuma,
+				R.id.textStare, R.id.textTipCmd, R.id.textUL, R.id.textCmdSAP });
 
 		addSpinnerCmdListener();
 
@@ -159,10 +169,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		this.stergeCmdSimBtn.setVisibility(View.INVISIBLE);
 		addListenerStergeCmdSimBtn();
 
-		adapter = new SimpleAdapter(this, list1, R.layout.comsimulatecustomrowview, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt",
-				"pretArt", "monedaArt", "depozit", "status", "procent", "procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt,
-				R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit,
-				R.id.textStatusArt, R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr, R.id.textProcAprobModif });
+		adapter = new SimpleAdapter(this, list1, R.layout.comsimulatecustomrowview, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt", "pretArt",
+				"monedaArt", "depozit", "status", "procent", "procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt, R.id.textNumeArt,
+				R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit, R.id.textStatusArt,
+				R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr, R.id.textProcAprobModif });
 
 		listArticoleSimulate.setAdapter(adapter);
 		listArticoleSimulate.setVisibility(View.INVISIBLE);
@@ -220,7 +230,8 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		verificaStocButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				verificaStocArticole();
+				if (!comandaAreConditii())
+					verificaStocArticole();
 
 			}
 		});
@@ -380,6 +391,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 					setupContextLayout(comandaCurenta);
 					performGetArticoleComanda();
+
 				}
 
 			}
@@ -391,10 +403,26 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	}
 
 	private void setupContextLayout(BeanComandaSimulata comanda) {
-		if (comanda.isAprobata())
+		if ((comanda.isAprobata() || comanda.getCodStare().equals(Constants.CMD_SIM_CONDITII)) && !isComandaVeche())
 			verificaStocButton.setVisibility(View.VISIBLE);
 		else
 			verificaStocButton.setVisibility(View.INVISIBLE);
+	}
+
+	private boolean isComandaVeche() {
+		boolean isVeche = false;
+
+		try {
+			Date dataComanda = new SimpleDateFormat("dd-MMM-yy").parse(comandaCurenta.getData());
+			int nrZile = UtilsDates.dateDiffDays(dataComanda, new Date());
+			if (nrZile > 7)
+				isVeche = true;
+
+		} catch (ParseException e) {
+			isVeche = true;
+		}
+
+		return isVeche;
 	}
 
 	private void setCreazaCmdBtnVisibleStatus(BeanComandaSimulata comanda) {
@@ -406,16 +434,86 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	}
 
 	private boolean isCmdAvansOK(BeanComandaSimulata comanda, boolean allStock) {
-		return comanda.getCodStare().equals("21") && comanda.isAprobata() && comanda.getAvans() > 0 && allStock;
+		return (comanda.getCodStare().equals("41") || comanda.getCodStare().equals("21")) && comanda.isAprobata() && comanda.getAvans() > 0 && allStock;
 	}
 
 	public void addListenerCreazaCmdSimBtn() {
 		creeazaCmdSimBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				showCreateCmdConfirmationAlert();
+
+				if (!comandaAreConditii()) {
+					actualizeazaComandaSimulata();
+				}
 
 			}
 		});
+
+	}
+
+	public boolean comandaAreConditii() {
+
+		for (ArticolSimulat articol : listArticole) {
+			if (articol.hasConditii()) {
+				Toast.makeText(getApplicationContext(), "Preluati mai intai conditiile impuse.", Toast.LENGTH_LONG).show();
+				return true;
+			}
+		}
+
+		comandaCurenta.setAprobata(true);
+
+		return false;
+	}
+
+	public double getTotalComanda() {
+
+		double totalComanda = 0;
+		for (ArticolComanda articol : listArticole) {
+			totalComanda += articol.getPretUnit() / articol.getMultiplu() * Double.valueOf(articol.getCantUmb());
+
+		}
+
+		return totalComanda;
+	}
+
+	private void actualizeazaComandaSimulata() {
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("idComanda", comandaCurenta.getId());
+		params.put("totalComanda", getTotalComanda() + "");
+		params.put("listArticole", serializeArticole());
+
+		comenzi.updateComandaSimulata(params);
+
+	}
+
+	private String serializeArticole() {
+		JSONArray myArray = new JSONArray();
+
+		JSONObject obj = null;
+
+		try {
+			for (int i = 0; i < listArticole.size(); i++) {
+
+				{
+					obj = new JSONObject();
+					obj.put("codArticol", listArticole.get(i).getCodArticol());
+					obj.put("cantitate", listArticole.get(i).getCantitate());
+					obj.put("pretUnit", listArticole.get(i).getPretUnit());
+					obj.put("multiplu", listArticole.get(i).getMultiplu());
+					obj.put("cantUmb", listArticole.get(i).getCantUmb());
+					obj.put("procent", listArticole.get(i).getProcent());
+					obj.put("procAprob", listArticole.get(i).getProcAprob());
+					obj.put("procentFact", listArticole.get(i).getProcentFact());
+					obj.put("ponderare", listArticole.get(i).getPonderare());
+					obj.put("infoArticol", listArticole.get(i).getInfoArticol());
+					myArray.put(obj);
+				}
+			}
+		} catch (Exception ex) {
+			Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return myArray.toString();
 
 	}
 
@@ -431,6 +529,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 				// fara rezervare
 				if (comandaCurenta.getCodStare().equals("21"))
 					tipOpCmd = "10";
+
+				// cu conditii
+				if (comandaCurenta.getCodStare().equals("41"))
+					tipOpCmd = "41";
 
 				opereazaComanda();
 
@@ -500,27 +602,23 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	}
 
 	public void performGetComenzi() {
-		try {
 
-			HashMap<String, String> params = new HashMap<String, String>();
+		HashMap<String, String> params = new HashMap<String, String>();
 
-			String tipUser = "CV";
+		String tipUser = "CV";
 
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("9"))
-				tipUser = "CV";
+		if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("9"))
+			tipUser = "CV";
 
-			params.put("filiala", UserInfo.getInstance().getUnitLog());
-			params.put("codUser", UserInfo.getInstance().getCod());
-			params.put("tipCmd", "4"); // comenzi simulate
-			params.put("depart", "11");
-			params.put("tipUser", tipUser);
-			params.put("codClient", selectedClient);
+		params.put("filiala", UserInfo.getInstance().getUnitLog());
+		params.put("codUser", UserInfo.getInstance().getCod());
+		params.put("tipCmd", "4"); // comenzi simulate
+		params.put("depart", "11");
+		params.put("tipUser", tipUser);
+		params.put("codClient", selectedClient);
 
-			comenzi.getListComenzi(params);
+		comenzi.getListComenzi(params);
 
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	private void performGetArticoleComanda() {
@@ -538,9 +636,12 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	private void populateArticoleComanda(BeanArticoleAfisare articoleComanda) {
 
 		dateLivrareCmdCurent = articoleComanda.getDateLivrare();
-		listArticole = articoleComanda.getArticoleSimulate();
+
+		listArticole = getArticole(articoleComanda.getListArticole());
 
 		adapterSimulat.setListArticole(listArticole);
+		adapterSimulat.setListConditii(articoleComanda.getConditii().getArticole());
+		adapterSimulat.setComandaCurenta(comandaCurenta);
 
 		listArticoleSimulate.setAdapter(adapterSimulat);
 
@@ -556,14 +657,48 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 	}
 
+	private List<ArticolSimulat> getArticole(List<ArticolComanda> listArticole) {
+		List<ArticolSimulat> listSimulate = new ArrayList<ArticolSimulat>();
+
+		for (ArticolComanda artCmd : listArticole) {
+			ArticolSimulat articol = new ArticolSimulat();
+
+			articol.setStatus(artCmd.getStatus());
+			articol.setCodArticol(artCmd.getCodArticol());
+			articol.setNumeArticol(artCmd.getNumeArticol());
+			articol.setCantitate(artCmd.getCantitate());
+			articol.setDepozit(artCmd.getDepozit());
+			articol.setPretUnit(artCmd.getPretUnit());
+			articol.setPretUnitarClient(artCmd.getPretUnit());
+			articol.setUm(artCmd.getUm());
+			articol.setProcent(artCmd.getProcent());
+			articol.setProcentFact(artCmd.getProcentFact());
+			articol.setProcAprob(artCmd.getProcAprob());
+			articol.setMultiplu(artCmd.getMultiplu());
+			articol.setPret(artCmd.getPret());
+			articol.setInfoArticol(artCmd.getInfoArticol());
+			articol.setCantUmb(artCmd.getCantUmb());
+			articol.setUmb(artCmd.getUmb());
+			articol.setUnitLogAlt(artCmd.getUnitLogAlt());
+			articol.setDepart(artCmd.getDepart());
+			articol.setTipArt(artCmd.getTipAlert());
+			articol.setConditii(false);
+
+			articol.setAlteValori(artCmd.getAlteValori());
+			articol.setDepartSintetic(artCmd.getDepartSintetic());
+			articol.setDepartAprob(artCmd.getDepartAprob());
+
+			listSimulate.add(articol);
+		}
+
+		return listSimulate;
+	}
+
 	protected void populateListComenzi(List<BeanComandaCreata> cmdList) {
 
 		if (cmdList.size() > 0) {
 
-			creeazaCmdSimBtn.setVisibility(View.VISIBLE);
 			stergeCmdSimBtn.setVisibility(View.VISIBLE);
-
-			verificaStocButton.setVisibility(View.VISIBLE);
 			detaliiLayout.setVisibility(View.VISIBLE);
 
 			NumberFormat nf2 = NumberFormat.getInstance();
@@ -613,6 +748,9 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			simulata.setAprobariNecesare(creata.getAprobariNecesare());
 			simulata.setAprobariPrimite(creata.getAprobariPrimite());
 			simulata.setAvans(creata.getAvans());
+			simulata.setCanalDistrib(creata.getCanalDistrib());
+			simulata.setFiliala(creata.getFiliala());
+			simulata.setCodClient(creata.getCodClient());
 			listSimulate.add(simulata);
 		}
 
@@ -701,7 +839,13 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			comenziSimulate = (List<BeanComandaCreata>) result;
 			break;
 		case GET_ARTICOLE_COMANDA_JSON:
-			populateArticoleComanda(comenzi.deserializeArticoleComandaLight((String) result));
+			populateArticoleComanda(comenzi.deserializeArticoleComanda((String) result));
+			break;
+		case UPDATE_COM_SIM:
+			if (((String) result).equals("0"))
+				showCreateCmdConfirmationAlert();
+			else
+				Toast.makeText(getApplicationContext(), "Eroare salvare date.", Toast.LENGTH_LONG).show();
 			break;
 		default:
 			break;

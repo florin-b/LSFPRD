@@ -131,7 +131,7 @@ public class UtilsDates {
 			statusInterval.setMessage("Livrarea trebuie sa se faca in cel mult " + getNrZileLivrare() + " zile de la data curenta.");
 			return statusInterval;
 		}
-		
+
 		statusInterval.setValid(true);
 
 		return statusInterval;
@@ -150,6 +150,28 @@ public class UtilsDates {
 		cal.setTime(date);
 		cal.add(Calendar.DATE, days);
 		return cal.getTime();
+
+	}
+
+	public static int dateDiffDays(Date dateStart, Date dateStop) {
+
+		if (dateStart == null || dateStop == null)
+			return -1;
+
+		try {
+
+			long diff = dateStop.getTime() - dateStart.getTime();
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+
+			if (diffDays > 0) {
+				return (int) diffDays;
+			}
+
+		} catch (Exception e) {
+
+		}
+
+		return -1;
 
 	}
 

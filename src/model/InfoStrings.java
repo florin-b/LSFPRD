@@ -150,6 +150,10 @@ public class InfoStrings {
 			retVal = "Comanda simulata fara rezervare stoc."; // pt. comenzi GED
 			break;
 
+		case 41:
+			retVal = "Comanda fara rez. stoc cu conditii";
+			break;			
+			
 		case 30:
 			retVal = "Comanda nealocata pe borderou";
 			break;

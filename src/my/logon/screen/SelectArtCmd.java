@@ -2050,7 +2050,12 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			String varLocalUnitLog = "";
 
 			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE)
-				varLocalUnitLog = DateLivrare.getInstance().getCodFilialaCLP();
+			{
+				if (globalDepozSel.equals("MAV1"))
+					varLocalUnitLog = DateLivrare.getInstance().getCodFilialaCLP().substring(0, 2) + "2" + DateLivrare.getInstance().getCodFilialaCLP().substring(3, 4);
+				else
+					varLocalUnitLog = DateLivrare.getInstance().getCodFilialaCLP();
+			}
 			else {
 				if (globalDepozSel.equals("MAV1") || globalDepozSel.equals("DSCM")) {
 					if (CreareComanda.filialaAlternativa.equals("BV90"))

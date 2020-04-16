@@ -98,7 +98,7 @@ public class HelperAdreseLivrare {
 
 			double distAdresa = distanceXtoY(coordAdresa.latitude, coordAdresa.longitude, Double.valueOf(coords[0]), Double.valueOf(coords[1]), "K");
 
-			if (distAdresa <= DIST_MIN_ADR_KM) {
+			if (distAdresa <= DIST_MIN_ADR_NOUA_KM) {
 				tonajAdresa = adresa.getTonaj();
 				break;
 			}
@@ -126,6 +126,20 @@ public class HelperAdreseLivrare {
 		}
 
 		return selectedPos;
+	}
+	
+	public static boolean adresaExista(List<BeanAdresaLivrare> listAdrese){
+		boolean adresaExista  = false;
+		
+		for (BeanAdresaLivrare adresa : listAdrese){
+			if (adresa.getCodJudet().equals(DateLivrare.getInstance().getCodJudet()) && adresa.getOras().toLowerCase().equals(DateLivrare.getInstance().getOras().toLowerCase()) && adresa.getStrada().replace(" ", "").toLowerCase().equals(DateLivrare.getInstance().getStrada().replace(" ","").toLowerCase())) {
+				adresaExista = true;
+				break;
+			}
+			
+		}
+		
+		return adresaExista;
 	}
 
 	public static double distanceXtoY(double lat1, double lon1, double lat2, double lon2, String unit) {

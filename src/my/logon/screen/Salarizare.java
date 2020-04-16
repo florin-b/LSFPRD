@@ -96,6 +96,14 @@ public class Salarizare extends Activity implements OperatiiSalarizareListener, 
 		btnDetaliiSalarizare = (Button) findViewById(R.id.btnDetaliiSalarizare);
 		setListenerBtnDetalii();
 
+		if (UtilsUser.isKA() || UtilsUser.isUserSDKA() || UtilsUser.isUserKA()){
+			((TextView) findViewById(R.id.textVenitRecurentGen)).setText("Venit TCF");
+			((TextView) findViewById(R.id.textVenitRecurentGen1)).setText("Venit TCF");
+			((TextView) findViewById(R.id.textDetRecurent)).setText("Detalii venit TCF");
+			((TextView) findViewById(R.id.textClientiRec)).setText("Clienti an curent");
+			((TextView) findViewById(R.id.textVenitRecDet)).setText("Venit TCF");
+		}
+		
 		initData();
 
 	}

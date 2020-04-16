@@ -109,8 +109,8 @@ public class MainMenu extends Activity {
 			"Retur comenzi", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Pierderi vanzari", "Info client", "Plati CEC", "Clienti facturati",
 			"Clienti alocati", "Salarizare", "Adrese clienti", "Delegatii", "Despre", "Iesire" };
 
-	public int[] btnImageKA = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
-			R.drawable.cmd_bloc, R.drawable.clp, R.drawable.afis_clp,  R.drawable.box_yellow_48, R.drawable.colosseum,
+	public int[] btnImageKA = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,R.drawable.clp,
+			R.drawable.cmd_bloc, R.drawable.afis_clp,  R.drawable.box_yellow_48, R.drawable.colosseum,
 			R.drawable.custody_48, R.drawable.data_icon, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda, R.drawable.vanzari,
 			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.target, R.drawable.client_info, R.drawable.payment,
 			R.drawable.clienti_inactivi, R.drawable.clients, R.drawable.money_gold_48, R.drawable.location_icon, R.drawable.blank,

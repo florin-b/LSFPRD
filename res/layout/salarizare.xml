@@ -70,6 +70,7 @@
                         android:typeface="sans" />
 
                     <TextView
+                        android:id="@+id/textVenitRecurentGen"
                         android:layout_width="0dip"
                         android:layout_height="match_parent"
                         android:layout_weight="0.08"
@@ -175,6 +176,7 @@
                                 android:typeface="sans" />
 
                             <TextView
+                                 android:id="@+id/textVenitRecurentGen1"
                                 android:layout_width="0dip"
                                 android:layout_height="match_parent"
                                 android:layout_weight="0.1"
@@ -573,6 +575,7 @@
                     android:visibility="gone" >
 
                     <TextView
+                        android:id="@+id/textDetRecurent"
                         android:layout_width="0dip"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -646,6 +649,7 @@
                             android:typeface="sans" />
 
                         <TextView
+                            android:id="@+id/textClientiRec"
                             android:layout_width="0dip"
                             android:layout_height="match_parent"
                             android:layout_weight="0.07"
@@ -668,6 +672,7 @@
                             android:typeface="sans" />
 
                         <TextView
+                             android:id="@+id/textVenitRecDet"
                             android:layout_width="0dip"
                             android:layout_height="match_parent"
                             android:layout_weight="0.1"
