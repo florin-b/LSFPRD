@@ -9,7 +9,8 @@ public class BeanClient {
 	private String tipClient;
 	private String agenti;
 	private List<String> termenPlata;
-
+	private String codCUI;
+	
 	public BeanClient() {
 
 	}
@@ -58,5 +59,15 @@ public class BeanClient {
 	public void setTermenPlata(List<String> termenPlata) {
 		this.termenPlata = termenPlata;
 	}
+
+	public String getCodCUI() {
+		return codCUI;
+	}
+
+	public void setCodCUI(String codCUI) {
+		this.codCUI = codCUI;
+	}
+	
+	
 
 }

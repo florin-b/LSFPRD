@@ -129,6 +129,9 @@ public class OperatiiClient implements AsyncTaskListener {
 					client.setTipClient(object.getString("tipClient"));
 					client.setAgenti(object.getString("agenti"));
 					
+					if (object.has("codCUI") && object.getString("codCUI") != "null")
+						client.setCodCUI(object.getString("codCUI"));
+					
 					if (object.has("termenPlata") && object.getString("termenPlata") != "null") {
 						JSONArray arrayPlata = new JSONArray(object.getString("termenPlata"));
 

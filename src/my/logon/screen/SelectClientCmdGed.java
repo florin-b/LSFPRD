@@ -94,6 +94,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private Spinner spinnerAgenti;
 	private RadioGroup radioSelectAgent;
 	private LinearLayout layoutLabelRefClient, layoutTextRefClient;
+	private String codCuiIp;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -311,11 +312,17 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	}
 
 	private void performVerificareTVA() {
-		if (!txtCNPClient.getText().toString().isEmpty()) {
-			HashMap<String, String> params = new HashMap<String, String>();
-			params.put("cuiClient", txtCNPClient.getText().toString().trim());
-			operatiiClient.getStarePlatitorTva(params);
+		String strCui = "";
+
+		if (radioClientInstPub.isChecked()) {
+			strCui = codCuiIp;
+		} else if (!txtCNPClient.getText().toString().isEmpty()) {
+			strCui = txtCNPClient.getText().toString().trim();
 		}
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("cuiClient", strCui);
+		operatiiClient.getStarePlatitorTva(params);
 	}
 
 	private void setListenerFacturaPF() {
@@ -670,6 +677,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				layoutTextJ.setVisibility(View.GONE);
 				checkPlatTva.setVisibility(View.INVISIBLE);
 
+				verificaTva.setVisibility(View.VISIBLE);
 				verificaID.setVisibility(View.GONE);
 				checkFacturaPF.setVisibility(View.GONE);
 				labelIDClient.setText("COD");
@@ -1121,6 +1129,11 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			if (client.getTermenPlata() != null)
 				CreareComandaGed.listTermenPlata = client.getTermenPlata();
+			
+			if (radioClientInstPub.isChecked()) {
+				labelIDClient.setText(labelIDClient.getText() + "\t\t\t\t\t CUI: " + client.getCodCUI());
+				codCuiIp = client.getCodCUI();
+			}
 
 		}
 		if (tipClient == EnumTipClient.DISTRIBUTIE) {

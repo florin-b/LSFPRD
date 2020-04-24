@@ -818,7 +818,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		spinnerJudetLivrare = (Spinner) findViewById(R.id.spinnerJudetLivrare);
 		spinnerJudetLivrare.setOnItemSelectedListener(new regionLivrareSelectedListener());
 
-		if (DateLivrare.getInstance().isAltaAdresa()) {
+		if (DateLivrare.getInstance().isAltaAdresa() || !DateLivrare.getInstance().getOrasD().isEmpty()) {
 			radioAltaAdresa.setChecked(true);
 
 			textLocalitateLivrare.setText(DateLivrare.getInstance().getOrasD());
@@ -1207,13 +1207,16 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			numeJudet = tempMap.get("numeJudet");
 		}
 
-		for (String localitate : listLocalitati) {
-			if (localitate.trim().equalsIgnoreCase(localitateCurenta)) {
-				locExist = true;
-				break;
-			}
+		if (listLocalitati != null)
+			for (String localitate : listLocalitati) {
+				if (localitate.trim().equalsIgnoreCase(localitateCurenta)) {
+					locExist = true;
+					break;
+				}
 
-		}
+			}
+		else
+			locExist = true;
 
 		if (!locExist && !localitateCurenta.isEmpty()) {
 			String alert = "Localitatea " + localitateCurenta + " nu exista in judetul " + numeJudet + ". Completati alta localitate.";
