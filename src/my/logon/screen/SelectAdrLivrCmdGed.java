@@ -818,7 +818,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		spinnerJudetLivrare = (Spinner) findViewById(R.id.spinnerJudetLivrare);
 		spinnerJudetLivrare.setOnItemSelectedListener(new regionLivrareSelectedListener());
 
-		if (DateLivrare.getInstance().isAltaAdresa() || !DateLivrare.getInstance().getOrasD().isEmpty()) {
+		if (DateLivrare.getInstance().isAltaAdresa() || !DateLivrare.getInstance().getOrasD().trim().isEmpty()) {
 			radioAltaAdresa.setChecked(true);
 
 			textLocalitateLivrare.setText(DateLivrare.getInstance().getOrasD());
@@ -1057,7 +1057,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 					checkMacara.setVisibility(View.INVISIBLE);
 					spinnerTonaj.setVisibility(View.INVISIBLE);
 					spinnerTonaj.setSelection(0);
-					spinnerPlata.setSelection(0);
+
+					if (spinnerPlata.getSelectedItem().toString().contains("E1"))
+						spinnerPlata.setSelection(0);
 
 				}
 
@@ -1517,6 +1519,18 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		String rawTipPlataStr = spinnerPlata.getSelectedItem().toString();
 
 		dateLivrareInstance.setTipPlata(rawTipPlataStr.substring(0, rawTipPlataStr.indexOf("-") - 1).trim());
+
+		if (dateLivrareInstance.getTransport().equals("TCLI") && dateLivrareInstance.getTipPlata().equals("E1")) {
+			Toast.makeText(getApplicationContext(), "Pentru transport TCLI nu puteti selecta metoda de plata Numerar sofer.", Toast.LENGTH_LONG)
+					.show();
+			return;
+		}
+
+		if (dateLivrareInstance.getTransport().equals("TRAP") && dateLivrareInstance.getTipPlata().equals("E")) {
+			Toast.makeText(getApplicationContext(), "Pentru transport TRAP nu puteti selecta metoda de plata Numerar in filiala.", Toast.LENGTH_LONG)
+					.show();
+			return;
+		}
 
 		adresa = dateLivrareInstance.getNumeJudet() + " " + dateLivrareInstance.getOras() + " " + dateLivrareInstance.getStrada();
 

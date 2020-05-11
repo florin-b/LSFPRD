@@ -142,9 +142,9 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 		spinnerCmd = (Spinner) findViewById(R.id.spinnerCmd);
 
-		adapterComenzi = new SimpleAdapter(this, listComenzi, R.layout.comsimulatecustomview, new String[] { "idCmd", "codClient", "numeClient", "data",
-				"suma", "stare", "tipCmd", "ul", "cmdSap" }, new int[] { R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData, R.id.textSuma,
-				R.id.textStare, R.id.textTipCmd, R.id.textUL, R.id.textCmdSAP });
+		adapterComenzi = new SimpleAdapter(this, listComenzi, R.layout.comsimulatecustomview, new String[] { "idCmd", "codClient", "numeClient",
+				"data", "suma", "stare", "tipCmd", "ul", "cmdSap" }, new int[] { R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData,
+				R.id.textSuma, R.id.textStare, R.id.textTipCmd, R.id.textUL, R.id.textCmdSAP });
 
 		addSpinnerCmdListener();
 
@@ -169,10 +169,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		this.stergeCmdSimBtn.setVisibility(View.INVISIBLE);
 		addListenerStergeCmdSimBtn();
 
-		adapter = new SimpleAdapter(this, list1, R.layout.comsimulatecustomrowview, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt", "pretArt",
-				"monedaArt", "depozit", "status", "procent", "procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt, R.id.textNumeArt,
-				R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit, R.id.textStatusArt,
-				R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr, R.id.textProcAprobModif });
+		adapter = new SimpleAdapter(this, list1, R.layout.comsimulatecustomrowview, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt",
+				"pretArt", "monedaArt", "depozit", "status", "procent", "procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt,
+				R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit,
+				R.id.textStatusArt, R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr, R.id.textProcAprobModif });
 
 		listArticoleSimulate.setAdapter(adapter);
 		listArticoleSimulate.setVisibility(View.INVISIBLE);
@@ -413,7 +413,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		boolean isVeche = false;
 
 		try {
-			Date dataComanda = new SimpleDateFormat("dd-MMM-yy").parse(comandaCurenta.getData());
+			Date dataComanda = new SimpleDateFormat("dd-MMM-yy", Locale.US).parse(comandaCurenta.getData());
 			int nrZile = UtilsDates.dateDiffDays(dataComanda, new Date());
 			if (nrZile > 7)
 				isVeche = true;
@@ -434,7 +434,8 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	}
 
 	private boolean isCmdAvansOK(BeanComandaSimulata comanda, boolean allStock) {
-		return (comanda.getCodStare().equals("41") || comanda.getCodStare().equals("21")) && comanda.isAprobata() && comanda.getAvans() > 0 && allStock;
+		return (comanda.getCodStare().equals("41") || comanda.getCodStare().equals("21")) && comanda.isAprobata() && comanda.getAvans() > 0
+				&& allStock;
 	}
 
 	public void addListenerCreazaCmdSimBtn() {
@@ -701,7 +702,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			stergeCmdSimBtn.setVisibility(View.VISIBLE);
 			detaliiLayout.setVisibility(View.VISIBLE);
 
-			NumberFormat nf2 = NumberFormat.getInstance();
+			NumberFormat nf2 = NumberFormat.getInstance();	
 			nf2.setMinimumFractionDigits(2);
 			nf2.setMaximumFractionDigits(2);
 
