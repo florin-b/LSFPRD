@@ -117,7 +117,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	public SimpleAdapter adapterUmVanz;
 	private double varProc = 0, valMultiplu = 0, pretVanzare = 0;
 
-	String tipAlert = "", codPromo = "0", infoArticol = "", Umb = "", cantUmb = "", selectedUnitMas = "";
+	String tipAlert = "", codPromo = "0", infoArticol = "", Umb = "", cantUmb = "", selectedUnitMas = "", selectedUnitMasPret = "";
 
 	private HashMap<String, String> artMap = null;
 	double procR = 0, globalCantArt = 0;
@@ -873,9 +873,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			selectedCant = Double.parseDouble(textCant.getText().toString().trim());
 
 			selectedUnitMas = "";
+			selectedUnitMasPret = "";
 			if (listUmVanz.size() > 1) {
 				artMap = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
 				selectedUnitMas = artMap.get("rowText");
+				selectedUnitMasPret = artMap.get("rowText");
 			}
 
 			if (selectedCant > 0) {
@@ -1110,6 +1112,21 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						return;
 					}
 
+					if (listUmVanz.size() > 1) {
+
+						artMap = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
+						String currentUnitMas = artMap.get("rowText");
+
+						if (!currentUnitMas.equals(selectedUnitMasPret)) {
+							Toast.makeText(getApplicationContext(), "Unitatea de masura nu corespunde celei pentru care a fost solicitat pretul.",
+									Toast.LENGTH_LONG).show();
+							return;
+
+						}
+
+					}
+					
+					
 					String cantArticol = textCant.getText().toString().trim();
 
 					if (selectedCant != Double.parseDouble(cantArticol)) {

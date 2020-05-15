@@ -415,7 +415,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		try {
 			Date dataComanda = new SimpleDateFormat("dd-MMM-yy", Locale.US).parse(comandaCurenta.getData());
 			int nrZile = UtilsDates.dateDiffDays(dataComanda, new Date());
-			if (nrZile > 7)
+			if (nrZile > 14)
 				isVeche = true;
 
 		} catch (ParseException e) {

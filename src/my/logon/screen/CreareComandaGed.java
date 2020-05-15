@@ -725,7 +725,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				menu.add(Menu.NONE, 0, 0, "Sterge");
 				if (!UserInfo.getInstance().getTipAcces().equals("9") && !UserInfo.getInstance().getTipAcces().equals("10")
-						&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED")) {
+						&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("CVR")) {
 					if (!isTotalNegociat)
 						menu.add(Menu.NONE, 1, 1, "Schimba pret");
 				}

@@ -1526,12 +1526,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			return;
 		}
 
-		if (dateLivrareInstance.getTransport().equals("TRAP") && dateLivrareInstance.getTipPlata().equals("E")) {
-			Toast.makeText(getApplicationContext(), "Pentru transport TRAP nu puteti selecta metoda de plata Numerar in filiala.", Toast.LENGTH_LONG)
-					.show();
-			return;
-		}
-
 		adresa = dateLivrareInstance.getNumeJudet() + " " + dateLivrareInstance.getOras() + " " + dateLivrareInstance.getStrada();
 
 		if (layoutHeaderAdrese.getVisibility() == View.VISIBLE && radioListAdrese.isChecked()) {
