@@ -1125,8 +1125,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						}
 
 					}
-					
-					
+
 					String cantArticol = textCant.getText().toString().trim();
 
 					if (selectedCant != Double.parseDouble(cantArticol)) {
@@ -1707,8 +1706,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private boolean userCannotModifyPrice() {
-		return (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UserInfo.getInstance().getTipUserSap().equals("CVR")
-				|| UtilsUser.isSSCM() || UtilsUser.isCGED())
+		return (UserInfo.getInstance().getTipUserSap().equals("CONS-GED") || UtilsUser.isSSCM() || UtilsUser.isCGED())
 				&& !UtilsComenzi.isComandaInstPublica();
 	}
 
