@@ -49,6 +49,7 @@ import beans.PlatitorTva;
 import dialogs.CautaClientDialog;
 import dialogs.DatePersClientDialog;
 import enums.EnumClienti;
+import enums.TipCmdGed;
 
 public class SelectClientCmdGed extends Activity implements OperatiiClientListener, CautaClientDialogListener, DatePersListener {
 
@@ -132,7 +133,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 		layoutDetaliiClientDistrib = (LinearLayout) findViewById(R.id.detaliiClientDistrib);
 		layoutDetaliiClientDistrib.setVisibility(View.GONE);
-		
+
 		layoutLabelRefClient = (LinearLayout) findViewById(R.id.layoutLabelRefClient);
 		layoutTextRefClient = (LinearLayout) findViewById(R.id.layoutTextRefClient);
 
@@ -216,6 +217,11 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		addListenerRadioCmdNormala();
 
 		radioCmdSimulata = (RadioButton) findViewById(R.id.radioCmdSimulata);
+		if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE)
+			radioCmdSimulata.setVisibility(View.INVISIBLE);
+		else
+			radioCmdSimulata.setVisibility(View.VISIBLE);
+
 		addListenerRadioCmdSimulata();
 
 		radioRezervStocDa = (RadioButton) findViewById(R.id.radioRezervStocDa);
@@ -266,7 +272,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	private boolean isCasiera() {
 		return UserInfo.getInstance().getTipUserSap().equals("CGED") || UtilsUser.isSSCM();
 	}
-	
+
 	private void setRadioSelectClientListener() {
 
 		radioSelectAgent.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -537,10 +543,10 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					verificaID.setVisibility(View.GONE);
 					verificaTva.setVisibility(View.GONE);
 					labelIDClient.setText("CUI");
-					
+
 					layoutLabelRefClient.setVisibility(View.GONE);
 					layoutTextRefClient.setVisibility(View.GONE);
-					
+
 					clearDateLivrare();
 
 				} else {
@@ -564,7 +570,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					labelIDClient.setVisibility(View.VISIBLE);
 					((LinearLayout) findViewById(R.id.layoutLabelJ)).setVisibility(View.VISIBLE);
 					((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.VISIBLE);
-					
+
 					layoutLabelRefClient.setVisibility(View.GONE);
 					layoutTextRefClient.setVisibility(View.GONE);
 
@@ -601,7 +607,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					((LinearLayout) findViewById(R.id.layoutTextJ)).setVisibility(View.INVISIBLE);
 
 					txtNumeClientGed.setText("");
-					
+
 					layoutLabelRefClient.setVisibility(View.GONE);
 					layoutTextRefClient.setVisibility(View.GONE);
 
@@ -630,7 +636,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 					labelIDClient.setText("CNP");
 					setTextNumeClientEnabled(true);
 					clearDateLivrare();
-					
+
 					layoutLabelRefClient.setVisibility(View.GONE);
 					layoutTextRefClient.setVisibility(View.GONE);
 				}
@@ -654,7 +660,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 				layoutLabelRefClient.setVisibility(View.GONE);
 				layoutTextRefClient.setVisibility(View.GONE);
-				
+
 				setTextNumeClientEnabled(false);
 
 				tipClient = EnumTipClient.MESERIAS;
@@ -682,7 +688,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				checkFacturaPF.setVisibility(View.GONE);
 				labelIDClient.setText("COD");
 				txtCNPClient.setVisibility(View.VISIBLE);
-				
+
 				layoutLabelRefClient.setVisibility(View.VISIBLE);
 				layoutTextRefClient.setVisibility(View.VISIBLE);
 
@@ -717,8 +723,21 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	}
 
 	private void clearDateLivrare() {
+
+		String filialaClp = "";
+
+		if (DateLivrare.getInstance().getTipComandaGed() == TipCmdGed.COMANDA_LIVRARE) {
+			filialaClp = DateLivrare.getInstance().getCodFilialaCLP();
+		}
+
 		if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0)
 			DateLivrare.getInstance().resetAll();
+
+		if (!filialaClp.isEmpty()) {
+			DateLivrare.getInstance().setCodFilialaCLP(filialaClp);
+			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_LIVRARE);
+		}
+
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -873,7 +892,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			if (layoutTextJ.getVisibility() == View.VISIBLE)
 				CreareComandaGed.codJ = txtCodJ.getText().toString().trim();
-			
+
 			DateLivrare.getInstance().setRefClient(((EditText) findViewById(R.id.textRefClient)).getText().toString().trim());
 
 		}
@@ -1000,7 +1019,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				@SuppressWarnings("unchecked")
 				HashMap<String, String> artMap = (HashMap<String, String>) arg0.getSelectedItem();
 				UserInfo.getInstance().setCod(artMap.get("codAgent"));
-				
+
 				if (!artMap.get("codAgent").isEmpty() && isCasiera()) {
 					HashMap<String, String> params = new HashMap<String, String>();
 					params.put("codAgent", artMap.get("codAgent"));
@@ -1110,7 +1129,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			break;
 		case GET_TERMEN_PLATA:
 			setTermenPlataClient((String) result);
-			break;			
+			break;
 		default:
 			break;
 		}
@@ -1123,13 +1142,13 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			txtCNPClient.setText(client.getCodClient());
 			CreareComandaGed.codClientVar = client.getCodClient();
 			CreareComandaGed.tipClient = client.getTipClient();
-			
+
 			layoutLabelRefClient.setVisibility(View.VISIBLE);
 			layoutTextRefClient.setVisibility(View.VISIBLE);
 
 			if (client.getTermenPlata() != null)
 				CreareComandaGed.listTermenPlata = client.getTermenPlata();
-			
+
 			if (radioClientInstPub.isChecked()) {
 				labelIDClient.setText(labelIDClient.getText() + "\t\t\t\t\t CUI: " + client.getCodCUI());
 				codCuiIp = client.getCodCUI();
@@ -1145,7 +1164,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 
 			CreareComandaGed.tipClient = "PJ";
 			DateLivrare.getInstance().setTipPersClient("PJ");
-			
+
 			if (client.getTermenPlata() != null)
 				CreareComandaGed.listTermenPlata = client.getTermenPlata();
 
@@ -1180,7 +1199,6 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 		List<String> listTermen = operatiiClient.deserializeTermenPlata(termenPlata);
 		if (!listTermen.isEmpty())
 			CreareComandaGed.listTermenPlata = listTermen;
-	}	
-	
-	
+	}
+
 }

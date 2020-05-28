@@ -825,7 +825,7 @@ public class InfoStrings {
 				codClient = "4119000176";
 
 			else if (filiala.equals("IS10"))
-				codClient = "4119000317";
+				codClient = "4119000196";
 
 			else if (filiala.equals("TM10"))
 				codClient = "4119000252";

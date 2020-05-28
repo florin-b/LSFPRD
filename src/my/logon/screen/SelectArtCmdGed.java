@@ -68,6 +68,7 @@ import beans.PretArticolGed;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
 import enums.EnumTipComanda;
+import enums.TipCmdGed;
 import filters.DecimalDigitsInputFilter;
 
 public class SelectArtCmdGed extends ListActivity implements OperatiiArticolListener {
@@ -156,6 +157,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private String tipPersClient;
+	private Spinner spinnerDepart;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -310,6 +312,23 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			layoutPretGEDFTva.setVisibility(View.VISIBLE);
 		}
 
+		if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE) {
+
+			if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0) {
+				CreareComandaGed.selectedDepozIndexClp = -1;
+				CreareComandaGed.selectedDepartIndexClp = -1;
+			}
+
+			if (CreareComandaGed.selectedDepozIndexClp != -1) {
+
+				spinnerDepart.setSelection(CreareComandaGed.selectedDepartIndexClp);
+				spinnerDepart.setEnabled(false);
+
+				spinnerDepoz.setSelection(CreareComandaGed.selectedDepozIndexClp);
+				spinnerDepoz.setEnabled(false);
+			}
+		}
+
 	}
 
 	private void setDefaultDepoz(EnumDepoz depoz, ArrayList<String> listDepozite) {
@@ -333,11 +352,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		LayoutInflater mInflater = LayoutInflater.from(this);
 		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);
-		final Spinner spinnerView = (Spinner) mCustomView.findViewById(R.id.spinnerDep);
+		spinnerDepart = (Spinner) mCustomView.findViewById(R.id.spinnerDep);
 
-		spinnerView.setOnItemSelectedListener(new OnItemSelectedListener() {
+		spinnerDepart.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				selectedDepartamentAgent = EnumDepartExtra.getCodDepart(spinnerView.getSelectedItem().toString());
+				selectedDepartamentAgent = EnumDepartExtra.getCodDepart(spinnerDepart.getSelectedItem().toString());
 				populateListViewArticol(new ArrayList<ArticolDB>());
 
 				if (selectedDepartamentAgent.equals("11") || selectedDepartamentAgent.equals("05")) {
@@ -359,7 +378,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			}
 		});
 
-		spinnerView.setAdapter(adapter);
+		spinnerDepart.setAdapter(adapter);
 		getActionBar().setCustomView(mCustomView);
 		getActionBar().setDisplayShowCustomEnabled(true);
 
@@ -396,7 +415,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	private void CreateMenu(Menu menu) {
 
-		if (UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite() || isWood()) {
+		if ((UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite() || isWood()) && CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_VANZARE) {
 			MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
 			{
 				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -1337,6 +1356,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 						mgr.hideSoftInputFromWindow(textCant.getWindowToken(), 0);
 
+						if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE) {
+							blocheazaDepartDepoz();
+						}
+
 					} else {
 
 						Toast toast = Toast.makeText(getApplicationContext(), "Articolul nu are pret definit!", Toast.LENGTH_SHORT);
@@ -1354,6 +1377,13 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			}
 		});
 
+	}
+
+	private void blocheazaDepartDepoz() {
+		CreareComandaGed.selectedDepartIndexClp = spinnerDepart.getSelectedItemPosition();
+		CreareComandaGed.selectedDepozIndexClp = spinnerDepoz.getSelectedItemPosition();
+		spinnerDepart.setEnabled(false);
+		spinnerDepoz.setEnabled(false);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1826,23 +1856,33 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		if (codArticol.length() == 8)
 			codArticol = "0000000000" + codArticol;
 
-		if (globalDepozSel.equals("MAV1") || globalDepozSel.equals("MAV2")) {
-			if (CreareComandaGed.filialaAlternativa.equals("BV90"))
-				varLocalUnitLog = "BV92";
+		if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE) {
+			if (globalDepozSel.equals("MAV1"))
+				varLocalUnitLog = DateLivrare.getInstance().getCodFilialaCLP().substring(0, 2) + "2"
+						+ DateLivrare.getInstance().getCodFilialaCLP().substring(3, 4);
 			else
-				varLocalUnitLog = filialaAlternativa.substring(0, 2) + "2" + filialaAlternativa.substring(3, 4);
-		} else if (globalDepozSel.equals("WOOD")) {
-			varLocalUnitLog = filialaAlternativa.substring(0, 2) + "4" + filialaAlternativa.substring(3, 4);
+				varLocalUnitLog = DateLivrare.getInstance().getCodFilialaCLP();
 		} else {
 
-			if (CreareComandaGed.filialaAlternativa.equals("BV90"))
-				varLocalUnitLog = CreareComandaGed.filialaAlternativa;
-			else
-				varLocalUnitLog = filialaAlternativa.substring(0, 2) + "1" + filialaAlternativa.substring(3, 4);
-		}
+			if (globalDepozSel.equals("MAV1") || globalDepozSel.equals("MAV2")) {
+				if (CreareComandaGed.filialaAlternativa.equals("BV90"))
+					varLocalUnitLog = "BV92";
+				else
+					varLocalUnitLog = filialaAlternativa.substring(0, 2) + "2" + filialaAlternativa.substring(3, 4);
+			} else if (globalDepozSel.equals("WOOD")) {
+				varLocalUnitLog = filialaAlternativa.substring(0, 2) + "4" + filialaAlternativa.substring(3, 4);
+			} else {
 
-		if (UtilsUser.isUserSite()) {
-			varLocalUnitLog = UtilsUser.getULUserSite(CreareComandaGed.filialaAlternativa, globalDepozSel);
+				if (CreareComandaGed.filialaAlternativa.equals("BV90"))
+					varLocalUnitLog = CreareComandaGed.filialaAlternativa;
+				else
+					varLocalUnitLog = filialaAlternativa.substring(0, 2) + "1" + filialaAlternativa.substring(3, 4);
+			}
+
+			if (UtilsUser.isUserSite()) {
+				varLocalUnitLog = UtilsUser.getULUserSite(CreareComandaGed.filialaAlternativa, globalDepozSel);
+			}
+
 		}
 
 		params.put("codArt", codArticol);

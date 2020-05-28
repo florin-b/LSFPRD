@@ -29,6 +29,7 @@ import listeners.ComenziDAOListener;
 import listeners.CostMacaraListener;
 import listeners.OperatiiArticolListener;
 import listeners.PaletAlertListener;
+import listeners.TipCmdGedListener;
 import listeners.ValoareNegociataDialogListener;
 import model.AlgoritmComandaGed;
 import model.ArticolComanda;
@@ -51,7 +52,6 @@ import utils.UtilsComenziGed;
 import utils.UtilsUser;
 import adapters.ArticoleGedAdapter;
 import adapters.ArticolePretTransport;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -89,13 +89,15 @@ import beans.PretArticolGed;
 import dialogs.ArtComplDialog;
 import dialogs.CostMacaraDialog;
 import dialogs.PaletAlertDialog;
+import dialogs.TipComandaGedDialog;
 import dialogs.ValoareNegociataDialog;
 import enums.EnumArticoleDAO;
 import enums.EnumComenziDAO;
 import enums.EnumDaNuOpt;
+import enums.TipCmdGed;
 
 public class CreareComandaGed extends Activity implements AsyncTaskListener, ArtComplDialogListener, Observer, OperatiiArticolListener,
-		ValoareNegociataDialogListener, PaletAlertListener, ComenziDAOListener, CostMacaraListener {
+		ValoareNegociataDialogListener, PaletAlertListener, ComenziDAOListener, CostMacaraListener, TipCmdGedListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd, valTranspBtn, debugBtn;
 	String filiala = "", nume = "", cod = "";
@@ -185,6 +187,9 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	private OperatiiArticol opArticol;
 	private ComenziDAO comandaDAO;
 	private CostDescarcare costDescarcare;
+
+	public static TipCmdGed tipComandaGed = TipCmdGed.COMANDA_VANZARE;
+	public static int selectedDepartIndexClp = -1, selectedDepozIndexClp = -1;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -300,20 +305,24 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	}
 
 	private void CreateMenu(Menu menu) {
-		MenuItem mnu1 = menu.add(0, 0, 0, "Client");
+
+		MenuItem mnu0 = menu.add(0, 0, 0, "Tip");
+		mnu0.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+
+		MenuItem mnu1 = menu.add(0, 1, 1, "Client");
 
 		mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		MenuItem mnu2 = menu.add(0, 1, 1, "Articole");
+		MenuItem mnu2 = menu.add(0, 2, 2, "Articole");
 
 		mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
-		MenuItem mnu3 = menu.add(0, 2, 2, "Livrare");
+		MenuItem mnu3 = menu.add(0, 3, 3, "Livrare");
 
 		mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
 		if (UtilsUser.isAgentOrSD() || UtilsUser.isUserGed() || UtilsUser.isConsWood()) {
-			MenuItem mnu4 = menu.add(0, 3, 3, "Valoare negociata");
+			MenuItem mnu4 = menu.add(0, 4, 4, "Valoare negociata");
 			mnu4.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		}
 
@@ -326,11 +335,25 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		return true;
 	}
 
+	private void showTipComandaDialog() {
+		TipComandaGedDialog tipCmdDialog = new TipComandaGedDialog(this);
+		tipCmdDialog.setTipCmdGedListener(this);
+		tipCmdDialog.showDialog();
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 
 		case 0:
+			if (listArticole == null || listArticole.size() == 0) {
+				showTipComandaDialog();
+			} else {
+				Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_SHORT).show();
+			}
+			return true;
+
+		case 1:
 			if (listArticole == null || listArticole.size() == 0) {
 
 				Intent nextScreen = new Intent(getApplicationContext(), SelectClientCmdGed.class);
@@ -339,7 +362,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				Toast.makeText(getApplicationContext(), "Stergeti mai intai toate articolele!", Toast.LENGTH_SHORT).show();
 			}
 			break;
-		case 1:
+		case 2:
 
 			if (numeClientVar.length() > 0) {
 
@@ -374,7 +397,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			}
 
 			break;
-		case 2:
+		case 3:
 
 			if (numeClientVar.length() > 0) {
 				Intent nextScreen = new Intent(getApplicationContext(), SelectAdrLivrCmdGed.class);
@@ -388,7 +411,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 			break;
 
-		case 3:
+		case 4:
 			showValNegociatDialogBox();
 			break;
 
@@ -1744,7 +1767,6 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		filialaAlternativa = UserInfo.getInstance().getUnitLog();
 		ListaArticoleComandaGed.getInstance().clearArticoleComanda();
 
-
 		initLocale();
 
 	}
@@ -2265,6 +2287,29 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	@Override
 	public void acceptaCostMacara(boolean acceptaCost, double valoareCost) {
 		trateazaPretMacara(acceptaCost, valoareCost);
+
+	}
+
+	@Override
+	public void tipComandaSelected(TipCmdGed tipSelected, String idComanda, String codFilialaClp) {
+		tipComandaGed = tipSelected;
+		DateLivrare.getInstance().setTipComandaGed(tipSelected);
+		DateLivrare.getInstance().setCodFilialaCLP(codFilialaClp);
+
+		ActionBar actionBar = getActionBar();
+
+		if (tipSelected.equals(TipCmdGed.COMANDA_AMOB)) {
+			actionBar.setTitle("Comanda GED - preluare comanda Amob");
+
+		} else if (tipSelected.equals(TipCmdGed.COMANDA_LIVRARE)) {
+			actionBar.setTitle("Comanda livrare" + " " + codFilialaClp);
+		} else {
+			actionBar.setTitle("Comanda GED");
+			selectedDepartIndexClp = -1;
+			selectedDepozIndexClp = -1;
+		}
+
+		invalidateOptionsMenu();
 
 	}
 
