@@ -1274,6 +1274,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				articolCmd.setDepart(articol.getDepart());
 				articolCmd.setDepartAprob(articol.getDepartAprob());
 				articolCmd.setIstoricPret(articol.getIstoricPret());
+				articolCmd.setFilialaSite(articol.getFilialaSite());
+				
 				if (isArtGedExceptie(articol))
 					articolCmd.setObservatii(articol.getObservatii());
 
@@ -1370,6 +1372,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				obj.put("observatii", listArticole.get(i).getObservatii());
 				obj.put("departAprob", listArticole.get(i).getDepartAprob());
 				obj.put("istoricPret", listArticole.get(i).getIstoricPret());
+				obj.put("filialaSite", listArticole.get(i).getFilialaSite());
 				obj.put("valTransport", "0");
 				obj.put("procTransport", "0");
 				myArray.put(obj);

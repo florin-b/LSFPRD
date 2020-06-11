@@ -948,12 +948,14 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private void performGetJudete() {
 
 		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP") || !DateLivrare.getInstance().getCodJudet().isEmpty()) {
-
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
 		} else {
 			String unitLog = UserInfo.getInstance().getUnitLog();
 
+			if (isComandaClp())
+				unitLog = DateLivrare.getInstance().getCodFilialaCLP();
+			
 			if (unitLog.equals("NN10"))
 				unitLog = "AG10";
 
@@ -964,6 +966,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			call.getCallResultsSyncActivity();
 		}
 
+	}
+	
+	private boolean isComandaClp() {
+		return DateLivrare.getInstance().getCodFilialaCLP() != null && DateLivrare.getInstance().getCodFilialaCLP().length() == 4;
 	}
 
 	private void fillJudeteClient(String arrayJudete) {

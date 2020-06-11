@@ -1173,7 +1173,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						altDepozit = true;
 					}
 
-					if (!unitLogUnic.equals(CreareComanda.filialaAlternativa)) {
+					if (!unitLogUnic.equals(CreareComanda.filialaAlternativa) && !isUserExceptieFiliale()) {
 						Toast.makeText(getApplicationContext(), "Selectati articole dintr-o singura filiala!", Toast.LENGTH_LONG).show();
 
 						return;
@@ -1356,6 +1356,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						unArticol.setCategorie(articolDBSelected.getCategorie());
 						unArticol.setLungime(articolDBSelected.getLungime());
 						unArticol.setCmp(cmpArt);
+						unArticol.setFilialaSite(CreareComanda.filialaAlternativa);
 
 						if (procRedFin > 0)
 							unArticol.setIstoricPret(istoricPret);
@@ -1442,6 +1443,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private boolean isUserExceptieFiliale() {
+		return UserInfo.getInstance().getUnitLog().startsWith("BV") && (globalCodDepartSelectetItem.equals("01") || globalCodDepartSelectetItem.equals("02"));
+	}	
+	
+	
 	private void saveArticolCustodie() {
 
 		if (textCant.getText().toString().isEmpty()) {

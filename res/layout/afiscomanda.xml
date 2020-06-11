@@ -96,7 +96,7 @@
                 android:layout_height="match_parent"
                 android:fadeScrollbars="false"
                 android:fillViewport="true"
-                android:scrollbars="none" >
+                android:scrollbars="vertical" >
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -298,6 +298,28 @@
 
                         <TextView
                             android:id="@+id/textObsLivrare"
+                            style="@style/dateLivrareDlValori"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.4" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layoutAdrLivrare"
+                        style="@style/dateLivrareDlLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" >
+
+                        <TextView
+                            style="@style/dateLivrareDlLabel"
+                            android:layout_width="0dip"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.2"
+                            android:text="Adresa livrare" />
+
+                        <TextView
+                            android:id="@+id/textAdrLivrare"
                             style="@style/dateLivrareDlValori"
                             android:layout_width="0dip"
                             android:layout_height="wrap_content"

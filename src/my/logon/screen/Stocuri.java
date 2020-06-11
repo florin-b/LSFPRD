@@ -428,6 +428,10 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 	}
 
+	boolean isWood() {
+		return UserInfo.getInstance().getTipUser().equals("WOOD");
+	}	
+	
 	protected void performGetPret() {
 
 		try {
@@ -443,6 +447,10 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
 
 				String localFilialaStoc = filialaStoc.substring(0, 2) + "2" + filialaStoc.substring(3, 4);
+				
+				if (isWood()) {
+					localFilialaStoc = UserInfo.getInstance().getUnitLog().substring(0, 2) + "4" + UserInfo.getInstance().getUnitLog().substring(3, 4);
+				}
 
 				params.put("client", InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF"));
 				params.put("articol", codArticol);

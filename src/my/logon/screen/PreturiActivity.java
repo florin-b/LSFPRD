@@ -401,6 +401,10 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 
 	}
 
+	boolean isWood() {
+		return UserInfo.getInstance().getTipUser().equals("WOOD");
+	}	
+	
 	protected void performGetPret() {
 
 		try {
@@ -416,6 +420,10 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
 
 				filialaPret = filialaPret.substring(0, 2) + "2" + filialaPret.substring(3, 4);
+				
+				if (isWood()) {
+					filialaPret = UserInfo.getInstance().getUnitLog().substring(0, 2) + "4" + UserInfo.getInstance().getUnitLog().substring(3, 4);
+				}
 
 				params.put("client", InfoStrings.getClientGenericGed(UserInfo.getInstance().getUnitLog(), "PF"));
 				params.put("articol", codArticol);

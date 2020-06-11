@@ -669,6 +669,13 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		textPersContact.setText(dateLivrare.getPersContact());
 		textTelefon.setText(dateLivrare.getNrTel());
 		textObsLivrare.setText(dateLivrare.getObsLivrare());
+		
+		if (!dateLivrare.getCodJudetD().trim().isEmpty()) {
+			((LinearLayout) findViewById(R.id.layoutAdrLivrare)).setVisibility(View.VISIBLE);
+			((TextView) findViewById(R.id.textAdrLivrare)).setText("jud. " + InfoStrings.numeJudet(dateLivrare.getCodJudetD()) + ", loc. "
+					+ dateLivrare.getOrasD() + ", " + dateLivrare.getAdresaD());
+		} else
+			((LinearLayout) findViewById(R.id.layoutAdrLivrare)).setVisibility(View.GONE);
 
 		ArticolAfisAdapter adapter = new ArticolAfisAdapter(this, listArticole);
 		listViewArticole.setAdapter(adapter);
@@ -802,6 +809,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 				textTransport.setText("");
 				textJudet.setText("");
 				textOras.setText("");
+				((LinearLayout) findViewById(R.id.layoutAdrLivrare)).setVisibility(View.GONE);
 
 				textPondereArtBAfis.setText("");
 				textValoareMarja.setText("");
