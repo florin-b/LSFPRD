@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import beans.ArticolCalculDesc;
 import beans.ArticolDescarcare;
+import beans.BeanArticolRetur;
 import beans.CostDescarcare;
 
 public class HelperCostDescarcare {
@@ -85,6 +86,26 @@ public class HelperCostDescarcare {
 			articol.setUm(artCmd.getUmb());
 			articol.setDepoz(artCmd.getDepozit());
 			articoleCalcul.add(articol);
+		}
+
+		return articoleCalcul;
+
+	}
+	
+	public static List<ArticolCalculDesc> getDateCalculDescarcareRetur(List<BeanArticolRetur> listArticole) {
+
+		List<ArticolCalculDesc> articoleCalcul = new ArrayList<ArticolCalculDesc>();
+
+		for (BeanArticolRetur artCmd : listArticole) {
+
+			if (artCmd.getCantitateRetur() > 0) {
+				ArticolCalculDesc articol = new ArticolCalculDesc();
+				articol.setCod(artCmd.getCod());
+				articol.setCant(artCmd.getCantitateRetur());
+				articol.setUm(artCmd.getUm());
+				articol.setDepoz(" ");
+				articoleCalcul.add(articol);
+			}
 		}
 
 		return articoleCalcul;

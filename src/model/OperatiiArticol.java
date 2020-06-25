@@ -6,6 +6,7 @@ import java.util.List;
 
 import listeners.OperatiiArticolListener;
 import beans.ArticolDB;
+import beans.BeanArticolSimulat;
 import beans.BeanArticolStoc;
 import beans.BeanGreutateArticol;
 import beans.BeanParametruPretGed;
@@ -49,6 +50,8 @@ public interface OperatiiArticol {
 	public void getStocArticole(HashMap<String, String> params);
 	
 	public String serializeListArtStoc(List<BeanArticolStoc> listArticole);
+	
+	public String serializeListArtSim(List<BeanArticolSimulat> listArticole);
 	
 	public List<BeanArticolStoc> derializeListArtStoc(String listArticole);
 	

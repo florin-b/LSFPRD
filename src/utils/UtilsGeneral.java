@@ -59,7 +59,8 @@ public class UtilsGeneral {
 
 		listDepozite.add("DSCM");
 
-		listDepozite.add("MAV1");
+		if (DateLivrare.getInstance().getTipComandaDistrib() != TipCmdDistrib.COMANDA_LIVRARE)
+			listDepozite.add("MAV1");
 
 		if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.DISPOZITIE_LIVRARE)
 			listDepozite.remove("DESC");

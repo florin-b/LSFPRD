@@ -1388,6 +1388,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			getPretTransport();
 		} else {
 			ListaArticoleModificareComanda.getInstance().setListaArticole(listArticoleComanda);
+			ListaArticoleModificareComanda.getInstance().addObserver(this);
 		}
 
 		ListaArticoleComandaGed.getInstance().setConditiiArticole(conditiiComandaArticole);

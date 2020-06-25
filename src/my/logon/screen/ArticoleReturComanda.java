@@ -1,13 +1,18 @@
 package my.logon.screen;
 
+import helpers.HelperCostDescarcare;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import listeners.ComenziDAOListener;
 import listeners.ListaArtReturListener;
 import listeners.OperatiiReturListener;
+import model.ComenziDAO;
 import model.OperatiiReturMarfa;
 import model.UserInfo;
 import utils.MapUtils;
@@ -32,12 +37,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.Address;
+import beans.ArticolCalculDesc;
+import beans.ArticolDescarcare;
 import beans.BeanArticolRetur;
 import beans.BeanComandaRetur;
+import beans.CostDescarcare;
+import enums.EnumComenziDAO;
 import enums.EnumRetur;
 import enums.EnumTipRetur;
 
-public class ArticoleReturComanda extends Fragment implements ListaArtReturListener, OperatiiReturListener {
+public class ArticoleReturComanda extends Fragment implements ListaArtReturListener, OperatiiReturListener, ComenziDAOListener {
 
 	TextView textDocument;
 	ListView listArticoleRetur;
@@ -56,6 +65,9 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 	private String nrDocument, codClient, numeClient;
 	private OperatiiReturMarfa opRetur;
 	TextView selectIcon;
+
+	private Button macaraBtn;
+	private ComenziDAO comandaDAO;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.articole_retur_marfa, container, false);
@@ -93,7 +105,24 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 		saveReturProgress = (ProgressBar) v.findViewById(R.id.progress_bar_retur);
 		saveReturProgress.setVisibility(View.INVISIBLE);
 
+		comandaDAO = ComenziDAO.getInstance(getActivity());
+		comandaDAO.setComenziDAOListener(this);
+
+		macaraBtn = (Button) v.findViewById(R.id.macaraBtn);
+		setListenerMacaraBtn();
+
 		return v;
+	}
+
+	private void setListenerMacaraBtn() {
+		macaraBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				verificaPretMacara();
+
+			}
+		});
 	}
 
 	public static ArticoleReturComanda newInstance() {
@@ -274,6 +303,60 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 
 	}
 
+	private void verificaPretMacara() {
+
+		List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcareRetur(listArticole);
+		String listArtSer = comandaDAO.serializeArtCalcMacara(artCalcul);
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("unitLog", UserInfo.getInstance().getUnitLog());
+		params.put("codAgent", UserInfo.getInstance().getCod());
+		params.put("codClient", codClient);
+		params.put("listArt", listArtSer);
+
+		comandaDAO.getCostMacara(params);
+
+	}
+
+	private void trateazaPretMacara(String result) {
+
+		CostDescarcare costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
+
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+
+			for (ArticolDescarcare artDesc : costDescarcare.getArticoleDescarcare()) {
+
+				Iterator<BeanArticolRetur> iterator = listArticole.iterator();
+
+				while (iterator.hasNext()) {
+
+					BeanArticolRetur articol = iterator.next();
+					if (articol.getCod().equals(artDesc.getCod().replaceFirst("^0*", "")))
+						iterator.remove();
+				}
+			}
+
+			for (ArticolDescarcare artDesc : costDescarcare.getArticoleDescarcare()) {
+
+				BeanArticolRetur artRetur = new BeanArticolRetur();
+				artRetur.setCod(artDesc.getCod().replaceFirst("^0*", ""));
+				artRetur.setNume("PREST.SERV.DESCARCARE PALET DIV " + artDesc.getDepart());
+				artRetur.setCantitateRetur(artDesc.getCantitate());
+				artRetur.setCantitate(artDesc.getCantitate());
+				artRetur.setUm("BUC");
+				listArticole.add(artRetur);
+
+			}
+
+			populateListArticole(listArticole);
+			Toast.makeText(getActivity(), "Serviciul de descarcare a fost adaugat.", Toast.LENGTH_LONG).show();
+
+		} else {
+			Toast.makeText(getActivity(), "Pentru aceste articole serviciul de descarcare nu este acceptat.", Toast.LENGTH_LONG).show();
+		}
+
+	}
+
 	private boolean isCantValid() {
 		if (textReturArticol.getText().toString().trim().length() == 0) {
 			Toast.makeText(getActivity(), "Cantitate invalida", Toast.LENGTH_LONG).show();
@@ -361,7 +444,6 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 
 	}
 
-	
 	public void setListArtRetur(String nrDocument, List<BeanArticolRetur> listArticole, String codClient, String numeClient) {
 		this.listArticole = listArticole;
 		this.nrDocument = nrDocument;
@@ -400,4 +482,18 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 
 	}
 
+	
+	@Override
+	public void operationComenziComplete(EnumComenziDAO methodName, Object result) {
+
+		switch (methodName) {
+		case GET_COST_MACARA:
+			trateazaPretMacara((String) result);
+			break;
+		default:
+			break;
+		}
+
+	}	
+	
 }

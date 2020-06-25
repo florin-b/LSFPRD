@@ -190,6 +190,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	public static TipCmdGed tipComandaGed = TipCmdGed.COMANDA_VANZARE;
 	public static int selectedDepartIndexClp = -1, selectedDepozIndexClp = -1;
+	public static String  selectedDepartCod = "-1";
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -1766,6 +1767,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		filialaAlternativa = UserInfo.getInstance().getUnitLog();
 		ListaArticoleComandaGed.getInstance().clearArticoleComanda();
+		
+		selectedDepartIndexClp = -1;
+		selectedDepozIndexClp = -1;
+		selectedDepartCod = "-1";
 
 		initLocale();
 
@@ -2307,6 +2312,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			actionBar.setTitle("Comanda GED");
 			selectedDepartIndexClp = -1;
 			selectedDepozIndexClp = -1;
+			selectedDepartCod = "-1";
 		}
 
 		invalidateOptionsMenu();

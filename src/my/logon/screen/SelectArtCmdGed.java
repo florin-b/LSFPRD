@@ -317,12 +317,14 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0) {
 				CreareComandaGed.selectedDepozIndexClp = -1;
 				CreareComandaGed.selectedDepartIndexClp = -1;
+				CreareComandaGed.selectedDepartCod = "-1";
 			}
 
 			if (CreareComandaGed.selectedDepozIndexClp != -1) {
-
-				spinnerDepart.setSelection(CreareComandaGed.selectedDepartIndexClp);
-				spinnerDepart.setEnabled(false);
+				if (spinnerDepart != null) {
+					spinnerDepart.setSelection(CreareComandaGed.selectedDepartIndexClp);
+					spinnerDepart.setEnabled(false);
+				}
 
 				spinnerDepoz.setSelection(CreareComandaGed.selectedDepozIndexClp);
 				spinnerDepoz.setEnabled(false);
@@ -1082,13 +1084,18 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			tipArticol = "S";
 		else
 			tipArticol = "A";
+		
+		String departCautare = selectedDepartamentAgent;
+
+		if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE && !CreareComandaGed.selectedDepartCod.equals("-1"))
+			departCautare = CreareComandaGed.selectedDepartCod;
 
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("searchString", numeArticol);
 		params.put("tipArticol", tipArticol);
 		params.put("tipCautare", tipCautare);
 		params.put("filiala", UserInfo.getInstance().getUnitLog());
-		params.put("departament", selectedDepartamentAgent);
+		params.put("departament", departCautare);
 		params.put("codUser", UserInfo.getInstance().getCod());
 
 		opArticol.getArticoleDistributie(params);
@@ -1313,6 +1320,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 						ListaArticoleComandaGed listaArticole = ListaArticoleComandaGed.getInstance();
 						listaArticole.addArticolComanda(articol);
+						
+						if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE) {
+							blocheazaDepartDepoz();
+						}
 
 						textNumeArticol.setText("");
 						textCodArticol.setText("");
@@ -1356,9 +1367,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 						mgr.hideSoftInputFromWindow(textCant.getWindowToken(), 0);
 
-						if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE) {
-							blocheazaDepartDepoz();
-						}
 
 					} else {
 
@@ -1380,10 +1388,16 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private void blocheazaDepartDepoz() {
-		CreareComandaGed.selectedDepartIndexClp = spinnerDepart.getSelectedItemPosition();
+		if (spinnerDepart != null) {
+			CreareComandaGed.selectedDepartIndexClp = spinnerDepart.getSelectedItemPosition();
+			spinnerDepart.setEnabled(false);
+		}
+
 		CreareComandaGed.selectedDepozIndexClp = spinnerDepoz.getSelectedItemPosition();
-		spinnerDepart.setEnabled(false);
 		spinnerDepoz.setEnabled(false);
+
+		if (CreareComandaGed.selectedDepartCod.equals("-1"))
+			CreareComandaGed.selectedDepartCod = globalCodDepartSelectetItem;
 	}
 
 	@SuppressWarnings("unchecked")

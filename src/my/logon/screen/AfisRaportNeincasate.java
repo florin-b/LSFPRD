@@ -144,8 +144,8 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 			if (neincasateArray.size() > 0) {
 				arrayListNeincasate.clear();
 
-				double totalFact = 0, totalIncasat = 0, totalRest = 0;
-				double totalGenFact = 0, totalGenIncasat = 0, totalGenRest = 0;
+				double totalFact = 0, totalIncasat = 0, totalRest = 0, totalAcoperit = 0;
+				double totalGenFact = 0, totalGenIncasat = 0, totalGenRest = 0, totalGenAcoperit = 0;
 
 				NumberFormat nf = NumberFormat.getInstance();
 				nf.setMinimumFractionDigits(2);
@@ -167,7 +167,7 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 							temp.put("referinta", " ");
 							temp.put("emitere", " ");
 							temp.put("scadenta", " ");
-							temp.put("acoperit", " ");
+							temp.put("acoperit", nf.format(totalAcoperit));
 							temp.put("tipPlata", " ");
 							temp.put("scadentaBO", " ");
 							temp.put("valoare", nf.format(totalFact));
@@ -195,6 +195,7 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 						totalFact = 0;
 						totalIncasat = 0;
 						totalRest = 0;
+						totalAcoperit = 0;
 
 					}
 
@@ -209,7 +210,7 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 								temp.put("referinta", " ");
 								temp.put("emitere", " ");
 								temp.put("scadenta", " ");
-								temp.put("acoperit", " ");
+								temp.put("acoperit", nf.format(totalAcoperit));
 								temp.put("tipPlata", " ");
 								temp.put("scadentaBO", " ");
 								temp.put("valoare", nf.format(totalFact));
@@ -237,6 +238,7 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 							totalFact = 0;
 							totalIncasat = 0;
 							totalRest = 0;
+							totalAcoperit = 0;
 
 						}
 
@@ -260,10 +262,12 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 					totalFact += Double.parseDouble(neincasateArray.get(i).getValoare());
 					totalIncasat += Double.parseDouble(neincasateArray.get(i).getIncasat());
 					totalRest += Double.parseDouble(neincasateArray.get(i).getRest());
+					totalAcoperit += Double.valueOf(neincasateArray.get(i).getAcoperit());
 
 					totalGenFact += Double.parseDouble(neincasateArray.get(i).getValoare());
 					totalGenIncasat += Double.parseDouble(neincasateArray.get(i).getIncasat());
 					totalGenRest += Double.parseDouble(neincasateArray.get(i).getRest());
+					totalGenAcoperit += Double.valueOf(neincasateArray.get(i).getAcoperit());
 
 					arrayListNeincasate.add(temp);
 				}
@@ -275,7 +279,7 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 					temp.put("referinta", " ");
 					temp.put("emitere", " ");
 					temp.put("scadenta", " ");
-					temp.put("acoperit", " ");
+					temp.put("acoperit", nf.format(totalAcoperit));
 					temp.put("tipPlata", " ");
 					temp.put("scadentaBO", " ");
 					temp.put("valoare", nf.format(totalFact));
@@ -305,7 +309,7 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 				temp.put("referinta", " ");
 				temp.put("emitere", " ");
 				temp.put("scadenta", " ");
-				temp.put("acoperit", " ");
+				temp.put("acoperit", nf.format(totalGenAcoperit));
 				temp.put("tipPlata", " ");
 				temp.put("scadentaBO", " ");
 				temp.put("valoare", nf.format(totalGenFact));

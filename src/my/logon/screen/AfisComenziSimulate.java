@@ -9,7 +9,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,6 +61,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.ArticolSimulat;
+import beans.BeanArticolSimulat;
 import beans.BeanArticolStoc;
 import beans.BeanArticoleAfisare;
 import beans.BeanComandaCreata;
@@ -237,18 +237,18 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		});
 	}
 
-	private List<BeanArticolStoc> getArticoleComanda() {
+	private List<BeanArticolSimulat> getArticoleComanda() {
 
 		Iterator<ArticolSimulat> iterator = listArticole.iterator();
 
-		List<BeanArticolStoc> listArtStoc = new ArrayList<BeanArticolStoc>();
+		List<BeanArticolSimulat> listArtStoc = new ArrayList<BeanArticolSimulat>();
 		String codArticol;
 
 		while (iterator.hasNext()) {
 			ArticolComanda articolComanda = iterator.next();
 
 			if (!InfoStrings.isMatTransport(articolComanda.getCodArticol()) && !InfoStrings.isMatTransportNume(articolComanda.getNumeArticol())) {
-				BeanArticolStoc articolStoc = new BeanArticolStoc();
+				BeanArticolSimulat articolStoc = new BeanArticolSimulat();
 
 				if (articolComanda.getCodArticol().length() == 8)
 					codArticol = "0000000000" + articolComanda.getCodArticol();
@@ -260,6 +260,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 				articolStoc.setUnitLog(getUnitLog(articolComanda.getDepozit(), articolComanda.getUnitLogAlt()));
 				articolStoc.setDepart(articolComanda.getDepartSintetic());
+				articolStoc.setUm(articolComanda.getUm());
 				listArtStoc.add(articolStoc);
 			}
 		}
@@ -271,7 +272,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	private void verificaStocArticole() {
 
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("listArticole", opArticol.serializeListArtStoc(getArticoleComanda()));
+		params.put("listArticole", opArticol.serializeListArtSim(getArticoleComanda()));
 
 		opArticol.getStocArticole(params);
 

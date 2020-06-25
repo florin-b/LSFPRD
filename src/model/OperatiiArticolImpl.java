@@ -18,6 +18,7 @@ import utils.UtilsGeneral;
 import android.content.Context;
 import android.widget.Toast;
 import beans.ArticolDB;
+import beans.BeanArticolSimulat;
 import beans.BeanArticolStoc;
 import beans.BeanGreutateArticol;
 import beans.BeanParametruPretGed;
@@ -318,6 +319,39 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		return jsonArray.toString();
 	}
 
+	@Override
+	public String serializeListArtSim(List<BeanArticolSimulat> listArticole) {
+
+		JSONArray jsonArray = new JSONArray();
+		JSONObject object = null;
+
+		Iterator<BeanArticolSimulat> iterator = listArticole.iterator();
+
+		while (iterator.hasNext()) {
+			BeanArticolSimulat articol = iterator.next();
+
+			object = new JSONObject();
+			try {
+				object.put("cod", articol.getCod());
+				object.put("depozit", articol.getDepozit());
+				object.put("depart", articol.getDepart());
+				object.put("unitLog", articol.getUnitLog());
+				object.put("um", articol.getUm());
+
+				jsonArray.put(object);
+
+			} catch (JSONException e) {
+
+				e.printStackTrace();
+			}
+
+		}
+
+		return jsonArray.toString();
+	}	
+	
+	
+	
 	public void deserializeListArtStoc(String listArticole) {
 		// Object json = new JSONTokener(serializedListArticole).nextValue();
 

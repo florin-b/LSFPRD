@@ -122,6 +122,11 @@ public class NeincasateAdapter extends SimpleAdapter implements ArticolNeincasat
 
 		tokNewVal = artMap.get("acoperit");
 		holder.textAcoperit.setText(tokNewVal);
+		if (isBold) {
+			holder.textAcoperit.setTypeface(null, Typeface.BOLD);
+		} else {
+			holder.textAcoperit.setTypeface(null, Typeface.NORMAL);
+		}
 
 		tokNewVal = artMap.get("tipPlata");
 		holder.textTipPlata.setText(tokNewVal);
