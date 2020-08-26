@@ -952,6 +952,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		paramPret.setLocalitate(getLocalitatePret());
 		paramPret.setFilialaAlternativa(CreareComandaGed.filialaAlternativa);
 		paramPret.setCodClientParavan(CreareComandaGed.codClientParavan);
+		paramPret.setFilialaClp(DateLivrare.getInstance().getCodFilialaCLP());
 
 		params.put("parametruPret", opArticol.serializeParamPretGed(paramPret));
 

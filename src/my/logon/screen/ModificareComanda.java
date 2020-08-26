@@ -38,6 +38,7 @@ import model.ListaArticoleModificareComanda;
 import model.UserInfo;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import utils.UtilsComenziGed;
@@ -668,7 +669,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						comandaFinala.setUserSiteMail(dateLivrareInstance.getMail());
 						comandaFinala.setIsValIncModif(isValIncModif);
 						comandaFinala.setCodJ(codJ);
-						comandaFinala.setAdresaLivrareGed(adrLivrareGED);
+						comandaFinala.setAdresaLivrareGed(serializeDateLivrareGed());
 						comandaFinala.setNumeClient(dateLivrareInstance.getNumeClient());
 						comandaFinala.setCnpClient(dateLivrareInstance.getCnpClient());
 						comandaFinala.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
@@ -1109,6 +1110,24 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		return obj.toString();
 
 	}
+	
+	
+	private String serializeDateLivrareGed() {
+
+		JSONObject jsonAdresa = new JSONObject();
+
+		try {
+			jsonAdresa.put("codJudet", DateLivrare.getInstance().getCodJudetD());
+			jsonAdresa.put("oras", DateLivrare.getInstance().getOrasD());
+			jsonAdresa.put("strada", DateLivrare.getInstance().getAdresaD());
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return jsonAdresa.toString();
+	}	
+	
 
 	private String getCoordAdresa() {
 		if (DateLivrare.getInstance().getCoordonateAdresa() != null)

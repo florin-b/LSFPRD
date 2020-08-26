@@ -18,6 +18,7 @@ public class BeanParametruPretGed {
 	private String localitate;
 	private String filialaAlternativa;
 	private String codClientParavan;
+	private String filialaClp;
 
 	public String getClient() {
 		return client;
@@ -147,6 +148,14 @@ public class BeanParametruPretGed {
 		this.codClientParavan = codClientParavan;
 	}
 
+	public String getFilialaClp() {
+		return filialaClp;
+	}
+
+	public void setFilialaClp(String filialaClp) {
+		this.filialaClp = filialaClp;
+	}
+	
 	@Override
 	public String toString() {
 		return "BeanParametruPretGed [client=" + client + ", articol=" + articol + ", cantitate=" + cantitate + ", depart=" + depart + ", um=" + um + ", ul="

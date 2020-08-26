@@ -966,6 +966,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		params.put("codUser", UserInfo.getInstance().getCod());
 		params.put("canalDistrib", CreareComanda.canalDistrib);
 		params.put("filialaAlternativa", CreareComanda.filialaAlternativa);
+		params.put("filialaClp", DateLivrare.getInstance().getCodFilialaCLP());
 
 		opArticol.getPret(params);
 
