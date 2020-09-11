@@ -233,7 +233,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			setTipTransportOptions();
 
-			if (UserInfo.getInstance().getUserSite().equals("X") || UtilsUser.isConsWood()) {
+			if (UserInfo.getInstance().getUserSite().equals("X") || UtilsUser.isConsWood() || isComandaClp()) {
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransportOnline);
 
 			} else {
@@ -947,14 +947,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void performGetJudete() {
 
-		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP") || !DateLivrare.getInstance().getCodJudet().isEmpty()) {
+		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP") || !DateLivrare.getInstance().getCodJudet().isEmpty() || isComandaClp()) {
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
 		} else {
 			String unitLog = UserInfo.getInstance().getUnitLog();
 
-			if (isComandaClp())
-				unitLog = DateLivrare.getInstance().getCodFilialaCLP();
 			
 			if (unitLog.equals("NN10"))
 				unitLog = "AG10";
