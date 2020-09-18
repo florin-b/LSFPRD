@@ -14,6 +14,7 @@ import my.logon.screen.R;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,6 +89,13 @@ public class UtilsGeneral {
 
 		return listDepozite.toArray(new String[listDepozite.size()]);
 
+	}
+	
+	public static void trateazaExceptieMAV_BU(ArrayAdapter<String> adapterSpinnerDepozite) {
+
+		//pentru filialele BU se elimina MAV2, conform solicitarii din 17.09.2020
+		if (UserInfo.getInstance().getUnitLog().startsWith("BU"))
+			adapterSpinnerDepozite.remove("MAV2");
 	}
 
 	public static String[] getDepoziteMav() {

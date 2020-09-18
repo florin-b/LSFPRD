@@ -476,6 +476,25 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		performGetAdreseLivrare();
 
+		if (isComandaBV() && DateLivrare.getInstance().getTipPlata().substring(0, 1).equals("E")) {
+			checkAviz.setChecked(false);
+			checkAviz.setEnabled(false);
+		}
+
+	}
+
+	private boolean isComandaBV() {
+
+		boolean isBV90 = false;
+
+		for (ArticolComanda articol : ListaArticoleComanda.getInstance().getListArticoleComanda()) {
+			if (articol.getFilialaSite().equals("BV90")) {
+				isBV90 = true;
+				break;
+			}
+		}
+
+		return isBV90;
 	}
 
 	private void setLivrareCustodieLayout() {
@@ -816,7 +835,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		spinnerPlata.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
+				checkAviz.setEnabled(true);
+
 				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("E")) {
+
+					if (isComandaBV()) {
+						checkAviz.setEnabled(false);
+						checkAviz.setChecked(false);
+					}
 					spinnerResponsabil.setSelection(1);
 				}
 
@@ -1702,12 +1728,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			radioLista.setChecked(true);
 			spinnerAdreseLivrare.setSelection(posAdresa);
 			return true;
-		}
-		else if (posAdresa != -1){
+		} else if (posAdresa != -1) {
 			valideazaTonajAdresaNoua();
 			return false;
-		}
-		else
+		} else
 			return false;
 
 	}

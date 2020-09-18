@@ -346,6 +346,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				if (selectedDepartamentAgent.equals("11") || selectedDepartamentAgent.equals("05")) {
 					adapterSpinnerDepozite.clear();
 					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteGed());
+					
+					UtilsGeneral.trateazaExceptieMAV_BU(adapterSpinnerDepozite);
 
 					if (selectedDepartamentAgent.equals("11"))
 						spinnerDepoz.setSelection(adapterSpinnerDepozite.getPosition("MAV1"));

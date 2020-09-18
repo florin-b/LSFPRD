@@ -267,6 +267,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			arrayListDepozite.addAll(Arrays.asList(UtilsGeneral.getDepoziteGed()));
 
 		adapterSpinnerDepozite = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListDepozite);
+		
+		UtilsGeneral.trateazaExceptieMAV_BU(adapterSpinnerDepozite);
 		adapterSpinnerDepozite.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerDepoz.setAdapter(adapterSpinnerDepozite);
 		spinnerDepoz.setOnItemSelectedListener(new OnSelectDepozit());
@@ -350,7 +352,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	private void addSpinnerDepartamente() {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item,
-				DepartamentAgent.getDepartamenteAgentNerestr());
+				DepartamentAgent.getDepartamenteAgentGED());
 
 		LayoutInflater mInflater = LayoutInflater.from(this);
 		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);
@@ -364,6 +366,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				if (selectedDepartamentAgent.equals("11") || selectedDepartamentAgent.equals("05")) {
 					adapterSpinnerDepozite.clear();
 					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteGed());
+					UtilsGeneral.trateazaExceptieMAV_BU(adapterSpinnerDepozite);
 
 					if (selectedDepartamentAgent.equals("11"))
 						spinnerDepoz.setSelection(adapterSpinnerDepozite.getPosition("MAV1"));
@@ -372,6 +375,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 				} else {
 					adapterSpinnerDepozite.clear();
 					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteGed());
+					UtilsGeneral.trateazaExceptieMAV_BU(adapterSpinnerDepozite);
 					spinnerDepoz.setSelection(0);
 				}
 			}

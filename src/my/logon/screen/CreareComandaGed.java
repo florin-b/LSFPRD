@@ -1184,9 +1184,27 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		}
 	}
 
+	private boolean isComandaBV() {
+
+		boolean isBV90 = false;
+
+		for (ArticolComanda articol : ListaArticoleComandaGed.getInstance().getListArticoleComanda()) {
+			if (articol.getFilialaSite().equals("BV90")) {
+				isBV90 = true;
+				break;
+			}
+		}
+
+		return isBV90;
+	}	
+	
 	private void valideazaFinal() {
 
-		if (HelperCreareComanda.isConditiiAlertaIndoire(ListaArticoleComandaGed.getInstance().getListArticoleComanda())) {
+		if (isComandaBV() && (DateLivrare.getInstance().getTipDocInsotitor().equals("2") || DateLivrare.getInstance().getTipDocInsotitor().equals("3") && DateLivrare.getInstance().getTipPlata().substring(0, 1).equals("E"))){
+			Toast.makeText(getApplicationContext(), "Pentru comenzi din BV90 nu puteti selecta optiunile 'Plata in numerar' si 'Aviz de expeditie'.", Toast.LENGTH_LONG).show();
+			return;
+		}
+		else if (HelperCreareComanda.isConditiiAlertaIndoire(ListaArticoleComandaGed.getInstance().getListArticoleComanda())) {
 			HelperDialog.showInfoDialog(CreareComandaGed.this, "Atentie!", "Selectati tipul de prelucrare (indoire sau debitare).");
 		} else {
 			verificaPretMacara();
