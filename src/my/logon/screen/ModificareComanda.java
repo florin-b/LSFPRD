@@ -25,6 +25,7 @@ import listeners.ArticolModificareListener;
 import listeners.AsyncTaskListener;
 import listeners.ComenziDAOListener;
 import listeners.CostMacaraListener;
+import listeners.PaletiListener;
 import model.AlgoritmComandaGed;
 import model.ArticolComanda;
 import model.Comanda;
@@ -75,6 +76,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.ArticolCalculDesc;
+import beans.ArticolPalet;
 import beans.BeanArticoleAfisare;
 import beans.BeanComandaCreata;
 import beans.BeanConditii;
@@ -84,10 +86,12 @@ import beans.CostDescarcare;
 import beans.DateLivrareAfisare;
 import dialogs.AprobariDialog;
 import dialogs.CostMacaraDialog;
+import dialogs.CostPaletiDialog;
 import enums.EnumComenziDAO;
+import enums.EnumPaleti;
 
 public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer,
-		CostMacaraListener {
+		CostMacaraListener, PaletiListener {
 
 	Button quitBtn, stocBtn, clientBtn, articoleBtn, livrareBtn, salveazaComandaBtn, stergeComandaBtn, btnCommentariiCond, aprobareBtn;
 	String filiala = "", nume = "", cod = "", globalSubCmp = "0";
@@ -693,6 +697,14 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
+			String codFurnizor = " ";
+
+			if (DateLivrare.getInstance().getFurnizorComanda() != null
+					&& !DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().trim().isEmpty())
+				codFurnizor = DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa();
+			else if (!DateLivrare.getInstance().getCodFilialaCLP().trim().isEmpty())
+				codFurnizor = DateLivrare.getInstance().getCodFilialaCLP();
+
 			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(listArticoleComanda);
 
 			String listArtSer = operatiiComenzi.serializeArtCalcMacara(artCalcul);
@@ -702,6 +714,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
 			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
 			params.put("codClient", comandaFinala.getCodClient());
+			params.put("codFurnizor", codFurnizor);
 			params.put("listArt", listArtSer);
 
 			operatiiComenzi.getCostMacara(params);
@@ -713,8 +726,20 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private void afiseazaPretMacaraDialog(String result) {
 
 		costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
+		
+		verificaPaletiComanda(costDescarcare.getArticolePaleti());
+		
+		if (!costDescarcare.getArticolePaleti().isEmpty()) {
 
-		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+			int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.65);
+			int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.55);
+
+			CostPaletiDialog costPaleti = new CostPaletiDialog(this, costDescarcare.getArticolePaleti(), DateLivrare.getInstance().getTransport());
+			costPaleti.setPaletiDialogListener(this);
+			costPaleti.getWindow().setLayout(width, height);
+			costPaleti.show();
+
+		} else if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
 
 			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, isComandaGed());
 			macaraDialog.setCostMacaraListener(this);
@@ -730,6 +755,56 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	}
 
+	private void verificaPaletiComanda(List<ArticolPalet> listPaleti) {
+
+		Iterator<ArticolComanda> articolIterator = listArticoleComanda.iterator();
+
+		boolean paletExista;
+
+		while (articolIterator.hasNext()) {
+			ArticolComanda articol = articolIterator.next();
+			
+			paletExista = true;
+
+			if (articol.isUmPalet()) {
+				paletExista = false;
+			}
+
+			for (ArticolPalet palet : listPaleti) {
+
+				if (palet.getCodPalet().equals(articol.getCodArticol()) && (palet.getCantitate() == (int) articol.getCantitate())) {
+					paletExista = true;
+				}
+
+			}
+
+			if (!paletExista) {
+				articolIterator.remove();
+				adapterArticole.notifyDataSetChanged();
+			}
+
+		}
+
+		Iterator<ArticolPalet> paletIterator = listPaleti.iterator();
+
+		for (ArticolComanda articol : listArticoleComanda) {
+
+			while (paletIterator.hasNext()) {
+				ArticolPalet palet = paletIterator.next();
+
+				if (palet.getCodPalet().equals(articol.getCodArticol()) && (palet.getCantitate() == (int) articol.getCantitate())) {
+					paletIterator.remove();
+				}
+
+			}
+
+			paletIterator = listPaleti.iterator();
+
+		}
+
+	}	
+	
+	
 	private void trateazaPretMacara(boolean acceptaPret, double valoarePret) {
 
 		if (acceptaPret) {
@@ -1100,7 +1175,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("filialaCLP", DateLivrare.getInstance().getCodFilialaCLP());
 			obj.put("numeDelegat", DateLivrare.getInstance().getDelegat().getNume());
 			obj.put("ciDelegat", DateLivrare.getInstance().getDelegat().getSerieNumarCI());
-			obj.put("autoDelegat", DateLivrare.getInstance().getDelegat().getNrAuto());	
+			obj.put("autoDelegat", DateLivrare.getInstance().getDelegat().getNrAuto());
 			obj.put("refClient", DateLivrare.getInstance().getRefClient());
 
 		} catch (Exception ex) {
@@ -1110,8 +1185,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		return obj.toString();
 
 	}
-	
-	
+
 	private String serializeDateLivrareGed() {
 
 		JSONObject jsonAdresa = new JSONObject();
@@ -1126,8 +1200,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		}
 
 		return jsonAdresa.toString();
-	}	
-	
+	}
 
 	private String getCoordAdresa() {
 		if (DateLivrare.getInstance().getCoordonateAdresa() != null)
@@ -1816,8 +1889,10 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		if (valTransport < valTransportSAP)
 			valTransport = valTransportSAP;
 
-		UtilsComenziGed.setValoareArticolTransport(listArticole, valTransport);
-		adapterArticole.notifyDataSetChanged();
+		if (!DateLivrare.getInstance().getTransport().equals("TCLI")) {
+			UtilsComenziGed.setValoareArticolTransport(listArticole, valTransport);
+			adapterArticole.notifyDataSetChanged();
+		}
 
 		if (DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT")) {
 			valTranspBtn.setVisibility(View.VISIBLE);
@@ -1860,6 +1935,33 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		return bd.doubleValue();
 	}
 
+	private void adaugaPalet(ArticolPalet articolPalet, EnumPaleti status) {
+		
+		String depozitPalet = HelperCostDescarcare.getDepozitPalet(listArticoleComanda, articolPalet.getCodArticol());
+		
+		ArticolComanda articol = HelperCostDescarcare.getArticolPalet(articolPalet, depozitPalet);
+		
+		listArticoleComanda.add(articol);
+		adapterArticole.setListArticole(listArticoleComanda);
+		adapterArticole.notifyDataSetChanged();
+
+	}
+
+	private void respingePalet() {
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, false);
+			macaraDialog.setCostMacaraListener(this);
+			macaraDialog.show();
+
+		} else {
+			if (!costDescarcare.getSePermite())
+				DateLivrare.getInstance().setMasinaMacara(false);
+
+		}
+	}	
+	
+	
 	private void calculProcente(ArrayList<ArticolComanda> listArticole) {
 		if (UtilsUser.isAgentOrSDorKA() || UtilsUser.isConsWood() || comandaSelectata.isCmdInstPublica()) {
 			valTranspBtn.setVisibility(View.GONE);
@@ -1928,4 +2030,21 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		calculProcente(listArticoleComanda);
 
 	}
+	
+	@Override
+	public void paletiStatus(EnumPaleti status, ArticolPalet palet) {
+		switch (status) {
+		case ACCEPTA:
+			adaugaPalet(palet, status);
+			break;
+		case RESPINGE:
+		case FINALIZEAZA:
+			respingePalet();
+			break;
+		default:
+			break;
+		}
+
+	}	
+	
 }

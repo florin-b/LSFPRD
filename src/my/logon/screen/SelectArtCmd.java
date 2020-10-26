@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import listeners.ArticolCantListener;
 import listeners.OperatiiArticolListener;
 import model.ArticolComanda;
 import model.Constants;
@@ -22,10 +23,12 @@ import model.OperatiiArticol;
 import model.OperatiiArticolFactory;
 import model.UserInfo;
 import utils.DepartamentAgent;
+import utils.UtilsArticole;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import adapters.CautareArticoleAdapter;
+
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -58,14 +61,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import beans.ArticolCant;
 import beans.ArticolDB;
+import dialogs.ArticoleCantDialog;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
 import enums.EnumFiliale;
 import enums.EnumTipComanda;
 import enums.TipCmdDistrib;
 
-public class SelectArtCmd extends ListActivity implements OperatiiArticolListener {
+public class SelectArtCmd extends ListActivity implements OperatiiArticolListener, ArticolCantListener {
 
 	Button articoleBtn, saveArtBtn, pretBtn;
 	String filiala = "", nume = "", cod = "", umStoc = "";
@@ -1021,6 +1026,23 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	
+	private void showArticoleCantDialog(String listArticoleSer) {
+		List<ArticolCant> listArticole = opArticol.deserializeArticoleCant(listArticoleSer);
+
+		if (!listArticole.isEmpty()) {
+
+			int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.6);
+			int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.5);
+
+			ArticoleCantDialog articoleCant = new ArticoleCantDialog(this, listArticole);
+			articoleCant.setArticoleCantListener(this);
+			articoleCant.getWindow().setLayout(width, height);
+			articoleCant.show();
+		}
+
+	}
+	
 	boolean isNotDepartRestricted(String codDepart) {
 		if (UserInfo.getInstance().getTipAcces().equals("27"))
 			return true;
@@ -1384,6 +1406,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 									Toast.LENGTH_LONG).show();
 
 						}
+						
+						if (UtilsArticole.isArticolPal(articolDBSelected.getSintetic()))
+							afiseazaArticoleCant(codArticol, CreareComanda.filialaAlternativa);
 
 						textNumeArticol.setText("");
 						textCodArticol.setText("");
@@ -1446,6 +1471,16 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private void afiseazaArticoleCant(String codArticol, String filiala) {
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("unitLog", filiala);
+		params.put("codArtPal", codArticol);
+
+		opArticol.getArticoleCant(params);
+	}	
+	
+	
 	private boolean isUserExceptieFiliale() {
 		return UserInfo.getInstance().getUnitLog().startsWith("BV") && (globalCodDepartSelectetItem.equals("01") || globalCodDepartSelectetItem.equals("02"));
 	}	
@@ -2139,9 +2174,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			listArtPret((String) result);
 			break;
 
-		case GET_ARTICOLE_DISTRIBUTIE:
-			populateListViewArticol(opArticol.deserializeArticoleVanzare((String) result));
-			break;
+
 		case GET_ARTICOLE_STATISTIC:
 			((TextView) findViewById(R.id.textAfisStatistic)).setVisibility(View.VISIBLE);
 			listArticoleStatistic = opArticol.deserializeArticoleVanzare((String) result);
@@ -2157,6 +2190,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			listArticoleCustodie = opArticol.deserializeArticoleVanzare((String) result);
 			populateListViewArticol(listArticoleCustodie);
 			break;
+		case GET_ARTICOLE_DISTRIBUTIE:
 		case GET_ARTICOLE_FURNIZOR:
 			populateListViewArticol(opArticol.deserializeArticoleVanzare((String) result));
 			break;
@@ -2166,11 +2200,37 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		case GET_FACTOR_CONVERSIE:
 			loadFactorConversie((String) result);
 			break;
-
+		case GET_ARTICOLE_CANT:
+			showArticoleCantDialog((String) result);
+			break;
 		default:
 			break;
 
 		}
+
+	}
+	
+	
+	@Override
+	public void articolCantSelected(ArticolCant articolCant) {
+
+		List<ArticolDB> listArticole = new ArrayList<ArticolDB>();
+		articolCant.setCod(articolCant.getCod().replaceFirst("^0*", ""));
+		listArticole.add(articolCant);
+
+		CreareComanda.filialaAlternativa = articolCant.getUlStoc();
+
+		if (articolCant.getDepozit().equals("92V1"))
+			spinnerDepoz.setSelection(adapterSpinnerDepozite.getPosition("92V1"));
+		else
+			spinnerDepoz.setSelection(0);
+
+		txtNumeArticol.setText("");
+		resultLayout.setVisibility(View.INVISIBLE);
+		CautareArticoleAdapter adapterArticole = new CautareArticoleAdapter(this, listArticole);
+		setListAdapter(adapterArticole);
+
+		this.getListView().performItemClick(this.getListView().getAdapter().getView(0, null, null), 0, this.getListView().getItemIdAtPosition(0));
 
 	}
 

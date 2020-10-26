@@ -206,7 +206,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			txtTel.setText(dateLivrareInstance.getNrTel());
 
 			checkFactura = (CheckBox) findViewById(R.id.checkFactura);
+			setListenerCheckFactura();
 			checkAviz = (CheckBox) findViewById(R.id.checkAviz);
+			setListenerCheckAviz();
 
 			checkObsSofer = (CheckBox) findViewById(R.id.chkObsSofer);
 			setListenerCheckObsSofer();
@@ -441,6 +443,30 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
+	
+	private void setListenerCheckFactura(){
+		checkFactura.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked)
+					checkAviz.setChecked(false);
+			}
+		});
+	}
+	
+	
+	private void setListenerCheckAviz(){
+		checkAviz.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked)
+					checkFactura.setChecked(false);
+			}
+		});
+	}
+	
 	private void getDateLivrareClient() {
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("codClient", CreareComandaGed.codClientVar);
@@ -1521,6 +1547,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		dateLivrareInstance.setRedSeparat(" ");
 
 		String rawTipPlataStr = spinnerPlata.getSelectedItem().toString();
+		
+		if (rawTipPlataStr.startsWith("O") &&  (!strMailAddr.contains("@") || !strMailAddr.contains("."))){
+			Toast.makeText(getApplicationContext(), "Completati adresa de e-mail.", Toast.LENGTH_LONG).show();
+			return;
+		}
 
 		dateLivrareInstance.setTipPlata(rawTipPlataStr.substring(0, rawTipPlataStr.indexOf("-") - 1).trim());
 

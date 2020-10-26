@@ -1,0 +1,2 @@
+https://github.com/florin-b/LSFPRD.git
+https://scm.arabesque.ro/gitlab/android-apps/lite-sfa.git

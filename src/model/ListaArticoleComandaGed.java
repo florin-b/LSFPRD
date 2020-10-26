@@ -98,6 +98,7 @@ public class ListaArticoleComandaGed extends Observable {
 				
 				articol.setValTransport((articol.getPretUnitarClient() * articol.getCantUmb()) * (articol.getProcTransport() / 100));
 				articol.setTipAlert(tipAlert);
+				articol.setPonderare(0);
 
 			}
 		}

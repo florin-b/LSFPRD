@@ -27,6 +27,7 @@ import listeners.ComenziDAOListener;
 import listeners.CostMacaraListener;
 import listeners.OperatiiArticolListener;
 import listeners.PaletAlertListener;
+import listeners.PaletiListener;
 import listeners.PretTransportDialogListener;
 import listeners.TipCmdDistribListener;
 import listeners.ValoareNegociataDialogListener;
@@ -77,10 +78,12 @@ import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.ArticolCalculDesc;
+import beans.ArticolPalet;
 import beans.BeanArticolStoc;
 import beans.CostDescarcare;
 import dialogs.ArtComplDialog;
 import dialogs.CostMacaraDialog;
+import dialogs.CostPaletiDialog;
 import dialogs.PaletAlertDialog;
 import dialogs.PretTransportDialog;
 import dialogs.TipComandaDistributieDialog;
@@ -88,11 +91,12 @@ import dialogs.ValoareNegociataDialog;
 import enums.EnumArticoleDAO;
 import enums.EnumComenziDAO;
 import enums.EnumDaNuOpt;
+import enums.EnumPaleti;
 import enums.TipCmdDistrib;
 
 public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener,
 		PretTransportDialogListener, ArtComplDialogListener, Observer, PaletAlertListener, CostMacaraListener, TipCmdDistribListener,
-		OperatiiArticolListener {
+		OperatiiArticolListener, PaletiListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd;
 	String filiala = "", nume = "", cod = "";
@@ -626,7 +630,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			dateLivrareInstance.setCodAgent(UserInfo.getInstance().getCod());
 			dateLivrareInstance.setFactRed(factRed);
 
-			if (dateLivrareInstance.getZonaBucuresti() != null) {
+			if (dateLivrareInstance.getZonaBucuresti() != null && tipComandaDistributie != TipCmdDistrib.LIVRARE_CUSTODIE) {
 
 				HelperTranspBuc.eliminaCostTransportZoneBuc(ListaArticoleComanda.getInstance().getListArticoleComanda());
 
@@ -1015,17 +1019,26 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	private void trateazaConditiiSuplimentare() {
 
-		if (comandaHasPalet())
-			displayAlertPalet();
-		else
-			displayArtComplDialog();
+		displayArtComplDialog();
 	}
 
 	private void afiseazaPretMacaraDialog(String result) {
 
 		costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
 
-		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+		verificaPaletiComanda(costDescarcare.getArticolePaleti());
+
+		if (!costDescarcare.getArticolePaleti().isEmpty()) {
+
+			int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.65);
+			int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.55);
+
+			CostPaletiDialog costPaleti = new CostPaletiDialog(this, costDescarcare.getArticolePaleti(), DateLivrare.getInstance().getTransport());
+			costPaleti.setPaletiDialogListener(this);
+			costPaleti.getWindow().setLayout(width, height);
+			costPaleti.show();
+
+		} else if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
 
 			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, false);
 			macaraDialog.setCostMacaraListener(this);
@@ -1036,8 +1049,60 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				DateLivrare.getInstance().setMasinaMacara(false);
 
 			trateazaConditiiSuplimentare();
+		}
+
+	}
+
+	private void verificaPaletiComanda(List<ArticolPalet> listPaleti) {
+
+		Iterator<ArticolComanda> articolIterator = ListaArticoleComanda.getInstance().getListArticoleComanda().iterator();
+
+		boolean paletExista;
+
+		while (articolIterator.hasNext()) {
+			ArticolComanda articol = articolIterator.next();
+
+			paletExista = true;
+
+			if (articol.isUmPalet()) {
+				paletExista = false;
+			}
+
+			for (ArticolPalet palet : listPaleti) {
+
+				if (palet.getCodPalet().equals(articol.getCodArticol()) && (palet.getCantitate() == (int) articol.getCantitate())) {
+					paletExista = true;
+				}
+
+			}
+
+			if (!paletExista) {
+				articolIterator.remove();
+			}
 
 		}
+
+		Iterator<ArticolPalet> paletIterator = listPaleti.iterator();
+
+		for (ArticolComanda articol : ListaArticoleComanda.getInstance().getListArticoleComanda()) {
+
+			while (paletIterator.hasNext()) {
+				ArticolPalet palet = paletIterator.next();
+
+				if (palet.getCodPalet().equals(articol.getCodArticol()) && (palet.getCantitate() == (int) articol.getCantitate())) {
+					paletIterator.remove();
+				}
+
+			}
+
+			paletIterator = listPaleti.iterator();
+
+		}
+
+		ArticoleCreareAdapter adapterArticole = new ArticoleCreareAdapter(new ArrayList<ArticolComanda>(), this);
+		adapterArticole.setListArticole(ListaArticoleComanda.getInstance().getListArticoleComanda());
+		listArtCmd.setAdapter(adapterArticole);
+		adapterArticole.notifyDataSetChanged();
 
 	}
 
@@ -1069,6 +1134,13 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
+			String codFurnizor = " ";
+
+			if (tipComandaDistributie == TipCmdDistrib.DISPOZITIE_LIVRARE)
+				codFurnizor = DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa();
+			else if (tipComandaDistributie == TipCmdDistrib.COMANDA_LIVRARE)
+				codFurnizor = DateLivrare.getInstance().getCodFilialaCLP();
+
 			List<ArticolCalculDesc> artCalcul = HelperCostDescarcare.getDateCalculDescarcare(ListaArticoleComanda.getInstance()
 					.getListArticoleComanda());
 
@@ -1079,11 +1151,11 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			params.put("unitLog", DateLivrare.getInstance().getUnitLog());
 			params.put("codAgent", DateLivrare.getInstance().getCodAgent());
 			params.put("codClient", comandaFinala.getCodClient());
+			params.put("codFurnizor", codFurnizor);
 			params.put("listArt", listArtSer);
 
 			comandaDAO.getCostMacara(params);
-		} else
-			trateazaConditiiSuplimentare();
+		}
 
 	}
 
@@ -1097,7 +1169,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			String tipUser = "AV";
 			HashMap<String, String> params = new HashMap<String, String>();
 
-			if (UserInfo.getInstance().getTipAcces().equals("27") || UtilsUser.isUserSK()|| UtilsUser.isUserSapKA())
+			if (UserInfo.getInstance().getTipAcces().equals("27") || UtilsUser.isUserSK() || UtilsUser.isUserSapKA())
 				tipUser = "KA";
 
 			params.put("comanda", comandaFinalaStr);
@@ -1119,27 +1191,6 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		}
 	}
 
-	private void displayAlertPalet() {
-
-		PaletAlertDialog infoDialog = new PaletAlertDialog(this);
-		infoDialog.setPaletAlertListener(this);
-		infoDialog.showAlertDialog();
-
-	}
-
-	private boolean comandaHasPalet() {
-
-		List<ArticolComanda> listaArticole = ListaArticoleComanda.getInstance().getListArticoleComanda();
-		Iterator<ArticolComanda> iterator = listaArticole.iterator();
-
-		while (iterator.hasNext()) {
-			if (iterator.next().isUmPalet())
-				return true;
-		}
-
-		return false;
-
-	}
 
 	private String prepareArtForDelivery() {
 		String retVal = "";
@@ -1275,7 +1326,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				articolCmd.setDepartAprob(articol.getDepartAprob());
 				articolCmd.setIstoricPret(articol.getIstoricPret());
 				articolCmd.setFilialaSite(articol.getFilialaSite());
-				
+
 				if (isArtGedExceptie(articol))
 					articolCmd.setObservatii(articol.getObservatii());
 
@@ -2004,6 +2055,38 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		return hasMAV;
 	}
 
+	private void adaugaPalet(ArticolPalet articolPalet, EnumPaleti status) {
+
+		String depozitPalet = HelperCostDescarcare.getDepozitPalet(ListaArticoleComanda.getInstance().getListArticoleComanda(), articolPalet.getCodArticol());
+		ArticolComanda articol = HelperCostDescarcare.getArticolPalet(articolPalet, depozitPalet);
+		ListaArticoleComanda.getInstance().addArticolComanda(articol);
+		
+		ArticoleCreareAdapter adapterArticole = new ArticoleCreareAdapter(new ArrayList<ArticolComanda>(), this);
+		adapterArticole.setListArticole(ListaArticoleComanda.getInstance().getListArticoleComanda());
+		listArtCmd.setAdapter(adapterArticole);
+		adapterArticole.notifyDataSetChanged();
+
+		prepareArtForDelivery();
+
+		articoleFinaleStr = serializedResult;
+
+	}
+
+	private void respingePalet() {
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, false);
+			macaraDialog.setCostMacaraListener(this);
+			macaraDialog.show();
+
+		} else {
+			if (!costDescarcare.getSePermite())
+				DateLivrare.getInstance().setMasinaMacara(false);
+
+			trateazaConditiiSuplimentare();
+		}
+	}
+
 	private void setHeaderVisibility(boolean isVisible) {
 		if (isVisible) {
 			listArtCmd.setVisibility(View.VISIBLE);
@@ -2101,6 +2184,22 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		default:
 			break;
 
+		}
+
+	}
+
+	@Override
+	public void paletiStatus(EnumPaleti status, ArticolPalet palet) {
+		switch (status) {
+		case ACCEPTA:
+			adaugaPalet(palet, status);
+			break;
+		case RESPINGE:
+		case FINALIZEAZA:
+			respingePalet();
+			break;
+		default:
+			break;
 		}
 
 	}

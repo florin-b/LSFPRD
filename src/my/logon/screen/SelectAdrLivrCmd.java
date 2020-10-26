@@ -340,7 +340,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		// document insotitor
 
 		checkFactura = (CheckBox) findViewById(R.id.checkFactura);
+		setListenerCheckFactura();
 		checkAviz = (CheckBox) findViewById(R.id.checkAviz);
+		setListenerCheckAviz();
 
 		checkFactura.setChecked(false);
 		checkAviz.setChecked(false);
@@ -418,7 +420,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		if (UtilsUser.isAgentOrSD() && UserInfo.getInstance().getCodDepart().startsWith("04"))
 			layoutPrelucrare04.setVisibility(View.VISIBLE);
 
-		if (UtilsUser.isKA())
+		if (UtilsUser.isKA() || UtilsUser.isUserSDKA() || UtilsUser.isUserSK())
 			layoutPrelucrare04.setVisibility(View.VISIBLE);
 
 		radioLista = (RadioButton) findViewById(R.id.radioLista);
@@ -495,6 +497,29 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		}
 
 		return isBV90;
+	}
+	
+	private void setListenerCheckFactura(){
+		checkFactura.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked)
+					checkAviz.setChecked(false);
+			}
+		});
+	}
+	
+	
+	private void setListenerCheckAviz(){
+		checkAviz.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked)
+					checkFactura.setChecked(false);
+			}
+		});
 	}
 
 	private void setLivrareCustodieLayout() {

@@ -17,6 +17,7 @@ import org.json.JSONTokener;
 import utils.UtilsGeneral;
 import android.content.Context;
 import android.widget.Toast;
+import beans.ArticolCant;
 import beans.ArticolDB;
 import beans.BeanArticolSimulat;
 import beans.BeanArticolStoc;
@@ -138,6 +139,12 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		performOperation();
 	}
 
+	public void getArticoleCant(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_ARTICOLE_CANT;
+		this.params = params;
+		performOperation();
+	}	
+	
 	@Override
 	public Object getDepartBV90(String codArticol) {
 		numeComanda = EnumArticoleDAO.GET_DEP_BV90;
@@ -473,6 +480,55 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		}
 
 		return listArticole;
+	}
+	
+	
+	public ArrayList<ArticolCant> deserializeArticoleCant(String listArticoleSer) {
+		ArticolCant articol = null;
+		ArrayList<ArticolCant> listArticole = new ArrayList<ArticolCant>();
+
+		try {
+			Object json = new JSONTokener(listArticoleSer).nextValue();
+
+			if (json instanceof JSONArray) {
+
+				JSONArray jsonArray = new JSONArray(listArticoleSer);
+
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject articolObject = jsonArray.getJSONObject(i);
+
+					articol = new ArticolCant();
+					
+					articol.setCod(articolObject.getString("cod"));
+					articol.setNume(articolObject.getString("denumire"));
+					articol.setSintetic(articolObject.getString("sintetic"));
+					articol.setDimensiuni(articolObject.getString("dimensiuni"));
+					articol.setCaract(articolObject.getString("caract"));
+					articol.setStoc(articolObject.getString("stoc"));
+					articol.setUmVanz(articolObject.getString("um"));
+					articol.setTipCant(articolObject.getString("tipCant"));
+					articol.setUlStoc(articolObject.getString("ulStoc"));
+					articol.setNivel1(articolObject.getString("nivel1"));
+					articol.setUmVanz(articolObject.getString("umVanz"));
+					articol.setUmVanz10(articolObject.getString("umVanz10"));
+					articol.setDepart(articolObject.getString("depart"));
+					articol.setDepartAprob(articolObject.getString("departAprob"));
+					articol.setTipAB(articolObject.getString("tipAB"));
+					articol.setUmPalet(articolObject.getString("umPalet").equals("1") ? true : false);
+					articol.setCategorie(articolObject.getString("categorie"));
+					articol.setLungime(Double.valueOf(articolObject.getString("lungime")));
+					articol.setDepozit(articolObject.getString("depozit"));
+					listArticole.add(articol);
+
+				}
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return listArticole;
+
 	}
 
 }

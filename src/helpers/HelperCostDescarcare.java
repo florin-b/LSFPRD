@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import model.ArticolComanda;
+import model.UserInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 
 import beans.ArticolCalculDesc;
 import beans.ArticolDescarcare;
+import beans.ArticolPalet;
 import beans.BeanArticolRetur;
 import beans.CostDescarcare;
 
@@ -47,7 +49,7 @@ public class HelperCostDescarcare {
 			articolComanda.setDepartAprob("");
 			articolComanda.setIstoricPret("");
 			articolComanda.setAlteValori("");
-			articolComanda.setDepozit(artDesc.getDepart() + "V1");
+			articolComanda.setDepozit(artDesc.getDepart().substring(0,2) + "V1");
 			articolComanda.setTipArt("");
 			articolComanda.setDepart(artDesc.getDepart());
 			articolComanda.setDepartSintetic(artDesc.getDepart());
@@ -75,6 +77,42 @@ public class HelperCostDescarcare {
 
 	}
 
+	public static ArticolComanda getArticolPalet(ArticolPalet articolPalet, String depozit) {
+
+		ArticolComanda articolComanda = new ArticolComanda();
+
+		articolComanda.setCodArticol(articolPalet.getCodPalet());
+		articolComanda.setNumeArticol(articolPalet.getNumePalet());
+		articolComanda.setCantitate(articolPalet.getCantitate());
+		articolComanda.setCantUmb(articolPalet.getCantitate());
+		articolComanda.setPretUnit(articolPalet.getPretUnit());
+		articolComanda.setPret(articolPalet.getPretUnit() * articolPalet.getCantitate());
+		articolComanda.setPretUnitarClient(articolPalet.getPretUnit());
+		articolComanda.setPretUnitarGed(articolPalet.getPretUnit());
+		articolComanda.setProcent(0);
+		articolComanda.setUm("BUC");
+		articolComanda.setUmb("BUC");
+		articolComanda.setDiscClient(0);
+		articolComanda.setProcentFact(0);
+		articolComanda.setMultiplu(1);
+		articolComanda.setConditie(false);
+		articolComanda.setProcAprob(0);
+		articolComanda.setInfoArticol(" ");
+		articolComanda.setObservatii("");
+		articolComanda.setDepartAprob("");
+		articolComanda.setIstoricPret("");
+		articolComanda.setAlteValori("");
+		articolComanda.setDepozit(depozit);
+		articolComanda.setTipArt("");
+		articolComanda.setDepart(articolPalet.getDepart());
+		articolComanda.setDepartSintetic(articolPalet.getDepart());
+		articolComanda.setFilialaSite(UserInfo.getInstance().getUnitLog());
+
+		return articolComanda;
+
+	}	
+	
+	
 	public static List<ArticolCalculDesc> getDateCalculDescarcare(List<ArticolComanda> listArticole) {
 
 		List<ArticolCalculDesc> articoleCalcul = new ArrayList<ArticolCalculDesc>();
@@ -116,6 +154,7 @@ public class HelperCostDescarcare {
 
 		CostDescarcare costDescarcare = new CostDescarcare();
 		List<ArticolDescarcare> listArticole = new ArrayList<ArticolDescarcare>();
+		List<ArticolPalet> listPaleti = new ArrayList<ArticolPalet>();
 
 		JSONObject jsonObject;
 		try {
@@ -140,12 +179,49 @@ public class HelperCostDescarcare {
 			}
 
 			costDescarcare.setArticoleDescarcare(listArticole);
+			
+			JSONArray jsonPaleti = new JSONArray(jsonObject.getString("articolePaleti"));
+
+			for (int i = 0; i < jsonPaleti.length(); i++) {
+				ArticolPalet articol = new ArticolPalet();
+
+				JSONObject object = jsonPaleti.getJSONObject(i);
+
+				articol.setCodPalet(object.getString("codPalet"));
+				articol.setNumePalet(object.getString("numePalet"));
+				articol.setDepart(object.getString("depart"));
+				articol.setCantitate(Integer.valueOf(object.getString("cantitate")));
+				articol.setPretUnit(Double.valueOf(object.getString("pretUnit")));
+				articol.setFurnizor(object.getString("furnizor"));
+				articol.setCodArticol(object.getString("codArticol"));
+				articol.setNumeArticol(object.getString("numeArticol"));
+				articol.setCantArticol(object.getString("cantArticol"));
+				articol.setUmArticol(object.getString("umArticol"));
+
+				listPaleti.add(articol);
+
+			}
+
+			costDescarcare.setArticolePaleti(listPaleti);
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
 		return costDescarcare;
+	}
+	
+	public static String getDepozitPalet(List<ArticolComanda> listArticole, String codArticolPalet) {
+		String depozit = "";
+
+		for (ArticolComanda art : listArticole) {
+			if (art.getCodArticol().contains(codArticolPalet)) {
+				depozit = art.getDepozit();
+				break;
+			}
+		}
+
+		return depozit;
 	}
 
 }

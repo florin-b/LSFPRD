@@ -55,7 +55,7 @@ public class UtilsGeneral {
 		if (UserInfo.getInstance().getCodDepart().equals("02") || UserInfo.getInstance().getDepartExtra().contains("02"))
 			listDepozite.add("92V1");
 
-		if (UserInfo.getInstance().getCodDepart().equals("05"))
+		if (UserInfo.getInstance().getCodDepart().equals("05") || UtilsUser.isKA() || UtilsUser.isUserSDKA() || UtilsUser.isUserSK())
 			listDepozite.add("95V1");
 
 		listDepozite.add("DSCM");

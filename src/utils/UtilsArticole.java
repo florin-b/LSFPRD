@@ -128,4 +128,12 @@ public class UtilsArticole {
 	}	
 	
 	
+	public static boolean isArticolPal(String codSintetic) {
+
+		return codSintetic.equals("100") || codSintetic.equals("101") || codSintetic.equals("102") || codSintetic.equals("103") || codSintetic.equals("104")
+				|| codSintetic.equals("105") || codSintetic.equals("106");
+
+	}
+	
+	
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import listeners.OperatiiArticolListener;
+import beans.ArticolCant;
 import beans.ArticolDB;
 import beans.BeanArticolSimulat;
 import beans.BeanArticolStoc;
@@ -42,26 +43,29 @@ public interface OperatiiArticol {
 	public String serializeParamPretGed(BeanParametruPretGed param);
 
 	public String serializeArticolePretTransport(List<ArticolComanda> listArticole);
-	
+
 	public BeanGreutateArticol deserializeGreutateArticol(Object result);
-	
+
 	public Object getDepartBV90(String codArticol);
-	
+
 	public void getStocArticole(HashMap<String, String> params);
-	
+
 	public String serializeListArtStoc(List<BeanArticolStoc> listArticole);
-	
+
 	public String serializeListArtSim(List<BeanArticolSimulat> listArticole);
-	
+
 	public List<BeanArticolStoc> derializeListArtStoc(String listArticole);
-	
+
 	public void getCodBare(HashMap<String, String> params);
-	
+
 	public void getArticoleStatistic(HashMap<String, String> params);
-	
+
 	public void getStocCustodie(HashMap<String, String> params);
-	
+
 	public void getArticoleCustodie(HashMap<String, String> params);
-	
+
+	public void getArticoleCant(HashMap<String, String> params);
+
+	public ArrayList<ArticolCant> deserializeArticoleCant(String listArticole);
 
 }

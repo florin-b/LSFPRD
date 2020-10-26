@@ -168,7 +168,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		performOperation(params);
 
 	}
-	
+
 	public void updateComandaSimulata(HashMap<String, String> params) {
 		numeComanda = EnumComenziDAO.UPDATE_COM_SIM;
 		performOperation(params);
@@ -443,8 +443,11 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 						articol.setProcT1(Double.valueOf(articolObject.getString("procT1")));
 
 					if (articolObject.has("filialaSite"))
-						articol.setFilialaSite(articolObject.getString("filialaSite"));					
-					
+						articol.setFilialaSite(articolObject.getString("filialaSite"));
+
+					if (articolObject.has("umPalet"))
+						articol.setUmPalet(articolObject.getString("umPalet").equals("1") ? true : false);
+
 					listArticole.add(articol);
 
 				}
@@ -602,7 +605,7 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					comanda.setTelSofer(comandaObject.getString("telSofer"));
 					comanda.setCodStareComanda(Integer.valueOf(comandaObject.getString("stareComanda")));
 					comanda.setTelClient(comandaObject.getString("telClient"));
-					
+
 					listComenzi.add(comanda);
 
 				}
