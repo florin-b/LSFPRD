@@ -427,7 +427,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				return true;
 			else if (UserInfo.getInstance().getCodDepart().equals("01") && UserInfo.getInstance().getDepartExtra().contains("02"))
 				return true;
-		} else if (UserInfo.getInstance().getTipUser().equals("KA"))
+		} else if (UserInfo.getInstance().getTipUser().equals("KA") || UtilsUser.isUserSDKA() || UtilsUser.isUserSK())
 			return true;
 
 		return false;

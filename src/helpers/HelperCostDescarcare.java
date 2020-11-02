@@ -107,6 +107,7 @@ public class HelperCostDescarcare {
 		articolComanda.setDepart(articolPalet.getDepart());
 		articolComanda.setDepartSintetic(articolPalet.getDepart());
 		articolComanda.setFilialaSite(UserInfo.getInstance().getUnitLog());
+		articolComanda.setUmPalet(true);
 
 		return articolComanda;
 
