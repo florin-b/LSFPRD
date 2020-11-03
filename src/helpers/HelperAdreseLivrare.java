@@ -128,12 +128,12 @@ public class HelperAdreseLivrare {
 		return selectedPos;
 	}
 	
-	public static boolean adresaExista(List<BeanAdresaLivrare> listAdrese){
-		boolean adresaExista  = false;
+	public static int adresaExista(List<BeanAdresaLivrare> listAdrese){
+		int adresaExista  = -1;
 		
 		for (BeanAdresaLivrare adresa : listAdrese){
 			if (adresa.getCodJudet().equals(DateLivrare.getInstance().getCodJudet()) && adresa.getOras().toLowerCase().equals(DateLivrare.getInstance().getOras().toLowerCase()) && adresa.getStrada().replace(" ", "").toLowerCase().equals(DateLivrare.getInstance().getStrada().replace(" ","").toLowerCase())) {
-				adresaExista = true;
+				adresaExista = listAdrese.indexOf(adresa);
 				break;
 			}
 			

@@ -4,8 +4,6 @@
  */
 package my.logon.screen;
 
-
-
 import helpers.HelperAdreseLivrare;
 
 import java.text.NumberFormat;
@@ -96,7 +94,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private Button saveAdrLivrBtn;
 	private EditText txtPers, txtTel, txtObservatii, txtValoareIncasare;
-	
+
 	private static final String METHOD_NAME = "getClientJud";
 	int posJudetSel = 0;
 
@@ -324,12 +322,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		}
 
 		performGetJudete();
-		
-		
-		
-		int i = 0;
 
-		
+		int i = 0;
 
 		// document insotitor
 
@@ -481,10 +475,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			radioText.setChecked(true);
 			textLocalitate.setText(DateLivrare.getInstance().getOras());
 			textStrada.setText(DateLivrare.getInstance().getStrada());
-			
+
 		}
-		
-		
+
 	}
 
 	private boolean isComandaBV() {
@@ -500,10 +493,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		return isBV90;
 	}
-	
-	private void setListenerCheckFactura(){
+
+	private void setListenerCheckFactura() {
 		checkFactura.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
+
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked)
@@ -511,11 +504,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 		});
 	}
-	
-	
-	private void setListenerCheckAviz(){
+
+	private void setListenerCheckAviz() {
 		checkAviz.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
+
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked)
@@ -884,10 +876,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void fillJudeteClient(String arrayJudete) {
 
-		
 		if (listJudete != null)
 			listJudete.clear();
-		
+
 		HashMap<String, String> temp;
 		String numeJudSel = "";
 		int i;
@@ -922,9 +913,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			spinnerJudet.setSelection(posJudetSel);
 		}
 
-	}	
-	
-	
+	}
+
 	private void addListenerTipPlata() {
 		spinnerPlata.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -1813,14 +1803,16 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private boolean adresaNouaExista() {
-		int posAdresa = HelperAdreseLivrare.verificaDistantaAdresaNoua(adreseList, DateLivrare.getInstance().getCoordonateAdresa());
-		boolean adresaExista = HelperAdreseLivrare.adresaExista(adreseList);
 
-		if (adresaExista) {
+		int posAdresa = HelperAdreseLivrare.verificaDistantaAdresaNoua(adreseList, DateLivrare.getInstance().getCoordonateAdresa());
+
+		int adresaExista = HelperAdreseLivrare.adresaExista(adreseList);
+
+		if (adresaExista != -1) {
 			Toast.makeText(getApplicationContext(), "Aceasta adresa exista deja in lista de adrese.", Toast.LENGTH_LONG).show();
-			selectedAddrModifCmd = posAdresa;
+			selectedAddrModifCmd = posAdresa != -1 ? posAdresa : adresaExista;
 			radioLista.setChecked(true);
-			spinnerAdreseLivrare.setSelection(posAdresa);
+			spinnerAdreseLivrare.setSelection(posAdresa != -1 ? posAdresa : adresaExista);
 			return true;
 		} else if (posAdresa != -1) {
 			valideazaTonajAdresaNoua();
@@ -2011,7 +2003,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		}
 
 	}
-	
+
 	public void operatiiAdresaComplete(EnumOperatiiAdresa numeComanda, Object result, EnumLocalitate tipLocalitate) {
 
 		switch (numeComanda) {
