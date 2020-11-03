@@ -89,7 +89,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 		initSelectionDepartament();
 
-		if (UtilsUser.isAV() || UtilsUser.isKA())
+		if (UtilsUser.isAV() || UtilsUser.isKA() || UtilsUser.isUserSK() || UtilsUser.isUserSDKA())
 			addSpinnerDepartamente();
 
 		opArticol = OperatiiArticolFactory.createObject("OperatiiArticolImpl", this);
@@ -216,7 +216,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 		if (UtilsUser.isCV() || UtilsUser.isDVCV() || UtilsUser.isConsWood())
 			selectedDepartamentAgent = "";
 
-		if (UtilsUser.isKA())
+		if (UtilsUser.isKA() || UtilsUser.isUserSK() || UtilsUser.isUserSDKA())
 			selectedDepartamentAgent = "00";
 	}
 

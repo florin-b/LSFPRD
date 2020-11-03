@@ -88,7 +88,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 
 		initSelectionDepartament();
 
-		if (UtilsUser.isAV() || UtilsUser.isKA())
+		if (UtilsUser.isAV() || UtilsUser.isKA() || UtilsUser.isUserSK() || UtilsUser.isUserSDKA())
 			addSpinnerDepartamente();
 
 		ActionBar actionBar = getActionBar();
@@ -179,7 +179,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 		if (UtilsUser.isCV() || UtilsUser.isDVCV() || UtilsUser.isConsWood())
 			selectedDepartamentAgent = "";
 
-		if (UtilsUser.isKA())
+		if (UtilsUser.isKA() || UtilsUser.isUserSK() || UtilsUser.isUserSDKA())
 			selectedDepartamentAgent = "00";
 	}
 
