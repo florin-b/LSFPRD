@@ -1482,7 +1482,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	
 	
 	private boolean isUserExceptieFiliale() {
-		return UserInfo.getInstance().getUnitLog().startsWith("BV") && (globalCodDepartSelectetItem.equals("01") || globalCodDepartSelectetItem.equals("02"));
+		return globalCodDepartSelectetItem.equals("01") || globalCodDepartSelectetItem.equals("02");
 	}	
 	
 	

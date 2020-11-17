@@ -417,7 +417,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 
 			// consilieri sau sm
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18") || UtilsUser.isUserIP()) {
 
 				filialaPret = filialaPret.substring(0, 2) + "2" + filialaPret.substring(3, 4);
 				
@@ -493,7 +493,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 
 		TextView labelPTVA = new TextView(this);
 		// pentru consilieri nu se afiseaza pretul cu tva
-		if (!UserInfo.getInstance().getTipAcces().equals("17") && !UserInfo.getInstance().getTipAcces().equals("18")) {
+		if (!UserInfo.getInstance().getTipAcces().equals("17") && !UserInfo.getInstance().getTipAcces().equals("18") && !UtilsUser.isUserIP()) {
 
 			labelPTVA.setText("Pret + tva");
 			labelPTVA.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
@@ -547,7 +547,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 				labelPret.setLayoutParams(layoutParams);
 				rowLayoutCh.addView(labelPret);
 
-				if (!UserInfo.getInstance().getTipAcces().equals("17") && !UserInfo.getInstance().getTipAcces().equals("18")) {
+				if (!UserInfo.getInstance().getTipAcces().equals("17") && !UserInfo.getInstance().getTipAcces().equals("18") && !UtilsUser.isUserIP()) {
 					labelPTVA = new TextView(this);
 					labelPTVA.setText("");
 					if (artTok[1] != null) {

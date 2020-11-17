@@ -1202,6 +1202,24 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		return isBV90;
 	}
 
+	private boolean isConditiiTranspCmdIP_BV_02_05() {
+
+		boolean isBV90 = false;
+
+		for (ArticolComanda articol : ListaArticoleComandaGed.getInstance().getListArticoleComanda()) {
+			if (articol.getFilialaSite().equals("BV90") && (articol.getDepartSintetic().equals("02") || articol.getDepartSintetic().equals("05"))) {
+				isBV90 = true;
+				break;
+			}
+		}
+
+		if (isBV90 && !DateLivrare.getInstance().getTransport().equals("TCLI") && !DateLivrare.getInstance().getTransport().equals("TERT"))
+			return false;
+		else
+			return true;
+
+	}
+
 	private void valideazaFinal() {
 
 		if (isComandaBV()
@@ -1210,6 +1228,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			Toast.makeText(getApplicationContext(), "Pentru comenzi din BV90 nu puteti selecta optiunile 'Plata in numerar' si 'Aviz de expeditie'.",
 					Toast.LENGTH_LONG).show();
 			return;
+		} else if (UtilsUser.isUserIP() && !isConditiiTranspCmdIP_BV_02_05()) {
+			Toast.makeText(getApplicationContext(), "Pentru articole din BV90 selectati transport TCLI sau TERT.", Toast.LENGTH_LONG).show();
 		} else if (HelperCreareComanda.isConditiiAlertaIndoire(ListaArticoleComandaGed.getInstance().getListArticoleComanda())) {
 			HelperDialog.showInfoDialog(CreareComandaGed.this, "Atentie!", "Selectati tipul de prelucrare (indoire sau debitare).");
 		} else {
@@ -1222,7 +1242,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComandaGed.getInstance().getListArticoleComanda());
 
-		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
+		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") && !UtilsUser.isUserIP()) {
 
 			String codFurnizor = " ";
 
@@ -1317,7 +1337,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		while (articolIterator.hasNext()) {
 			ArticolComanda articol = articolIterator.next();
-			
+
 			paletExista = true;
 
 			if (articol.isUmPalet()) {
@@ -1353,18 +1373,16 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 			paletIterator = listPaleti.iterator();
 		}
-		
+
 		adapter.notifyDataSetChanged();
 
-	}	
-	
+	}
+
 	private boolean isConditiiUserCmdRez() {
 		return UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("9")
 				|| UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
 				|| UserInfo.getInstance().getTipAcces().equals("41") || UserInfo.getInstance().getTipAcces().equals("44");
 	}
-
-
 
 	private String serializeDateLivrareGed() {
 
@@ -1451,7 +1469,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		}
 
 		// adaugare material transport
-		if (DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT")) {
+		if ((DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT"))
+				&& !UtilsUser.isUserIP()) {
 
 			articol = new ArticolComanda();
 			articol.setCodArticol("000000000030101050");

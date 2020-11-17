@@ -444,7 +444,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 
 			// consilieri sau sm
-			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18")) {
+			if (UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18") || UtilsUser.isUserIP()) {
 
 				String localFilialaStoc = filialaStoc.substring(0, 2) + "2" + filialaStoc.substring(3, 4);
 				
@@ -773,7 +773,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 		TextView labelPTVA = new TextView(this);
 		// pentru consilieri nu se afiseaza pretul cu tva
-		if (!UserInfo.getInstance().getTipAcces().equals("17") && !UserInfo.getInstance().getTipAcces().equals("18")) {
+		if (!UserInfo.getInstance().getTipAcces().equals("17") && !UserInfo.getInstance().getTipAcces().equals("18") && !UtilsUser.isUserIP()) {
 
 			labelPTVA.setText("Pret + tva");
 			labelPTVA.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
@@ -827,7 +827,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 				labelPret.setLayoutParams(layoutParams);
 				rowLayoutCh.addView(labelPret);
 
-				if (!UserInfo.getInstance().getTipAcces().equals("17") && !UserInfo.getInstance().getTipAcces().equals("18")) {
+				if (!UserInfo.getInstance().getTipAcces().equals("17") && !UserInfo.getInstance().getTipAcces().equals("18") && !UtilsUser.isUserIP()) {
 					labelPTVA = new TextView(this);
 					labelPTVA.setText("");
 					if (artTok[1] != null) {

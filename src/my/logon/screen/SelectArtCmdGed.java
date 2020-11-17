@@ -421,7 +421,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	private void CreateMenu(Menu menu) {
 
-		if ((UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite() || isWood()) && CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_VANZARE) {
+		if ((UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite() || isWood() || UtilsUser.isUserIP()) && CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_VANZARE) {
 			MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
 			{
 				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -516,7 +516,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	}
 
 	private void showFilialaDialogBox() {
-		if (UtilsUser.isUserExceptieBV90Ged() || isWood()) {
+		if (UtilsUser.isUserExceptieBV90Ged() || isWood() || UtilsUser.isUserIP()) {
 			showFilialaDialogBV90();
 		} else if (UtilsUser.isUserSite()) {
 			showFilialaDialogUserSite();
@@ -1142,6 +1142,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 								Toast.LENGTH_LONG).show();
 						return;
 					}
+					
+					if (UtilsUser.isUserIP() && !conditiiCmdIP()) {
+						return;
+					}
 
 					if (listUmVanz.size() > 1) {
 
@@ -1405,6 +1409,27 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			CreareComandaGed.selectedDepartCod = globalCodDepartSelectetItem;
 	}
 
+	private boolean conditiiCmdIP() {
+
+		if (CreareComandaGed.filialaAlternativa.equals("BV90")) {
+
+			if (!globalCodDepartSelectetItem.equals("02") && !globalCodDepartSelectetItem.equals("05")) {
+				Toast.makeText(getApplicationContext(), "Din BV90 adaugati doar articole din departamentele 02 sau 05.", Toast.LENGTH_LONG).show();
+				return false;
+			}
+
+			if (!DateLivrare.getInstance().getTransport().equals("TCLI") && !DateLivrare.getInstance().getTransport().equals("TERT")) {
+				Toast.makeText(getApplicationContext(), "Din BV90 selectati doar transport TCLI sau TERT.", Toast.LENGTH_LONG).show();
+				return false;
+			}
+
+		}
+
+		return true;
+
+	}	
+	
+	
 	@SuppressWarnings("unchecked")
 	private void listArtStoc(String pretResponse) {
 

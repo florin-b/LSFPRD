@@ -95,6 +95,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	String[] tipTransport = { "TRAP - Transport Arabesque", "TCLI - Transport client" };
 
+	String[] tipTransportIP = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport tert" };
+
 	String[] tipTransportOnline = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport tert" };
 
 	String[] docInsot = { "Factura", "Aviz de expeditie" };
@@ -238,7 +240,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			if (UserInfo.getInstance().getUserSite().equals("X") || UtilsUser.isConsWood() || isComandaClp()) {
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransportOnline);
 
-			} else {
+			} else if (UtilsUser.isUserIP())
+				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransportIP);
+			else {
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
 			}
 
@@ -443,10 +447,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
-	
-	private void setListenerCheckFactura(){
+	private void setListenerCheckFactura() {
 		checkFactura.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
+
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked)
@@ -454,11 +457,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			}
 		});
 	}
-	
-	
-	private void setListenerCheckAviz(){
+
+	private void setListenerCheckAviz() {
 		checkAviz.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
+
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked)
@@ -466,7 +468,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			}
 		});
 	}
-	
+
 	private void getDateLivrareClient() {
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("codClient", CreareComandaGed.codClientVar);
@@ -973,13 +975,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void performGetJudete() {
 
-		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP") || !DateLivrare.getInstance().getCodJudet().isEmpty() || isComandaClp()) {
+		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP") || !DateLivrare.getInstance().getCodJudet().isEmpty() || isComandaClp() || UtilsUser.isUserIP()) {
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
 		} else {
 			String unitLog = UserInfo.getInstance().getUnitLog();
 
-			
 			if (unitLog.equals("NN10"))
 				unitLog = "AG10";
 
@@ -991,7 +992,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		}
 
 	}
-	
+
 	private boolean isComandaClp() {
 		return DateLivrare.getInstance().getCodFilialaCLP() != null && DateLivrare.getInstance().getCodFilialaCLP().length() == 4;
 	}
@@ -1547,8 +1548,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		dateLivrareInstance.setRedSeparat(" ");
 
 		String rawTipPlataStr = spinnerPlata.getSelectedItem().toString();
-		
-		if (rawTipPlataStr.startsWith("O") &&  (!strMailAddr.contains("@") || !strMailAddr.contains("."))){
+
+		if (rawTipPlataStr.startsWith("O") && (!strMailAddr.contains("@") || !strMailAddr.contains("."))) {
 			Toast.makeText(getApplicationContext(), "Completati adresa de e-mail.", Toast.LENGTH_LONG).show();
 			return;
 		}

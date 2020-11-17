@@ -88,9 +88,9 @@ public class MainMenu extends Activity {
 			R.drawable.client_info, R.drawable.payment, R.drawable.clients,
 			R.drawable.location_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Modificare data livrare", "Stocuri", "Preturi", "Delegatii", "Iesire" };
+	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Modificare data livrare","Neincasate", "Stocuri", "Preturi", "Delegatii", "Iesire" };
 
-	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,R.drawable.data_icon,
+	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,R.drawable.data_icon, R.drawable.neincasate,
 			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.blank, R.drawable.exit_icon };
 
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",

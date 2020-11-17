@@ -12,6 +12,7 @@ import listeners.CustomSpinnerClass;
 import listeners.CustomSpinnerListener;
 import model.UserInfo;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -62,8 +63,8 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 			textAgentiVanzAg = (TextView) v.findViewById(R.id.textAgentiVanzAg);
 			textAgentiVanzAg.setVisibility(View.VISIBLE);
 
-			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
-					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("41")) // ag,
+			if ( !UtilsUser.isSDIP() && (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
+					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("41"))) // ag,
 			// ka,
 			// cv
 			{
@@ -72,7 +73,7 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 				spinnerFiliale.setVisibility(View.GONE);
 			} else {
 				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
-						|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("39")) // sd,
+						|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("39") || UtilsUser.isSDIP()) // sd,
 				// sm
 				{
 					spinnerAgenti.setVisibility(View.VISIBLE);
@@ -143,14 +144,20 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 				localDepart = "10";
 			}
 
-			if (UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("39")) // sef
+			if (UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("39") || UtilsUser.isSDIP()) // sef
 																	// magazin
 			{
 				localDepart = "11";
 			}
 
-			params.put("filiala", Neincasate.selectedFiliala);
+			String filialaNeincasate = Neincasate.selectedFiliala;
+			
+			if (UserInfo.getInstance().getTipUserSap().equals("SDIP"))
+				filialaNeincasate = UserInfo.getInstance().getInitUnitLog();
+			
+			params.put("filiala", filialaNeincasate);
 			params.put("depart", localDepart);
+			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 			AsyncTaskListener contextListener = (AsyncTaskListener) SelectAgentNeincasate.this;
 			AsyncTaskWSCall call = new AsyncTaskWSCall(getActivity(), contextListener, "getListAgenti", params);

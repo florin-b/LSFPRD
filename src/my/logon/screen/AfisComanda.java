@@ -388,7 +388,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
 			selectedCodDepart = "11";
 			tipAgent = "SDIP";
-
+			selectedFiliala = UserInfo.getInstance().getInitUnitLog();
 		}
 
 		agent.getListaAgenti(selectedFiliala, selectedCodDepart, this, true, tipAgent);

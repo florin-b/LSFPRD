@@ -1155,6 +1155,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			params.put("listArt", listArtSer);
 
 			comandaDAO.getCostMacara(params);
+		}else {
+			trateazaConditiiSuplimentare();
 		}
 
 	}

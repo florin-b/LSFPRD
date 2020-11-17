@@ -139,9 +139,9 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 		}
 
 		// user site
-		if (UserInfo.getInstance().getUserSite().equals("X") || UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
+		if (UserInfo.getInstance().getUserSite().equals("X") || UtilsUser.isUserIP()) {
 
-			// afisare filiale BUC
+			
 			listFiliala = new ArrayList<HashMap<String, String>>();
 			adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" },
 					new int[] { R.id.textRowName });
@@ -165,7 +165,7 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 		if ((UserInfo.getInstance().getTipAcces().equals("27") || UserInfo.getInstance().getTipAcces().equals("32")
 				|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance()
 				.getTipAcces().equals("39"))
-				&& !UserInfo.getInstance().getUserSite().equals("X") && !UserInfo.getInstance().getTipUserSap().equals("SDIP"))// KA,
+				&& !UserInfo.getInstance().getUserSite().equals("X") && !UtilsUser.isUserIP())// KA,
 		// cons
 		// sau
 		// sm

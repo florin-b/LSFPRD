@@ -695,7 +695,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		HelperCostDescarcare.eliminaCostDescarcare(listArticoleComanda);
 
-		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
+		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") && !UtilsUser.isUserIP()) {
 
 			String codFurnizor = " ";
 
@@ -1021,7 +1021,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		TreeSet<String> aprobariCV = new TreeSet<String>();
 		JSONObject obj = null;
 
-		if (!ModificareComanda.isComandaDistrib && !UtilsUser.isAgentOrSDorKA() && valTransport > 0) {
+		if (!ModificareComanda.isComandaDistrib && !UtilsUser.isAgentOrSDorKA() && !UtilsUser.isUserIP() && valTransport > 0) {
 			UtilsComenziGed.setValoareArticolTransport(listArticoleComanda, valTransport);
 		}
 
