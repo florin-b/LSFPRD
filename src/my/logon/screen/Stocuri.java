@@ -930,7 +930,7 @@ public class Stocuri extends ListActivity implements AsyncTaskListener, OnClickL
 
 	public void taskComplete(String response) {
 		afisPretArt(response);
-		if (UtilsUser.isCV())
+		if (UtilsUser.isCV() || UtilsUser.isUserIP())
 			performGetCodBare();
 	}
 

@@ -50,7 +50,7 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 
 	private String getUserDepart() {
 		if (UserInfo.getInstance().getTipUserSap().equals("SM") || UtilsUser.isSMNou() || UserInfo.getInstance().getTipUserSap().equals("SDCVA")
-				|| UserInfo.getInstance().getTipUserSap().equals("CVO"))
+				|| UserInfo.getInstance().getTipUserSap().equals("CVO") || UtilsUser.isSDIP())
 			return "11";
 		else if (UserInfo.getInstance().getTipAcces().equals("32"))
 			return "10";
@@ -67,6 +67,8 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 			tipAgent = UserInfo.getInstance().getTipUserSap();
 		else if (UserInfo.getInstance().getTipUserSap().equals("CVO"))
 			tipAgent = "CVO";
+		else if (UtilsUser.isSDIP())
+			tipAgent = "SDIP";
 
 		return tipAgent;
 	}

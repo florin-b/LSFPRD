@@ -158,6 +158,7 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 			params.put("filiala", filialaNeincasate);
 			params.put("depart", localDepart);
 			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
+			params.put("codAgent", UserInfo.getInstance().getCod());
 
 			AsyncTaskListener contextListener = (AsyncTaskListener) SelectAgentNeincasate.this;
 			AsyncTaskWSCall call = new AsyncTaskWSCall(getActivity(), contextListener, "getListAgenti", params);

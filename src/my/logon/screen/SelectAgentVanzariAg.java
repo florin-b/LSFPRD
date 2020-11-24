@@ -13,6 +13,7 @@ import listeners.CustomSpinnerListener;
 import model.UserInfo;
 import model.VanzariAgenti;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -62,8 +63,8 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 			textAgentiVanzAg = (TextView) v.findViewById(R.id.textAgentiVanzAg);
 			textAgentiVanzAg.setVisibility(View.VISIBLE);
 
-			if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
-					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("41")) // ag,
+			if ((UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("27")
+					|| UserInfo.getInstance().getTipAcces().equals("17") || UserInfo.getInstance().getTipAcces().equals("41")) && !UtilsUser.isSDIP()) // ag,
 			// ka,
 			// cv
 			{
@@ -72,7 +73,7 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 				spinnerFiliale.setVisibility(View.GONE);
 			} else {
 				if (UserInfo.getInstance().getTipAcces().equals("10") || UserInfo.getInstance().getTipAcces().equals("18")
-						|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("39")) // sd,
+						|| UserInfo.getInstance().getTipAcces().equals("32") || UserInfo.getInstance().getTipAcces().equals("39") || UtilsUser.isSDIP()) // sd,
 				// sm
 				{
 					spinnerAgenti.setVisibility(View.VISIBLE);
@@ -140,12 +141,20 @@ public class SelectAgentVanzariAg extends Fragment implements CustomSpinnerListe
 				localDepart = "10";
 			}
 
-			if (UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("39")) {
+			if (UserInfo.getInstance().getTipAcces().equals("18") || UserInfo.getInstance().getTipAcces().equals("39") || UtilsUser.isSDIP()) {
 				localDepart = "11";
 			}
 
-			params.put("filiala", VanzariAgenti.getInstance().selectedFiliala);
+			
+			String filialaN = VanzariAgenti.getInstance().selectedFiliala;
+			
+			if (UserInfo.getInstance().getTipUserSap().equals("SDIP"))
+				filialaN = UserInfo.getInstance().getInitUnitLog();
+			
+			params.put("filiala", filialaN);
 			params.put("depart", localDepart);
+			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
+			params.put("codAgent", UserInfo.getInstance().getCod());
 
 			AsyncTaskListener contextListener = (AsyncTaskListener) SelectAgentVanzariAg.this;
 			AsyncTaskWSCall call = new AsyncTaskWSCall(getActivity(), contextListener, "getListAgenti", params);

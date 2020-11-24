@@ -103,6 +103,7 @@ public class AfisRaportNeincasate extends Fragment implements AsyncTaskListener 
 			HashMap<String, String> params = new HashMap<String, String>();
 			params.put("reportParams", reportParams);
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
+			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 			AsyncTaskListener contextListener = (AsyncTaskListener) AfisRaportNeincasate.this;
 			AsyncTaskWSCall call = new AsyncTaskWSCall(getActivity(), contextListener, "getRaportNeincasateData",

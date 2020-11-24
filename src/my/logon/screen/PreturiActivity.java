@@ -646,7 +646,7 @@ public class PreturiActivity extends ListActivity implements PreturiListener, Op
 
 	public void taskComplete(String response) {
 		afisPretArt(response);
-		if (UtilsUser.isCV())
+		if (UtilsUser.isCV() || UtilsUser.isUserIP())
 			performGetCodBare();
 	}
 

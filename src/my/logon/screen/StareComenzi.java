@@ -89,7 +89,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 		operatiiComenzi = ComenziDAO.getInstance(this);
 		operatiiComenzi.setComenziDAOListener(this);
 
-		if (!isSDorSM() && !isSDCVO()) {
+		if (!isSDorSM() && !isSDCVO() && !UtilsUser.isSDIP()) {
 			codAgent = UserInfo.getInstance().getCod();
 			getComenziDeschise(UserInfo.getInstance().getCod());
 		}
@@ -170,7 +170,7 @@ public class StareComenzi extends Activity implements ComenziDAOListener, Select
 			mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		}
 
-		if (isSDorSM() || isSDCVO()) {
+		if (isSDorSM() || isSDCVO() || UtilsUser.isSDIP()) {
 			MenuItem mnu1 = menu.add(0, 1, 1, "Agenti");
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		}

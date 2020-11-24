@@ -46,6 +46,8 @@ public class OperatiiAgent implements AsyncTaskListener {
 
 		if (tipAgent != null)
 			params.put("tipAgent", tipAgent);
+		
+		params.put("codAgent", UserInfo.getInstance().getCod());
 
 		AsyncTaskListener contextListener = OperatiiAgent.this;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(context, contextListener, "getListAgentiJSON", params);

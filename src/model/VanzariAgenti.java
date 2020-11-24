@@ -58,6 +58,7 @@ public class VanzariAgenti {
 			obj.put("tipComanda", vanzariInstance.tipComanda);
 			obj.put("articole", articolListCode);
 			obj.put("clienti", clientListCode);
+			obj.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 
 		} catch (Exception ex) {
 

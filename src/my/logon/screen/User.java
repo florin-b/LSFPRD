@@ -99,9 +99,8 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 				radioSalPermis.setChecked(true);
 
 			setListenerRadioSal();
-		}		
-		
-		
+		}
+
 		// exceptie pentru agenti si sd din BUC
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
 			if (UserInfo.getInstance().getUnitLog().equals("BU10") || UserInfo.getInstance().isAltaFiliala()) {
@@ -141,7 +140,6 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 		// user site
 		if (UserInfo.getInstance().getUserSite().equals("X") || UtilsUser.isUserIP()) {
 
-			
 			listFiliala = new ArrayList<HashMap<String, String>>();
 			adapterFiliala = new SimpleAdapter(this, listFiliala, R.layout.simplerowlayout_1, new String[] { "rowText" },
 					new int[] { R.id.textRowName });
@@ -235,6 +233,9 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 		if (UserInfo.getInstance().getExtraFiliale().size() > 0) {
 			addExtraFiliale();
 		}
+
+		if (UtilsUser.isUserIP())
+			spinnerDepart.setVisibility(View.INVISIBLE);
 
 		listDepart = new ArrayList<HashMap<String, String>>();
 		adapterDepart = new SimpleAdapter(this, listDepart, R.layout.simplerowlayout_2, new String[] { "rowText", "rowDesc" }, new int[] {
@@ -344,7 +345,8 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 			spinnerDepart.setSelection(10);
 		}
 
-		spinnerDepart.setOnItemSelectedListener(new onSelectedDepart());
+		if (spinnerDepart.getVisibility() == View.VISIBLE)
+			spinnerDepart.setOnItemSelectedListener(new onSelectedDepart());
 
 		String languageToLoad = "en";
 		Locale locale = new Locale(languageToLoad);
@@ -462,7 +464,7 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 		else if (codAcc.equals("45")) {
 			retVal = "Sef magazin wood";
 		}
-		
+
 		else if (codAcc.equals("51")) {
 			retVal = "Sef supraveghere case";
 		}
@@ -473,7 +475,7 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 
 		else if (codAcc.equals("62")) {
 			retVal = "Operator facturare";
-		}		
+		}
 
 		return retVal;
 	}
@@ -578,8 +580,8 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 
 		});
 
-	}	
-	
+	}
+
 	public void blocheazaMeniuSalarizare() {
 
 		HashMap<String, String> params = new HashMap<String, String>();
@@ -589,9 +591,8 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 		opMeniu.setOperatiiMeniuListener(User.this);
 		opMeniu.blocheazaMeniu(params);
 
-	}	
-	
-	
+	}
+
 	public void onResume() {
 
 		super.onResume();
@@ -618,7 +619,6 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 
 	}
 
-	
 	@Override
 	public void codPinComplete(boolean isSuccess) {
 
@@ -638,6 +638,6 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 
 		}
 
-	}	
-	
+	}
+
 }

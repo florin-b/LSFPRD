@@ -533,6 +533,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			String fullCode = nf3.format(Integer.parseInt(selectedAgent)).toString();
 
 			String filCrnt = "", tipUser = "", paramDepart = UserInfo.getInstance().getCodDepart();
+			String codSD = "";
 
 			if (!selectedFiliala.equals("")) {
 				filCrnt = selectedFiliala;
@@ -590,6 +591,10 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 				tipUser = "SDCVA";
 				paramDepart = "11";
 			}
+			
+			if (UtilsUser.isSDIP()){
+				codSD = UserInfo.getInstance().getCod();
+			}
 
 			String paramInterval = intervalAfisare;
 			if (intervalAfisare.equals("3")) {
@@ -607,6 +612,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 			params.put("codClient", selectedClient);
 			params.put("tipUser", tipUser);
 			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
+			params.put("codSD", codSD);
 
 			comenzi.getListComenzi(params);
 

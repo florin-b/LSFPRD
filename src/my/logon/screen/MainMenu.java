@@ -1401,7 +1401,7 @@ public class MainMenu extends Activity {
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
 				.getTipUser().equals("SC"))
 				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR")
-						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP"))) {
+						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP") && !UserInfo.getInstance().getTipUserSap().equals("CVIP"))) {
 			nrBtns = btnNamesCVA.length;
 		}
 
@@ -1421,7 +1421,7 @@ public class MainMenu extends Activity {
 			nrBtns = btnNamesWOOD.length;
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isUserIP()) {
 			nrBtns = btnNamesCVR.length;
 		}
 
@@ -1433,9 +1433,7 @@ public class MainMenu extends Activity {
 			nrBtns = btnNamesOIVPD.length;
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
-			nrBtns = btnNamesSDIP.length;
-		}
+
 
 		return nrBtns;
 
@@ -1471,7 +1469,8 @@ public class MainMenu extends Activity {
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
 				.getTipUser().equals("SC"))
 				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR")
-						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP"))) {
+						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP") && !UserInfo
+						.getInstance().getTipUserSap().equals("CVIP"))) {
 			btnName = btnNamesCVA[btnPos];
 		}
 
@@ -1491,7 +1490,7 @@ public class MainMenu extends Activity {
 			btnName = btnNamesWOOD[btnPos];
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isUserIP()) {
 			btnName = btnNamesCVR[btnPos];
 		}
 
@@ -1503,9 +1502,7 @@ public class MainMenu extends Activity {
 			btnName = btnNamesOIVPD[btnPos];
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
-			btnName = btnNamesSDIP[btnPos];
-		}
+
 		return btnName;
 
 	}
@@ -1541,7 +1538,8 @@ public class MainMenu extends Activity {
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
 				.getTipUser().equals("SC"))
 				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR")
-						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP"))) {
+						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP") && !UserInfo
+						.getInstance().getTipUserSap().equals("CVIP"))) {
 			btnImg = btnImageCVA[btnPos];
 		}
 
@@ -1561,7 +1559,7 @@ public class MainMenu extends Activity {
 			btnImg = btnImageWOOD[btnPos];
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isUserIP()) {
 			btnImg = btnImageCVR[btnPos];
 		}
 
@@ -1573,9 +1571,7 @@ public class MainMenu extends Activity {
 			btnImg = btnImageOIVPD[btnPos];
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
-			btnImg = btnImageSDIP[btnPos];
-		}
+
 
 		return btnImg;
 
@@ -1646,7 +1642,8 @@ public class MainMenu extends Activity {
 
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SC"))
 				&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("CVR")
-				&& !UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
+				&& !UserInfo.getInstance().getTipUserSap().equals("SDIP")&& !UserInfo
+				.getInstance().getTipUserSap().equals("CVIP")) {
 
 			for (int i = 0; i < btnNamesCVA.length; i++) {
 				if (btnNamesCVA[i].equalsIgnoreCase(btnName)) {
@@ -1696,7 +1693,7 @@ public class MainMenu extends Activity {
 			}
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isUserIP()) {
 
 			for (int i = 0; i < btnNamesCVR.length; i++) {
 				if (btnNamesCVR[i].equalsIgnoreCase(btnName)) {
@@ -1726,15 +1723,7 @@ public class MainMenu extends Activity {
 			}
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("SDIP")) {
 
-			for (int i = 0; i < btnNamesOIVPD.length; i++) {
-				if (btnNamesSDIP[i].equalsIgnoreCase(btnName)) {
-					position = i;
-					break;
-				}
-			}
-		}
 
 		return position;
 
