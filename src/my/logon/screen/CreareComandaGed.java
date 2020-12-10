@@ -1242,7 +1242,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComandaGed.getInstance().getListArticoleComanda());
 
-		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") && !UtilsUser.isUserIP()) {
+		if ((DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") || DateLivrare.getInstance().getTransport().equalsIgnoreCase("TCLI")) && !UtilsUser.isUserIP()) {
 
 			String codFurnizor = " ";
 
@@ -1313,7 +1313,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			costPaleti.getWindow().setLayout(width, height);
 			costPaleti.show();
 
-		} else if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+		} else if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0 && DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
 			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, true);
 			macaraDialog.setCostMacaraListener(this);
@@ -2275,7 +2275,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	}
 
 	private void respingePalet() {
-		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0) {
+		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0 && DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
 			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, false);
 			macaraDialog.setCostMacaraListener(this);
