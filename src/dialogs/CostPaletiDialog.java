@@ -10,9 +10,14 @@ import adapters.AdapterPaleti;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,7 +35,10 @@ public class CostPaletiDialog extends Dialog {
 	private Button btnAdaugaPaleti;
 	private TextView textValPalet;
 	private Button btnRenuntaPaleti;
-	
+	private TextView textPaletSel;
+	private EditText textCantPaletSel;
+	private LinearLayout layoutPaletSel;
+	private ArticolPalet articol;
 
 	public CostPaletiDialog(Context context, List<ArticolPalet> listPaleti, String tipTransport) {
 		super(context);
@@ -51,6 +59,13 @@ public class CostPaletiDialog extends Dialog {
 	}
 
 	private void setUpLayout() {
+
+		textPaletSel = (TextView) findViewById(R.id.textPaletSel);
+		textCantPaletSel = (EditText) findViewById(R.id.textCantPaletSel);
+		setListenerTextCant();
+
+		layoutPaletSel = (LinearLayout) findViewById(R.id.layoutPaletSel);
+
 		spinnerPaleti = (ListView) findViewById(R.id.spinnerPaleti);
 
 		LinearLayout paletiLayout = (LinearLayout) findViewById(R.id.layoutPaleti);
@@ -59,6 +74,8 @@ public class CostPaletiDialog extends Dialog {
 
 		adapterPaleti = new AdapterPaleti(context, listPaleti);
 		spinnerPaleti.setAdapter(adapterPaleti);
+		setSpinnerListener();
+
 		textValPalet = (TextView) findViewById(R.id.textValPalet);
 		setTotalPaleti();
 
@@ -67,9 +84,57 @@ public class CostPaletiDialog extends Dialog {
 
 		btnRenuntaPaleti = (Button) findViewById(R.id.btnCancelPalet);
 
+		// if (!tipTransport.equals("TCLI"))
 		btnRenuntaPaleti.setVisibility(View.INVISIBLE);
 
 		addBtnRespingeListener();
+
+	}
+
+	private void setSpinnerListener() {
+		spinnerPaleti.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+				articol = (ArticolPalet) parent.getAdapter().getItem(position);
+
+				layoutPaletSel.setVisibility(View.VISIBLE);
+
+				textPaletSel.setText(articol.getNumePalet());
+				textCantPaletSel.setText(String.valueOf(articol.getCantitate()));
+
+			}
+		});
+	}
+
+	private void setListenerTextCant() {
+
+		textCantPaletSel.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+				if (s.toString().length() > 0) {
+					articol.setCantitate(Integer.parseInt(s.toString()));
+					adapterPaleti.notifyDataSetChanged();
+					setTotalPaleti();
+				}
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				
+
+			}
+		});
 
 	}
 
