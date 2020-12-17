@@ -98,6 +98,39 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layoutSalveazaConditii"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+             >
+
+            <View
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
+
+            <Button
+                android:id="@+id/btnSalveazaConditii"
+                style="@style/ok_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dip"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:background="@drawable/cancel_button_style"
+                android:paddingLeft="15dip"
+                android:paddingRight="15dip"
+                android:text="Salveaza conditii" />
+
+            <View
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/detaliiLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

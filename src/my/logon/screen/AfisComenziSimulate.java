@@ -50,6 +50,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -119,6 +120,9 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 	private DateLivrareAfisare dateLivrareCmdCurent;
 
 	private List<BeanComandaCreata> comenziSimulate;
+	private LinearLayout layoutSalveazaConditii;
+	private Button btnSalveazaConditii;
+	private boolean saveConditiiCmd = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -142,9 +146,9 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 		spinnerCmd = (Spinner) findViewById(R.id.spinnerCmd);
 
-		adapterComenzi = new SimpleAdapter(this, listComenzi, R.layout.comsimulatecustomview, new String[] { "idCmd", "codClient", "numeClient",
-				"data", "suma", "stare", "tipCmd", "ul", "cmdSap" }, new int[] { R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData,
-				R.id.textSuma, R.id.textStare, R.id.textTipCmd, R.id.textUL, R.id.textCmdSAP });
+		adapterComenzi = new SimpleAdapter(this, listComenzi, R.layout.comsimulatecustomview, new String[] { "idCmd", "codClient", "numeClient", "data",
+				"suma", "stare", "tipCmd", "ul", "cmdSap" }, new int[] { R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData, R.id.textSuma,
+				R.id.textStare, R.id.textTipCmd, R.id.textUL, R.id.textCmdSAP });
 
 		addSpinnerCmdListener();
 
@@ -169,10 +173,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 		this.stergeCmdSimBtn.setVisibility(View.INVISIBLE);
 		addListenerStergeCmdSimBtn();
 
-		adapter = new SimpleAdapter(this, list1, R.layout.comsimulatecustomrowview, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt",
-				"pretArt", "monedaArt", "depozit", "status", "procent", "procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt,
-				R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit,
-				R.id.textStatusArt, R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr, R.id.textProcAprobModif });
+		adapter = new SimpleAdapter(this, list1, R.layout.comsimulatecustomrowview, new String[] { "nrCrt", "numeArt", "codArt", "cantArt", "umArt", "pretArt",
+				"monedaArt", "depozit", "status", "procent", "procFact", "zDis", "tipAlert", "procAprob" }, new int[] { R.id.textNrCrt, R.id.textNumeArt,
+				R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit, R.id.textStatusArt,
+				R.id.textProcRed, R.id.textProcFact, R.id.textZDIS, R.id.textAlertUsr, R.id.textProcAprobModif });
 
 		listArticoleSimulate.setAdapter(adapter);
 		listArticoleSimulate.setVisibility(View.INVISIBLE);
@@ -190,6 +194,10 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 		textOras = (TextView) findViewById(R.id.textOrasModif);
 		textJudet = (TextView) findViewById(R.id.textJudetModif);
+
+		layoutSalveazaConditii = (LinearLayout) findViewById(R.id.layoutSalveazaConditii);
+		btnSalveazaConditii = (Button) findViewById(R.id.btnSalveazaConditii);
+		setListenerBtnConditii();
 
 		performGetComenzi();
 
@@ -232,6 +240,20 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			public void onClick(View v) {
 				if (!comandaAreConditii())
 					verificaStocArticole();
+
+			}
+		});
+	}
+
+	private void setListenerBtnConditii() {
+		btnSalveazaConditii.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (!comandaAreConditii()) {
+					saveConditiiCmd = true;
+					actualizeazaComandaSimulata();
+				}
 
 			}
 		});
@@ -336,7 +358,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 	private boolean trimitereMailPermisa() {
 
-		if (comandaCurenta != null && comandaCurenta.isAprobata())
+		if ( (comandaCurenta != null && comandaCurenta.isAprobata()) || (comandaCurenta.getCodStare().equals("41") && !comandaAreConditii()))
 			return true;
 
 		return false;
@@ -432,11 +454,16 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			creeazaCmdSimBtn.setVisibility(View.VISIBLE);
 		else
 			creeazaCmdSimBtn.setVisibility(View.INVISIBLE);
+
+		if (comanda.getCodStare().equals("41"))
+			layoutSalveazaConditii.setVisibility(View.VISIBLE);
+		else
+			layoutSalveazaConditii.setVisibility(View.INVISIBLE);
+
 	}
 
 	private boolean isCmdAvansOK(BeanComandaSimulata comanda, boolean allStock) {
-		return (comanda.getCodStare().equals("41") || comanda.getCodStare().equals("21")) && comanda.isAprobata() && comanda.getAvans() > 0
-				&& allStock;
+		return (comanda.getCodStare().equals("41") || comanda.getCodStare().equals("21")) && comanda.isAprobata() && comanda.getAvans() > 0 && allStock;
 	}
 
 	public void addListenerCreazaCmdSimBtn() {
@@ -703,7 +730,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			stergeCmdSimBtn.setVisibility(View.VISIBLE);
 			detaliiLayout.setVisibility(View.VISIBLE);
 
-			NumberFormat nf2 = NumberFormat.getInstance();	
+			NumberFormat nf2 = NumberFormat.getInstance();
 			nf2.setMinimumFractionDigits(2);
 			nf2.setMaximumFractionDigits(2);
 
@@ -818,6 +845,25 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 	}
 
+	private void handleUpdateCmdStatus(String status) {
+
+		if (saveConditiiCmd) {
+
+			if (((String) status).equals("0"))
+				Toast.makeText(getApplicationContext(), "Conditii salvate.", Toast.LENGTH_LONG).show();
+			else
+				Toast.makeText(getApplicationContext(), "Eroare salvare date.", Toast.LENGTH_LONG).show();
+
+			saveConditiiCmd = false;
+		} else {
+			if (((String) status).equals("0"))
+				showCreateCmdConfirmationAlert();
+			else
+				Toast.makeText(getApplicationContext(), "Eroare salvare date.", Toast.LENGTH_LONG).show();
+		}
+
+	}
+
 	@Override
 	public void onBackPressed() {
 		UserInfo.getInstance().setParentScreen("");
@@ -844,10 +890,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			populateArticoleComanda(comenzi.deserializeArticoleComanda((String) result));
 			break;
 		case UPDATE_COM_SIM:
-			if (((String) result).equals("0"))
-				showCreateCmdConfirmationAlert();
-			else
-				Toast.makeText(getApplicationContext(), "Eroare salvare date.", Toast.LENGTH_LONG).show();
+			handleUpdateCmdStatus((String) result);
 			break;
 		default:
 			break;
