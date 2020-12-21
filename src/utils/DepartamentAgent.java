@@ -171,6 +171,15 @@ public class DepartamentAgent {
 
 		else if (isAG()) {
 			depart.add(EnumDepartExtra.getNumeDepart(UserInfo.getInstance().getCodDepart()));
+			
+			if (UserInfo.getInstance().getCodDepart().startsWith("04") && UserInfo.getInstance().getDepartExtra().length() > 0) {
+				String[] depExtra = UserInfo.getInstance().getDepartExtra().split(";");
+
+				for (int i = 0; i < depExtra.length; i++) {
+					depart.add(EnumDepartExtra.getNumeDepart(depExtra[i]));
+				}
+			}
+			
 			depart.add(EnumDepartExtra.getNumeDepart("11"));
 		}
 
