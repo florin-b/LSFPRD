@@ -150,6 +150,14 @@ public class UtilsUser {
 		return tipUser;
 	}
 
+	public static boolean isAV_SD_01() {
+		return (UserInfo.getInstance().getTipUser().equals("AV") || UserInfo.getInstance().getTipUser().equals("SD")) && UserInfo.getInstance().getCodDepart().equals("01");
+	}	
+	
+	public static boolean isCVO(){
+		return UserInfo.getInstance().getTipUserSap().equals("CVO");
+	}
+	
 	public static boolean isDV_WOOD() {
 		if (isANYDV()) {
 

@@ -852,7 +852,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void performGetJudete() {
 
-		if (isComandaClp()) {
+		if (isComandaClp() || isComandaBV()) {
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
 		} else {

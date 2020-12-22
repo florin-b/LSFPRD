@@ -1133,7 +1133,8 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComanda.getInstance().getListArticoleComanda());
 
-		if (DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") || DateLivrare.getInstance().getTransport().equalsIgnoreCase("TCLI")) {
+		if ((DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") || DateLivrare.getInstance().getTransport().equalsIgnoreCase("TCLI"))
+				&& !UtilsUser.isAV_SD_01() && !UtilsUser.isCVO()) {
 
 			String codFurnizor = " ";
 
