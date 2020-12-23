@@ -61,6 +61,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import beans.ArticolCant;
 import beans.ArticolDB;
 import beans.BeanParametruPretGed;
 import beans.DepoziteUl;

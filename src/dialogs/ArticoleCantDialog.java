@@ -203,6 +203,7 @@ public class ArticoleCantDialog extends Dialog {
 
 			@Override
 			public void onClick(View v) {
+				listener.articolCantClosed();
 				dismiss();
 			}
 		});

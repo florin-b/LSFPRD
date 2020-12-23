@@ -147,6 +147,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private double discountASDL;
 	
 	private Spinner spinnerFilialeCustodie;
+	private List<ArticolCant> listArticoleCant;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -1028,20 +1029,33 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	
 	private void showArticoleCantDialog(String listArticoleSer) {
-		List<ArticolCant> listArticole = opArticol.deserializeArticoleCant(listArticoleSer);
+		listArticoleCant = opArticol.deserializeArticoleCant(listArticoleSer);
 
-		if (!listArticole.isEmpty()) {
+		if (!listArticoleCant.isEmpty()) {
 
 			int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.6);
 			int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.5);
 
-			ArticoleCantDialog articoleCant = new ArticoleCantDialog(this, listArticole);
+			ArticoleCantDialog articoleCant = new ArticoleCantDialog(this, listArticoleCant);
 			articoleCant.setArticoleCantListener(this);
 			articoleCant.getWindow().setLayout(width, height);
 			articoleCant.show();
 		}
 
 	}
+	
+	private void showArticoleCantDialog() {
+		if (listArticoleCant!= null && !listArticoleCant.isEmpty()) {
+
+			int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.6);
+			int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.5);
+
+			ArticoleCantDialog articoleCant = new ArticoleCantDialog(this, listArticoleCant);
+			articoleCant.setArticoleCantListener(this);
+			articoleCant.getWindow().setLayout(width, height);
+			articoleCant.show();
+		}
+	}	
 	
 	boolean isNotDepartRestricted(String codDepart) {
 		if (UserInfo.getInstance().getTipAcces().equals("27"))
@@ -1406,6 +1420,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 									Toast.LENGTH_LONG).show();
 
 						}
+						
+						showArticoleCantDialog();
 						
 						if (UtilsArticole.isArticolPal(articolDBSelected.getSintetic()))
 							afiseazaArticoleCant(codArticol, CreareComanda.filialaAlternativa);
@@ -2232,6 +2248,12 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 		this.getListView().performItemClick(this.getListView().getAdapter().getView(0, null, null), 0, this.getListView().getItemIdAtPosition(0));
 
+	}
+
+	@Override
+	public void articolCantClosed() {
+		listArticoleCant.clear();
+		
 	}
 
 }
