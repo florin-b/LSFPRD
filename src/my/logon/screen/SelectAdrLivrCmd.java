@@ -852,7 +852,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void performGetJudete() {
 
-		if (isComandaClp() || isComandaBV()) {
+		if (isComandaClp() || isComandaBV() || isComandaDl())  {
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
 		} else {
@@ -872,6 +872,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private boolean isComandaClp() {
 		return !DateLivrare.getInstance().getCodFilialaCLP().trim().isEmpty() && DateLivrare.getInstance().getCodFilialaCLP().trim().length() == 4;
+	}
+	
+	private boolean isComandaDl() {
+		return DateLivrare.getInstance().getFurnizorComanda() != null && !DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().isEmpty()
+				&& DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().length() > 4;
 	}
 
 	private void fillJudeteClient(String arrayJudete) {
