@@ -88,10 +88,14 @@ public class MainMenu extends Activity {
 			R.drawable.client_info, R.drawable.payment, R.drawable.clients,
 			R.drawable.location_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Modificare data livrare","Neincasate", "Stocuri", "Preturi", "Delegatii", "Iesire" };
+	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Creare CLP", "Afisare CLP",
+			"Retur paleti", "Stare retur paleti", "Obiective", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi",
+			"Info client", "Delegatii", "Despre", "Iesire" };
 
-	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,R.drawable.data_icon, R.drawable.neincasate,
-			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.blank, R.drawable.exit_icon };
+	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
+			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.colosseum,
+			R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status,
+			R.drawable.client_info, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",
 			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Articole avarie",
@@ -1421,8 +1425,12 @@ public class MainMenu extends Activity {
 			nrBtns = btnNamesWOOD.length;
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isUserIP()) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
 			nrBtns = btnNamesCVR.length;
+		}
+		
+		if (UtilsUser.isUserIP()) {
+			nrBtns = btnNamesSDIP.length;
 		}
 
 		if (UserInfo.getInstance().getTipUserSap().equals("SSCM") || UserInfo.getInstance().getTipUserSap().equals("CGED")) {
@@ -1490,10 +1498,14 @@ public class MainMenu extends Activity {
 			btnName = btnNamesWOOD[btnPos];
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isUserIP()) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
 			btnName = btnNamesCVR[btnPos];
 		}
 
+		if (UtilsUser.isUserIP()) {
+			btnName = btnNamesSDIP[btnPos];
+		}		
+		
 		if (UserInfo.getInstance().getTipUserSap().equals("SSCM") || UserInfo.getInstance().getTipUserSap().equals("CGED")) {
 			btnName = btnNamesINFO[btnPos];
 		}
@@ -1559,8 +1571,12 @@ public class MainMenu extends Activity {
 			btnImg = btnImageWOOD[btnPos];
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isUserIP()) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
 			btnImg = btnImageCVR[btnPos];
+		}
+		
+		if (UtilsUser.isUserIP()) {
+			btnImg = btnImageSDIP[btnPos];
 		}
 
 		if (UserInfo.getInstance().getTipUserSap().equals("SSCM") || UserInfo.getInstance().getTipUserSap().equals("CGED")) {
@@ -1693,10 +1709,20 @@ public class MainMenu extends Activity {
 			}
 		}
 
-		if (UserInfo.getInstance().getTipUserSap().equals("CVR") || UtilsUser.isUserIP()) {
+		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
 
 			for (int i = 0; i < btnNamesCVR.length; i++) {
 				if (btnNamesCVR[i].equalsIgnoreCase(btnName)) {
+					position = i;
+					break;
+				}
+			}
+		}
+		
+		if (UtilsUser.isUserIP()) {
+
+			for (int i = 0; i < btnNamesSDIP.length; i++) {
+				if (btnNamesSDIP[i].equalsIgnoreCase(btnName)) {
 					position = i;
 					break;
 				}
