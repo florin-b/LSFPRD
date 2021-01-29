@@ -691,7 +691,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 			String depart = UserInfo.getInstance().getCodDepart();
 
-			if (UtilsUser.isDV_WOOD() || UserInfo.getInstance().getCod().equals("00010281"))
+			if (UtilsUser.isDV_WOOD() || UserInfo.getInstance().getCod().equals("00010281") || UserInfo.getInstance().getCod().equals("00018768"))
 				depart = "11";
 
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
@@ -716,7 +716,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		String codDepart;
 
 		// CMATEI
-		if (UserInfo.getInstance().getCod().equals("00010281"))
+		if (UserInfo.getInstance().getCod().equals("00010281") || UserInfo.getInstance().getCod().equals("00018768"))
 			codDepart = "11";
 		else
 			codDepart = UserInfo.getInstance().getCodDepart();

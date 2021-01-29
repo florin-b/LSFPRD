@@ -43,6 +43,9 @@ public class VanzariAgenti {
 				|| UserInfo.getInstance().getTipAcces().equals("39")) {
 			selectedDepart = "11";
 		}
+		
+		if (UserInfo.getInstance().getCod().equals("00010281") || UserInfo.getInstance().getCod().equals("00018768"))
+			selectedDepart = "11";
 
 		JSONObject obj = null;
 

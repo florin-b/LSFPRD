@@ -150,6 +150,9 @@ public class SelectAgentNeincasate extends Fragment implements CustomSpinnerList
 				localDepart = "11";
 			}
 
+			if (UserInfo.getInstance().getCod().equals("00010281") || UserInfo.getInstance().getCod().equals("00018768"))
+				localDepart = "11";
+			
 			String filialaNeincasate = Neincasate.selectedFiliala;
 			
 			if (UserInfo.getInstance().getTipUserSap().equals("SDIP"))
