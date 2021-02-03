@@ -1,5 +1,7 @@
 package beans;
 
+import enums.EnumTipClientIP;
+
 public class BeanComandaCreata {
 
 	private String id;
@@ -38,7 +40,7 @@ public class BeanComandaCreata {
 	private String tipComanda;
 	private boolean isCmdInstPublica;
 	private double bazaSalariala;
-	
+	private EnumTipClientIP tipClientInstPublica;
 	
 	public BeanComandaCreata() {
 
@@ -332,16 +334,12 @@ public class BeanComandaCreata {
 		this.bazaSalariala = bazaSalariala;
 	}	
 	
-	@Override
-	public String toString() {
-		return "BeanComandaCreata [id=" + id + ", numeClient=" + numeClient + ", codClient=" + codClient + ", data=" + data + ", suma=" + suma + ", moneda="
-				+ moneda + ", monedaTva=" + monedaTva + ", sumaTva=" + sumaTva + ", stare=" + stare + ", cmdSap=" + cmdSap + ", tipClient=" + tipClient
-				+ ", divizieAgent=" + divizieAgent + ", canalDistrib=" + canalDistrib + ", filiala=" + filiala + ", factRed=" + factRed + ", accept1="
-				+ accept1 + ", accept2=" + accept2 + ", numeAgent=" + numeAgent + ", termenPlata=" + termenPlata + ", cursValutar=" + cursValutar
-				+ ", docInsotitor=" + docInsotitor + ", adresaNoua=" + adresaNoua + ", adresaLivrare=" + adresaLivrare + ", divizieComanda=" + divizieComanda
-				+ ", pondere30=" + pondere30 + ", aprobariNecesare=" + aprobariNecesare + ", aprobariPrimite=" + aprobariPrimite + ", conditiiImpuse="
-				+ conditiiImpuse + ", codClientGenericGed=" + codClientGenericGed + ", telAgent=" + telAgent + ", codStare=" + codStare + ", avans=" + avans
-				+ ", clientRaft=" + clientRaft + "]";
+	public EnumTipClientIP getTipClientInstPublica() {
+		return tipClientInstPublica;
+	}
+
+	public void setTipClientInstPublica(EnumTipClientIP tipClientInstPublica) {
+		this.tipClientInstPublica = tipClientInstPublica;
 	}
 
 }

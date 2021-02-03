@@ -8,12 +8,10 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import beans.BeanAdresaLivrare;
-import beans.BeanClient;
-
 import listeners.AsyncTaskListener;
 import model.HandleJSONData;
 import model.UserInfo;
+import utils.UtilsUser;
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
@@ -35,6 +33,8 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import beans.BeanAdresaLivrare;
+import beans.BeanClient;
 
 public class InfoClient extends Activity implements AsyncTaskListener {
 
@@ -541,11 +541,17 @@ public class InfoClient extends Activity implements AsyncTaskListener {
 			depSel = UserInfo.getInstance().getCodDepart();
 			if (CreareComanda.canalDistrib.equals("20"))
 				depSel = "11";
+			
+			String tipUserSap = UserInfo.getInstance().getTipUserSap();
+
+			if (UtilsUser.isDV() && UserInfo.getInstance().getInitDivizie().equals("11"))
+				tipUserSap = "SDIP";
 
 			params.put("numeClient", numeClient);
 			params.put("depart", depSel);
 			params.put("departAg", UserInfo.getInstance().getCodDepart());
 			params.put("unitLog", UserInfo.getInstance().getUnitLog());
+			params.put("tipUserSap", tipUserSap);
 
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, "cautaClientAndroid", params);
 			call.getCallResults();

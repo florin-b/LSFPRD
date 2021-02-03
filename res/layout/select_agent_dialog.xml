@@ -4,6 +4,12 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
+    <Spinner
+        android:id="@+id/spinnerFiliale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/listViewAgenti"
         android:layout_width="match_parent"
@@ -22,9 +28,9 @@
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dip"
             android:layout_marginBottom="10dip"
             android:layout_marginRight="10dip"
+            android:layout_marginTop="30dip"
             android:background="?android:attr/selectableItemBackground"
             android:gravity="right"
             android:src="@drawable/cancel_icon_32" />

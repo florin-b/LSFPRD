@@ -1,15 +1,17 @@
 package dialogs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import listeners.CautaClientDialogListener;
 import listeners.OperatiiClientListener;
-import my.logon.screen.R;
 import model.OperatiiClient;
 import model.UserInfo;
+import my.logon.screen.R;
 import utils.ScreenUtils;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.CautareClientiAdapter;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,8 +21,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import beans.BeanClient;
 import enums.EnumClienti;
+import enums.EnumTipClientIP;
 
 public class CautaClientDialog extends Dialog implements OperatiiClientListener {
 
@@ -35,6 +39,8 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 	private boolean isClientObiectivKA;
 	private boolean isInstitPublica;
 	private String numeClient;
+	private RadioGroup radioClientIP;
+	private EnumTipClientIP tipClientIP = EnumTipClientIP.CONSTR;
 
 	public CautaClientDialog(Context context) {
 		super(context);
@@ -58,6 +64,9 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 		btnCautaClient = (Button) findViewById(R.id.btnCautaClient);
 		setListenerCautaClient();
+		
+		radioClientIP = (RadioGroup) findViewById(R.id.radioClientIP);
+		setListenerRadioClientIP();
 
 		textNumeClient = (EditText) findViewById(R.id.textNumeClient);
 		textNumeClient.setHint("Nume client");
@@ -66,6 +75,28 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 	}
 
+	private void setListenerRadioClientIP() {
+		radioClientIP.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+				listClientiObiective.setAdapter(new CautareClientiAdapter(getContext(), new ArrayList<BeanClient>()));
+				textNumeClient.setText("");
+
+				switch (checkedId) {
+
+				case R.id.radioConstruct:
+					tipClientIP = EnumTipClientIP.CONSTR;
+					break;
+				case R.id.radioNonConstruct:
+					tipClientIP = EnumTipClientIP.NONCONSTR;
+					break;
+
+				}
+			}
+
+		});
+	}
+	
 	private void setListenerCancelButton() {
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -96,6 +127,10 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				BeanClient client = (BeanClient) listClientiObiective.getItemAtPosition(arg2);
+				
+				if (UtilsUser.isUserIP())
+					client.setTipClientIP(tipClientIP);
+				
 				if (listener != null) {
 					listener.clientSelected(client);
 					dismiss();
@@ -144,7 +179,8 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 		params.put("numeClient", numeClient);
 		params.put("unitLog", UserInfo.getInstance().getUnitLog());
 		params.put("tipUser", UserInfo.getInstance().getTipUserSap());
-
+		params.put("tipClient", tipClientIP.toString());
+		
 		opClient.getClientiInstitPub(params);
 	}
 
@@ -188,6 +224,10 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 	public void setInstitPublica(boolean isInstitPublica) {
 		this.isInstitPublica = isInstitPublica;
+		
+		if (isInstitPublica) {
+			radioClientIP.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public String getNumeClient() {

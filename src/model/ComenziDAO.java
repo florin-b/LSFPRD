@@ -32,6 +32,7 @@ import beans.FurnizorComanda;
 import com.google.android.gms.maps.model.LatLng;
 
 import enums.EnumComenziDAO;
+import enums.EnumTipClientIP;
 
 public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
@@ -566,6 +567,13 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					if (comandaObject.has("bazaSalariala"))
 						comanda.setBazaSalariala(Double.valueOf(comandaObject.getString("bazaSalariala")));
 
+					if (comandaObject.has("tipClientInstPublica")) {
+						if (comandaObject.getString("tipClientInstPublica").equals("CONSTR"))
+							comanda.setTipClientInstPublica(EnumTipClientIP.CONSTR);
+						else
+							comanda.setTipClientInstPublica(EnumTipClientIP.NONCONSTR);
+					}
+					
 					listComenzi.add(comanda);
 
 				}

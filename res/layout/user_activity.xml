@@ -266,4 +266,32 @@
         </RadioGroup>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="45dip"
+            android:layout_gravity="left"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="0.05"
+            android:gravity="left"
+            android:text="Versiune cod"
+            android:textColor="@color/detColor4"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textVersiuneCod"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_weight="0.23"
+            android:gravity="left"
+            android:textColor="@color/dropColor2"
+            android:textSize="18sp"
+            android:typeface="monospace" />
+    </LinearLayout>
+
 </LinearLayout>

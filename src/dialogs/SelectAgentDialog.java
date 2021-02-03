@@ -9,6 +9,7 @@ import listeners.SelectAgentDialogListener;
 import my.logon.screen.R;
 import model.Agent;
 import model.OperatiiAgent;
+import model.OperatiiFiliala;
 import model.UserInfo;
 import utils.UtilsUser;
 import android.app.Dialog;
@@ -16,9 +17,13 @@ import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
+
 
 public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 
@@ -27,6 +32,7 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 	private OperatiiAgent opAgent;
 	private ListView listViewAgenti;
 	private SelectAgentDialogListener listener;
+	private Spinner spinnerFiliale;
 
 	public SelectAgentDialog(Context context) {
 		super(context);
@@ -40,7 +46,9 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 
 		opAgent = OperatiiAgent.getInstance();
 		opAgent.setOperatiiAgentListener(this);
-		opAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), getUserDepart(), context, false, getTipAgent());
+
+		if (!UtilsUser.isDV())
+			opAgent.getListaAgenti(UserInfo.getInstance().getUnitLog(), getUserDepart(), context, false, getTipAgent());
 
 	}
 
@@ -54,6 +62,8 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 			return "11";
 		else if (UserInfo.getInstance().getTipAcces().equals("32"))
 			return "10";
+		else if (UtilsUser.isDV() && UserInfo.getInstance().getInitDivizie().equals("11"))
+			return "11";
 		else
 			return UserInfo.getInstance().getCodDepart();
 	}
@@ -69,11 +79,28 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 			tipAgent = "CVO";
 		else if (UtilsUser.isSDIP())
 			tipAgent = "SDIP";
+		else if (UtilsUser.isDV())
+			tipAgent = "DV";
 
 		return tipAgent;
 	}
 
 	private void setUpLayout() {
+
+		if (UtilsUser.isDV()) {
+
+			spinnerFiliale = (Spinner) findViewById(R.id.spinnerFiliale);
+
+			ArrayList<HashMap<String, String>> listFiliale = OperatiiFiliala.getInstance().getListToateFiliale();
+
+			SimpleAdapter adapterFiliale = new SimpleAdapter(context, listFiliale, R.layout.rowlayoutagenti, new String[] { "numeFiliala", "codFiliala" },
+					new int[] { R.id.textNumeAgent, R.id.textCodAgent });
+
+			spinnerFiliale.setAdapter(adapterFiliale);
+			spinnerFiliale.setVisibility(View.VISIBLE);
+
+			setSpinnerFilialaListener();
+		}
 
 		listViewAgenti = (ListView) findViewById(R.id.listViewAgenti);
 		setListViewAgentiListener();
@@ -81,6 +108,27 @@ public class SelectAgentDialog extends Dialog implements OperatiiAgentListener {
 		btnCancel = (ImageButton) findViewById(R.id.btnCancel);
 		setCancelButtonListener();
 
+	}
+
+	private void setSpinnerFilialaListener() {
+
+		spinnerFiliale.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
+				@SuppressWarnings("unchecked")
+				HashMap<String, String> artFiliala = (HashMap<String, String>) arg0.getSelectedItem();
+				if (!artFiliala.get("codFiliala").trim().isEmpty())
+					opAgent.getListaAgenti(artFiliala.get("codFiliala"), getUserDepart(), context, false, getTipAgent());
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				 
+
+			}
+		});
 	}
 
 	private void setListViewAgentiListener() {

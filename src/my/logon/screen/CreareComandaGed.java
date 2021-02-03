@@ -91,13 +91,13 @@ import beans.PretArticolGed;
 import dialogs.ArtComplDialog;
 import dialogs.CostMacaraDialog;
 import dialogs.CostPaletiDialog;
-import dialogs.PaletAlertDialog;
 import dialogs.TipComandaGedDialog;
 import dialogs.ValoareNegociataDialog;
 import enums.EnumArticoleDAO;
 import enums.EnumComenziDAO;
 import enums.EnumDaNuOpt;
 import enums.EnumPaleti;
+import enums.EnumTipClientIP;
 import enums.TipCmdGed;
 
 public class CreareComandaGed extends Activity implements AsyncTaskListener, ArtComplDialogListener, Observer, OperatiiArticolListener,
@@ -195,6 +195,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	public static TipCmdGed tipComandaGed = TipCmdGed.COMANDA_VANZARE;
 	public static int selectedDepartIndexClp = -1, selectedDepozIndexClp = -1;
 	public static String selectedDepartCod = "-1";
+	public static EnumTipClientIP tipClientIP = EnumTipClientIP.CONSTR;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -1243,7 +1244,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComandaGed.getInstance().getListArticoleComanda());
 
 		if ((DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") || DateLivrare.getInstance().getTransport().equalsIgnoreCase("TCLI"))
-				&& !UtilsUser.isUserIP() && !UtilsUser.isAV_SD_01() && !UtilsUser.isCVO() && !UtilsUser.isSVO()) {
+				&& !isExceptieComandaIP() && !UtilsUser.isAV_SD_01() && !UtilsUser.isCVO() && !UtilsUser.isSVO()) {
 
 			String codFurnizor = " ";
 
@@ -1269,10 +1270,12 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	}
 
+	private boolean isExceptieComandaIP() {
+		return UtilsUser.isUserIP() && tipClientIP == EnumTipClientIP.CONSTR;
+	}
+
 	private void trateazaConditiiSuplimentare() {
-
 		displayArtComplDialog();
-
 	}
 
 	private void trateazaPretMacara(boolean acceptaPret, double valoarePret) {
@@ -1473,7 +1476,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		// adaugare material transport
 		if ((DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT"))
-				&& !UtilsUser.isUserIP()) {
+				&& !isExceptieComandaIP()) {
 
 			articol = new ArticolComanda();
 			articol.setCodArticol("000000000030101050");

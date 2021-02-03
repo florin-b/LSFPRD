@@ -38,8 +38,7 @@ public class ComenziConditionate extends Activity implements AsyncTaskListener {
 	ListView listViewArtCmdCond;
 	private HashMap<String, String> artMap = null;
 
-	private TextView textTipPlata, textTransport, textAdrLivr, textPersContact, textTelefon, textOras, textJudet,
-			textComentarii;
+	private TextView textTipPlata, textTransport, textAdrLivr, textPersContact, textTelefon, textOras, textJudet, textComentarii;
 
 	LinearLayout layoutCmdCondHead;
 
@@ -59,10 +58,9 @@ public class ComenziConditionate extends Activity implements AsyncTaskListener {
 		spinnerCmdCond = (Spinner) findViewById(R.id.spinnerCmdCond);
 		spinnerCmdCond.setVisibility(View.INVISIBLE);
 
-		adapterComenziCond = new SimpleAdapter(this, listComenziCond, R.layout.list_comenzi_cond, new String[] {
-				"idCmd", "codClient", "numeClient", "data", "suma", "cmdSAP", "ul", "agent" }, new int[] {
-				R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData, R.id.textSuma, R.id.textCmdSAP,
-				R.id.textUL, R.id.textAgent });
+		adapterComenziCond = new SimpleAdapter(this, listComenziCond, R.layout.list_comenzi_cond, new String[] { "idCmd", "codClient", "numeClient",
+				"data", "suma", "cmdSAP", "ul", "agent" }, new int[] { R.id.textIdCmd, R.id.textCodClient, R.id.textClient, R.id.textData,
+				R.id.textSuma, R.id.textCmdSAP, R.id.textUL, R.id.textAgent });
 
 		spinnerCmdCond.setAdapter(adapterComenziCond);
 		spinnerCmdCond.setOnItemSelectedListener(new MyOnItemSelectedListener());
@@ -70,11 +68,10 @@ public class ComenziConditionate extends Activity implements AsyncTaskListener {
 		listViewArtCmdCond = (ListView) findViewById(R.id.listArtCmdCond);
 		listViewArtCmdCond.setVisibility(View.INVISIBLE);
 
-		adapterArtCmdCond = new SimpleAdapter(this, listArtCmdCond, R.layout.art_comenzi_cond, new String[] { "nrCrt",
-				"numeArt", "codArt", "cantArt", "umArt", "pretArt", "monedaArt", "depozit", "status", "procent",
-				"cantArtCond", "pretArtCond" }, new int[] { R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt,
-				R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt, R.id.textDepozit,
-				R.id.textStatusArt, R.id.textProcRed, R.id.textCantArtCond, R.id.textPretArtCond });
+		adapterArtCmdCond = new SimpleAdapter(this, listArtCmdCond, R.layout.art_comenzi_cond, new String[] { "nrCrt", "numeArt", "codArt",
+				"cantArt", "umArt", "pretArt", "monedaArt", "depozit", "status", "procent", "cantArtCond", "pretArtCond" }, new int[] {
+				R.id.textNrCrt, R.id.textNumeArt, R.id.textCodArt, R.id.textCantArt, R.id.textUmArt, R.id.textPretArt, R.id.textMonedaArt,
+				R.id.textDepozit, R.id.textStatusArt, R.id.textProcRed, R.id.textCantArtCond, R.id.textPretArtCond });
 
 		listViewArtCmdCond.setAdapter(adapterArtCmdCond);
 
@@ -102,14 +99,20 @@ public class ComenziConditionate extends Activity implements AsyncTaskListener {
 			HashMap<String, String> params = new HashMap<String, String>();
 
 			String tipUser = "";
+			String departUser = UserInfo.getInstance().getCodDepart();
+
 			if (UserInfo.getInstance().getTipAcces().equals("10"))
 				tipUser = "SD";
+			else if (UserInfo.getInstance().getTipAcces().equals("12")) {
+				tipUser = "DD";
 
-			if (UserInfo.getInstance().getTipAcces().equals("12") || UserInfo.getInstance().getTipAcces().equals("14"))
+				if (departUser.equals("00"))
+					departUser = UserInfo.getInstance().getInitDivizie();
+			} else if (UserInfo.getInstance().getTipAcces().equals("14"))
 				tipUser = "DV";
 
 			params.put("filiala", UserInfo.getInstance().getUnitLog());
-			params.put("depart", UserInfo.getInstance().getCodDepart());
+			params.put("depart", departUser);
 			params.put("tipUser", tipUser);
 			params.put("codUser", UserInfo.getInstance().getCod());
 
@@ -308,7 +311,7 @@ public class ComenziConditionate extends Activity implements AsyncTaskListener {
 
 			String[] tokenArt, tokenArtCond;
 			String client = "";
-			String  UmB = "", UmV = "", unitPret = "";
+			String UmB = "", UmV = "", unitPret = "";
 
 			int ii = 1;
 

@@ -98,13 +98,13 @@ public class MainMenu extends Activity {
 			R.drawable.client_info, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",
-			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Preturi concurenta", "Articole avarie",
+			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta", "Articole avarie",
 			"Afisare sablon", "Urmarire sablon", "Info client",  "Pierderi vanzari", "Adrese clienti", 
 			"Delegatii", "Despre", "Iesire" };
 
 	public int[] btnImageDV = new int[] { R.drawable.id_icon, R.drawable.agree_icon, R.drawable.constraints, R.drawable.preview_icon,
 			R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.cmd_bloc, R.drawable.colosseum, R.drawable.vanzari, R.drawable.neincasate,
-			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.viewreduceri_icon,
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.viewreduceri_icon,
 			R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi,
 			R.drawable.location_icon,  R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 

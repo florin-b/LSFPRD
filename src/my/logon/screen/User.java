@@ -4,9 +4,14 @@
  */
 package my.logon.screen;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import listeners.CodPinDialogListener;
 import listeners.HelperSiteListener;
@@ -19,8 +24,10 @@ import utils.UtilsUser;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,6 +57,7 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 
 	private HelperUserSite helperSite;
 	private RadioButton radioSalPermis, radioSalBlocat;
+	private TextView textVersiuneCod;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +108,29 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 
 			setListenerRadioSal();
 		}
+
+		textVersiuneCod = (TextView) findViewById(R.id.textVersiuneCod);
+
+		PackageInfo pInfo = null;
+		try {
+			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+		} catch (Exception e) {
+			Log.e("Error", e.toString());
+		}
+
+		long lastUpdate = 0;
+		String buildVer = "";
+		if (pInfo != null) {
+			buildVer = String.valueOf(pInfo.versionCode);
+			lastUpdate = pInfo.firstInstallTime;
+		}
+
+		DateFormat datePattern = new SimpleDateFormat("dd-MMM-yyyy' 'HH:mm:ss", Locale.UK);
+		datePattern.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+
+		String dateUpdate = datePattern.format(new Date(lastUpdate));
+
+		textVersiuneCod.setText(buildVer + " / " + dateUpdate);
 
 		// exceptie pentru agenti si sd din BUC
 		if (UserInfo.getInstance().getTipAcces().equals("9") || UserInfo.getInstance().getTipAcces().equals("10")) {
@@ -234,7 +265,7 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 			addExtraFiliale();
 		}
 
-		if (UtilsUser.isUserIP())
+		if (UtilsUser.isUserIP() || UserInfo.getInstance().getCodDepart().equals("00"))
 			spinnerDepart.setVisibility(View.INVISIBLE);
 
 		listDepart = new ArrayList<HashMap<String, String>>();
