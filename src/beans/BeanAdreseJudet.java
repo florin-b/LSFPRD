@@ -1,17 +1,18 @@
 package beans;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BeanAdreseJudet {
 
-	private List<String> listLocalitati;
+	private List<BeanLocalitate> listLocalitati;
 	private List<String> listStrazi;
 
-	public List<String> getListLocalitati() {
+	public List<BeanLocalitate> getListLocalitati() {
 		return listLocalitati;
 	}
 
-	public void setListLocalitati(List<String> listLocalitati) {
+	public void setListLocalitati(List<BeanLocalitate> listLocalitati) {
 		this.listLocalitati = listLocalitati;
 	}
 
@@ -21,6 +22,17 @@ public class BeanAdreseJudet {
 
 	public void setListStrazi(List<String> listStrazi) {
 		this.listStrazi = listStrazi;
+	}
+
+	public List<String> getListStringLocalitati() {
+
+		List<String> listStr = new ArrayList<String>();
+
+		for (BeanLocalitate loc : listLocalitati) {
+			listStr.add(loc.getLocalitate());
+		}
+
+		return listStr;
 	}
 
 }

@@ -8,7 +8,9 @@ import model.DateLivrare;
 import model.UserInfo;
 import my.logon.screen.CreareComanda;
 import my.logon.screen.ModificareComanda;
+import android.content.Context;
 import beans.BeanAdresaLivrare;
+import beans.BeanLocalitate;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -165,4 +167,34 @@ public class HelperAdreseLivrare {
 		return (rad * 180 / Math.PI);
 	}
 
+	public static boolean isDistantaCentruOk(Context context, BeanLocalitate localitate, LatLng coordAdresa) {
+
+		boolean distantaOk = true;
+
+		String[] arrayLoc = localitate.getCoordonate().split(",");
+		int distanta = (int) distanceXtoY(Double.parseDouble(arrayLoc[0]), Double.parseDouble(arrayLoc[1]), coordAdresa.latitude, coordAdresa.longitude, "K");
+
+		if (distanta > localitate.getRazaKm())
+			distantaOk = false;
+
+		return distantaOk;
+
+	}
+
+	public static BeanLocalitate getDateLocalitate(List<BeanLocalitate> listLocalitati, String localitate) {
+
+		BeanLocalitate beanLocalitate = null;
+
+		for (BeanLocalitate loc : listLocalitati) {
+
+			if (loc.getLocalitate().equalsIgnoreCase(localitate)) {
+				beanLocalitate = loc;
+				break;
+			}
+
+		}
+
+		return beanLocalitate;
+	}
+	
 }

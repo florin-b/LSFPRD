@@ -9,6 +9,9 @@ public class BeanAdresaLivrare {
 	private String codAdresa;
 	private String tonaj;
 	private String coords;
+	private boolean isOras;
+    private int razaKm;
+    private String coordsCentru;
 
 	public BeanAdresaLivrare() {
 
@@ -70,10 +73,30 @@ public class BeanAdresaLivrare {
 		this.coords = coords;
 	}
 
-	@Override
-	public String toString() {
-		return "BeanAdresaLivrare [oras=" + oras + ", strada=" + strada + ", nrStrada=" + nrStrada + ", codJudet=" + codJudet + ", codAdresa=" + codAdresa
-				+ ", tonaj=" + tonaj + ", coords=" + coords + "]";
+	public boolean isOras() {
+		return isOras;
 	}
+
+	public void setOras(boolean isOras) {
+		this.isOras = isOras;
+	}
+
+	public int getRazaKm() {
+		return razaKm;
+	}
+
+	public void setRazaKm(int razaKm) {
+		this.razaKm = razaKm;
+	}
+
+	public String getCoordsCentru() {
+		return coordsCentru;
+	}
+
+	public void setCoordsCentru(String coordsCentru) {
+		this.coordsCentru = coordsCentru;
+	}
+
+	
 
 }

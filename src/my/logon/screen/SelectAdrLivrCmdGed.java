@@ -4,6 +4,8 @@
  */
 package my.logon.screen;
 
+import helpers.HelperAdreseLivrare;
+
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,6 +69,7 @@ import beans.BeanAdresaLivrare;
 import beans.BeanAdreseJudet;
 import beans.BeanClient;
 import beans.BeanDateLivrareClient;
+import beans.BeanLocalitate;
 import beans.GeocodeAddress;
 import beans.ObiectivConsilier;
 import beans.StatusIntervalLivrare;
@@ -145,6 +148,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private BeanDateLivrareClient dateLivrareClient;
 
 	private CheckBox checkFactura, checkAviz;
+	private BeanAdreseJudet listAdreseJudet;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -975,7 +979,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void performGetJudete() {
 
-		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP") || !DateLivrare.getInstance().getCodJudet().isEmpty() || isComandaClp() || UtilsUser.isUserIP()) {
+		if (UtilsUser.isUserSite() || CreareComandaGed.tipClient.equals("IP") || !DateLivrare.getInstance().getCodJudet().isEmpty() || isComandaClp()
+				|| UtilsUser.isUserIP()) {
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
 		} else {
@@ -1154,16 +1159,18 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private void populateListLocSediu(BeanAdreseJudet listAdrese) {
+		
+		listAdreseJudet = listAdrese;
 
 		textLocalitate.setVisibility(View.VISIBLE);
 		textLocalitate.setText(DateLivrare.getInstance().getOras());
 
-		String[] arrayLocalitati = listAdrese.getListLocalitati().toArray(new String[listAdrese.getListLocalitati().size()]);
+		String[] arrayLocalitati = listAdrese.getListStringLocalitati().toArray(new String[listAdrese.getListStringLocalitati().size()]);
 		ArrayAdapter<String> adapterLoc = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayLocalitati);
 
 		textLocalitate.setThreshold(0);
 		textLocalitate.setAdapter(adapterLoc);
-		listLocalitatiSediu = listAdrese.getListLocalitati();
+		listLocalitatiSediu = listAdrese.getListStringLocalitati();
 		setListenerTextLocalitate();
 
 		String[] arrayStrazi = listAdrese.getListStrazi().toArray(new String[listAdrese.getListStrazi().size()]);
@@ -1291,12 +1298,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		textLocalitateLivrare.setVisibility(View.VISIBLE);
 		textLocalitateLivrare.setText(DateLivrare.getInstance().getOrasD().trim());
 
-		String[] arrayLocalitati = listAdrese.getListLocalitati().toArray(new String[listAdrese.getListLocalitati().size()]);
+		String[] arrayLocalitati = listAdrese.getListStringLocalitati().toArray(new String[listAdrese.getListStringLocalitati().size()]);
 		ArrayAdapter<String> adapterLoc = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, arrayLocalitati);
 
 		textLocalitateLivrare.setThreshold(0);
 		textLocalitateLivrare.setAdapter(adapterLoc);
-		listLocalitatiLivrare = listAdrese.getListLocalitati();
+		listLocalitatiLivrare = listAdrese.getListStringLocalitati();
 		setListenerTextLocalitateLivrare();
 
 		String[] arrayStrazi = listAdrese.getListStrazi().toArray(new String[listAdrese.getListStrazi().size()]);
@@ -1790,6 +1797,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		return address;
 	}
+	
+	
+	
+	
 
 	private boolean isAdresaComplet() {
 		if (DateLivrare.getInstance().getCodJudet().equals("") || DateLivrare.getInstance().getCodJudetD().equals("")) {
@@ -1806,7 +1817,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private boolean isAdresaCorecta() {
-		if (DateLivrare.getInstance().getTransport().equals("TRAP") && !hasCoordinates())
+		if (DateLivrare.getInstance().getTransport().equals("TRAP"))
 			return isAdresaGoogleOk();
 		else
 			return true;
@@ -1818,7 +1829,17 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		GeocodeAddress geoAddress = MapUtils.geocodeAddress(getAddressFromForm(), getApplicationContext());
 		DateLivrare.getInstance().setCoordonateAdresa(geoAddress.getCoordinates());
 
-		return geoAddress.isAdresaValida();
+		boolean isAdresaOk = geoAddress.isAdresaValida();
+
+		BeanLocalitate beanLocalitate = HelperAdreseLivrare.getDateLocalitate(listAdreseJudet.getListLocalitati(), DateLivrare.getInstance()
+				.getOras());
+
+		if (beanLocalitate.isOras()) {
+			isAdresaOk = HelperAdreseLivrare.isDistantaCentruOk(getApplicationContext(), beanLocalitate, geoAddress.getCoordinates());
+
+		}
+
+		return isAdresaOk;
 
 	}
 

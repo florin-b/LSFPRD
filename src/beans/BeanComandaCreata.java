@@ -41,6 +41,7 @@ public class BeanComandaCreata {
 	private boolean isCmdInstPublica;
 	private double bazaSalariala;
 	private EnumTipClientIP tipClientInstPublica;
+	private boolean isAprobDistrib;
 	
 	public BeanComandaCreata() {
 
@@ -342,4 +343,12 @@ public class BeanComandaCreata {
 		this.tipClientInstPublica = tipClientInstPublica;
 	}
 
+	public boolean isAprobDistrib() {
+		return isAprobDistrib;
+	}
+
+	public void setAprobDistrib(boolean isAprobDistrib) {
+		this.isAprobDistrib = isAprobDistrib;
+	}
+	
 }

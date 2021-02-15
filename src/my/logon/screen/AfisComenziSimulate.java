@@ -750,6 +750,8 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 			spinnerCmd.setVisibility(View.INVISIBLE);
 			listArticoleSimulate.setVisibility(View.INVISIBLE);
+			
+			layoutSalveazaConditii.setVisibility(View.INVISIBLE);
 
 			Toast.makeText(getApplicationContext(), "Nu exista comenzi!", Toast.LENGTH_SHORT).show();
 		}
@@ -780,6 +782,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 			simulata.setCanalDistrib(creata.getCanalDistrib());
 			simulata.setFiliala(creata.getFiliala());
 			simulata.setCodClient(creata.getCodClient());
+			simulata.setAprobDistrib(creata.isAprobDistrib());
 			listSimulate.add(simulata);
 		}
 

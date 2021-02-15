@@ -263,6 +263,10 @@ public class HandleJSONData {
 					oAdresa.setCodJudet(clienObject.getString("codJudet"));
 					oAdresa.setCodAdresa(clienObject.getString("codAdresa"));
 					oAdresa.setTonaj(clienObject.getString("tonaj"));
+					
+					oAdresa.setOras(Boolean.parseBoolean(clienObject.getString("isOras")));
+					oAdresa.setRazaKm(Integer.parseInt(clienObject.getString("razaKm")));
+					oAdresa.setCoordsCentru(clienObject.getString("coordsCentru"));
 
 					if (clienObject.getString("coords") != null && !clienObject.getString("coords").equals("null"))
 						oAdresa.setCoords(clienObject.getString("coords"));

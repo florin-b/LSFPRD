@@ -47,6 +47,7 @@ public class MapUtils {
 		}
 
 		strAddress.append(address.getCountry());
+		
 
 		Geocoder geoCoder = new Geocoder(context, Locale.getDefault());
 		List<android.location.Address> addresses = new ArrayList<android.location.Address>();

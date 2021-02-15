@@ -18,6 +18,7 @@ import android.content.Context;
 import android.widget.Toast;
 import beans.BeanAdreseJudet;
 import beans.BeanDateLivrareClient;
+import beans.BeanLocalitate;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 
@@ -114,7 +115,7 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 	public BeanAdreseJudet deserializeListAdrese(Object resultList) {
 
 		BeanAdreseJudet adreseJudet = new BeanAdreseJudet();
-		List<String> listLocalitati = new ArrayList<String>();
+		List<BeanLocalitate> listLocalitati = new ArrayList<BeanLocalitate>();
 		List<String> listStrazi = new ArrayList<String>();
 
 		try {
@@ -122,7 +123,15 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 			JSONArray jsonArrayLoc = new JSONArray(jsonObject.getString("listLocalitati"));
 
 			for (int i = 0; i < jsonArrayLoc.length(); i++) {
-				listLocalitati.add(UtilsFormatting.flattenToAscii(jsonArrayLoc.getString(i).toString()));
+				JSONObject articolObject = jsonArrayLoc.getJSONObject(i);
+
+				BeanLocalitate loc = new BeanLocalitate();
+				loc.setLocalitate(UtilsFormatting.flattenToAscii(articolObject.getString("localitate")));
+				loc.setOras(Boolean.parseBoolean(articolObject.getString("isOras")));
+				loc.setRazaKm(Integer.parseInt(articolObject.getString("razaKm")));
+				loc.setCoordonate(articolObject.getString("coordonate"));
+
+				listLocalitati.add(loc);
 			}
 
 			JSONArray jsonArrayStrazi = new JSONArray(jsonObject.getString("listStrazi"));
