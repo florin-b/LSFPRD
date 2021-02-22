@@ -148,7 +148,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	private BeanDateLivrareClient dateLivrareClient;
 
 	private CheckBox checkFactura, checkAviz;
-	private BeanAdreseJudet listAdreseJudet;
+	private BeanAdreseJudet listAdreseJudet, listAlteAdrese;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -1294,6 +1294,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private void populateListLocLivrare(BeanAdreseJudet listAdrese) {
+		
+		listAlteAdrese = listAdrese;
 
 		textLocalitateLivrare.setVisibility(View.VISIBLE);
 		textLocalitateLivrare.setText(DateLivrare.getInstance().getOrasD().trim());
@@ -1671,31 +1673,58 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private void setAdresaLivrare(Address address) {
 
-		textLocalitate.getText().clear();
-		textStrada.getText().clear();
-		textNrStr.getText().clear();
+		if (radioAdresaSediu.isChecked()) {
 
-		int nrJudete = spinnerJudet.getAdapter().getCount();
+			textLocalitate.getText().clear();
+			textStrada.getText().clear();
+			textNrStr.getText().clear();
 
-		for (int j = 0; j < nrJudete; j++) {
-			HashMap<String, String> artMapLivr = (HashMap<String, String>) this.adapterJudete.getItem(j);
-			String numeJudet = artMapLivr.get("numeJudet").toString();
+			int nrJudete = spinnerJudet.getAdapter().getCount();
 
-			if (address.getSector().equals(numeJudet)) {
-				spinnerJudet.setSelection(j);
-				break;
+			for (int j = 0; j < nrJudete; j++) {
+				HashMap<String, String> artMapLivr = (HashMap<String, String>) this.adapterJudete.getItem(j);
+				String numeJudet = artMapLivr.get("numeJudet").toString();
+
+				if (address.getSector().equals(numeJudet)) {
+					spinnerJudet.setSelection(j);
+					break;
+				}
+
+			}
+
+			if (address.getCity() != null && !address.getCity().isEmpty())
+				textLocalitate.setText(address.getCity());
+
+			if (address.getStreet() != null && !address.getStreet().isEmpty())
+				textStrada.setText(address.getStreet());
+
+			if (address.getNumber() != null && !address.getNumber().isEmpty())
+				textNrStr.setText(address.getNumber());
+		} else if (radioAltaAdresa.isChecked()) {
+
+			if (address.getCity() != null && !address.getCity().isEmpty())
+				textLocalitateLivrare.setText(address.getCity());
+
+			if (address.getStreet() != null && !address.getStreet().isEmpty())
+				textStradaLivrare.setText(address.getStreet());
+
+			if (address.getNumber() != null && !address.getNumber().isEmpty())
+				textStradaLivrare.setText(address.getStreet() + " " + address.getNumber());
+
+			int nrJudete = spinnerJudetLivrare.getAdapter().getCount();
+
+			for (int j = 0; j < nrJudete; j++) {
+				HashMap<String, String> artMapLivr = (HashMap<String, String>) this.adapterJudeteLivrare.getItem(j);
+				String numeJudet = artMapLivr.get("numeJudet").toString();
+
+				if (address.getSector().equals(numeJudet)) {
+					spinnerJudetLivrare.setSelection(j);
+					break;
+				}
+
 			}
 
 		}
-
-		if (address.getCity() != null && !address.getCity().isEmpty())
-			textLocalitate.setText(address.getCity());
-
-		if (address.getStreet() != null && !address.getStreet().isEmpty())
-			textStrada.setText(address.getStreet());
-
-		if (address.getNumber() != null && !address.getNumber().isEmpty())
-			textNrStr.setText(address.getNumber());
 
 	}
 
@@ -1831,8 +1860,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		boolean isAdresaOk = geoAddress.isAdresaValida();
 
-		BeanLocalitate beanLocalitate = HelperAdreseLivrare.getDateLocalitate(listAdreseJudet.getListLocalitati(), DateLivrare.getInstance()
-				.getOras());
+		String localitate = DateLivrare.getInstance().getOras();
+		List<BeanLocalitate> listLocalitati = listAdreseJudet.getListLocalitati();
+
+		if (radioAltaAdresa.isChecked()) {
+			localitate = DateLivrare.getInstance().getOrasD();
+			listLocalitati = listAlteAdrese.getListLocalitati();
+		}
+
+		BeanLocalitate beanLocalitate = HelperAdreseLivrare.getDateLocalitate(listLocalitati, localitate);
 
 		if (beanLocalitate.isOras()) {
 			isAdresaOk = HelperAdreseLivrare.isDistantaCentruOk(getApplicationContext(), beanLocalitate, geoAddress.getCoordinates());
