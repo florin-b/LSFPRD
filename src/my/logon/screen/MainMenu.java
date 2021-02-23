@@ -59,38 +59,37 @@ public class MainMenu extends Activity {
 	public GridView gridview;
 
 	public String[] btnNamesAgents = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Creare cmd GED", "Comenzi simulate",
-			"Cmz.blocate limita credit", "Creare CLP", "Afisare CLP", "Modificare custodie",  "Afisare DL", "Retur paleti",
-			"Stare retur paleti", "Retur comenzi", "Obiective","Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", 
-			"Pierderi vanzari", "Salarizare", "Urmarire sablon", "Info client","Clienti alocati", "Plati CEC", "Adrese clienti",
-			"Delegatii", "Despre", "Iesire" };
+			"Cmz.blocate limita credit", "Creare CLP", "Afisare CLP", "Modificare custodie", "Afisare DL", "Retur paleti", "Stare retur paleti",
+			"Retur comenzi", "Obiective", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi",
+			"Pierderi vanzari", "Salarizare", "Urmarire sablon", "Info client", "Clienti alocati", "Plati CEC", "Adrese clienti", "Delegatii",
+			"Despre", "Iesire" };
 
 	public int[] btnImageAgents = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.blue_basket_icon, R.drawable.simulate, R.drawable.cmd_bloc, R.drawable.clp, R.drawable.afis_clp, R.drawable.custody_48,
-			R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda,
-			R.drawable.colosseum, R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status,
-			R.drawable.target, R.drawable.money_gold_48, R.drawable.chart_icon, R.drawable.client_info, R.drawable.payment,R.drawable.clients,
-			R.drawable.location_icon, R.drawable.blank,
-			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
-
-	public String[] btnNamesSD = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Creare cmd GED","Comenzi simulate",
-			"Cmz.blocate limita credit", "Creare CLP", "Aprobare CLP", "Afisare CLP",  "Aprobare DL", "Afisare DL", "Retur paleti",
-			"Stare retur paleti", "Retur comenzi", "Modificare custodie","Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Obiective", "Preturi",
-			"Preturi concurenta", "Stare comenzi",  "Pierderi vanzari", "Salarizare", "Articole avarie", "Creare sablon", "Afisare sablon",
-			"Urmarire sablon", "Aprobare comanda", "Comenzi conditionate", "Info client", "Plati CEC", 
-			"Clienti alocati", "Adrese clienti",  "Delegatii", "Despre", "Iesire" };
-
-	public int[] btnImageSD = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
-			R.drawable.blue_basket_icon, R.drawable.simulate, R.drawable.cmd_bloc, R.drawable.clp, R.drawable.aprob_clp, R.drawable.afis_clp, 
-			R.drawable.box_green_48, R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda,
-			R.drawable.custody_48, R.drawable.data_icon,R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.concurenta,
-			R.drawable.znecesar1_icon, R.drawable.status, R.drawable.target, R.drawable.money_gold_48, R.drawable.reduceri_icon,
-			R.drawable.viewreduceri_icon, R.drawable.colosseum, R.drawable.chart_icon, R.drawable.agree_icon, R.drawable.constraints,
-			R.drawable.client_info, R.drawable.payment, R.drawable.clients,
+			R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda, R.drawable.colosseum,
+			R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status,
+			R.drawable.target, R.drawable.money_gold_48, R.drawable.chart_icon, R.drawable.client_info, R.drawable.payment, R.drawable.clients,
 			R.drawable.location_icon, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Creare CLP", "Afisare CLP",
-			"Retur paleti", "Stare retur paleti", "Obiective", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi",
-			"Info client", "Delegatii", "Despre", "Iesire" };
+	public String[] btnNamesSD = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Creare cmd GED", "Comenzi simulate",
+			"Cmz.blocate limita credit", "Creare CLP", "Aprobare CLP", "Afisare CLP", "Aprobare DL", "Afisare DL", "Retur paleti",
+			"Stare retur paleti", "Retur comenzi", "Modificare custodie", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Obiective",
+			"Preturi", "Preturi concurenta", "Stare comenzi", "Pierderi vanzari", "Salarizare", "Articole avarie", "Creare sablon", "Afisare sablon",
+			"Urmarire sablon", "Aprobare comanda", "Comenzi conditionate", "Info client", "Plati CEC", "Clienti alocati", "Adrese clienti",
+			"Delegatii", "Despre", "Iesire" };
+
+	public int[] btnImageSD = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
+			R.drawable.blue_basket_icon, R.drawable.simulate, R.drawable.cmd_bloc, R.drawable.clp, R.drawable.aprob_clp, R.drawable.afis_clp,
+			R.drawable.box_green_48, R.drawable.box_yellow_48, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda,
+			R.drawable.custody_48, R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon,
+			R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.status, R.drawable.target, R.drawable.money_gold_48,
+			R.drawable.reduceri_icon, R.drawable.viewreduceri_icon, R.drawable.colosseum, R.drawable.chart_icon, R.drawable.agree_icon,
+			R.drawable.constraints, R.drawable.client_info, R.drawable.payment, R.drawable.clients, R.drawable.location_icon, R.drawable.blank,
+			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+
+	public String[] btnNamesSDIP = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Creare CLP",
+			"Afisare CLP", "Retur paleti", "Stare retur paleti", "Obiective", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri",
+			"Preturi", "Stare comenzi", "Info client", "Delegatii", "Despre", "Iesire" };
 
 	public int[] btnImageSDIP = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.colosseum,
@@ -98,25 +97,25 @@ public class MainMenu extends Activity {
 			R.drawable.client_info, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesDV = { "Utilizator", "Aprobare comanda", "Comenzi conditionate", "Afisare comanda", "Aprobare CLP", "Afisare CLP",
-			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta", "Articole avarie",
-			"Afisare sablon", "Urmarire sablon", "Info client",  "Pierderi vanzari", "Adrese clienti", 
-			"Delegatii", "Despre", "Iesire" };
+			"Cmz.blocate limita credit", "Obiective", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta",
+			"Articole avarie", "Afisare sablon", "Urmarire sablon", "Info client", "Pierderi vanzari", "Adrese clienti", "Delegatii", "Despre",
+			"Iesire" };
 
 	public int[] btnImageDV = new int[] { R.drawable.id_icon, R.drawable.agree_icon, R.drawable.constraints, R.drawable.preview_icon,
 			R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.cmd_bloc, R.drawable.colosseum, R.drawable.vanzari, R.drawable.neincasate,
-			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.concurenta, R.drawable.znecesar1_icon, R.drawable.viewreduceri_icon,
-			R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi,
-			R.drawable.location_icon,  R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.concurenta, R.drawable.znecesar1_icon,
+			R.drawable.viewreduceri_icon, R.drawable.chart_icon, R.drawable.client_info, R.drawable.clienti_inactivi, R.drawable.location_icon,
+			R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesKA = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Cmz.blocate limita credit",
-			"Creare CLP", "Afisare CLP", "Afisare DL", "Obiective", "Modificare custodie", "Modificare data livrare", "Retur paleti", "Stare retur paleti",
-			"Retur comenzi", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Pierderi vanzari", "Info client", "Plati CEC", "Clienti facturati",
-			"Clienti alocati", "Salarizare", "Adrese clienti", "Delegatii", "Despre", "Iesire" };
+			"Creare CLP", "Afisare CLP", "Afisare DL", "Obiective", "Modificare custodie", "Modificare data livrare", "Retur paleti",
+			"Stare retur paleti", "Retur comenzi", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Pierderi vanzari", "Info client",
+			"Plati CEC", "Clienti facturati", "Clienti alocati", "Salarizare", "Adrese clienti", "Delegatii", "Despre", "Iesire" };
 
-	public int[] btnImageKA = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,R.drawable.clp,
-			R.drawable.cmd_bloc, R.drawable.afis_clp,  R.drawable.box_yellow_48, R.drawable.colosseum,
-			R.drawable.custody_48, R.drawable.data_icon, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda, R.drawable.vanzari,
-			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.target, R.drawable.client_info, R.drawable.payment,
+	public int[] btnImageKA = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.clp,
+			R.drawable.cmd_bloc, R.drawable.afis_clp, R.drawable.box_yellow_48, R.drawable.colosseum, R.drawable.custody_48, R.drawable.data_icon,
+			R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.retur_comanda, R.drawable.vanzari, R.drawable.neincasate,
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.target, R.drawable.client_info, R.drawable.payment,
 			R.drawable.clienti_inactivi, R.drawable.clients, R.drawable.money_gold_48, R.drawable.location_icon, R.drawable.blank,
 			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
@@ -128,17 +127,17 @@ public class MainMenu extends Activity {
 			R.drawable.despre_icon, R.drawable.exit_icon, R.drawable.blank };
 
 	public String[] btnNamesCVA = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Creare CLP",
-			"Afisare CLP", "Retur paleti", "Stare retur paleti", "Obiective", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi",
-			"Info client", "Delegatii", "Despre", "Iesire" };
+			"Afisare CLP", "Retur paleti", "Stare retur paleti", "Obiective", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri",
+			"Preturi", "Stare comenzi", "Info client", "Delegatii", "Despre", "Iesire" };
 
 	public int[] btnImageCVA = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
 			R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.colosseum,
-			R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.client_info,
-			R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon};
+			R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status,
+			R.drawable.client_info, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesSM = { "Utilizator", "Creare comanda", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate",
-			"Creare CLP", "Aprobare CLP", "Afisare CLP", "Retur paleti", "Stare retur paleti", "Obiective","Modificare data livrare", "Vanzari", "Neincasate", "Stocuri",
-			"Preturi", "Stare comenzi", "Info client", "Delegatii", "Despre", "Iesire" };
+			"Creare CLP", "Aprobare CLP", "Afisare CLP", "Retur paleti", "Stare retur paleti", "Obiective", "Modificare data livrare", "Vanzari",
+			"Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Info client", "Delegatii", "Despre", "Iesire" };
 
 	public int[] btnImageSM = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon,
 			R.drawable.preview_icon, R.drawable.simulate, R.drawable.clp, R.drawable.aprob_clp, R.drawable.afis_clp, R.drawable.retur_marfa,
@@ -147,13 +146,13 @@ public class MainMenu extends Activity {
 			R.drawable.blank };
 
 	public String[] btnNamesCONSGED = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate", "Retur paleti",
-			"Stare retur paleti", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta", "Obiective", "Info client",
-			"Despre", "Iesire" };
+			"Stare retur paleti", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Preturi", "Stare comenzi", "Preturi concurenta",
+			"Obiective", "Info client", "Despre", "Iesire" };
 
 	public int[] btnImageCONSGED = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
-			R.drawable.simulate, R.drawable.retur_marfa, R.drawable.status_retur_48,R.drawable.data_icon,  R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon,
-			R.drawable.dollar_icon, R.drawable.status, R.drawable.concurenta, R.drawable.colosseum, R.drawable.client_info, R.drawable.despre_icon,
-			R.drawable.exit_icon };
+			R.drawable.simulate, R.drawable.retur_marfa, R.drawable.status_retur_48, R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate,
+			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.concurenta, R.drawable.colosseum, R.drawable.client_info,
+			R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesKA3 = { "Utilizator", "Creare comanda", "Afisare comanda", "Comenzi simulate", "Retur paleti", "Vanzari", "Neincasate",
 			"Stocuri", "Preturi", "Info client", "Despre", "Iesire" };
@@ -163,11 +162,12 @@ public class MainMenu extends Activity {
 			R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.client_info, R.drawable.despre_icon,
 			R.drawable.exit_icon, R.drawable.blank };
 
-	public String[] btnNamesWOOD = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Modificare data livrare", "Stocuri", "Preturi", "Obiective",
-			"Despre", "Iesire" };
+	public String[] btnNamesWOOD = { "Utilizator", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate",
+			"Modificare data livrare", "Stocuri", "Preturi", "Stare comenzi", "Obiective", "Despre", "Iesire" };
 
-	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,R.drawable.data_icon,
-			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.colosseum, R.drawable.despre_icon, R.drawable.exit_icon };
+	public int[] btnImageWOOD = new int[] { R.drawable.id_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon, R.drawable.preview_icon,
+			R.drawable.simulate, R.drawable.data_icon, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status, R.drawable.colosseum,
+			R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesINFO = { "Utilizator", "Creare cmd GED", "Afisare comanda", "Stocuri", "Preturi", "Despre", "Iesire" };
 
@@ -175,19 +175,19 @@ public class MainMenu extends Activity {
 			R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	public String[] btnNamesCVR = { "Utilizator", "Creare comanda", "Creare cmd GED", "Modificare comanda", "Afisare comanda", "Comenzi simulate",
-			"Creare CLP", "Afisare CLP", "Retur paleti", "Stare retur paleti", "Obiective", "Modificare data livrare", "Vanzari", "Neincasate", "Stocuri", "Preturi",
-			"Stare comenzi", "Info client", "Delegatii", "Despre", "Iesire" };
+			"Creare CLP", "Afisare CLP", "Retur paleti", "Stare retur paleti", "Obiective", "Modificare data livrare", "Vanzari", "Neincasate",
+			"Stocuri", "Preturi", "Stare comenzi", "Info client", "Delegatii", "Despre", "Iesire" };
 
 	public int[] btnImageCVR = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.blue_basket_icon, R.drawable.modif_icon,
 			R.drawable.preview_icon, R.drawable.simulate, R.drawable.clp, R.drawable.afis_clp, R.drawable.retur_marfa, R.drawable.status_retur_48,
-			R.drawable.colosseum, R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.status,
-			R.drawable.client_info, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon };
+			R.drawable.colosseum, R.drawable.data_icon, R.drawable.vanzari, R.drawable.neincasate, R.drawable.stoc_icon, R.drawable.dollar_icon,
+			R.drawable.status, R.drawable.client_info, R.drawable.blank, R.drawable.despre_icon, R.drawable.exit_icon };
 
-	public String[] btnNamesOIVPD = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Modificare data livrare", "Stocuri", "Preturi",
-			"Despre", "Iesire" };
+	public String[] btnNamesOIVPD = { "Utilizator", "Creare comanda", "Modificare comanda", "Afisare comanda", "Modificare data livrare", "Stocuri",
+			"Preturi", "Despre", "Iesire" };
 
-	public int[] btnImageOIVPD = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon, R.drawable.data_icon,
-			R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
+	public int[] btnImageOIVPD = new int[] { R.drawable.id_icon, R.drawable.new_icon, R.drawable.modif_icon, R.drawable.preview_icon,
+			R.drawable.data_icon, R.drawable.stoc_icon, R.drawable.dollar_icon, R.drawable.despre_icon, R.drawable.exit_icon };
 
 	private static final String URL = "http://10.1.0.58/androidwebservices/service1.asmx";
 	String name = "", filiala = "";
@@ -513,8 +513,8 @@ public class MainMenu extends Activity {
 					startActivity(nextScreen);
 					finish();
 
-				}				
-				
+				}
+
 				if (selectedBtnName.equalsIgnoreCase("Retur paleti")) {
 
 					Intent nextScreen = new Intent(MainMenu.this, ReturPaleti.class);
@@ -1405,7 +1405,8 @@ public class MainMenu extends Activity {
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SM") || UserInfo.getInstance()
 				.getTipUser().equals("SC"))
 				&& (!UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("SMR")
-						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP") && !UserInfo.getInstance().getTipUserSap().equals("CVIP"))) {
+						&& !UserInfo.getInstance().getTipUserSap().equals("CVR") && !UserInfo.getInstance().getTipUserSap().equals("SDIP") && !UserInfo
+						.getInstance().getTipUserSap().equals("CVIP"))) {
 			nrBtns = btnNamesCVA.length;
 		}
 
@@ -1428,7 +1429,7 @@ public class MainMenu extends Activity {
 		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
 			nrBtns = btnNamesCVR.length;
 		}
-		
+
 		if (UtilsUser.isUserIP()) {
 			nrBtns = btnNamesSDIP.length;
 		}
@@ -1440,8 +1441,6 @@ public class MainMenu extends Activity {
 		if (UserInfo.getInstance().getTipUserSap().equals("OIVPD")) {
 			nrBtns = btnNamesOIVPD.length;
 		}
-
-
 
 		return nrBtns;
 
@@ -1504,8 +1503,8 @@ public class MainMenu extends Activity {
 
 		if (UtilsUser.isUserIP()) {
 			btnName = btnNamesSDIP[btnPos];
-		}		
-		
+		}
+
 		if (UserInfo.getInstance().getTipUserSap().equals("SSCM") || UserInfo.getInstance().getTipUserSap().equals("CGED")) {
 			btnName = btnNamesINFO[btnPos];
 		}
@@ -1513,7 +1512,6 @@ public class MainMenu extends Activity {
 		if (UserInfo.getInstance().getTipUserSap().equals("OIVPD")) {
 			btnName = btnNamesOIVPD[btnPos];
 		}
-
 
 		return btnName;
 
@@ -1574,7 +1572,7 @@ public class MainMenu extends Activity {
 		if (UserInfo.getInstance().getTipUserSap().equals("CVR")) {
 			btnImg = btnImageCVR[btnPos];
 		}
-		
+
 		if (UtilsUser.isUserIP()) {
 			btnImg = btnImageSDIP[btnPos];
 		}
@@ -1586,8 +1584,6 @@ public class MainMenu extends Activity {
 		if (UserInfo.getInstance().getTipUserSap().equals("OIVPD")) {
 			btnImg = btnImageOIVPD[btnPos];
 		}
-
-
 
 		return btnImg;
 
@@ -1658,8 +1654,7 @@ public class MainMenu extends Activity {
 
 		if ((UserInfo.getInstance().getTipUser().equals("CV") || UserInfo.getInstance().getTipUser().equals("SC"))
 				&& !UserInfo.getInstance().getTipUserSap().equals("CONS-GED") && !UserInfo.getInstance().getTipUserSap().equals("CVR")
-				&& !UserInfo.getInstance().getTipUserSap().equals("SDIP")&& !UserInfo
-				.getInstance().getTipUserSap().equals("CVIP")) {
+				&& !UserInfo.getInstance().getTipUserSap().equals("SDIP") && !UserInfo.getInstance().getTipUserSap().equals("CVIP")) {
 
 			for (int i = 0; i < btnNamesCVA.length; i++) {
 				if (btnNamesCVA[i].equalsIgnoreCase(btnName)) {
@@ -1718,7 +1713,7 @@ public class MainMenu extends Activity {
 				}
 			}
 		}
-		
+
 		if (UtilsUser.isUserIP()) {
 
 			for (int i = 0; i < btnNamesSDIP.length; i++) {
@@ -1748,8 +1743,6 @@ public class MainMenu extends Activity {
 				}
 			}
 		}
-
-
 
 		return position;
 
