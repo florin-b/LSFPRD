@@ -61,13 +61,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-import beans.ArticolCant;
 import beans.ArticolDB;
 import beans.BeanParametruPretGed;
 import beans.DepoziteUl;
 import beans.PretArticolGed;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
+import enums.EnumTipClientIP;
 import enums.EnumTipComanda;
 import enums.TipCmdGed;
 import filters.DecimalDigitsInputFilter;
@@ -268,7 +268,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			arrayListDepozite.addAll(Arrays.asList(UtilsGeneral.getDepoziteGed()));
 
 		adapterSpinnerDepozite = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListDepozite);
-		
+
 		UtilsGeneral.trateazaExceptieMAV_BU(adapterSpinnerDepozite);
 		adapterSpinnerDepozite.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerDepoz.setAdapter(adapterSpinnerDepozite);
@@ -419,14 +419,15 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 	boolean isWood() {
 		return UserInfo.getInstance().getTipUser().equals("WOOD");
 	}
-	
-	private boolean isUserCAG(){
+
+	private boolean isUserCAG() {
 		return UserInfo.getInstance().getTipUserSap().toUpperCase().startsWith("CAG");
 	}
 
 	private void CreateMenu(Menu menu) {
 
-		if ((UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite() || isWood() || UtilsUser.isUserIP() || isUserCAG()) && CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_VANZARE) {
+		if ((UtilsUser.isUserExceptieBV90Ged() || UtilsUser.isUserSite() || isWood() || UtilsUser.isUserIP() || isUserCAG())
+				&& CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_VANZARE) {
 			MenuItem mnu1 = menu.add(0, 0, 0, "Filiala");
 			{
 				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -1094,7 +1095,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 			tipArticol = "S";
 		else
 			tipArticol = "A";
-		
+
 		String departCautare = selectedDepartamentAgent;
 
 		if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE && !CreareComandaGed.selectedDepartCod.equals("-1"))
@@ -1147,7 +1148,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 								Toast.LENGTH_LONG).show();
 						return;
 					}
-					
+
 					if (UtilsUser.isUserIP() && !conditiiCmdIP()) {
 						return;
 					}
@@ -1334,7 +1335,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 						ListaArticoleComandaGed listaArticole = ListaArticoleComandaGed.getInstance();
 						listaArticole.addArticolComanda(articol);
-						
+
 						if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE) {
 							blocheazaDepartDepoz();
 						}
@@ -1380,7 +1381,6 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 						InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 						mgr.hideSoftInputFromWindow(textCant.getWindowToken(), 0);
-
 
 					} else {
 
@@ -1432,9 +1432,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		return true;
 
-	}	
-	
-	
+	}
+
 	@SuppressWarnings("unchecked")
 	private void listArtStoc(String pretResponse) {
 
@@ -1744,7 +1743,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 				String[] arrayPret = arrayIstoric[0].split("@");
 
-				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
+				if (isComandaIP())
+					valoarePret = Double.parseDouble(arrayPret[0]);
+				else
+					valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
 
 				TextView textIstoric1 = (TextView) findViewById(R.id.txtIstoricPret1);
 				textIstoric1.setText(" " + df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
@@ -1758,7 +1760,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 				String[] arrayPret = arrayIstoric[1].split("@");
 
-				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
+				if (isComandaIP())
+					valoarePret = Double.parseDouble(arrayPret[0]);
+				else
+					valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
 
 				TextView textIstoric2 = (TextView) findViewById(R.id.txtIstoricPret2);
 				textIstoric2.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
@@ -1772,7 +1777,10 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 				String[] arrayPret = arrayIstoric[2].split("@");
 
-				valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
+				if (isComandaIP())
+					valoarePret = Double.parseDouble(arrayPret[0]);
+				else
+					valoarePret = Double.parseDouble(arrayPret[0]) * Constants.TVA;
 
 				TextView textIstoric3 = (TextView) findViewById(R.id.txtIstoricPret3);
 				textIstoric3.setText(df.format(valoarePret) + UtilsFormatting.addSpace(arrayPret[0].trim(), 6) + " /" + arrayPret[1] + " "
@@ -1782,6 +1790,11 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		}
 
+	}
+
+	private static boolean isComandaIP() {
+		return UtilsUser.isUserIP()
+				&& (CreareComandaGed.tipClientIP == EnumTipClientIP.CONSTR || CreareComandaGed.tipClientIP == EnumTipClientIP.NONCONSTR);
 	}
 
 	private boolean userCannotModifyPrice() {

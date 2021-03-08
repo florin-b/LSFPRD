@@ -122,7 +122,7 @@ public class User extends Activity implements HelperSiteListener, CodPinDialogLi
 		String buildVer = "";
 		if (pInfo != null) {
 			buildVer = String.valueOf(pInfo.versionCode);
-			lastUpdate = pInfo.firstInstallTime;
+			lastUpdate = pInfo.firstInstallTime; 
 		}
 
 		DateFormat datePattern = new SimpleDateFormat("dd-MMM-yyyy' 'HH:mm:ss", Locale.UK);
