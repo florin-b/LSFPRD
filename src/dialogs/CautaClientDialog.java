@@ -64,7 +64,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 		btnCautaClient = (Button) findViewById(R.id.btnCautaClient);
 		setListenerCautaClient();
-		
+
 		radioClientIP = (RadioGroup) findViewById(R.id.radioClientIP);
 		setListenerRadioClientIP();
 
@@ -96,7 +96,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 		});
 	}
-	
+
 	private void setListenerCancelButton() {
 		cancelButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -127,10 +127,10 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				BeanClient client = (BeanClient) listClientiObiective.getItemAtPosition(arg2);
-				
+
 				if (UtilsUser.isUserIP())
 					client.setTipClientIP(tipClientIP);
-				
+
 				if (listener != null) {
 					listener.clientSelected(client);
 					dismiss();
@@ -180,7 +180,7 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 		params.put("unitLog", UserInfo.getInstance().getUnitLog());
 		params.put("tipUser", UserInfo.getInstance().getTipUserSap());
 		params.put("tipClient", tipClientIP.toString());
-		
+
 		opClient.getClientiInstitPub(params);
 	}
 
@@ -224,10 +224,12 @@ public class CautaClientDialog extends Dialog implements OperatiiClientListener 
 
 	public void setInstitPublica(boolean isInstitPublica) {
 		this.isInstitPublica = isInstitPublica;
-		
+
 		if (isInstitPublica) {
 			radioClientIP.setVisibility(View.VISIBLE);
-		}
+			textNumeClient.setHint("Nume client sau CIF");
+		} else
+			textNumeClient.setHint("Nume client");
 	}
 
 	public String getNumeClient() {
