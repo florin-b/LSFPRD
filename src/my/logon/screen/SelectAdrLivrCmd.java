@@ -855,7 +855,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void performGetJudete() {
 
-		if (isComandaClp() || isComandaBV() || isComandaDl() || DateLivrare.getInstance().isClientFurnizor())  {
+		if (isComandaClp() || isComandaBV() || isComandaDl() || DateLivrare.getInstance().isClientFurnizor()) {
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
 		} else {
@@ -876,9 +876,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private boolean isComandaClp() {
 		return !DateLivrare.getInstance().getCodFilialaCLP().trim().isEmpty() && DateLivrare.getInstance().getCodFilialaCLP().trim().length() == 4;
 	}
-	
+
 	private boolean isComandaDl() {
-		return DateLivrare.getInstance().getFurnizorComanda() != null && !DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().isEmpty()
+		return DateLivrare.getInstance().getFurnizorComanda() != null
+				&& !DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().isEmpty()
 				&& DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().length() > 4;
 	}
 
@@ -1116,8 +1117,14 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	protected void performGetAdreseLivrare() {
 
+		String filiala = "";
+
+		if (!isComandaClp() && !isComandaBV() && !isComandaDl() && !DateLivrare.getInstance().isClientFurnizor())
+			filiala = UserInfo.getInstance().getUnitLog();
+
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("codClient", globalCodClient);
+		params.put("filiala", filiala);
 
 		operatiiAdresa.getAdreseLivrareClient(params);
 
@@ -1402,7 +1409,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private void populateListLocalitati(BeanAdreseJudet listAdrese) {
-		
+
 		listAdreseJudet = listAdrese;
 
 		textLocalitate.setVisibility(View.VISIBLE);
@@ -1868,7 +1875,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			beanLocalitate.setOras(adresaLivrareSelected.isOras());
 			beanLocalitate.setRazaKm(adresaLivrareSelected.getRazaKm());
 			beanLocalitate.setCoordonate(adresaLivrareSelected.getCoordsCentru());
-			
+
 			addressCoordinates = DateLivrare.getInstance().getCoordonateAdresa();
 		}
 
@@ -1892,7 +1899,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private void setAdresaLivrareFromList(BeanAdresaLivrare adresaLivrare) {
-		
+
 		adresaLivrareSelected = adresaLivrare;
 
 		DateLivrare.getInstance().setAddrNumber(adresaLivrare.getCodAdresa());
