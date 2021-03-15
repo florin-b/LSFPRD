@@ -20,6 +20,7 @@ import beans.BeanClient;
 import beans.BeanDatePersonale;
 import beans.ClientAlocat;
 import beans.DetaliiClient;
+import beans.InfoCredit;
 import beans.PlatitorTva;
 import enums.EnumClienti;
 
@@ -108,6 +109,12 @@ public class OperatiiClient implements AsyncTaskListener {
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
 	}	
+	
+	public void getInfoCredit(HashMap<String, String> params) {
+		numeComanda = EnumClienti.GET_INFO_CREDIT;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
 	
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;
@@ -345,6 +352,28 @@ public class OperatiiClient implements AsyncTaskListener {
 
 		return listClienti;
 	}	
+	
+	public InfoCredit deserializeInfoCreditClient(String result) {
+		InfoCredit infoCredit = new InfoCredit();
+
+		try {
+			JSONObject jsonObject = new JSONObject(result);
+
+			if (jsonObject instanceof JSONObject) {
+
+				infoCredit.setLimitaCredit(Double.parseDouble(jsonObject.getString("limitaCredit")));
+				infoCredit.setRestCredit(Double.parseDouble(jsonObject.getString("restCredit")));
+				infoCredit.setBlocat(Boolean.parseBoolean(jsonObject.getString("isBlocat")));
+				infoCredit.setMotivBlocat(jsonObject.getString("motivBlocat"));
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return infoCredit;
+
+	}
 	
 	public void onTaskComplete(String methodName, Object result) {
 		if (listener != null) {
