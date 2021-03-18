@@ -2288,7 +2288,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0
 				&& DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
-			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, false);
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, true);
 			macaraDialog.setCostMacaraListener(this);
 			macaraDialog.show();
 

@@ -882,7 +882,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				|| InfoStrings.getClientGenericGedWood_faraFact(tempDistribUL, "PF").equals(selectedClientCode)
 				|| InfoStrings.getClientGenericGed_CONSGED_faraFactura(tempDistribUL, "PF").equals(selectedClientCode)
 				|| InfoStrings.getClientCVO_cuFact_faraCnp(tempDistribUL, "").equals(selectedClientCode)
-				|| InfoStrings.getClientGed_FaraFactura(tempDistribUL).equals(selectedClientCode))
+				|| InfoStrings.getClientGed_FaraFactura(tempDistribUL).equals(selectedClientCode)
+				|| !isComandaDistrib)
 
 			return true;
 		else
@@ -1961,7 +1962,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		if (costDescarcare.getSePermite() && costDescarcare.getValoareDescarcare() > 0
 				&& DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP")) {
 
-			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, false);
+			CostMacaraDialog macaraDialog = new CostMacaraDialog(this, costDescarcare, isComandaGed());
 			macaraDialog.setCostMacaraListener(this);
 			macaraDialog.show();
 
