@@ -665,7 +665,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	private double getValoareTransportSap() {
 
-		if (UtilsComenzi.isComandaInstPublica()) {
+		if (isExceptieComandaIP()) {
 			valTransport = 0;
 			return 0.0;
 		}
@@ -1027,6 +1027,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		listArticole.get(selectedPos).setPretUnit(newPretClient);
 		listArticole.get(selectedPos).setPret(listArticole.get(selectedPos).getPretUnit() * listArticole.get(selectedPos).getCantUmb());
 
+		listArticole.get(selectedPos).setProcent(
+				(1 - listArticole.get(selectedPos).getPretUnit()
+						/ (listArticole.get(selectedPos).getPretUnitarGed() / listArticole.get(selectedPos).getCantitate() * listArticole.get(selectedPos)
+								.getMultiplu())) * 100);		
+		
 		listArticole.get(selectedPos).setValTransport(
 				((listArticole.get(selectedPos).getPretUnitarClient() * listArticole.get(selectedPos).getCantUmb()) / listArticole.get(selectedPos)
 						.getMultiplu()) * (listArticole.get(selectedPos).getProcTransport() / 100));
