@@ -1250,7 +1250,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComandaGed.getInstance().getListArticoleComanda());
 
 		if ((DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") || DateLivrare.getInstance().getTransport().equalsIgnoreCase("TCLI"))
-				&& !isExceptieComandaIP() && !UtilsUser.isAV_SD_01() && !UtilsUser.isCVO() && !UtilsUser.isSVO()) {
+				&& !isExceptieComandaIP() && !UtilsUser.isAV_SD_01()) {
 
 			String codFurnizor = " ";
 
