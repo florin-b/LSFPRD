@@ -1029,9 +1029,9 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		listArticole.get(selectedPos).setProcent(
 				(1 - listArticole.get(selectedPos).getPretUnit()
-						/ (listArticole.get(selectedPos).getPretUnitarGed() / listArticole.get(selectedPos).getCantitate() * listArticole.get(selectedPos)
-								.getMultiplu())) * 100);		
-		
+						/ (listArticole.get(selectedPos).getPretUnitarGed() / listArticole.get(selectedPos).getCantitate() * listArticole.get(
+								selectedPos).getMultiplu())) * 100);
+
 		listArticole.get(selectedPos).setValTransport(
 				((listArticole.get(selectedPos).getPretUnitarClient() * listArticole.get(selectedPos).getCantUmb()) / listArticole.get(selectedPos)
 						.getMultiplu()) * (listArticole.get(selectedPos).getProcTransport() / 100));
@@ -1250,7 +1250,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		HelperCostDescarcare.eliminaCostDescarcare(ListaArticoleComandaGed.getInstance().getListArticoleComanda());
 
 		if ((DateLivrare.getInstance().getTransport().equalsIgnoreCase("TRAP") || DateLivrare.getInstance().getTransport().equalsIgnoreCase("TCLI"))
-				&& !isExceptieComandaIP() && !UtilsUser.isAV_SD_01()) {
+				&& !isExceptieComandaIP() && !UtilsUser.isAV_SD_01() && !isComandaPaletiCVO()) {
 
 			String codFurnizor = " ";
 
@@ -1339,6 +1339,20 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		}
 
+	}
+
+	private boolean isComandaPaletiCVO() {
+
+		boolean isComandaPaleti = true;
+
+		for (ArticolComanda articol : ListaArticoleComandaGed.getInstance().getListArticoleComanda()) {
+			if (!articol.isUmPalet()) {
+				isComandaPaleti = false;
+				break;
+			}
+		}
+
+		return isComandaPaleti && (UtilsUser.isCVO() || UtilsUser.isSVO());
 	}
 
 	private void verificaPaletiComanda(List<ArticolPalet> listPaleti) {
