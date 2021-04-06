@@ -1206,12 +1206,7 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				codCuiIp = client.getCodCUI();
 				
 				if (!client.getFilialaClientIP().equals(UserInfo.getInstance().getUnitLog())) {
-					CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_LIVRARE;
-					DateLivrare.getInstance().setCodFilialaCLP(client.getFilialaClientIP());
-				}
-				else {
-					CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_VANZARE;
-					DateLivrare.getInstance().setCodFilialaCLP("");
+					UserInfo.getInstance().setUnitLog(client.getFilialaClientIP());
 				}
 				
 				getInfoCreditClient(client.getCodClient());

@@ -83,6 +83,7 @@ import enums.EnumClienti;
 import enums.EnumJudete;
 import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
+import enums.TipCmdGed;
 
 public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, OperatiiClientListener, OperatiiAdresaListener, MapListener,
 		CautaObiectivListener {
@@ -1159,7 +1160,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private void populateListLocSediu(BeanAdreseJudet listAdrese) {
-		
+
 		listAdreseJudet = listAdrese;
 
 		textLocalitate.setVisibility(View.VISIBLE);
@@ -1182,6 +1183,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		textNrStr.setText(UtilsAddress.getStreetNumber(DateLivrare.getInstance().getStrada()));
 
 		setListenerTextStrada();
+
+		if (UtilsUser.isUserIP())
+			getFilialaLivrareJudet();
 
 	}
 
@@ -1294,7 +1298,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 	}
 
 	private void populateListLocLivrare(BeanAdreseJudet listAdrese) {
-		
+
 		listAlteAdrese = listAdrese;
 
 		textLocalitateLivrare.setVisibility(View.VISIBLE);
@@ -1316,6 +1320,15 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		textStradaLivrare.setAdapter(adapterStrazi);
 		setListenerTextStradaLivrare();
 
+		if (UtilsUser.isUserIP())
+			getFilialaLivrareJudet();
+
+	}
+
+	private void getFilialaLivrareJudet() {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+		operatiiAdresa.getFilialaLivrareMathaus(params);
 	}
 
 	private void setListenerTextLocalitateLivrare() {
@@ -1826,10 +1839,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		return address;
 	}
-	
-	
-	
-	
 
 	private boolean isAdresaComplet() {
 		if (DateLivrare.getInstance().getCodJudet().equals("") || DateLivrare.getInstance().getCodJudetD().equals("")) {
@@ -1981,6 +1990,20 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
+	private void handleFilialaLivrare(String filiala) {
+
+		if (!filiala.equals(UserInfo.getInstance().getUnitLog())) {
+			CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_LIVRARE;
+			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_LIVRARE);
+			DateLivrare.getInstance().setCodFilialaCLP(filiala);
+		} else {
+			CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_VANZARE;
+			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_VANZARE);
+			DateLivrare.getInstance().setCodFilialaCLP("");
+		}
+
+	}	
+	
 	private void setDateLivrareClient() {
 
 		if ((UtilsUser.isCGED() || UtilsUser.isSSCM() || CreareComandaGed.tipClient.equals("IP")) && dateLivrareClient != null) {
@@ -2021,6 +2044,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			valideazaAdresaResponse((String) result);
 		} else if (numeComanda == EnumOperatiiAdresa.GET_DATE_LIVRARE_CLIENT) {
 			loadDateLivrareClient(operatiiAdresa.deserializeDateLivrareClient((String) result));
+		} else if (numeComanda == EnumOperatiiAdresa.GET_FILIALA_MATHAUS) {
+			handleFilialaLivrare((String) result);
 		} else {
 			switch (tipLocalitate) {
 			case LOCALITATE_SEDIU:

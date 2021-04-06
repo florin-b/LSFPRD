@@ -90,6 +90,13 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 
 	}	
 	
+	public void getFilialaLivrareMathaus(HashMap<String, String> params) {
+		this.params = params;
+		numeComanda = EnumOperatiiAdresa.GET_FILIALA_MATHAUS;
+		performOperation();
+
+	}
+	
 	public List<String> deserializeListLocalitati(Object resultList) {
 
 		List<String> listLocalitati = new ArrayList<String>();

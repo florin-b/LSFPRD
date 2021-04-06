@@ -2,8 +2,9 @@ package enums;
 
 public enum EnumOperatiiAdresa {
 
-	GET_LOCALITATI_JUDET("getLocalitatiJudet"), GET_ADRESE_JUDET("getAdreseJudet"), IS_ADRESA_VALIDA("isAdresaValid"), GET_DATE_LIVRARE("getCmdDateLivrare"), GET_ADRESE_LIVR_CLIENT(
-			"getAdreseLivrareClient"), GET_LOCALITATI_LIVRARE_RAPIDA("getLocalitatiLivrareRapida"), GET_DATE_LIVRARE_CLIENT("getDateLivrareClient");
+	GET_LOCALITATI_JUDET("getLocalitatiJudet"), GET_ADRESE_JUDET("getAdreseJudet"), IS_ADRESA_VALIDA("isAdresaValid"), GET_DATE_LIVRARE(
+			"getCmdDateLivrare"), GET_ADRESE_LIVR_CLIENT("getAdreseLivrareClient"), GET_LOCALITATI_LIVRARE_RAPIDA("getLocalitatiLivrareRapida"), GET_DATE_LIVRARE_CLIENT(
+			"getDateLivrareClient"), GET_FILIALA_MATHAUS("getFilialaJudetLivrare");
 	private String numeComanda;
 
 	EnumOperatiiAdresa(String numeComanda) {
