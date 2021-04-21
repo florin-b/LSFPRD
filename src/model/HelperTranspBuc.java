@@ -222,7 +222,7 @@ public class HelperTranspBuc {
 
 			if (!ListaArticoleComanda.getInstance().getListArticoleComanda().isEmpty())
 				codDepart = ListaArticoleComanda.getInstance().getListArticoleComanda().get(0).getDepart();
-			else if (!ListaArticoleModificareComanda.getInstance().getListArticoleComanda().isEmpty())
+			else if (ListaArticoleModificareComanda.getInstance().getListArticoleComanda() != null && !ListaArticoleModificareComanda.getInstance().getListArticoleComanda().isEmpty())
 				codDepart = ListaArticoleModificareComanda.getInstance().getListArticoleComanda().get(0).getDepart();
 
 		}

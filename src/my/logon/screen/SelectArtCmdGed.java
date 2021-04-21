@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import listeners.MagazinMathausListener;
 import listeners.OperatiiArticolListener;
 import model.ArticolComandaGed;
 import model.Constants;
@@ -65,6 +66,7 @@ import beans.ArticolDB;
 import beans.BeanParametruPretGed;
 import beans.DepoziteUl;
 import beans.PretArticolGed;
+import dialogs.SelectMagazinMathausDialog;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
 import enums.EnumTipClientIP;
@@ -72,7 +74,7 @@ import enums.EnumTipComanda;
 import enums.TipCmdGed;
 import filters.DecimalDigitsInputFilter;
 
-public class SelectArtCmdGed extends ListActivity implements OperatiiArticolListener {
+public class SelectArtCmdGed extends ListActivity implements OperatiiArticolListener, MagazinMathausListener {
 
 	Button articoleBtn, saveArtBtn, pretBtn;
 	String filiala = "", nume = "", cod = "", umStoc = "";
@@ -1314,7 +1316,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						articol.setUmb(Umb);
 						articol.setCantUmb(Double.valueOf(cantUmb));
 						articol.setAlteValori(alteValori);
-						articol.setDepart(globalCodDepartSelectetItem.substring(0, 2));
+						articol.setDepart(globalCodDepartSelectetItem);
 						articol.setDepartSintetic(articol.getDepart());
 						articol.setCmp(cmpArt);
 						articol.setCoefCorectie(coefCorectie);
@@ -1336,7 +1338,7 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 						ListaArticoleComandaGed listaArticole = ListaArticoleComandaGed.getInstance();
 						listaArticole.addArticolComanda(articol);
 
-						if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE) {
+						if (CreareComandaGed.tipComandaGed == TipCmdGed.COMANDA_LIVRARE && !UtilsUser.isUserIP()) {
 							blocheazaDepartDepoz();
 						}
 
@@ -1853,6 +1855,21 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 		super.onListItemClick(l, v, position, id);
 
 		ArticolDB articol = (ArticolDB) l.getAdapter().getItem(position);
+		
+		if (isConditiiCVIPMathaus(articol.getDepart())) {
+			showSelectMathausDialog();
+			return;
+		}
+
+		if (UtilsUser.isUserIP() && !articol.getDepart().equals("11") && !CreareComandaGed.permitArticoleDistribIP && !ModificareComanda.permitArticoleDistribIP) {
+			Toast.makeText(getApplicationContext(), "Pe aceasta  comanda nu sunt permise articole din distributie.", Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		if (UtilsUser.isUserIP() && !UtilsGeneral.isFilialaMathaus(getFilialaLivrareCVIP()) && articol.getDepart().equals("11")) {
+			Toast.makeText(getApplicationContext(), "Filiala " + getFilialaLivrareCVIP() + " nu are magazin Mathaus.", Toast.LENGTH_LONG).show();
+			return;
+		}
 
 		articolDBSelected = articol;
 
@@ -1910,6 +1927,39 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 	}
 
+	private boolean isConditiiCVIPMathaus(String departArt) {
+
+		String filialaLivrare = getFilialaLivrareCVIP();
+
+		return UtilsUser.isUserIP() && ListaArticoleComandaGed.getInstance().getListArticoleComanda().isEmpty() && departArt.equals("11")
+				&& !UtilsGeneral.isFilialaMathaus(filialaLivrare);
+	}
+
+	private void showSelectMathausDialog() {
+
+		SelectMagazinMathausDialog mathausDialog = new SelectMagazinMathausDialog(SelectArtCmdGed.this);
+		mathausDialog.setMagazinMathausDialogListener(this);
+		mathausDialog.show();
+
+	}
+
+	private String getFilialaLivrareCVIP() {
+
+		String filialaLivrare;
+
+		if (!isComandaClp())
+			filialaLivrare = UserInfo.getInstance().getUnitLog();
+		else
+			filialaLivrare = DateLivrare.getInstance().getCodFilialaCLP();
+
+		return filialaLivrare;
+
+	}
+
+	private boolean isComandaClp() {
+		return !DateLivrare.getInstance().getCodFilialaCLP().trim().isEmpty() && DateLivrare.getInstance().getCodFilialaCLP().trim().length() == 4;
+	}
+	
 	private void performListArtStoc() {
 
 		HashMap<String, String> params = new HashMap<String, String>();
@@ -1988,6 +2038,25 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		}
 
+	}
+
+	@Override
+	public void magazinMathausSelected(String filialaMathaus) {
+		String filialaLivrare = getFilialaLivrareCVIP();
+
+		if (!filialaLivrare.equals(filialaMathaus)) {
+			CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_LIVRARE;
+			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_LIVRARE);
+			DateLivrare.getInstance().setCodFilialaCLP(filialaMathaus);
+		} else {
+			CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_VANZARE;
+			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_VANZARE);
+			DateLivrare.getInstance().setCodFilialaCLP("");
+		}
+
+		CreareComandaGed.permitArticoleDistribIP = false;
+		ModificareComanda.permitArticoleDistribIP = false;
+		
 	}
 
 }

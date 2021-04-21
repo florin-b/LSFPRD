@@ -14,7 +14,7 @@
             android:id="@+id/textNumeClient"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:inputType="textNoSuggestions"
             android:maxLength="30"
             android:singleLine="true"
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Constr." />
+                android:text="Inst.publice" />
 
             <RadioButton
                 android:id="@+id/radioNonConstruct"

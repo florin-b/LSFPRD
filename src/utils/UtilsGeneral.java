@@ -592,4 +592,26 @@ public class UtilsGeneral {
 
 	}
 
+	public static boolean isFilialaMathaus(String filiala) {
+
+		String filialeMathaus = "CT10, BU10, AG10, DJ10, BH10, IS0, GL10";
+
+		return filialeMathaus.contains(filiala);
+
+	}
+
+	public static List<String> getFilialaMathaus() {
+		List<String> filialeMathaus = new ArrayList<String>();
+
+		filialeMathaus.add("CT10");
+		filialeMathaus.add("BU10");
+		filialeMathaus.add("AG10");
+		filialeMathaus.add("DJ10");
+		filialeMathaus.add("BH10");
+		filialeMathaus.add("IS10");
+		filialeMathaus.add("GL10");
+
+		return filialeMathaus;
+	}	
+	
 }

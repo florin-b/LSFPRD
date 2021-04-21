@@ -645,7 +645,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|left"
                     android:checked="false"
-                    android:text="Facturare paleti separat" />
+                    android:text="Clientul nu doreste paletii" />
             </LinearLayout>
 
             <LinearLayout

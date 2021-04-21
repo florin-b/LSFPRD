@@ -1185,7 +1185,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		setListenerTextStrada();
 
 		if (UtilsUser.isUserIP())
-			getFilialaLivrareJudet();
+			getFilialaLivrareJudet(1);
 
 	}
 
@@ -1321,13 +1321,21 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		setListenerTextStradaLivrare();
 
 		if (UtilsUser.isUserIP())
-			getFilialaLivrareJudet();
+			getFilialaLivrareJudet(2);
 
 	}
 
-	private void getFilialaLivrareJudet() {
+	private void getFilialaLivrareJudet(int tipAdresa) {
+
+		String codJudet;
+
+		if (tipAdresa == 1)
+			codJudet = DateLivrare.getInstance().getCodJudet();
+		else
+			codJudet = DateLivrare.getInstance().getCodJudetD();
+
 		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+		params.put("codJudet", codJudet);
 		operatiiAdresa.getFilialaLivrareMathaus(params);
 	}
 
@@ -1874,6 +1882,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		if (radioAltaAdresa.isChecked()) {
 			localitate = DateLivrare.getInstance().getOrasD();
+
+			if (listAlteAdrese == null)
+				return isAdresaOk;
+
 			listLocalitati = listAlteAdrese.getListLocalitati();
 		}
 
@@ -1990,20 +2002,23 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
-	private void handleFilialaLivrare(String filiala) {
+	private void handleFilialaLivrare(String filialaRes) {
 
-		if (!filiala.equals(UserInfo.getInstance().getUnitLog())) {
+		if (filialaRes.trim().length() != 4)
+			return;
+
+		if (!filialaRes.equals(UserInfo.getInstance().getUnitLog())) {
 			CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_LIVRARE;
 			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_LIVRARE);
-			DateLivrare.getInstance().setCodFilialaCLP(filiala);
+			DateLivrare.getInstance().setCodFilialaCLP(filialaRes);
 		} else {
 			CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_VANZARE;
 			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_VANZARE);
 			DateLivrare.getInstance().setCodFilialaCLP("");
 		}
 
-	}	
-	
+	}
+
 	private void setDateLivrareClient() {
 
 		if ((UtilsUser.isCGED() || UtilsUser.isSSCM() || CreareComandaGed.tipClient.equals("IP")) && dateLivrareClient != null) {

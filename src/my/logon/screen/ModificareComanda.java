@@ -170,6 +170,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	private double valTransport = 0;
 	private double valTransportSAP = 0;
+	public static boolean permitArticoleDistribIP = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -1359,6 +1360,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		selectedCmd = "";
 		totalComanda = 0;
 		codTipReducere = "-1";
+		permitArticoleDistribIP = true;
 
 		try {
 			ListaArticoleComandaGed.getInstance().clearArticoleComanda();

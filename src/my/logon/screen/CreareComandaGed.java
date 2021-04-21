@@ -196,6 +196,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	public static int selectedDepartIndexClp = -1, selectedDepozIndexClp = -1;
 	public static String selectedDepartCod = "-1";
 	public static EnumTipClientIP tipClientIP = EnumTipClientIP.CONSTR;
+	public static boolean permitArticoleDistribIP = true;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -1502,7 +1503,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			articol.setCodArticol("000000000030101050");
 			articol.setCantitate(1.0);
 			articol.setDepozit(depozitSite);
-			articol.setDepart(" ");
+			articol.setDepart(listArticole.get(0).getDepart());
 			articol.setPretUnit(valTransport);
 			articol.setProcent(0);
 			articol.setUm("BUC");
@@ -1888,6 +1889,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		selectedDepartIndexClp = -1;
 		selectedDepozIndexClp = -1;
 		selectedDepartCod = "-1";
+		
+		permitArticoleDistribIP = true;
 
 		initLocale();
 
