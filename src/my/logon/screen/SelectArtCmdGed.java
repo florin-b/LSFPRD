@@ -1420,8 +1420,8 @@ public class SelectArtCmdGed extends ListActivity implements OperatiiArticolList
 
 		if (CreareComandaGed.filialaAlternativa.equals("BV90")) {
 
-			if (!globalCodDepartSelectetItem.equals("02") && !globalCodDepartSelectetItem.equals("05")) {
-				Toast.makeText(getApplicationContext(), "Din BV90 adaugati doar articole din departamentele 02 sau 05.", Toast.LENGTH_LONG).show();
+			if (!globalCodDepartSelectetItem.equals("01") && !globalCodDepartSelectetItem.equals("02") && !globalCodDepartSelectetItem.equals("05")) {
+				Toast.makeText(getApplicationContext(), "Din BV90 adaugati doar articole din departamentele 01, 02 sau 05.", Toast.LENGTH_LONG).show();
 				return false;
 			}
 
