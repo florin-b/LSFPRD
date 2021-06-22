@@ -1184,9 +1184,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 		setListenerTextStrada();
 
-		if (UtilsUser.isUserIP())
-			getFilialaLivrareJudet(1);
-
 	}
 
 	private void setListenerTextLocalitate() {
@@ -1320,24 +1317,9 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		textStradaLivrare.setAdapter(adapterStrazi);
 		setListenerTextStradaLivrare();
 
-		if (UtilsUser.isUserIP())
-			getFilialaLivrareJudet(2);
-
 	}
 
-	private void getFilialaLivrareJudet(int tipAdresa) {
 
-		String codJudet;
-
-		if (tipAdresa == 1)
-			codJudet = DateLivrare.getInstance().getCodJudet();
-		else
-			codJudet = DateLivrare.getInstance().getCodJudetD();
-
-		HashMap<String, String> params = new HashMap<String, String>();
-		params.put("codJudet", codJudet);
-		operatiiAdresa.getFilialaLivrareMathaus(params);
-	}
 
 	private void setListenerTextLocalitateLivrare() {
 
@@ -2002,22 +1984,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
-	private void handleFilialaLivrare(String filialaRes) {
 
-		if (filialaRes.trim().length() != 4)
-			return;
-
-		if (!filialaRes.equals(UserInfo.getInstance().getUnitLog())) {
-			CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_LIVRARE;
-			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_LIVRARE);
-			DateLivrare.getInstance().setCodFilialaCLP(filialaRes);
-		} else {
-			CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_VANZARE;
-			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_VANZARE);
-			DateLivrare.getInstance().setCodFilialaCLP("");
-		}
-
-	}
 
 	private void setDateLivrareClient() {
 
@@ -2059,8 +2026,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			valideazaAdresaResponse((String) result);
 		} else if (numeComanda == EnumOperatiiAdresa.GET_DATE_LIVRARE_CLIENT) {
 			loadDateLivrareClient(operatiiAdresa.deserializeDateLivrareClient((String) result));
-		} else if (numeComanda == EnumOperatiiAdresa.GET_FILIALA_MATHAUS) {
-			handleFilialaLivrare((String) result);
 		} else {
 			switch (tipLocalitate) {
 			case LOCALITATE_SEDIU:

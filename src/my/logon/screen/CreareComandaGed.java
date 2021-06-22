@@ -313,8 +313,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	private void CreateMenu(Menu menu) {
 
-		MenuItem mnu0 = menu.add(0, 0, 0, "Tip");
-		mnu0.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		if (!UtilsUser.isUserIP()) {
+			MenuItem mnu0 = menu.add(0, 0, 0, "Tip");
+			mnu0.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		}
 
 		MenuItem mnu1 = menu.add(0, 1, 1, "Client");
 
@@ -483,7 +485,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 					.setPositiveButton("Da", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 
-							resetAllVars();
+							clearAllData();
 							UserInfo.getInstance().setParentScreen("");
 
 							backToMainMenu();
@@ -532,6 +534,13 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		try {
 
+			ActionBar actionBar = getActionBar();
+
+			if (tipComandaGed == TipCmdGed.COMANDA_LIVRARE)
+				actionBar.setTitle("Comanda livrare " + DateLivrare.getInstance().getCodFilialaCLP());
+			else
+				actionBar.setTitle("Comanda GED");
+			
 			// !! Se modifica din 2 locuri, User si selectArtCmd
 			if (!filialaAlternativa.equals("BV90"))
 				filialaAlternativa = UserInfo.getInstance().getUnitLog();
@@ -1490,7 +1499,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		String filialaSite = "", depozitSite = " ";
 
-		if (UtilsUser.isUserSite() && !listArticole.isEmpty()) {
+		if ((UtilsUser.isUserSite() || !isExceptieComandaIP()) && !listArticole.isEmpty()) {
 			filialaSite = listArticole.get(0).getFilialaSite();
 			depozitSite = listArticole.get(0).getDepozit();
 		}
@@ -1563,6 +1572,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("istoricPret", listArticole.get(i).getIstoricPret());
 				obj.put("valTransport", listArticole.get(i).getValTransport());
 				obj.put("procTransport", listArticole.get(i).getProcTransport());
+				obj.put("depart", listArticole.get(i).getDepart());
 
 				myArray.put(obj);
 
@@ -1787,7 +1797,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				// pentru transport ARBSQ se afiseaza valoarea transportului
 				if (DateLivrare.getInstance().getTransport().equals("TRAP") || DateLivrare.getInstance().getTransport().equals("TERT")) {
-					displayDlgPretTransp();
+					displayDlgPretTransp(saveResponse);
 				} else
 				// comanda ged fara transport client
 				{
@@ -1843,6 +1853,10 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		valTranspBtn.setVisibility(View.GONE);
 
 		listViewArticoleComanda.setEnabled(true);
+		
+		if (tipComandaGed == TipCmdGed.COMANDA_LIVRARE && !DateLivrare.getInstance().getCodFilialaCLP().isEmpty() && UtilsUser.isUserIP()) {
+			UserInfo.getInstance().setUnitLog(DateLivrare.getInstance().getCodFilialaCLP());
+		}
 
 		// reset variabile
 		resetAllVars();
@@ -1889,14 +1903,14 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		selectedDepartIndexClp = -1;
 		selectedDepozIndexClp = -1;
 		selectedDepartCod = "-1";
-		
+
 		permitArticoleDistribIP = true;
 
 		initLocale();
 
 	}
 
-	private void displayDlgPretTransp() {
+	private void displayDlgPretTransp(String response) {
 		try {
 			dlgTransp = new Dialog(CreareComandaGed.this);
 			dlgTransp.setContentView(R.layout.valtranspdlgbox);
@@ -1905,14 +1919,23 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
 			nf2.setMinimumFractionDigits(2);
 			nf2.setMaximumFractionDigits(2);
+			
+			double valTranspExtra = 0;
+
+			if (response.contains("#")) {
+				String[] tokResponse = response.split("#");
+				valTranspExtra = Double.parseDouble(tokResponse[1]);
+			}
+
+			final double valTranspExtraFinal = valTranspExtra;
 
 			TextView textValCmd = (TextView) dlgTransp.findViewById(R.id.textValCmd);
 			textValCmd.setText(nf2.format(CreareComandaGed.totalComanda));
 
 			TextView textValTransp = (TextView) dlgTransp.findViewById(R.id.textValTransp);
-			textValTransp.setText(nf2.format(valTransport));
+			textValTransp.setText(nf2.format(valTransport + valTranspExtra));
 
-			double totCmd = valTransport + CreareComandaGed.totalComanda;
+			double totCmd = valTransport + CreareComandaGed.totalComanda + valTranspExtra;
 
 			TextView textTotCmd = (TextView) dlgTransp.findViewById(R.id.textTotCmd);
 			textTotCmd.setText(nf2.format(totCmd));
@@ -1922,7 +1945,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				public void onClick(View v) {
 					dlgTransp.dismiss();
-
+					valTransport += valTranspExtraFinal;
+					
 					if (CreareComandaGed.tipComanda.equals("N")) // comanda
 																	// ferma
 						performSaveCmdGED();

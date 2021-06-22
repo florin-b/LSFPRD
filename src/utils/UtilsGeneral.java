@@ -594,7 +594,7 @@ public class UtilsGeneral {
 
 	public static boolean isFilialaMathaus(String filiala) {
 
-		String filialeMathaus = "CT10, BU10, AG10, DJ10, BH10, IS0, GL10";
+		String filialeMathaus = "CT10, BU10, AG10, DJ10, BH10, IS10, GL10";
 
 		return filialeMathaus.contains(filiala);
 

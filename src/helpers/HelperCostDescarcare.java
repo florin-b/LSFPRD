@@ -49,7 +49,7 @@ public class HelperCostDescarcare {
 			articolComanda.setDepartAprob("");
 			articolComanda.setIstoricPret("");
 			articolComanda.setAlteValori("");
-			articolComanda.setDepozit(artDesc.getDepart().substring(0,2) + "V1");
+			articolComanda.setDepozit(getDepozitDescarcare(artDesc.getDepart()));
 			articolComanda.setTipArt("");
 			articolComanda.setDepart(artDesc.getDepart());
 			articolComanda.setDepartSintetic(artDesc.getDepart());
@@ -62,6 +62,13 @@ public class HelperCostDescarcare {
 
 	}
 
+	private static String getDepozitDescarcare(String depart){
+		if (depart.substring(0, 2).equals("11"))
+			return "MAV1";
+		else	
+			return depart.substring(0, 2) + "V1";
+	}
+	
 	public static void eliminaCostDescarcare(List<ArticolComanda> listArticole) {
 
 		Iterator<ArticolComanda> iterator = listArticole.iterator();

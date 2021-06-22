@@ -843,6 +843,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 						}
 
+						afisPretUmAlternativa();
+						
 					}// sf. verif. cantitate
 
 				} catch (Exception ex) {
@@ -1810,6 +1812,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						procDiscClient = 100 - (initPrice / listPrice) * 100;
 				}
 
+				afisPretUmAlternativa();
+				
 				procDisc.setText(nf2.format(procDiscClient));
 				txtPretArt.setEnabled(true);
 				textProcRed.setFocusableInTouchMode(true);
@@ -1939,6 +1943,35 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private void afisPretUmAlternativa() {
+
+		if (valoareUmrez / valoareUmren != 1) {
+
+			double pretUmAlt;
+
+			if (pretMod) {
+
+				if (textProcRed.getText().toString().trim().isEmpty())
+					return;
+
+				pretUmAlt = Double.parseDouble(textProcRed.getText().toString()) * valoareUmrez / valoareUmren;
+			} else {
+
+				if (txtPretArt.getText().toString().trim().isEmpty())
+					return;
+
+				pretUmAlt = Double.parseDouble(txtPretArt.getText().toString()) * valoareUmrez / valoareUmren;
+			}
+
+			NumberFormat nf = NumberFormat.getInstance();
+			nf.setMinimumFractionDigits(2);
+			nf.setMaximumFractionDigits(2);
+			((TextView) findViewById(R.id.txtPretUmAlt)).setText("1 " + selectedUnitMas + " = " + nf.format(pretUmAlt) + " RON");
+		} else
+			((TextView) findViewById(R.id.txtPretUmAlt)).setText("");
+
+	}
+	
 	private String getPretIstoric(String infoIstoric) {
 
 		String pretIstoric = "0";
@@ -2062,6 +2095,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		textUM.setText("");
 		textStoc.setText("");
 		textCant.setText("");
+		
+		valoareUmrez = 1;
+		valoareUmren = 1;
 
 		String umVanz = articol.getUmVanz();
 		listUmVanz.clear();

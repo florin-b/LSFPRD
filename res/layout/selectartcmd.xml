@@ -403,6 +403,16 @@
                     android:textSize="17sp"
                     android:typeface="monospace" />
 
+                <TextView
+                    android:id="@+id/txtPretUmAlt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right|center"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/editTextColor1"
+                    android:textSize="17sp"
+                    android:typeface="monospace" />
+
                 <LinearLayout
                     android:id="@+id/layoutIstoricPret1"
                     android:layout_width="match_parent"
