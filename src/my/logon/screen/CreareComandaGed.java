@@ -540,7 +540,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				actionBar.setTitle("Comanda livrare " + DateLivrare.getInstance().getCodFilialaCLP());
 			else
 				actionBar.setTitle("Comanda GED");
-			
+
 			// !! Se modifica din 2 locuri, User si selectArtCmd
 			if (!filialaAlternativa.equals("BV90"))
 				filialaAlternativa = UserInfo.getInstance().getUnitLog();
@@ -1135,7 +1135,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	}
 
 	private boolean isCondPF10_000() {
-		return DateLivrare.getInstance().getTipPersClient().equals("PF") && DateLivrare.getInstance().getTipPlata().equals("E")
+		return DateLivrare.getInstance().getTipPersClient().equals("PF")
+				&& (DateLivrare.getInstance().getTipPlata().equals("E") || DateLivrare.getInstance().getTipPlata().equals("E1"))
 				&& Double.valueOf(DateLivrare.getInstance().getTotalComanda()) > 10000;
 	}
 
@@ -1576,11 +1577,14 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				myArray.put(obj);
 
-				if ((listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) || UtilsComenzi.isComandaInstPublica()
-						|| (isTotalNegociat && !UtilsUser.isAgentOrSD() && !UtilsUser.isConsWood())) {
+				if ((listArticole.get(i).getNumeArticol() != null && (listArticole.get(i).getPonderare() == 1 || listArticole.get(i).getPonderare() == 2))
+						|| UtilsComenzi.isComandaInstPublica()
+						|| (isTotalNegociat && !UtilsUser.isAgentOrSD() && !UtilsUser.isConsWood())
+						|| (listArticole.get(i).getNumeArticol() != null) && comandaFinala.getComandaBlocata().equals("21")) {
 
 					if (listArticole.get(i).getProcent() > 0) {
 						alertDV = true;
+						
 						if (!comandaFinala.getComandaBlocata().equals("21"))
 							comandaFinala.setComandaBlocata("1");
 
@@ -1853,7 +1857,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		valTranspBtn.setVisibility(View.GONE);
 
 		listViewArticoleComanda.setEnabled(true);
-		
+
 		if (tipComandaGed == TipCmdGed.COMANDA_LIVRARE && !DateLivrare.getInstance().getCodFilialaCLP().isEmpty() && UtilsUser.isUserIP()) {
 			UserInfo.getInstance().setUnitLog(DateLivrare.getInstance().getCodFilialaCLP());
 		}
@@ -1919,7 +1923,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			NumberFormat nf2 = NumberFormat.getInstance(new Locale("en", "US"));
 			nf2.setMinimumFractionDigits(2);
 			nf2.setMaximumFractionDigits(2);
-			
+
 			double valTranspExtra = 0;
 
 			if (response.contains("#")) {
@@ -1946,7 +1950,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				public void onClick(View v) {
 					dlgTransp.dismiss();
 					valTransport += valTranspExtraFinal;
-					
+
 					if (CreareComandaGed.tipComanda.equals("N")) // comanda
 																	// ferma
 						performSaveCmdGED();
