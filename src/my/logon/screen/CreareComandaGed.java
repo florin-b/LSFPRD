@@ -1577,14 +1577,12 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 				myArray.put(obj);
 
-				if ((listArticole.get(i).getNumeArticol() != null && (listArticole.get(i).getPonderare() == 1 || listArticole.get(i).getPonderare() == 2))
-						|| UtilsComenzi.isComandaInstPublica()
-						|| (isTotalNegociat && !UtilsUser.isAgentOrSD() && !UtilsUser.isConsWood())
-						|| (listArticole.get(i).getNumeArticol() != null) && comandaFinala.getComandaBlocata().equals("21")) {
+				if ((listArticole.get(i).getNumeArticol() != null && listArticole.get(i).getPonderare() == 1) || UtilsComenzi.isComandaInstPublica()
+						|| (isTotalNegociat && !UtilsUser.isAgentOrSD() && !UtilsUser.isConsWood())) {
 
 					if (listArticole.get(i).getProcent() > 0) {
 						alertDV = true;
-						
+
 						if (!comandaFinala.getComandaBlocata().equals("21"))
 							comandaFinala.setComandaBlocata("1");
 

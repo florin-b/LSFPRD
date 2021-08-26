@@ -1756,6 +1756,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		textTransport.setText("");
 		textLimCrd.setText("");
 		textRestCrd.setText("");
+		textTaxaVerde.setText("");
 		textClient.setVisibility(View.GONE);
 		textFurnizor.setVisibility(View.GONE);
 		textTotalCmd.setVisibility(View.GONE);
