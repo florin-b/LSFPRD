@@ -15,7 +15,9 @@ import java.util.Timer;
 import listeners.AsyncTaskListener;
 import model.Constants;
 import model.InfoStrings;
+import model.OperatiiMeniu;
 import model.UserInfo;
+import utils.UtilsDevice;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.Activity;
@@ -283,7 +285,9 @@ public class LogonScreen extends Activity implements AsyncTaskListener {
 
 			params.put("userId", userN);
 			params.put("userPass", passN);
+			
 			params.put("ipAdr", globalMyIP);
+			params.put("deviceInfo", new OperatiiMeniu(getApplicationContext()).serializeDeviceInfo(new UtilsDevice().getDeviceInfo(getApplicationContext())));
 
 			AsyncTaskWSCall call = new AsyncTaskWSCall(this, METHOD_NAME, params);
 			call.getCallResults();

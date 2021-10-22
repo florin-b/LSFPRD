@@ -1119,7 +1119,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			DateLivrare.getInstance().setMasinaMacara(true);
 
 			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret, UserInfo.getInstance()
-					.getUnitLog());
+					.getUnitLog(), ListaArticoleComanda.getInstance().getListArticoleComanda());
 
 			ListaArticoleComanda.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
 

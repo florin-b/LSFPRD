@@ -819,7 +819,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			DateLivrare.getInstance().setMasinaMacara(true);
 
 			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret, UserInfo.getInstance()
-					.getUnitLog());
+					.getUnitLog(), listArticoleComanda);
 
 			listArticoleComanda.addAll(articoleDescarcare);
 

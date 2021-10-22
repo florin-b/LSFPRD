@@ -19,7 +19,8 @@ import beans.CostDescarcare;
 
 public class HelperCostDescarcare {
 
-	public static List<ArticolComanda> getArticoleDescarcare(CostDescarcare costDescarcare, double valoareCost, String filiala) {
+	public static List<ArticolComanda> getArticoleDescarcare(CostDescarcare costDescarcare, double valoareCost, String filiala,
+			List<ArticolComanda> articoleComanda) {
 
 		double procentReducere = valoareCost / costDescarcare.getValoareDescarcare();
 
@@ -49,7 +50,7 @@ public class HelperCostDescarcare {
 			articolComanda.setDepartAprob("");
 			articolComanda.setIstoricPret("");
 			articolComanda.setAlteValori("");
-			articolComanda.setDepozit(getDepozitDescarcare(artDesc.getDepart()));
+			articolComanda.setDepozit(getDepozitDescarcare(artDesc.getDepart(), articoleComanda));
 			articolComanda.setTipArt("");
 			articolComanda.setDepart(artDesc.getDepart());
 			articolComanda.setDepartSintetic(artDesc.getDepart());
@@ -62,13 +63,26 @@ public class HelperCostDescarcare {
 
 	}
 
-	private static String getDepozitDescarcare(String depart){
+	private static String getDepozitDescarcare(String depart, List<ArticolComanda> articoleComanda) {
 		if (depart.substring(0, 2).equals("11"))
-			return "MAV1";
-		else	
+			return getDepozitComandaGed(articoleComanda);
+		else
 			return depart.substring(0, 2) + "V1";
 	}
-	
+
+	private static String getDepozitComandaGed(List<ArticolComanda> articoleComanda) {
+		String depozit = "";
+
+		for (ArticolComanda articol : articoleComanda) {
+			if (articol.getDepozit() != null && !articol.getDepozit().isEmpty()) {
+				depozit = articol.getDepozit();
+				break;
+			}
+		}
+
+		return depozit;
+	}
+
 	public static void eliminaCostDescarcare(List<ArticolComanda> listArticole) {
 
 		Iterator<ArticolComanda> iterator = listArticole.iterator();
@@ -118,9 +132,8 @@ public class HelperCostDescarcare {
 
 		return articolComanda;
 
-	}	
-	
-	
+	}
+
 	public static List<ArticolCalculDesc> getDateCalculDescarcare(List<ArticolComanda> listArticole) {
 
 		List<ArticolCalculDesc> articoleCalcul = new ArrayList<ArticolCalculDesc>();
@@ -137,7 +150,7 @@ public class HelperCostDescarcare {
 		return articoleCalcul;
 
 	}
-	
+
 	public static List<ArticolCalculDesc> getDateCalculDescarcareRetur(List<BeanArticolRetur> listArticole) {
 
 		List<ArticolCalculDesc> articoleCalcul = new ArrayList<ArticolCalculDesc>();
@@ -187,7 +200,7 @@ public class HelperCostDescarcare {
 			}
 
 			costDescarcare.setArticoleDescarcare(listArticole);
-			
+
 			JSONArray jsonPaleti = new JSONArray(jsonObject.getString("articolePaleti"));
 
 			for (int i = 0; i < jsonPaleti.length(); i++) {
@@ -218,7 +231,7 @@ public class HelperCostDescarcare {
 
 		return costDescarcare;
 	}
-	
+
 	public static String getDepozitPalet(List<ArticolComanda> listArticole, String codArticolPalet) {
 		String depozit = "";
 

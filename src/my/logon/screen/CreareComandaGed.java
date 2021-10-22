@@ -1302,7 +1302,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			DateLivrare.getInstance().setMasinaMacara(true);
 
 			List<ArticolComanda> articoleDescarcare = HelperCostDescarcare.getArticoleDescarcare(costDescarcare, valoarePret, UserInfo.getInstance()
-					.getUnitLog());
+					.getUnitLog(), ListaArticoleComandaGed.getInstance().getListArticoleComanda());
 
 			ListaArticoleComandaGed.getInstance().getListArticoleComanda().addAll(articoleDescarcare);
 

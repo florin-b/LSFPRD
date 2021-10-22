@@ -5,7 +5,12 @@ import java.util.HashMap;
 import listeners.AsyncTaskListener;
 import listeners.OperatiiMeniuListener;
 import my.logon.screen.AsyncTaskWSCall;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
+import beans.BeanDeviceInfo;
 import enums.EnumOperatiiMeniu;
 
 public class OperatiiMeniu implements AsyncTaskListener {
@@ -36,6 +41,25 @@ public class OperatiiMeniu implements AsyncTaskListener {
 		call.getCallResultsFromFragment();
 	}
 
+	public String serializeDeviceInfo(BeanDeviceInfo deviceInfo) {
+
+		JSONObject jsonObject = new JSONObject();
+
+		try {
+			jsonObject.put("sdkVer", deviceInfo.getSdkVer());
+			jsonObject.put("man", deviceInfo.getMan());
+			jsonObject.put("model", deviceInfo.getModel());
+			jsonObject.put("appName", deviceInfo.getAppName());
+			jsonObject.put("appVer", deviceInfo.getAppVer());
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return jsonObject.toString();
+
+	}	
+	
 	public void setOperatiiMeniuListener(OperatiiMeniuListener meniuListener) {
 		this.meniuListener = meniuListener;
 	}
