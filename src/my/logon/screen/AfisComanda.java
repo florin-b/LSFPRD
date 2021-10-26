@@ -92,7 +92,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 	String cmdNr = null, agentNr = null;
 	String[] tokenAgent = null, tokenFiliala = null;
 	TextView textTipPlata, textAdrLivr, textTotalCmd, textTotalTvaCmd, textPondereArtBAfis;
-	TextView textPersContact, textTelefon, textCantar, textTransport, textJudet, textOras, textValoareMarja, textObsLivrare;
+	TextView textPersContact, textTelefon, textCantar, textTransport, textJudet, textOras, textValoareMarja, textObsLivrare, textDataLivrare;
 	static String tipAcces;
 	Spinner spinnerAgentiAfisCmd, spinnerFiliale, spinnerTipUser;
 	LinearLayout layoutTotalCmd;
@@ -192,6 +192,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 		textTelefon = (TextView) findViewById(R.id.textTelefon);
 		textCantar = (TextView) findViewById(R.id.textCantar);
 		textTransport = (TextView) findViewById(R.id.textTransport);
+		textDataLivrare = (TextView) findViewById(R.id.textDataLivrare);
 		textJudet = (TextView) findViewById(R.id.textJudet);
 		textOras = (TextView) findViewById(R.id.textOras);
 
@@ -668,6 +669,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 
 		textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrare.getTipPlata()));
 		textTransport.setText(UtilsGeneral.getDescTipTransport(dateLivrare.getTransport()));
+		textDataLivrare.setText(dateLivrare.getDataLivrare());
 		textCantar.setText(dateLivrare.getCantar().equals("1") ? "Cu cantarire" : "Fara cantarire");
 		textOras.setText(dateLivrare.getOras());
 		textJudet.setText(InfoStrings.numeJudet(dateLivrare.getCodJudet()));
@@ -813,6 +815,7 @@ public class AfisComanda extends Activity implements CustomSpinnerListener, Oper
 				textTelefon.setText("");
 				textCantar.setText("");
 				textTransport.setText("");
+				textDataLivrare.setText("");
 				textJudet.setText("");
 				textOras.setText("");
 				((LinearLayout) findViewById(R.id.layoutAdrLivrare)).setVisibility(View.GONE);

@@ -265,6 +265,26 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        style="@style/dateLivrareDlLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            style="@style/dateLivrareDlLabel"
+                            android:layout_width="0dip"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.2"
+                            android:text="Data livrare" />
+
+                        <TextView
+                            android:id="@+id/textDataLivrare"
+                            style="@style/dateLivrareDlValori"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.4" />
+                    </LinearLayout>
+                    
+                    <LinearLayout
                         android:id="@+id/layoutCmdBV90"
                         style="@style/dateLivrareDlLayout"
                         android:layout_width="match_parent"
