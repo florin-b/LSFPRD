@@ -32,6 +32,7 @@ public class DocumenteReturMarfa extends Fragment implements ListaDocReturListen
 	CriteriuNrDocRetur criteriuNrDoc;
 	List<BeanDocumentRetur> listDocumente;
 	TextView selectIcon;
+	
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.documente_retur_marfa, container, false);
@@ -92,7 +93,7 @@ public class DocumenteReturMarfa extends Fragment implements ListaDocReturListen
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				BeanDocumentRetur docRetur = (BeanDocumentRetur) arg0.getAdapter().getItem(arg2);
-				documentListener.documentSelected(docRetur.getNumar());
+				documentListener.documentSelected(docRetur);
 
 			}
 		});

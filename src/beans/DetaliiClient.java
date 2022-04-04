@@ -18,6 +18,7 @@ public class DetaliiClient {
 	private String tipClient;
 	private boolean isFurnizor;
 	private String divizii;
+	private String tipPlata;
 
 	public DetaliiClient() {
 
@@ -151,4 +152,11 @@ public class DetaliiClient {
 		this.divizii = divizii;
 	}
 
+	public String getTipPlata() {
+		return tipPlata;
+	}
+
+	public void setTipPlata(String tipPlata) {
+		this.tipPlata = tipPlata;
+	}
 }

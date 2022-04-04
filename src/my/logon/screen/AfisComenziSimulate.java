@@ -676,7 +676,7 @@ public class AfisComenziSimulate extends Activity implements AsyncTaskListener, 
 
 		listArticoleSimulate.setVisibility(View.VISIBLE);
 
-		textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrareCmdCurent.getTipPlata()));
+		textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrareCmdCurent.getTipPlata(), dateLivrareCmdCurent.getTermenPlata()));
 		textTransport.setText(UtilsGeneral.getDescTipTransport(dateLivrareCmdCurent.getTransport()));
 		textOras.setText(dateLivrareCmdCurent.getOras());
 		textJudet.setText(InfoStrings.numeJudet(dateLivrareCmdCurent.getCodJudet()));

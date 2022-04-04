@@ -33,16 +33,14 @@
             </RadioButton>
 
             <RadioButton
-                android:id="@+id/radioAmob"
+                android:id="@+id/radioDL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dip"
-                android:checked="false"
-                android:text="Comanda AMOB"
+                android:text="Dispozitie de livrare DL"
                 android:textColor="@color/detColor1"
                 android:textSize="17sp"
-                android:typeface="sans"
-                android:visibility="invisible" >
+                android:typeface="sans" >
             </RadioButton>
 
             <RadioButton
@@ -55,6 +53,19 @@
                 android:textColor="@color/detColor1"
                 android:textSize="17sp"
                 android:typeface="sans" >
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/radioAmob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dip"
+                android:checked="false"
+                android:text="Comanda AMOB"
+                android:textColor="@color/detColor1"
+                android:textSize="17sp"
+                android:typeface="sans"
+                android:visibility="invisible" >
             </RadioButton>
         </RadioGroup>
 

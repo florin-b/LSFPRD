@@ -23,6 +23,7 @@ import beans.DetaliiClient;
 import beans.InfoCredit;
 import beans.PlatitorTva;
 import enums.EnumClienti;
+import enums.EnumTipClientIP;
 
 public class OperatiiClient implements AsyncTaskListener {
 
@@ -95,27 +96,26 @@ public class OperatiiClient implements AsyncTaskListener {
 		numeComanda = EnumClienti.GET_CLIENTI_ALOCATI;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
-	}	
-	
-	
+	}
+
 	public void getAgentComanda(HashMap<String, String> params) {
 		numeComanda = EnumClienti.GET_AGENT_COMANDA;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
-	}	
-	
+	}
+
 	public void getTermenPlata(HashMap<String, String> params) {
 		numeComanda = EnumClienti.GET_TERMEN_PLATA;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
-	}	
-	
+	}
+
 	public void getInfoCredit(HashMap<String, String> params) {
 		numeComanda = EnumClienti.GET_INFO_CREDIT;
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
 	}
-	
+
 	public ArrayList<BeanClient> deserializeListClienti(String serializedListClienti) {
 		BeanClient client = null;
 		ArrayList<BeanClient> listClienti = new ArrayList<BeanClient>();
@@ -135,13 +135,13 @@ public class OperatiiClient implements AsyncTaskListener {
 					client.setNumeClient(object.getString("numeClient"));
 					client.setTipClient(object.getString("tipClient"));
 					client.setAgenti(object.getString("agenti"));
-					
+
 					if (object.has("codCUI") && object.getString("codCUI") != "null")
 						client.setCodCUI(object.getString("codCUI"));
-					
+
 					if (object.has("filiala") && object.getString("filiala") != "null")
-						client.setFilialaClientIP(object.getString("filiala"));					
-					
+						client.setFilialaClientIP(object.getString("filiala"));
+
 					if (object.has("termenPlata") && object.getString("termenPlata") != "null") {
 						JSONArray arrayPlata = new JSONArray(object.getString("termenPlata"));
 
@@ -153,8 +153,21 @@ public class OperatiiClient implements AsyncTaskListener {
 						}
 						client.setTermenPlata(listPlata);
 					}
-					
-					
+
+					if (object.has("tipClientIP") && object.getString("tipClientIP") != "null") {
+						if (object.getString("tipClientIP").equals("CONSTR"))
+							client.setTipClientIP(EnumTipClientIP.CONSTR);
+						else
+							client.setTipClientIP(EnumTipClientIP.NONCONSTR);
+					} else
+						client.setTipClientIP(null);
+
+					if (object.has("clientBlocat") && object.getString("clientBlocat") != "null")
+						client.setClientBlocat(Boolean.parseBoolean(object.getString("clientBlocat")));
+
+					if (object.has("tipPlata") && object.getString("tipPlata") != "null")
+						client.setTipPlata(object.getString("tipPlata"));
+
 					listClienti.add(client);
 
 				}
@@ -191,6 +204,10 @@ public class OperatiiClient implements AsyncTaskListener {
 				detaliiClient.setTipClient(InfoStrings.getTipClient(jsonObject.getString("tipClient")));
 				detaliiClient.setFurnizor(Boolean.valueOf(jsonObject.getString("isFurnizor")));
 				detaliiClient.setDivizii(jsonObject.getString("divizii"));
+
+				if (jsonObject.has("tipPlata"))
+					detaliiClient.setTipPlata(jsonObject.getString("tipPlata"));
+
 			}
 
 		} catch (JSONException e) {
@@ -259,9 +276,8 @@ public class OperatiiClient implements AsyncTaskListener {
 		}
 
 		return listTermen;
-	}	
-	
-	
+	}
+
 	public PlatitorTva deserializePlatitorTva(String result) {
 		PlatitorTva platitorTva = new PlatitorTva();
 
@@ -304,6 +320,25 @@ public class OperatiiClient implements AsyncTaskListener {
 					datePersonale.setCodjudet(dateObject.getString("codjudet"));
 					datePersonale.setLocalitate(dateObject.getString("localitate"));
 					datePersonale.setStrada(dateObject.getString("strada"));
+
+					if (dateObject.has("termenPlata") && dateObject.getString("termenPlata") != "null") {
+						JSONArray arrayPlata = new JSONArray(dateObject.getString("termenPlata"));
+
+						List<String> listPlata = new ArrayList<String>();
+
+						for (int j = 0; j < arrayPlata.length(); j++) {
+							listPlata.add(arrayPlata.getString(j));
+
+						}
+						datePersonale.setTermenPlata(listPlata);
+					}
+
+					if (dateObject.has("clientBlocat") && dateObject.getString("clientBlocat") != "null")
+						datePersonale.setClientBlocat(Boolean.parseBoolean(dateObject.getString("clientBlocat")));
+
+					if (dateObject.has("tipPlata") && dateObject.getString("tipPlata") != "null")
+						datePersonale.setTipPlata(dateObject.getString("tipPlata"));
+
 					listDate.add(datePersonale);
 
 				}
@@ -317,7 +352,6 @@ public class OperatiiClient implements AsyncTaskListener {
 		return listDate;
 	}
 
-	
 	public List<ClientAlocat> deserializeClientiAlocati(String result) {
 		List<ClientAlocat> listClienti = new ArrayList<ClientAlocat>();
 
@@ -354,8 +388,8 @@ public class OperatiiClient implements AsyncTaskListener {
 		}
 
 		return listClienti;
-	}	
-	
+	}
+
 	public InfoCredit deserializeInfoCreditClient(String result) {
 		InfoCredit infoCredit = new InfoCredit();
 
@@ -377,7 +411,7 @@ public class OperatiiClient implements AsyncTaskListener {
 		return infoCredit;
 
 	}
-	
+
 	public void onTaskComplete(String methodName, Object result) {
 		if (listener != null) {
 			listener.operationComplete(numeComanda, result);

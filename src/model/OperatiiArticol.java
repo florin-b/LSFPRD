@@ -9,6 +9,7 @@ import beans.ArticolCant;
 import beans.ArticolDB;
 import beans.BeanArticolSimulat;
 import beans.BeanArticolStoc;
+import beans.BeanCablu05;
 import beans.BeanGreutateArticol;
 import beans.BeanParametruPretGed;
 import beans.PretArticolGed;
@@ -67,5 +68,11 @@ public interface OperatiiArticol {
 	public void getArticoleCant(HashMap<String, String> params);
 
 	public ArrayList<ArticolCant> deserializeArticoleCant(String listArticole);
+
+	public void getCabluri05(HashMap<String, String> params);
+
+	public ArrayList<BeanCablu05> deserializeCabluri05(String listArticole);
+
+	public String serializeCabluri05(List<BeanCablu05> listCabluri);
 
 }

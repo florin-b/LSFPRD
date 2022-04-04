@@ -2,7 +2,11 @@ package my.logon.screen;
 
 import helpers.HelperCostDescarcare;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,11 +19,25 @@ import listeners.OperatiiReturListener;
 import model.ComenziDAO;
 import model.OperatiiReturMarfa;
 import model.UserInfo;
+
+import org.apache.commons.net.util.Base64;
+
 import utils.MapUtils;
+import utils.UtilsDates;
 import utils.UtilsGeneral;
-import adapters.ArticoleReturAdapter;
+import adapters.AdapterPozaArtRetur;
+import adapters.ArticoleReturComandaAdapter;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.OpenableColumns;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,11 +47,17 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import beans.Address;
@@ -42,12 +66,15 @@ import beans.ArticolDescarcare;
 import beans.BeanArticolRetur;
 import beans.BeanComandaRetur;
 import beans.CostDescarcare;
+import beans.PozaArticol;
 import enums.EnumComenziDAO;
+import enums.EnumMotivRespArticol;
 import enums.EnumRetur;
 import enums.EnumTipRetur;
 
 public class ArticoleReturComanda extends Fragment implements ListaArtReturListener, OperatiiReturListener, ComenziDAOListener {
 
+	protected static final int PICKFILE_RESULT_CODE = 0;
 	TextView textDocument;
 	ListView listArticoleRetur;
 	TextView textNumeArticol, textCodArticol, textCantArticol, textUmArticol;
@@ -65,12 +92,17 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 	private String nrDocument, codClient, numeClient;
 	private OperatiiReturMarfa opRetur;
 	TextView selectIcon;
+	private Spinner spinnerMotivRetur;
+	private CheckBox checkboxInlocuire;
+	private Button btnAdaugaPoze;
+	private ListView listViewPoze;
+	private AdapterPozaArtRetur adapterPoze;
 
 	private Button macaraBtn;
 	private ComenziDAO comandaDAO;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.articole_retur_marfa, container, false);
+		View v = inflater.inflate(R.layout.articole_retur_comanda, container, false);
 
 		opRetur = new OperatiiReturMarfa(getActivity());
 		opRetur.setOperatiiReturListener(this);
@@ -109,7 +141,21 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 		comandaDAO.setComenziDAOListener(this);
 
 		macaraBtn = (Button) v.findViewById(R.id.macaraBtn);
+		macaraBtn.setVisibility(View.INVISIBLE);
 		setListenerMacaraBtn();
+
+		spinnerMotivRetur = (Spinner) v.findViewById(R.id.spinnerMotivRetur);
+		populateSpinnerMotivRetur();
+		setListenerSpinnerRetur();
+
+		checkboxInlocuire = (CheckBox) v.findViewById(R.id.checkboxInlocuire);
+		setListenerCheckInlocuire();
+
+		btnAdaugaPoze = (Button) v.findViewById(R.id.btnAdaugaPoze);
+		setListenerAdaugaPoze();
+
+		listViewPoze = (ListView) v.findViewById(R.id.listViewPoze);
+		adapterPoze = new AdapterPozaArtRetur(new ArrayList<PozaArticol>(), getActivity());
 
 		return v;
 	}
@@ -125,6 +171,184 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 		});
 	}
 
+	private void setListenerAdaugaPoze() {
+		btnAdaugaPoze.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+				chooseFile.setType("*/*");
+				chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+				startActivityForResult(chooseFile, PICKFILE_RESULT_CODE);
+
+			}
+		});
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+
+			if (selectedArticol.getPozeArticol().size() < 3) {
+
+				PozaArticol pozaArticol = new PozaArticol();
+				getImageMetaData(data.getData(), pozaArticol);
+				pozaArticol.setStrData(fileToString(data.getData()));
+				List<PozaArticol> tempListPoze = selectedArticol.getPozeArticol();
+
+				tempListPoze.add(pozaArticol);
+				selectedArticol.setPozeArticol(tempListPoze);
+				adapterPoze.setPozeArticol(tempListPoze);
+				listViewPoze.setAdapter(adapterPoze);
+
+			}
+
+		}
+
+	}
+
+	private String fileToString(Uri uri) {
+
+		Bitmap bitmap;
+		String base64 = "";
+		try {
+
+			InputStream fis = getActivity().getContentResolver().openInputStream(uri);
+
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+			bitmap = BitmapFactory.decodeStream(fis);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+
+			int read;
+			byte[] bytes = new byte[1024];
+
+			while ((read = fis.read(bytes)) != -1) {
+				outputStream.write(bytes, 0, read);
+			}
+
+			outputStream.flush();
+			fis.close();
+
+			base64 = Base64.encodeBase64String(outputStream.toByteArray());
+
+		} catch (Exception e) {
+			Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
+		}
+		return base64;
+
+	}
+
+	public static String encodeImage(byte[] imageByteArray) {
+		return Base64.encodeBase64URLSafeString(imageByteArray);
+	}
+
+	public void getImageMetaData(Uri uri, PozaArticol pozaArticol) {
+
+		Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+
+		try {
+
+			if (cursor != null && cursor.moveToFirst()) {
+
+				String displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+				pozaArticol.setNume(displayName);
+
+				int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+
+				String size = null;
+				if (!cursor.isNull(sizeIndex)) {
+					size = cursor.getString(sizeIndex);
+				} else {
+					size = "Unknown";
+				}
+
+				pozaArticol.setDim(Long.valueOf(size));
+
+			}
+		} finally {
+			cursor.close();
+		}
+	}
+
+	private void populateSpinnerMotivRetur() {
+		List<String> listMotive = EnumMotivRespArticol.getStringList();
+		ArrayAdapter<String> adapterMotive = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, listMotive);
+		listMotive.add(0, "Selectati motiv retur");
+		spinnerMotivRetur.setAdapter(adapterMotive);
+
+	}
+
+	private void setListenerSpinnerRetur() {
+		spinnerMotivRetur.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (position > 0) {
+					String codMotiv = EnumMotivRespArticol.getCodRetur(spinnerMotivRetur.getSelectedItem().toString());
+
+					selectedArticol.setMotivRespingere(codMotiv);
+
+					if (codMotiv.equals("5") || codMotiv.equals("6")) {
+						checkboxInlocuire.setChecked(false);
+						checkboxInlocuire.setEnabled(false);
+					} else
+						checkboxInlocuire.setEnabled(true);
+
+				} else
+					selectedArticol.setMotivRespingere("");
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+	}
+
+	private void setListenerCheckInlocuire() {
+		checkboxInlocuire.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+
+                    if (textReturArticol.getText().toString().trim().isEmpty()) {
+                        Toast.makeText(getActivity(), "Completati cantitatea de retur.", Toast.LENGTH_LONG).show();
+                        checkboxInlocuire.setChecked(false);
+                        return;
+                    }
+
+                    getStocReturAvansat();
+                }
+
+                selectedArticol.setInlocuire(isChecked);
+
+            }
+		});
+	}
+	
+	
+	private void getStocReturAvansat() {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("nrDocument", nrDocument);
+        params.put("codArticol", selectedArticol.getCod());
+        params.put("um", selectedArticol.getUm());
+        opRetur.getStocReturAvansat(params);
+    }
+
+    private void validateStocRetur(String stocAvansat) {
+
+        double cantRetur = Double.valueOf(textReturArticol.getText().toString().trim());
+        double cantStoc = Double.valueOf(stocAvansat);
+
+        if (cantStoc < cantRetur) {
+            Toast.makeText(getActivity(), "Stoc insuficient pentru inlocuire.", Toast.LENGTH_LONG).show();
+            checkboxInlocuire.setChecked(false);
+            selectedArticol.setInlocuire(false);
+        }
+    }
+
 	public static ArticoleReturComanda newInstance() {
 		ArticoleReturComanda frg = new ArticoleReturComanda();
 		Bundle bdl = new Bundle();
@@ -135,13 +359,63 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 	private void addListenerSaveArt() {
 		saveArtRetur.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if (isCantValid()) {
+				if (isCantValid() && isMotivReturSelected() && isMotivReturValid()) {
 					selectedArticol.setCantitateRetur(Double.valueOf(textReturArticol.getText().toString()));
 					updateListArticole(selectedArticol);
 					showPanel("selectItem");
 				}
 			}
 		});
+	}
+
+	private boolean isMotivReturSelected() {
+		if (spinnerMotivRetur.getSelectedItemPosition() == 0) {
+			Toast.makeText(getActivity(), "Selectati motivul de retur.", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean isMotivReturValid() {
+
+		try {
+
+			Date dataLivrare = new SimpleDateFormat("yyyyMMdd").parse(DateLivrareReturComanda.dataLivrareComanda);
+			int dateDiff = UtilsDates.dateDiffinDays2(dataLivrare);
+
+			String codMotiv = EnumMotivRespArticol.getCodRetur(spinnerMotivRetur.getSelectedItem().toString());
+
+			if (dateDiff > 2 && !codMotiv.equals("4")) {
+				showInfoMotivReturDialog();
+				return false;
+			}
+
+		} catch (Exception ex) {
+			Toast.makeText(getActivity(), ex.toString(), Toast.LENGTH_SHORT).show();
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public void showInfoMotivReturDialog() {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage(
+				"\nPentru acest motiv de retur livrarea trebuia facuta cu cel mult 2 zile in urma. \nAceasta comanda s-a livrat in data de "
+						+ UtilsDates.formatDateFromSap(DateLivrareReturComanda.dataLivrareComanda) + ".\n").setCancelable(false)
+				.setPositiveButton("Inchide", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.setCancelable(false);
+		alert.show();
+
 	}
 
 	private void addListenerCancelArt() {
@@ -192,11 +466,6 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 
 		if (DateLivrareReturComanda.tipTransport.length() == 0) {
 			Toast.makeText(getActivity(), "Selectati tipul de transport", Toast.LENGTH_SHORT).show();
-			return false;
-		}
-
-		if (DateLivrareReturComanda.motivRetur.length() == 0) {
-			Toast.makeText(getActivity(), "Selectati motivul de retur", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 
@@ -277,8 +546,8 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 		comandaRetur.setDataLivrare(DateLivrareReturComanda.dataRetur);
 		comandaRetur.setTipTransport(DateLivrareReturComanda.tipTransport);
 		comandaRetur.setCodAgent(UserInfo.getInstance().getCod());
-		comandaRetur.setTipAgent(UserInfo.getInstance().getTipUser());
-		comandaRetur.setMotivRespingere(DateLivrareReturComanda.motivRetur);
+		comandaRetur.setTipAgent(UserInfo.getInstance().getTipUserSap());
+		comandaRetur.setMotivRespingere(" ");
 		comandaRetur.setNumePersContact(DateLivrareReturComanda.numePersContact);
 		comandaRetur.setTelPersContact(DateLivrareReturComanda.telPersContact);
 		comandaRetur.setAdresaCodJudet(DateLivrareReturComanda.adresaCodJudet);
@@ -414,6 +683,7 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 
 	private void showPanel(String panel) {
 		if (panel.equals("cantitateRetur")) {
+
 			layoutRetur.setVisibility(View.VISIBLE);
 			selectIcon.setVisibility(View.GONE);
 		}
@@ -439,6 +709,27 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 		textCantArticol.setText(String.valueOf(articol.getCantitate()));
 		textUmArticol.setText(articol.getUm());
 
+		if (articol.getMotivRespingere() == null)
+			spinnerMotivRetur.setSelection(0);
+		else {
+			int nrItems = spinnerMotivRetur.getAdapter().getCount();
+
+			for (int i = 0; i < nrItems; i++) {
+
+				String codMotiv = EnumMotivRespArticol.getCodRetur(spinnerMotivRetur.getAdapter().getItem(i).toString());
+				if (codMotiv.equals(articol.getMotivRespingere())) {
+					spinnerMotivRetur.setSelection(i);
+					break;
+				}
+
+			}
+		}
+
+		checkboxInlocuire.setChecked(articol.isInlocuire());
+
+		adapterPoze.setPozeArticol(articol.getPozeArticol());
+		listViewPoze.setAdapter(adapterPoze);
+
 		if (articol.getCantitateRetur() > 0)
 			textReturArticol.setText(String.valueOf(articol.getCantitateRetur()));
 
@@ -457,7 +748,7 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 	}
 
 	private void populateListArticole(List<BeanArticolRetur> listArticole) {
-		ArticoleReturAdapter adapter = new ArticoleReturAdapter(getActivity(), listArticole);
+		ArticoleReturComandaAdapter adapter = new ArticoleReturComandaAdapter(getActivity(), listArticole);
 		listArticoleRetur.setAdapter(adapter);
 	}
 
@@ -476,13 +767,15 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 		case SAVE_COMANDA_RETUR:
 			showCmdStatus((String) result);
 			break;
+		case GET_STOC_RETUR_AVANSAT:
+            validateStocRetur((String) result);
+            break;
 		default:
 			break;
 		}
 
 	}
 
-	
 	@Override
 	public void operationComenziComplete(EnumComenziDAO methodName, Object result) {
 
@@ -494,6 +787,6 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 			break;
 		}
 
-	}	
-	
+	}
+
 }

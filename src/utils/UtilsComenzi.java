@@ -86,4 +86,35 @@ public class UtilsComenzi {
 		return DateLivrare.getInstance().getTipPersClient() != null && DateLivrare.getInstance().getTipPersClient().toUpperCase().equals("IP");
 	}
 
+	public static String getTipPlataClient(String tipPlataSelect, String tipPlataContract) {
+
+		if (tipPlataSelect.equals("LC"))
+			return tipPlataContract;
+		else if (tipPlataSelect.equals("N"))
+			return "E";
+		else if (tipPlataSelect.equals("OP"))
+			return "O";
+		else if (tipPlataSelect.equals("R"))
+			return "E1";
+		else if (tipPlataSelect.equals("C"))
+			return "CB";
+
+		return tipPlataSelect;
+
+	}
+
+	public static String setTipPlataClient(String tipPlataClient) {
+
+		if (tipPlataClient.equals("E"))
+			return "N";
+		else if (tipPlataClient.equals("O"))
+			return "OP";
+		else if (tipPlataClient.equals("E1"))
+			return "R";
+		if (tipPlataClient.equals("CB"))
+			return "C";
+
+		return tipPlataClient;
+	}
+
 }

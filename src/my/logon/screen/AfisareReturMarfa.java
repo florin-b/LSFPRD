@@ -311,14 +311,7 @@ public class AfisareReturMarfa extends Activity implements OperatiiReturListener
 	private void getArticoleComanda(String idComanda) {
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("idComanda", idComanda);
-
-		String tipUser = UserInfo.getInstance().getTipUserSap();
-
-		if ((tipUser.equals("SD") && (stare == 0) || stare == 2) || tipUser.contains("AV"))
-			operatiiRetur.getArticoleComandaSalvata(params);
-		else
-			operatiiRetur.getArticoleComandaSalvataSap(params);
-
+		operatiiRetur.getArticoleComandaSalvata(params);
 	}
 
 	private void populateArticoleComanda(BeanComandaRetur comandaRetur) {
@@ -377,12 +370,9 @@ public class AfisareReturMarfa extends Activity implements OperatiiReturListener
 		case GET_COMENZI_SALVATE:
 			populateListComenzi(operatiiRetur.deserializeComenziSalvate(result));
 			break;
-
-		case GET_ARTICOLE_COMANDA_SAP:
 		case GET_ARTICOLE_COMANDA_SALVATA:
 			populateArticoleComanda(operatiiRetur.deserializeComandaSalvata(result));
 			break;
-
 		case OPEREAZA_COMANDA:
 			getListComenziRetur(intervalAfisare, stare);
 			break;

@@ -89,6 +89,7 @@ import enums.EnumLocalitate;
 import enums.EnumOperatiiAdresa;
 import enums.EnumOperatiiObiective;
 import enums.EnumZona;
+import enums.TipCmdDistrib;
 
 public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnItemClickListener, OperatiiAdresaListener, ObiectiveListener,
 		MapListener, AutocompleteDialogListener, AsyncTaskListener {
@@ -99,7 +100,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private static final String METHOD_NAME = "getClientJud";
 	int posJudetSel = 0;
 
-	String[] tipPlata = { "B - Bilet la ordin", "C - Cec", "E - Plata in numerar", "O - Ordin de plata" };
+	private String[] tipPlataContract = { "LC - Limita credit", "N - Numerar in filiala", "OP - ordin de plata", "R - ramburs" };
+	private String[] tipPlataClBlocat = { "N - Numerar in filiala", "OP - ordin de plata", "R - ramburs" };
+	private String[] tipPlataRest = { "N - Numerar in filiala", "OP - ordin de plata", "R - ramburs" };
 
 	private String[] tipTransport = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TFRN - Transport furnizor" };
 
@@ -168,6 +171,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		operatiiAdresa = new OperatiiAdresaImpl(this);
 		operatiiAdresa.setOperatiiAdresaListener(this);
+
+		Bundle bundle = getIntent().getExtras();
+
+		if (bundle != null && bundle.getString("parrentClass") != null && bundle.getString("parrentClass").equals("ModificareComanda")) {
+
+			if (bundle.getString("tipPlataContract").equals("B") || bundle.getString("tipPlataContract").equals("C")) {
+				CreareComanda.tipPlataContract = bundle.getString("tipPlataContract");
+				DateLivrare.getInstance().setTipPlata("LC");
+			}
+
+		}
 
 		this.saveAdrLivrBtn = (Button) findViewById(R.id.saveAdrLivrBtn);
 		addListenerSaveAdr();
@@ -256,9 +270,29 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		addListenerResponsabil();
 		spinnerResponsabil.setAdapter(adapterResponsabil);
 
+		for (int ii = 0; ii < adapterResponsabil.getCount(); ii++) {
+			if (adapterResponsabil.getItem(ii).toString().split("-")[0].trim().equals(DateLivrare.getInstance().getObsPlata())) {
+				spinnerResponsabil.setSelection(ii);
+				break;
+			}
+		}
+
 		spinnerPlata = (Spinner) findViewById(R.id.spinnerPlata);
 
-		ArrayAdapter<String> adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlata);
+		ArrayAdapter<String> adapterSpinnerPlata;
+
+		if (DateLivrare.getInstance().isClientBlocat())
+			adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataClBlocat);
+		else if (!CreareComanda.tipPlataContract.trim().isEmpty() || DateLivrare.getInstance().getTipPlata().equals("LC")) {
+
+			if (!CreareComanda.tipPlataContract.trim().isEmpty()) {
+				((TextView) findViewById(R.id.tipPlataContract)).setText("Contract: " + CreareComanda.tipPlataContract);
+				DateLivrare.getInstance().setTipPlata("LC");
+			}
+			adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataContract);
+		} else
+			adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataRest);
+
 		adapterSpinnerPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerPlata.setAdapter(adapterSpinnerPlata);
 		addListenerTipPlata();
@@ -301,18 +335,27 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		selectedAddrModifCmd = -1;
 
 		if (CreareComanda.termenPlata.trim().length() > 0) {
-			String[] tokTermen = CreareComanda.termenPlata.split(";");
-			int nrLivr = 0;
-			for (nrLivr = 0; nrLivr < tokTermen.length; nrLivr++) {
-				adapterTermenPlata.add(tokTermen[nrLivr]);
+
+			if (DateLivrare.getInstance().isClientBlocat()) {
+				adapterTermenPlata.add("C000");
+			} else {
+				String[] tokTermen = CreareComanda.termenPlata.split(";");
+				int nrLivr = 0;
+				for (nrLivr = 0; nrLivr < tokTermen.length; nrLivr++) {
+					adapterTermenPlata.add(tokTermen[nrLivr]);
+				}
+				spinnerTermenPlata.setSelection(nrLivr);
 			}
-			spinnerTermenPlata.setSelection(nrLivr);
 
 			globalCodClient = CreareComanda.codClientVar;
 
 		} else {
 
-			adapterTermenPlata.add("C000");
+			if (!DateLivrare.getInstance().isClientBlocat() && DateLivrare.getInstance().getTermenPlata() != null
+					&& !DateLivrare.getInstance().getTermenPlata().isEmpty())
+				adapterTermenPlata.add(DateLivrare.getInstance().getTermenPlata());
+			else
+				adapterTermenPlata.add("C000");
 
 			if (!ModificareComanda.codClientVar.equals("")) {
 				globalCodClient = ModificareComanda.codClientVar;
@@ -323,6 +366,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			}
 
 		}
+
+		spinnerTermenPlata.setEnabled(false);
 
 		performGetJudete();
 
@@ -350,10 +395,16 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		// sf. doc insot
 
 		// tip plata
-		for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
-			if (adapterSpinnerPlata.getItem(i).toString().substring(0, 1).equals(DateLivrare.getInstance().getTipPlata())) {
-				spinnerPlata.setSelection(i);
-				break;
+
+		if (!CreareComanda.tipPlataContract.trim().isEmpty() && CreareComanda.tipPlataContract.equals("O")) {
+			setTipPlataSelected(CreareComanda.tipPlataContract);
+		} else {
+			for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
+				if (adapterSpinnerPlata.getItem(i).toString().split("-")[0].trim().equals(
+						UtilsComenzi.setTipPlataClient(DateLivrare.getInstance().getTipPlata()))) {
+					spinnerPlata.setSelection(i);
+					break;
+				}
 			}
 		}
 
@@ -479,6 +530,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			textLocalitate.setText(DateLivrare.getInstance().getOras());
 			textStrada.setText(DateLivrare.getInstance().getStrada());
 
+		}
+
+	}
+
+	private void setTipPlataSelected(String tipPlata) {
+
+		for (int i = 0; i < spinnerPlata.getAdapter().getCount(); i++) {
+			if (spinnerPlata.getAdapter().getItem(i).toString().startsWith(tipPlata)) {
+				spinnerPlata.setSelection(i);
+				break;
+			}
 		}
 
 	}
@@ -855,7 +917,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 	private void performGetJudete() {
 
-		if (isComandaClp() || isComandaBV() || isComandaDl() || DateLivrare.getInstance().isClientFurnizor()) {
+		if (isComandaClp() || isComandaBV() || isComandaDl() || DateLivrare.getInstance().isClientFurnizor() || isLivrareCustodie()) {
 			fillJudeteClient(EnumJudete.getRegionCodes());
 
 		} else {
@@ -881,6 +943,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		return DateLivrare.getInstance().getFurnizorComanda() != null
 				&& !DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().isEmpty()
 				&& DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().length() > 4;
+	}
+
+	private boolean isLivrareCustodie() {
+		return DateLivrare.getInstance().getTipComandaDistrib().equals(TipCmdDistrib.LIVRARE_CUSTODIE);
 	}
 
 	private void fillJudeteClient(String arrayJudete) {
@@ -929,22 +995,39 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
 				checkAviz.setEnabled(true);
+				spinnerResponsabil.setEnabled(true);
+				spinnerTermenPlata.setEnabled(false);
+				((TextView) findViewById(R.id.tipPlataContract)).setVisibility(View.INVISIBLE);
 
-				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("E")) {
+				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("N")
+						|| spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("R")) {
 
 					if (isComandaBV()) {
 						checkAviz.setEnabled(false);
 						checkAviz.setChecked(false);
 					}
+					spinnerResponsabil.setSelection(2);
+					spinnerResponsabil.setEnabled(false);
+					spinnerTermenPlata.setSelection(0);
+				}
+
+				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("O")) {
+					spinnerTermenPlata.setEnabled(true);
+					spinnerResponsabil.setSelection(0);
+				}
+
+				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("R")) {
+					spinnerResponsabil.setEnabled(true);
 					spinnerResponsabil.setSelection(1);
+				}
+
+				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("L")) {
+					spinnerTermenPlata.setSelection(adapterTermenPlata.getCount() - 1);
+					((TextView) findViewById(R.id.tipPlataContract)).setVisibility(View.VISIBLE);
 				}
 
 				if (pos == 0 || pos == 1 || pos == 2 || pos == 3) {
 					spinnerTermenPlata.setVisibility(View.VISIBLE);
-				}
-
-				if (pos == 2) {
-					Toast.makeText(getApplicationContext(), "Valoare maxima comanda pentru PJ: 5000 RON", Toast.LENGTH_SHORT).show();
 				}
 
 				if (pos == 2 && spinnerResponsabil.getSelectedItemPosition() == 1) {
@@ -1677,7 +1760,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 			return;
 		}
 
-		dateLivrareInstance.setTipPlata(spinnerPlata.getSelectedItem().toString().substring(0, 1));
+		dateLivrareInstance.setTipPlata(spinnerPlata.getSelectedItem().toString().split("-")[0].trim());
 		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
 
 		if (dateLivrareInstance.getTransport().equalsIgnoreCase("TERR") && !HelperAdreseLivrare.isAdresaLivrareRapida()) {

@@ -113,6 +113,17 @@ public class UtilsDates {
 		return (int) (diff / (24 * 60 * 60 * 1000));
 
 	}
+	
+	public static int dateDiffinDays2(Date dateStop) {
+
+		long diff = getDateMidnight().getTime() + 1000 - dateStop.getTime();
+
+		if (diff < 0)
+			return -1;
+
+		return (int) (diff / (24 * 60 * 60 * 1000));
+
+	}
 
 	public static StatusIntervalLivrare getStatusIntervalLivrare(Date dateStop) {
 
@@ -172,6 +183,27 @@ public class UtilsDates {
 		}
 
 		return -1;
+
+	}
+	
+	public static String formatDateFromSap(String strDate) {
+
+		String formatted = "";
+
+		try {
+
+			String pattern = "yyyymmdd";
+			SimpleDateFormat formatInit = new SimpleDateFormat(pattern, new Locale("ro"));
+			Date date = formatInit.parse(strDate);
+
+			SimpleDateFormat formatFinal = new SimpleDateFormat("dd-mm-yyyy");
+
+			formatted = formatFinal.format(date);
+		} catch (Exception p) {
+			
+		}
+
+		return formatted;
 
 	}
 

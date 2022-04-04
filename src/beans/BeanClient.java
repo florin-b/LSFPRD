@@ -15,6 +15,8 @@ public class BeanClient {
 	private String codCUI;
 	private EnumTipClientIP tipClientIP = EnumTipClientIP.CONSTR;
 	private String filialaClientIP = UserInfo.getInstance().getFiliala();
+	private boolean clientBlocat;
+	private String tipPlata;
 
 	public BeanClient() {
 
@@ -89,4 +91,21 @@ public class BeanClient {
 		this.filialaClientIP = filialaClientIP;
 	}
 
+	public boolean isClientBlocat() {
+		return clientBlocat;
+	}
+
+	public void setClientBlocat(boolean clientBlocat) {
+		this.clientBlocat = clientBlocat;
+	}
+
+	public String getTipPlata() {
+		return tipPlata;
+	}
+
+	public void setTipPlata(String tipPlata) {
+		this.tipPlata = tipPlata;
+	}
+
+	
 }

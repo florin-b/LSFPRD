@@ -47,6 +47,7 @@ import android.widget.Toast;
 import beans.BeanClient;
 import beans.BeanDatePersonale;
 import beans.DetaliiClient;
+import beans.FurnizorComanda;
 import beans.InfoCredit;
 import beans.PlatitorTva;
 import dialogs.CautaClientDialog;
@@ -738,12 +739,23 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			filialaClp = DateLivrare.getInstance().getCodFilialaCLP();
 		}
 
-		if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().size() == 0)
+		FurnizorComanda furnizorComanda = null;
+
+		if (DateLivrare.getInstance().getTipComandaGed() == TipCmdGed.DISPOZITIE_LIVRARE) {
+			furnizorComanda = DateLivrare.getInstance().getFurnizorComanda();
+		}
+
+		if (ListaArticoleComandaGed.getInstance().getListArticoleComanda().isEmpty())
 			DateLivrare.getInstance().resetAll();
 
 		if (!filialaClp.isEmpty()) {
 			DateLivrare.getInstance().setCodFilialaCLP(filialaClp);
 			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_LIVRARE);
+		}
+
+		if (furnizorComanda != null) {
+			DateLivrare.getInstance().setFurnizorComanda(furnizorComanda);
+			DateLivrare.getInstance().setTipComandaGed(TipCmdGed.DISPOZITIE_LIVRARE);
 		}
 
 	}
@@ -1194,6 +1206,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			CreareComandaGed.codClientVar = client.getCodClient();
 			CreareComandaGed.tipClient = client.getTipClient();
 			CreareComandaGed.tipClientIP = client.getTipClientIP();
+			
+			CreareComandaGed.tipPlataContract = client.getTipPlata();
+			DateLivrare.getInstance().setClientBlocat(client.isClientBlocat());
 
 			layoutLabelRefClient.setVisibility(View.VISIBLE);
 			layoutTextRefClient.setVisibility(View.VISIBLE);
@@ -1206,16 +1221,20 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 				codCuiIp = client.getCodCUI();
 				txtNumeClientGed.setText(client.getNumeClient().replaceFirst("\\(.*", ""));
 				
-				if (!client.getFilialaClientIP().equals(UserInfo.getInstance().getUnitLog())) {
-					CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_LIVRARE;
-					DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_LIVRARE);
-					DateLivrare.getInstance().setCodFilialaCLP(UserInfo.getInstance().getUnitLog());
-					UserInfo.getInstance().setUnitLog(client.getFilialaClientIP());
-
+				if (DateLivrare.getInstance().getFurnizorComanda() != null) {
 				} else {
-					CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_VANZARE;
-					DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_VANZARE);
-					DateLivrare.getInstance().setCodFilialaCLP("");
+					if (!client.getFilialaClientIP().equals(UserInfo.getInstance().getUnitLog())) {
+						CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_LIVRARE;
+						DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_LIVRARE);
+						DateLivrare.getInstance().setCodFilialaCLP(UserInfo.getInstance().getUnitLog());
+						UserInfo.getInstance().setUnitLog(client.getFilialaClientIP());
+
+					} else {
+						CreareComandaGed.tipComandaGed = TipCmdGed.COMANDA_VANZARE;
+						DateLivrare.getInstance().setTipComandaGed(TipCmdGed.COMANDA_VANZARE);
+						DateLivrare.getInstance().setCodFilialaCLP("");
+					}
+
 				}
 				
 				getInfoCreditClient(client.getCodClient());
@@ -1228,6 +1247,9 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 			CreareComandaGed.codClientVar = client.getCodClient();
 			CreareComandaGed.numeClientVar = client.getNumeClient();
 			CreareComandaGed.tipClient = client.getTipClient();
+			
+			CreareComandaGed.tipPlataContract = client.getTipPlata();
+			DateLivrare.getInstance().setClientBlocat(client.isClientBlocat());
 
 			CreareComandaGed.tipClient = "PJ";
 			DateLivrare.getInstance().setTipPersClient("PJ");
@@ -1246,6 +1268,12 @@ public class SelectClientCmdGed extends Activity implements OperatiiClientListen
 	}
 
 	private void populateDatePersonale(BeanDatePersonale datePersonale) {
+		
+		CreareComandaGed.tipPlataContract = datePersonale.getTipPlata();
+		DateLivrare.getInstance().setClientBlocat(datePersonale.isClientBlocat());
+
+		if (datePersonale.getTermenPlata() != null)
+			CreareComandaGed.listTermenPlata = datePersonale.getTermenPlata();
 
 		txtNumeClientGed.setText(datePersonale.getNume());
 		txtCNPClient.setText(datePersonale.getCnp());

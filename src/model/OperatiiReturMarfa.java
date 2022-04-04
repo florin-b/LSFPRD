@@ -18,10 +18,12 @@ import android.content.Context;
 import android.widget.Toast;
 import beans.BeanAdresaLivrare;
 import beans.BeanArticolRetur;
+
 import beans.BeanComandaRetur;
 import beans.BeanComandaReturAfis;
 import beans.BeanDocumentRetur;
 import beans.BeanPersoanaContact;
+import beans.PozaArticol;
 import enums.EnumRetur;
 
 public class OperatiiReturMarfa implements AsyncTaskListener {
@@ -72,6 +74,12 @@ public class OperatiiReturMarfa implements AsyncTaskListener {
 		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
 		call.getCallResultsFromFragment();
 	}
+	
+	public void getStocReturAvansat(HashMap<String, String> params) {
+		numeComanda = EnumRetur.GET_STOC_RETUR_AVANSAT;
+		AsyncTaskWSCall call = new AsyncTaskWSCall(numeComanda.getComanda(), params, (AsyncTaskListener) this, context);
+		call.getCallResultsFromFragment();
+	}
 
 	public void opereazaComanda(HashMap<String, String> params) {
 		numeComanda = EnumRetur.OPEREAZA_COMANDA;
@@ -108,6 +116,30 @@ public class OperatiiReturMarfa implements AsyncTaskListener {
 					docRetur = new BeanDocumentRetur();
 					docRetur.setNumar(jsonObj.getString("numar"));
 					docRetur.setData(jsonObj.getString("data"));
+					docRetur.setTipTransport(jsonObj.getString("tipTransport"));
+					docRetur.setDataLivrare(jsonObj.getString("dataLivrare"));
+					
+					
+					JSONObject objectExtra = new JSONObject(jsonObj.getString("extraDate"));
+					
+					List<BeanAdresaLivrare> listAdreseDoc = new ArrayList<BeanAdresaLivrare>();
+					BeanAdresaLivrare adresaDoc = new BeanAdresaLivrare();
+					adresaDoc.setCodAdresa(objectExtra.getString("codAdresa"));
+					adresaDoc.setCodJudet(objectExtra.getString("codJudet"));
+					adresaDoc.setOras(objectExtra.getString("localitate"));
+					adresaDoc.setStrada(objectExtra.getString("strada"));
+					adresaDoc.setNrStrada("");
+					listAdreseDoc.add(adresaDoc);
+					docRetur.setListAdrese(listAdreseDoc);
+					
+					List<BeanPersoanaContact> listPersoaneDoc = new ArrayList<BeanPersoanaContact>();
+					BeanPersoanaContact persoanaDoc = new BeanPersoanaContact();
+					persoanaDoc.setNume(objectExtra.getString("numeContact"));
+					persoanaDoc.setTelefon(objectExtra.getString("telContact"));
+					listPersoaneDoc.add(persoanaDoc);
+					docRetur.setListPersoane(listPersoaneDoc);
+					
+					
 					listDocumente.add(docRetur);
 
 				}
@@ -178,6 +210,12 @@ public class OperatiiReturMarfa implements AsyncTaskListener {
 					artRetur.setCantitate(Double.valueOf(jsonObj.getString("cantitate")));
 					artRetur.setUm(jsonObj.getString("um"));
 					artRetur.setCantitateRetur(0);
+
+					if (jsonObj.has("pretUnitPalet") && jsonObj.getString("pretUnitPalet") != "null")
+						artRetur.setPretUnitPalet(Double.valueOf(jsonObj.getString("pretUnitPalet")));
+					else
+						artRetur.setPretUnitPalet(0);
+
 					listArticole.add(artRetur);
 				}
 			}
@@ -204,6 +242,10 @@ public class OperatiiReturMarfa implements AsyncTaskListener {
 					jsonObject.put("cod", articol.getCod());
 					jsonObject.put("cantitateRetur", String.valueOf(articol.getCantitateRetur()));
 					jsonObject.put("um", articol.getUm());
+					jsonObject.put("motivRespingere", articol.getMotivRespingere());
+					jsonObject.put("inlocuire", articol.isInlocuire());
+					jsonObject.put("pozeArticol", serializePozeArticol(articol.getPozeArticol()));
+
 					jsonArray.put(jsonObject);
 				}
 			} catch (Exception ex) {
@@ -212,6 +254,28 @@ public class OperatiiReturMarfa implements AsyncTaskListener {
 		}
 
 		return jsonArray.toString();
+	}
+
+	private String serializePozeArticol(List<PozaArticol> listPoze) {
+		JSONArray jsonPoze = new JSONArray();
+
+		if (listPoze == null)
+			return "";
+
+		try {
+
+			for (PozaArticol poza : listPoze) {
+				JSONObject obj = new JSONObject();
+				obj.put("nume", poza.getNume());
+				obj.put("strData", poza.getStrData());
+				jsonPoze.put(obj);
+			}
+
+		} catch (Exception ex) {
+			Toast.makeText(context, ex.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return jsonPoze.toString();
 	}
 
 	public String serializeComandaRetur(BeanComandaRetur comandaRetur) {
@@ -300,7 +364,6 @@ public class OperatiiReturMarfa implements AsyncTaskListener {
 		return listComenzi;
 	}
 
-	
 	public void onTaskComplete(String methodName, Object result) {
 		if (opReturListener != null) {
 			opReturListener.operationReturComplete(numeComanda, result);

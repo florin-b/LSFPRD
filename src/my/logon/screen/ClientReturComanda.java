@@ -23,14 +23,20 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import beans.BeanClient;
 import enums.EnumClienti;
+import enums.EnumTipComanda;
 
 public class ClientReturComanda extends Fragment implements OperatiiClientListener {
 
@@ -38,9 +44,16 @@ public class ClientReturComanda extends Fragment implements OperatiiClientListen
 	private EditText textNumeClient;
 	private ListView clientiList;
 	private TextView selectIcon;
-	private Spinner spinnerLuna, spinnerAn;
+	private Spinner spinnerCautare;
+	private EnumTipComanda tipComanda;
 
 	private ClientReturListener clientListener;
+
+	private enum EnumTipCautare {
+		NUME, TELEFON
+	};
+
+	private EnumTipCautare enumTipCautare = EnumTipCautare.NUME;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -61,13 +74,50 @@ public class ClientReturComanda extends Fragment implements OperatiiClientListen
 		selectIcon = (TextView) v.findViewById(R.id.selectIcon);
 		selectIcon.setVisibility(View.INVISIBLE);
 
-		spinnerLuna = (Spinner) v.findViewById(R.id.spinnerLuna);
-		spinnerAn = (Spinner) v.findViewById(R.id.spinnerAn);
+		tipComanda = EnumTipComanda.DISTRIBUTIE;
+		spinnerCautare = (Spinner) v.findViewById(R.id.spinnerCautare);
+		spinnerCautare.setVisibility(View.GONE);
+		setSpinnerCautareItems();
+		setSpinnerCautareListener();
 
-		loadDataSpinners();
+		if (!UtilsUser.isCV() && !UtilsUser.isUserIP()) {
+			tipComanda = EnumTipComanda.DISTRIBUTIE;
+
+		} else {
+			tipComanda = EnumTipComanda.GED;
+			spinnerCautare.setVisibility(View.VISIBLE);
+		}
 
 		return v;
 
+	}
+
+	private void setSpinnerCautareItems() {
+
+		String[] criteriuCautare = { "Nume", "Telefon" };
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, criteriuCautare);
+		spinnerCautare.setAdapter(adapter);
+
+	}
+
+	private void setSpinnerCautareListener() {
+		spinnerCautare.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				String criteriu = spinnerCautare.getSelectedItem().toString().toLowerCase();
+				textNumeClient.setHint("Introduceti " + criteriu + " client");
+				textNumeClient.setText("");
+				clientiList.setAdapter(new CautareClientiAdapter(getActivity(), new ArrayList<BeanClient>()));
+				selectIcon.setVisibility(View.INVISIBLE);
+
+				if (criteriu.equalsIgnoreCase("nume"))
+					enumTipCautare = EnumTipCautare.NUME;
+				else if (criteriu.equalsIgnoreCase("telefon"))
+					enumTipCautare = EnumTipCautare.TELEFON;
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
 	}
 
 	@Override
@@ -87,31 +137,6 @@ public class ClientReturComanda extends Fragment implements OperatiiClientListen
 		return frg;
 	}
 
-	private void loadDataSpinners() {
-
-		String[] months = { "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie", "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie",
-				"Decembrie" };
-
-		ArrayAdapter<String> adapterLuna = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, months);
-		spinnerLuna.setAdapter(adapterLuna);
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		spinnerLuna.setSelection(cal.get(Calendar.MONTH));
-
-		int year = cal.get(Calendar.YEAR);
-
-		String[] years = new String[2];
-		years[0] = String.valueOf(year - 1);
-		years[1] = String.valueOf(year);
-
-		ArrayAdapter<String> adapterAn = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, years);
-		spinnerAn.setAdapter(adapterAn);
-
-		spinnerAn.setSelection(1);
-
-	}
-
 	private void addListenerClient(Button clientButton) {
 		clientButton.setOnClickListener(new OnClickListener() {
 
@@ -125,13 +150,20 @@ public class ClientReturComanda extends Fragment implements OperatiiClientListen
 
 		if (hasText(textNumeClient)) {
 
+			String numeClientCautare = textNumeClient.getText().toString().trim();
+
+			if (enumTipCautare == EnumTipCautare.TELEFON)
+				numeClientCautare = "tel:" + numeClientCautare;
+
 			clearScreen();
 			HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
-			params.put("numeClient", textNumeClient.getText().toString().trim());
+			params.put("numeClient", numeClientCautare);
 			params.put("depart", "00");
 			params.put("departAg", UserInfo.getInstance().getCodDepart());
 			params.put("unitLog", UserInfo.getInstance().getUnitLog());
-			if (UtilsUser.isUserGed())
+			params.put("tipCmd","CMD");
+			
+			if (UtilsUser.isUserGed() || tipComanda == EnumTipComanda.GED)
 				opClient.getListClientiCV(params);
 			else
 				opClient.getListClienti(params);
@@ -153,18 +185,11 @@ public class ClientReturComanda extends Fragment implements OperatiiClientListen
 
 				BeanClient client = (BeanClient) arg0.getAdapter().getItem(arg2);
 				if (client != null) {
-					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), getIntervalSel(), null);
+					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), "", null);
 
 				}
 			}
 		});
-	}
-
-	private String getIntervalSel() {
-		String lunaSel = String.format("%02d", spinnerLuna.getSelectedItemPosition() + 1);
-		String anSel = spinnerAn.getSelectedItem().toString();
-
-		return anSel + lunaSel;
 	}
 
 	private void hideSoftKeyboard() {

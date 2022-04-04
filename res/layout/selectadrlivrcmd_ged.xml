@@ -404,9 +404,12 @@
                     android:gravity="left" />
 
                 <TextView
+                    android:id="@+id/tipPlataContract"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.01"
+                    android:layout_weight="0.1"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
                     android:textSize="16sp" />
 
                 <Spinner

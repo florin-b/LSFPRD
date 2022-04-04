@@ -375,6 +375,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 				dateLivrare.setMarjaBrutaCantProc(Double.valueOf(jsonLivrare.getString("marjaBrutaCantProc")));
 				dateLivrare.setRefClient(jsonLivrare.getString("refClient"));
 
+				if (jsonLivrare.has("isClientBlocat"))
+					dateLivrare.setClientBlocat(Boolean.valueOf(jsonLivrare.getString("isClientBlocat")));
+
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
 				for (int i = 0; i < jsonArticole.length(); i++) {
@@ -448,6 +451,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 					if (articolObject.has("umPalet"))
 						articol.setUmPalet(articolObject.getString("umPalet").equals("1") ? true : false);
+
+					if (articolObject.has("listCabluri"))
+						articol.setListCabluri(new OperatiiArticolImpl(context).deserializeCantCabluri05(articolObject.getString("listCabluri")));
 
 					listArticole.add(articol);
 
@@ -573,10 +579,10 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 						else
 							comanda.setTipClientInstPublica(EnumTipClientIP.NONCONSTR);
 					}
-					
+
 					if (comandaObject.has("isAprobatDistrib"))
 						comanda.setAprobDistrib(Boolean.valueOf(comandaObject.getString("isAprobatDistrib")));
-					
+
 					listComenzi.add(comanda);
 
 				}

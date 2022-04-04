@@ -209,4 +209,14 @@ public class ReturPaleti extends FragmentActivity implements ClientReturListener
 		}
 
 	}
+	
+	@Override
+	public void documentSelected(BeanDocumentRetur documentRetur) {
+		this.nrDocument = documentRetur.getNumar();
+		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
+		params.put("nrDocument", nrDocument);
+		params.put("tipDocument", "PAL");
+		opRetur.getArticoleDocument(params);
+		
+	}
 }

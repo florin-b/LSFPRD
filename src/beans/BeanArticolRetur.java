@@ -1,11 +1,18 @@
 package beans;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BeanArticolRetur {
 	private String nume;
 	private String cod;
 	private double cantitate;
 	private String um;
 	private double cantitateRetur;
+	private double pretUnitPalet;
+	private String motivRespingere;
+	private boolean inlocuire;
+	private List<PozaArticol> pozeArticol;
 
 	public BeanArticolRetur() {
 
@@ -49,6 +56,46 @@ public class BeanArticolRetur {
 
 	public void setCantitateRetur(double cantitateRetur) {
 		this.cantitateRetur = cantitateRetur;
+	}
+
+	public double getPretUnitPalet() {
+		return pretUnitPalet;
+	}
+
+	public void setPretUnitPalet(double pretUnitPalet) {
+		this.pretUnitPalet = pretUnitPalet;
+	}
+
+	public String getMotivRespingere() {
+		return motivRespingere;
+	}
+
+	public void setMotivRespingere(String motivRespingere) {
+		this.motivRespingere = motivRespingere;
+	}
+
+	public boolean isInlocuire() {
+		return inlocuire;
+	}
+
+	public void setInlocuire(boolean inlocuire) {
+		this.inlocuire = inlocuire;
+	}
+
+	public List<PozaArticol> getPozeArticol() {
+		if (pozeArticol == null)
+			return new ArrayList<PozaArticol>();
+
+		return pozeArticol;
+	}
+
+	public void setPozeArticol(List<PozaArticol> pozeArticol) {
+		this.pozeArticol = pozeArticol;
+	}
+
+	@Override
+	public String toString() {
+		return "BeanArticolRetur [nume=" + nume + ", cod=" + cod + ", cantitate=" + cantitate + ", um=" + um + ", cantitateRetur=" + cantitateRetur + "]";
 	}
 
 }

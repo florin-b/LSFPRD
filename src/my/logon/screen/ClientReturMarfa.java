@@ -105,6 +105,7 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) {
 					tipComanda = EnumTipComanda.DISTRIBUTIE;
+					DateLivrareReturPaleti.setTipComandaRetur(tipComanda);
 					clearSelection();
 				}
 
@@ -119,6 +120,7 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if (isChecked) {
 					tipComanda = EnumTipComanda.GED;
+					DateLivrareReturPaleti.setTipComandaRetur(tipComanda);
 					clearSelection();
 				}
 
@@ -173,6 +175,7 @@ public class ClientReturMarfa extends Fragment implements OperatiiClientListener
 
 				BeanClient client = (BeanClient) arg0.getAdapter().getItem(arg2);
 				if (client != null) {
+					DateLivrareReturPaleti.setTipClientIP(client.getTipClientIP());
 					clientListener.clientSelected(client.getCodClient(), client.getNumeClient(), null, tipComanda);
 
 				}

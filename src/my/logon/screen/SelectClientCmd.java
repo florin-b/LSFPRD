@@ -136,12 +136,13 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		nf2.setMaximumFractionDigits(2);
 
 		spinnerAgenti = ((Spinner) findViewById(R.id.spinnerAgenti));
-		setSpinnerAgentiListener();		
-		
-		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD() || UtilsUser.isASDL()) {
+		setSpinnerAgentiListener();
+
+		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD()
+				|| UtilsUser.isASDL()) {
 			((LinearLayout) findViewById(R.id.layoutAgentClient)).setVisibility(View.VISIBLE);
 		}
-		
+
 		radioCmdFerma = (RadioButton) findViewById(R.id.radio_cmd_ferma);
 		radioCmdSimulata = (RadioButton) findViewById(R.id.radio_cmd_simulata);
 
@@ -229,7 +230,8 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		codClient = client.getCodClient();
 		tipClientVar = client.getTipClient();
 
-		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD() || UtilsUser.isASDL()) {
+		if (UtilsUser.isSuperAv() || UtilsUser.isSMR() || UtilsUser.isCVR() || UtilsUser.isSSCM() || UtilsUser.isCGED() || UtilsUser.isOIVPD()
+				|| UtilsUser.isASDL()) {
 
 			String[] tokAgenti = client.getAgenti().split("@");
 
@@ -249,8 +251,8 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 				listAgenti.add(agent);
 			}
 
-			SimpleAdapter adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" }, new int[] {
-					R.id.textNumeAgent, R.id.textCodAgent });
+			SimpleAdapter adapterAgenti = new SimpleAdapter(this, listAgenti, R.layout.rowlayoutagenti, new String[] { "numeAgent", "codAgent" },
+					new int[] { R.id.textNumeAgent, R.id.textCodAgent });
 
 			spinnerAgenti.setAdapter(adapterAgenti);
 
@@ -306,19 +308,18 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 				if (codClientVar.length() == 0) {
 					Toast.makeText(getApplicationContext(), "Selectati un client!", Toast.LENGTH_SHORT).show();
 				} else {
-					
+
 					if ((UtilsUser.isSuperAv() || UtilsUser.isASDL()) && spinnerAgenti.getSelectedItemPosition() == 0) {
 						Toast.makeText(getApplicationContext(), "Selectati un agent.", Toast.LENGTH_LONG).show();
 						return;
 					}
-					
-					
+
 					CreareComanda.codClientVar = codClientVar;
 					CreareComanda.numeClientVar = numeClientVar;
 					CreareComanda.tipClientVar = tipClientVar;
 
 					CreareComanda.cmdAngajament = false;
-					
+
 					DateLivrare.getInstance().setRefClient(((EditText) findViewById(R.id.textRefClient)).getText().toString().trim());
 
 					if (CreareComanda.canalDistrib.equals("10")) {
@@ -326,7 +327,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 						if (cmdAngaj.isChecked())
 							CreareComanda.cmdAngajament = true;
 					}
-					
+
 					if (radioCmdFerma.isChecked()) {
 						CreareComanda.tipComanda = "N";
 					} else if (radioCmdSimulata.isChecked()) {
@@ -378,7 +379,7 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 			params.put("unitLog", UserInfo.getInstance().getUnitLog());
 			params.put("codUser", UserInfo.getInstance().getCod());
 			params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
-			
+
 			opClient.getListClienti(params);
 
 			InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -424,42 +425,44 @@ public class SelectClientCmd extends ListActivity implements OperatiiClientListe
 		CreareComanda.termenPlata = detaliiClient.getTermenPlata();
 		CreareComanda.cursValutar = Double.parseDouble(detaliiClient.getCursValutar());
 
+		CreareComanda.tipPlataContract = detaliiClient.getTipPlata();
+
 		((TextView) findViewById(R.id.diviziiClient)).setText(detaliiClient.getDivizii());
+
+		DateLivrare.getInstance().setClientBlocat(detaliiClient.getStare().equals("X"));
 
 		if (detaliiClient.getStare().equals("X")) {
 			clientBlocatText.setVisibility(View.VISIBLE);
 			clientBlocatText.setText("Blocat : " + detaliiClient.getMotivBlocare());
-			saveClntBtn.setVisibility(View.INVISIBLE);
 		} else {
-			DateLivrare dateLivrareInstance = DateLivrare.getInstance();
-
-			dateLivrareInstance.setOras(detaliiClient.getOras());
-			dateLivrareInstance.setStrada(detaliiClient.getStrada() + " " + detaliiClient.getNrStrada());
-			dateLivrareInstance.setCodJudet(detaliiClient.getRegiune());
-
-			if (CreareComanda.canalDistrib.equals("10"))
-				dateLivrareInstance.setRedSeparat("R");
-			else
-				dateLivrareInstance.setRedSeparat(" ");
-
-			dateLivrareInstance.setPersContact(detaliiClient.getPersContact());
-			dateLivrareInstance.setNrTel(detaliiClient.getTelefon());
-			dateLivrareInstance.setClientFurnizor(detaliiClient.isFurnizor());
-			dateLivrareInstance.setDiviziiClient(detaliiClient.getDivizii());
-
-			codClientVar = codClient;
-			numeClientVar = numeClient;
-
-			dateLivrareInstance.setDateLivrare(InfoStrings.numeJudet(dateLivrareInstance.getCodJudet()) + " " + dateLivrareInstance.getOras() + " "
-					+ dateLivrareInstance.getStrada() + "#" + dateLivrareInstance.getPersContact() + "#" + dateLivrareInstance.getNrTel()
-					+ "#NU#E#TRAP#NU");
-
 			clientBlocatText.setVisibility(View.INVISIBLE);
 			clientBlocatText.setText("");
-			tipClient.setText(detaliiClient.getTipClient());
-			saveClntBtn.setVisibility(View.VISIBLE);
-
 		}
+
+		DateLivrare dateLivrareInstance = DateLivrare.getInstance();
+		dateLivrareInstance.setOras(detaliiClient.getOras());
+		dateLivrareInstance.setStrada(detaliiClient.getStrada() + " " + detaliiClient.getNrStrada());
+		dateLivrareInstance.setCodJudet(detaliiClient.getRegiune());
+
+		if (CreareComanda.canalDistrib.equals("10"))
+			dateLivrareInstance.setRedSeparat("R");
+		else
+			dateLivrareInstance.setRedSeparat(" ");
+
+		dateLivrareInstance.setPersContact(detaliiClient.getPersContact());
+		dateLivrareInstance.setNrTel(detaliiClient.getTelefon());
+		dateLivrareInstance.setClientFurnizor(detaliiClient.isFurnizor());
+		dateLivrareInstance.setDiviziiClient(detaliiClient.getDivizii());
+
+		codClientVar = codClient;
+		numeClientVar = numeClient;
+
+		dateLivrareInstance.setDateLivrare(InfoStrings.numeJudet(dateLivrareInstance.getCodJudet()) + " " + dateLivrareInstance.getOras() + " "
+				+ dateLivrareInstance.getStrada() + "#" + dateLivrareInstance.getPersContact() + "#" + dateLivrareInstance.getNrTel()
+				+ "#NU#E#TRAP#NU");
+
+		tipClient.setText(detaliiClient.getTipClient());
+		saveClntBtn.setVisibility(View.VISIBLE);
 
 	}
 

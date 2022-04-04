@@ -62,6 +62,7 @@ public class DateLivrareAfisare {
 	private double marjaBrutaPalProc = 0;
 	private double marjaBrutaCantProc = 0;
 	private String refClient;
+	private boolean isClientBlocat;
 
 	public DateLivrareAfisare() {
 
@@ -541,4 +542,11 @@ public class DateLivrareAfisare {
 		this.refClient = refClient;
 	}	
 	
+	public boolean isClientBlocat() {
+		return isClientBlocat;
+	}
+
+	public void setClientBlocat(boolean isClientBlocat) {
+		this.isClientBlocat = isClientBlocat;
+	}
 }

@@ -179,42 +179,45 @@ public class UtilsGeneral {
 		return retVal;
 	}
 
-	public static String getDescTipPlata(String codPlata) {
+	public static String getDescTipPlata(String codPlata,String termenPlata) {
 
 		String tipPlata = "nedefinit";
 
 		if (codPlata.equals("B")) {
 			tipPlata = "Bilet la ordin";
-		}
-		if (codPlata.equals("C")) {
+		} else if (codPlata.equals("C")) {
 			tipPlata = "Cec";
-		}
-		if (codPlata.equals("E")) {
+		} else if (codPlata.equals("E")) {
 			tipPlata = "Plata in numerar";
-		}
-		if (codPlata.equals("L")) {
+		} else if (codPlata.equals("L")) {
 			tipPlata = "Plata interna buget-trezorerie";
-		}
-		if (codPlata.equals("O")) {
-			tipPlata = "Ordin de plata";
-		}
-		if (codPlata.equals("U")) {
+		} else if (codPlata.equals("O")) {
+			if (termenPlata != null && termenPlata.equals("C000"))
+				tipPlata = "Ordin de plata avans";
+			else
+				tipPlata = "Ordin de plata";
+		} else if (codPlata.equals("U")) {
 			tipPlata = "Plata interna-alte institutii";
-		}
-		if (codPlata.equals("W")) {
+		} else if (codPlata.equals("W")) {
 			tipPlata = "Plata in strainatate-banci";
-		}
-		if (codPlata.equals("BRD")) {
+		} else if (codPlata.equals("BRD")) {
 			tipPlata = "Card BRD";
-		}
-		if (codPlata.equals("ING")) {
+		} else if (codPlata.equals("ING")) {
 			tipPlata = "Card ING";
-		}
-		if (codPlata.equals("UNI")) {
+		} else if (codPlata.equals("UNI")) {
 			tipPlata = "Card Unicredit";
-		}
-		if (codPlata.equals("E1")) {
-			tipPlata = "Numerar sofer";
+		} else if (codPlata.equals("E1")) {
+			tipPlata = "Ramburs";
+		} else if (codPlata.equals("CB")) {
+			tipPlata = "Card bancar";
+		} else if (codPlata.equals("LC")) {
+			tipPlata = "Limita credit";
+		} else if (codPlata.equals("OPA")) {
+			tipPlata = "OP avans";
+		} else if (codPlata.equals("R")) {
+			tipPlata = "Ramburs";
+		} else if (codPlata.equals("N")) {
+			tipPlata = "Plata in numerar";
 		}
 
 		return tipPlata;

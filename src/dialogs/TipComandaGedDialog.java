@@ -2,13 +2,13 @@ package dialogs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import listeners.ComenziDAOListener;
 import listeners.TipCmdGedListener;
-import my.logon.screen.R;
 import model.ComenziDAO;
 import model.UserInfo;
+import my.logon.screen.R;
+import utils.UtilsUser;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
@@ -20,7 +20,6 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import enums.EnumComenziDAO;
 import enums.TipCmdGed;
 
@@ -65,6 +64,10 @@ public class TipComandaGedDialog extends Dialog implements ComenziDAOListener {
 		final RadioButton radioNoua = (RadioButton) findViewById(R.id.radioNoua);
 		final RadioButton radioAmob = (RadioButton) findViewById(R.id.radioAmob);
 		final RadioButton radioCLP = (RadioButton) findViewById(R.id.radioCLP);
+		final RadioButton radioDL = (RadioButton) findViewById(R.id.radioDL);
+
+		if (UtilsUser.isUserIP())
+			radioCLP.setVisibility(View.INVISIBLE);
 
 		final Spinner spinnerFilialeClp = (Spinner) findViewById(R.id.spinFilialaCLP);
 		final TextView textInfoClp = (TextView) findViewById(R.id.textInfoClp);
@@ -86,6 +89,8 @@ public class TipComandaGedDialog extends Dialog implements ComenziDAOListener {
 
 				if (radioNoua.isChecked())
 					tipComanda = TipCmdGed.COMANDA_VANZARE;
+				else if (radioDL.isChecked())
+					tipComanda = TipCmdGed.DISPOZITIE_LIVRARE;
 				else if (radioAmob.isChecked()) {
 					tipComanda = TipCmdGed.COMANDA_AMOB;
 					if (idComanda.equals("-1"))
@@ -130,6 +135,18 @@ public class TipComandaGedDialog extends Dialog implements ComenziDAOListener {
 			public void onClick(View v) {
 				spinnerFilialeClp.setVisibility(View.VISIBLE);
 				textInfoClp.setVisibility(View.VISIBLE);
+
+			}
+
+		});
+
+		radioDL.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				spinnerComenziAmob.setVisibility(View.INVISIBLE);
+				spinnerFilialeClp.setVisibility(View.INVISIBLE);
+				textInfoClp.setVisibility(View.INVISIBLE);
 
 			}
 
@@ -196,7 +213,6 @@ public class TipComandaGedDialog extends Dialog implements ComenziDAOListener {
 
 	@Override
 	public void operationComenziComplete(EnumComenziDAO methodName, Object result) {
-		
 
 	}
 

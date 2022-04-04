@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import listeners.Cablu05SelectedListener;
 import listeners.OperatiiArticolListener;
 import model.ArticolComandaGed;
 import model.Constants;
@@ -56,11 +57,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import beans.ArticolDB;
+import beans.BeanCablu05;
+import dialogs.Cabluri05Dialog;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
 import enums.EnumTipComanda;
 
-public class SelectArtModificareCmd extends ListActivity implements OperatiiArticolListener {
+public class SelectArtModificareCmd extends ListActivity implements OperatiiArticolListener, Cablu05SelectedListener {
 
 	Button articoleBtn, saveArtBtn, pretBtn;
 	String filiala = "", nume = "", cod = "", umStoc = "";
@@ -114,6 +117,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 	private ArticolDB articolDBSelected;
 	private TextView txtImpachetare;
 	private String istoricPret;
+	private List<BeanCablu05> listCabluri;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -634,6 +638,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 		try {
 
 			selectedUnitMas = "";
+			listCabluri = null;
 			if (listUmVanz.size() > 1) {
 				artMap = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
 				selectedUnitMas = artMap.get("rowText");
@@ -833,6 +838,11 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 					if (textCant.getVisibility() != View.VISIBLE) {
 						return;
 					}
+					
+					if (isConditieCabluri05BV90() && listCabluri == null) {
+						getCabluri05(codArticol);
+						return;
+					}
 
 					if (textProcRed.getText().toString().trim().length() == 0) {
 						if (tglProc.getText().equals(("%")))
@@ -993,6 +1003,7 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 						unArticol.setTipAlert(tipAlert);
 						unArticol.setStatus(" ");
 						unArticol.setDepartAprob(articolDBSelected.getDepartAprob());
+						unArticol.setListCabluri(listCabluri);
 
 						if (procRedFin > 0)
 							unArticol.setIstoricPret(istoricPret);
@@ -1036,6 +1047,8 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 						globalCantArt = 0;
 						globalCodDepartSelectetItem = "";
 						subCmp = "0";
+						
+						listCabluri = null;
 
 						redBtnTable.setVisibility(View.GONE);
 						labelStoc.setVisibility(View.GONE);
@@ -1080,6 +1093,37 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 
 	}
 
+	private boolean isConditieCabluri05BV90() {
+		return articolDBSelected.getDepart().equals("05") && ModificareComanda.filialaAlternativaM.equals("BV90");
+	}
+
+	private void getCabluri05(String codArticol) {
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codArticol", codArticol);
+		params.put("sinteticArticol", articolDBSelected.getSintetic());
+		opArticol.getCabluri05(params);
+
+	}
+
+	private void afisCabluri05(List<BeanCablu05> listCabluri) {
+		
+		if (listCabluri.isEmpty()) {
+			this.listCabluri = listCabluri;
+			saveArtBtn.performClick();
+			return;
+		}
+		
+		int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.5);
+		int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.55);
+
+		Cabluri05Dialog cabluriDialog = new Cabluri05Dialog(SelectArtModificareCmd.this, listCabluri, textCant.getText().toString().trim());
+		cabluriDialog.getWindow().setLayout(width, height);
+		cabluriDialog.setCabluSelectedListener(this);
+		cabluriDialog.show();
+
+	}
+	
 	private void populateListViewArt(List<ArticolDB> resultsList) {
 		listArticole.clear();
 		txtNumeArticol.setText("");
@@ -1541,11 +1585,21 @@ public class SelectArtModificareCmd extends ListActivity implements OperatiiArti
 		case GET_STOC_DEPOZIT:
 			listArtStoc((String) result);
 			break;
+		case GET_CABLURI_05:
+			afisCabluri05(opArticol.deserializeCabluri05((String) result));
+			break;
 		default:
 			break;
 
 		}
 
+	}
+	
+	@Override
+	public void cabluriSelected(List<BeanCablu05> listCabluri) {
+		this.listCabluri = listCabluri;
+		saveArtBtn.performClick();
+		
 	}
 
 }

@@ -20,7 +20,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -31,7 +30,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
-
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.SimpleAdapter;
@@ -44,12 +42,12 @@ import beans.BeanPersoanaContact;
 import com.google.android.gms.maps.model.LatLng;
 
 import dialogs.MapAddressDialogF4;
-import enums.EnumMotivRespingere;
+
 
 public class DateLivrareReturComanda extends Fragment implements OnItemClickListener, OnTouchListener, MapListener {
 
 	ClientReturListener clientListener;
-	Spinner spinnerTransport, spinnerDataRetur, spinnerMotivRetur, spinnerAdresaRetur, spinnerJudet;
+	Spinner spinnerTransport, spinnerDataRetur, spinnerAdresaRetur, spinnerJudet;
 	String[] arrayTipTransport = { "Selectati tip transport", "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport curier" };
 	LinearLayout layoutAdresaNoua;
 	private List<BeanAdresaLivrare> listAdrese;
@@ -62,18 +60,19 @@ public class DateLivrareReturComanda extends Fragment implements OnItemClickList
 	private String[] arrayPersoane, arrayTelefoane;
 	private LinearLayout layoutTranspBack;
 
-	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU",
-			"CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA",
-			"IALOMITA", "IASI", "ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA",
-			"TELEORMAN", "TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
+	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU", "CALARASI",
+			"CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI",
+			"ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN", "TIMIS", "TULCEA",
+			"VALCEA", "VASLUI", "VRANCEA" };
 
-	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52",
-			"18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
+	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52", "18", "19",
+			"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
 
 	public static boolean isAltaAdresa = false;
 	private Button btnPozitieAdresa;
 
 	private RadioGroup radioGroupTranspRetur;
+	public static String dataLivrareComanda;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -85,12 +84,10 @@ public class DateLivrareReturComanda extends Fragment implements OnItemClickList
 
 		spinnerTransport = (Spinner) v.findViewById(R.id.spinnerTranspRetur);
 		populateSpinnerTransport();
+
 		spinnerTransport.setSelection(1);
 		setListenerSpinnerTransport();
 
-		spinnerMotivRetur = (Spinner) v.findViewById(R.id.spinnerMotivRetur);
-		populateSpinnerMotivRetur();
-		setListenerSpinnerRetur();
 
 		spinnerAdresaRetur = (Spinner) v.findViewById(R.id.spinnerAdresaRetur);
 		setSpinnerAdresaListener();
@@ -166,7 +163,7 @@ public class DateLivrareReturComanda extends Fragment implements OnItemClickList
 				if (position > 0) {
 					tipTransport = UtilsGeneral.getTipTransport(spinnerTransport.getSelectedItem().toString());
 					if (tipTransport.contains("TRAP")) {
-						layoutTranspBack.setVisibility(View.VISIBLE);
+						layoutTranspBack.setVisibility(View.GONE);
 					} else
 						layoutTranspBack.setVisibility(View.GONE);
 				} else {
@@ -252,30 +249,6 @@ public class DateLivrareReturComanda extends Fragment implements OnItemClickList
 		});
 	}
 
-	private void populateSpinnerMotivRetur() {
-		List<String> listMotive = EnumMotivRespingere.getStringList();
-
-		ArrayAdapter<String> adapterMotive = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, listMotive);
-
-		listMotive.add(0, "Selectati motiv retur");
-		spinnerMotivRetur.setAdapter(adapterMotive);
-
-	}
-
-	private void setListenerSpinnerRetur() {
-		spinnerMotivRetur.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position > 0)
-					motivRetur = EnumMotivRespingere.getCodRetur(spinnerMotivRetur.getSelectedItem().toString());
-				else
-					motivRetur = "";
-			}
-
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-	}
-
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
@@ -316,8 +289,8 @@ public class DateLivrareReturComanda extends Fragment implements OnItemClickList
 	private void fillSpinnerJudete() {
 
 		ArrayList<HashMap<String, String>> listJudete = new ArrayList<HashMap<String, String>>();
-		SimpleAdapter adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete,
-				new String[] { "numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+		SimpleAdapter adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
+				new int[] { R.id.textNumeJudet, R.id.textCodJudet });
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("numeJudet", "Selectat judetul");
@@ -504,6 +477,26 @@ public class DateLivrareReturComanda extends Fragment implements OnItemClickList
 		textTelefon.setText(arrayTelefoane[position]);
 		lpw.dismiss();
 
+	}
+
+	public void setTipTransportComanda(String tipTransport) {
+
+		int nrOpt = spinnerTransport.getAdapter().getCount();
+
+		for (int ii = 0; ii < nrOpt; ii++) {
+
+			if (spinnerTransport.getAdapter().getItem(ii).toString().startsWith(tipTransport)) {
+				spinnerTransport.setSelection(ii);
+				break;
+			}
+		}
+
+		spinnerTransport.setEnabled(false);
+
+	}
+
+	public void setDataLivrareComanda(String dataLivrare) {
+		dataLivrareComanda = dataLivrare;
 	}
 
 	public boolean onTouch(View v, MotionEvent event) {

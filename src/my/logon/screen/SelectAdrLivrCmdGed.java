@@ -95,15 +95,20 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	private static final String METHOD_NAME = "getClientJud";
 
-	String[] tipPlataOnline = { "E - Numerar la livrare", "INS - Card online", "O - Virament bancar" };
+	String[] tipTransport = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TFRN - Transport furnizor" };
 
-	String[] tipTransport = { "TRAP - Transport Arabesque", "TCLI - Transport client" };
+	String[] tipTransportIP = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport tert", "TFRN - Transport furnizor" };
 
-	String[] tipTransportIP = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport tert" };
-
-	String[] tipTransportOnline = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport tert" };
+	String[] tipTransportOnline = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport tert", "TFRN - Transport furnizor" };
 
 	String[] docInsot = { "Factura", "Aviz de expeditie" };
+
+	private String[] tipPlataContract = { "LC - Limita credit" };
+	private String[] tipPlataClBlocatIP = { "N - Numerar in filiala" };
+	private String[] tipPlataClBlocatNonIP = { "C - Card bancar", "N - Numerar in filiala", "OP - ordin de plata", "R - Ramburs" };
+	private String[] tipPlataRestIP = { "N - Numerar in filiala", "OP - ordin de plata" };
+	private String[] tipPlataRestNonIP = { "C - Card bancar", "N - Numerar in filiala", "OP - ordin de plata", "R - Ramburs" };
+	private String[] tipPlataDL = { "C - Card bancar", "N - Numerar in filiala", "OP - ordin de plata" };
 
 	public SimpleAdapter adapterJudete, adapterJudeteLivrare, adapterAdreseLivrare;
 
@@ -188,9 +193,16 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			Bundle bundle = getIntent().getExtras();
 
-			if (bundle.getString("parrentClass") != null && bundle.getString("parrentClass").equals("ModificareComanda")) {
+			if (bundle.getString("parrentClass") != null && bundle.getString("parrentClass").equals("ModificareComanda")
+					&& !DateLivrare.getInstance().getTipPersClient().equals("PF")) {
 				LinearLayout layoutRaft = (LinearLayout) findViewById(R.id.layoutClientRaft);
 				layoutRaft.setVisibility(View.GONE);
+
+				if (bundle.getString("tipPlataContract").equals("B") || bundle.getString("tipPlataContract").equals("C")) {
+					CreareComandaGed.tipPlataContract = bundle.getString("tipPlataContract");
+					DateLivrare.getInstance().setTipPlata("LC");
+				}
+
 			}
 
 			textLocalitateLivrare = (AutoCompleteTextView) findViewById(R.id.autoCompleteLocLivrare);
@@ -251,15 +263,33 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
 			}
 
-			boolean isRestrictieMetPlata = !DateLivrare.getInstance().isFacturaCmd();
+			if (DateLivrare.getInstance().isClientBlocat()) {
+				if (CreareComandaGed.tipClient.equals("IP"))
+					adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataClBlocatIP);
+				else
+					adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataClBlocatNonIP);
 
-			if (!DateLivrare.getInstance().getTipPersClient().equalsIgnoreCase("PF"))
-				isRestrictieMetPlata = false;
+			} else {
 
-			if (ModificareComanda.codClientVar != null && !ModificareComanda.codClientVar.trim().isEmpty())
-				isRestrictieMetPlata = false;
+				if (!CreareComandaGed.tipPlataContract.trim().isEmpty() || DateLivrare.getInstance().getTipPlata().equals("LC")) {
 
-			adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, UtilsComenzi.tipPlataGed(isRestrictieMetPlata));
+					if (!CreareComandaGed.tipPlataContract.trim().isEmpty()) {
+						((TextView) findViewById(R.id.tipPlataContract)).setText("Contract: " + CreareComandaGed.tipPlataContract);
+					}
+
+					adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataContract);
+				} else if (CreareComandaGed.tipClient.equals("IP"))
+					adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataRestIP);
+				else
+					adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataRestNonIP);
+
+			}
+
+			if (!DateLivrare.getInstance().isClientBlocat()
+					&& (!CreareComandaGed.tipPlataContract.trim().isEmpty() || DateLivrare.getInstance().getTipPlata().equals("LC")))
+				spinnerPlata.setEnabled(false);
+			else
+				spinnerPlata.setEnabled(true);
 
 			adapterSpinnerPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			spinnerPlata.setAdapter(adapterSpinnerPlata);
@@ -309,7 +339,7 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 			if (CreareComandaGed.listTermenPlata != null && CreareComandaGed.listTermenPlata.size() > 0) {
 				adapterTermenPlata.addAll(CreareComandaGed.listTermenPlata);
 
-				if (UserInfo.getInstance().getTipUserSap().equals("CGED") || UtilsUser.isSSCM()) {
+				if (UserInfo.getInstance().getTipUserSap().equals("CGED") || UtilsUser.isSSCM() || UtilsUser.isUserIP()) {
 					spinnerTermenPlata.setSelection(CreareComandaGed.listTermenPlata.size() - 1);
 				}
 
@@ -325,6 +355,8 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 				}
 			}
+
+			spinnerTermenPlata.setEnabled(false);
 
 			addListenerTermenPlata();
 			addAdresaLivrare();
@@ -345,14 +377,20 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 			String strTipPlata = "";
 			// tip plata
-			for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
 
-				strTipPlata = adapterSpinnerPlata.getItem(i).toString().substring(0, adapterSpinnerPlata.getItem(i).toString().indexOf("-") - 1)
-						.trim();
+			if (!CreareComandaGed.tipPlataContract.trim().isEmpty() && CreareComandaGed.tipPlataContract.equals("O")) {
+				setTipPlataSelected(CreareComandaGed.tipPlataContract);
+			} else {
 
-				if (strTipPlata.equals(dateLivrareInstance.getTipPlata())) {
-					spinnerPlata.setSelection(i);
-					break;
+				for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
+
+					strTipPlata = adapterSpinnerPlata.getItem(i).toString().substring(0, adapterSpinnerPlata.getItem(i).toString().indexOf("-") - 1)
+							.trim();
+
+					if (strTipPlata.equals(UtilsComenzi.setTipPlataClient(dateLivrareInstance.getTipPlata()))) {
+						spinnerPlata.setSelection(i);
+						break;
+					}
 				}
 			}
 
@@ -452,6 +490,17 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
+    private void setTipPlataSelected(String tipPlata){
+
+        for (int i=0;i<spinnerPlata.getAdapter().getCount();i++){
+            if (spinnerPlata.getAdapter().getItem(i).toString().startsWith(tipPlata)) {
+                spinnerPlata.setSelection(i);
+                break;
+            }
+        }
+
+    }
+	
 	private void setListenerCheckFactura() {
 		checkFactura.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -1003,6 +1052,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		return DateLivrare.getInstance().getCodFilialaCLP() != null && DateLivrare.getInstance().getCodFilialaCLP().length() == 4;
 	}
 
+	private boolean isComandaDl() {
+		return DateLivrare.getInstance().getFurnizorComanda() != null
+				&& !DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().isEmpty()
+				&& DateLivrare.getInstance().getFurnizorComanda().getCodFurnizorMarfa().length() > 4;
+	}
+
 	private void fillJudeteClient(String arrayJudete) {
 
 		HashMap<String, String> temp;
@@ -1072,6 +1127,12 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 						Toast.makeText(getApplicationContext(), "Valoare maxima comanda: 5000 RON", Toast.LENGTH_SHORT).show();
 
 				}
+
+				if (rawTipPlataStr.toLowerCase().contains("numerar")) {
+					checkAviz.setChecked(false);
+					checkAviz.setEnabled(false);
+				} else
+					checkAviz.setEnabled(true);
 
 			}
 
@@ -1319,8 +1380,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 
 	}
 
-
-
 	private void setListenerTextLocalitateLivrare() {
 
 		textLocalitateLivrare.addTextChangedListener(new TextWatcher() {
@@ -1546,6 +1605,11 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		dateLivrareInstance.setNrTel(telefon);
 
 		dateLivrareInstance.setTransport(spinnerTransp.getSelectedItem().toString().substring(0, 4));
+
+		if (dateLivrareInstance.getTransport().equals("TCLI") && dateLivrareInstance.getTipPlata().equals("R")) {
+			Toast.makeText(getApplicationContext(), "Pentru transport TCLI nu puteti selecta metoda de plata Ramburs.", Toast.LENGTH_LONG).show();
+			return;
+		}
 
 		if (!isAdresaCorecta()) {
 			Toast.makeText(getApplicationContext(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
@@ -1983,8 +2047,6 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 		}
 
 	}
-
-
 
 	private void setDateLivrareClient() {
 

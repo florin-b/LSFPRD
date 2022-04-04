@@ -1,7 +1,10 @@
 package my.logon.screen;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,8 +13,10 @@ import listeners.ListaArtReturListener;
 import listeners.OperatiiReturListener;
 import model.OperatiiReturMarfa;
 import model.UserInfo;
+import my.logon.screen.R;
 import utils.MapUtils;
 import utils.UtilsGeneral;
+import utils.UtilsUser;
 import adapters.ArticoleReturAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -37,9 +42,9 @@ import beans.Address;
 import beans.BeanArticolRetur;
 import beans.BeanComandaRetur;
 import enums.EnumRetur;
+import enums.EnumTipClientIP;
+import enums.EnumTipComanda;
 import enums.EnumTipRetur;
-
-
 
 public class ArticoleReturPaleti extends Fragment implements ListaArtReturListener, OperatiiReturListener {
 
@@ -60,6 +65,8 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 	private String nrDocument, codClient, numeClient;
 	private OperatiiReturMarfa opRetur;
 	TextView selectIcon;
+	private static final double TAXA_RETUR_PALET = 8.4;
+	private static final String codArtTranspPalet = "99999999";
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.articole_retur_marfa, container, false);
@@ -117,6 +124,53 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 				}
 			}
 		});
+	}
+
+	private boolean isCondTranspPaleti() {
+
+		if (isTipTranspPretPaleti() && DateLivrareReturPaleti.tipClientIP != null && DateLivrareReturPaleti.tipClientIP == EnumTipClientIP.NONCONSTR)
+			return true;
+		else
+			return isTipTranspPretPaleti() && (UtilsUser.isCV() || DateLivrareReturPaleti.tipCmdRetur == EnumTipComanda.GED);
+
+	}
+
+	private boolean isValReturPaleti() {
+
+		double valTaxaRetur = getNrPaletiRetur() * TAXA_RETUR_PALET;
+		double valPaletiRetur = getValoarePaletiRetur();
+
+		if (valTaxaRetur > valPaletiRetur) {
+			showInfoTaxaDialog(valTaxaRetur, valPaletiRetur);
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public void showInfoTaxaDialog(double valTaxa, double valPaleti) {
+
+		NumberFormat nf = new DecimalFormat("#0.00");
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage(
+				"\nValoarea taxei de retur (" + nf.format(valTaxa) + " lei) este mai mare decat valoarea paletilor returnati (" + nf.format(valPaleti)
+						+ " lei). \nAceasta comanda nu se poate salva.\n").setCancelable(false)
+				.setPositiveButton("Inchide", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.setCancelable(false);
+		alert.show();
+
+	}
+
+	private boolean isTipTranspPretPaleti() {
+		return DateLivrareReturPaleti.tipTransport.equals("TRAP");
 	}
 
 	private void addListenerCancelArt() {
@@ -184,30 +238,33 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 			Toast.makeText(getActivity(), "Selectati orasul", Toast.LENGTH_SHORT).show();
 			return false;
 		}
+
+		if (isCondTranspPaleti() && !isValReturPaleti())
+			return false;		
 		
 		if (!isAdresaCorecta()) {
 			Toast.makeText(getActivity(), "Completati adresa corect sau pozitionati adresa pe harta.", Toast.LENGTH_LONG).show();
 			return false;
 		}
+		
+
 
 		return true;
 	}
 
-	
 	private boolean isAdresaCorecta() {
 		if (DateLivrareReturPaleti.tipTransport.toUpperCase().equals("TRAP") && DateLivrareReturPaleti.isAltaAdresa)
 			return isAdresaGoogleOk();
 		else
 			return true;
 
-	}	
-	
+	}
+
 	private boolean isAdresaGoogleOk() {
 		return MapUtils.geocodeAddress(getAddressFromForm(), getActivity()).isAdresaValida();
 
 	}
-	
-	
+
 	private Address getAddressFromForm() {
 		Address address = new Address();
 
@@ -216,8 +273,8 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 		address.setSector(UtilsGeneral.getNumeJudet(DateLivrareReturPaleti.adresaCodJudet));
 
 		return address;
-	}	
-	
+	}
+
 	private boolean hasArticolReturCant() {
 		boolean retCant = false;
 
@@ -251,6 +308,13 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 	private void performSaveRetur() {
 
 		BeanComandaRetur comandaRetur = new BeanComandaRetur();
+
+		removeArticolTransport();
+
+		if (isCondTranspPaleti()) {
+			listArticole.add(getTransportRetur());
+		}
+
 		comandaRetur.setNrDocument(nrDocument);
 		comandaRetur.setDataLivrare(DateLivrareReturPaleti.dataRetur);
 		comandaRetur.setTipTransport(DateLivrareReturPaleti.tipTransport);
@@ -273,6 +337,19 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 		params.put("tipRetur", EnumTipRetur.PALETI.getTipRetur());
 
 		opRetur.saveComandaRetur(params);
+
+	}
+
+	private void removeArticolTransport() {
+
+		Iterator<BeanArticolRetur> listIterator = listArticole.iterator();
+
+		while (listIterator.hasNext()) {
+			BeanArticolRetur artRetur = listIterator.next();
+
+			if (artRetur.getCod().equals(codArtTranspPalet))
+				listIterator.remove();
+		}
 
 	}
 
@@ -307,6 +384,30 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 		populateListArticole(listArticole);
 		listArticoleRetur.setSelection(artPosition);
 		clearArtFields();
+
+	}
+
+	private int getNrPaletiRetur() {
+
+		int nrPaleti = 0;
+
+		for (BeanArticolRetur artRetur : listArticole) {
+			if (artRetur.getCantitateRetur() > 0)
+				nrPaleti += artRetur.getCantitateRetur();
+		}
+
+		return nrPaleti;
+	}
+
+	private double getValoarePaletiRetur() {
+
+		double valPaleti = 0;
+
+		for (BeanArticolRetur artRetur : listArticole) {
+			valPaleti += artRetur.getCantitateRetur() * artRetur.getPretUnitPalet();
+		}
+
+		return valPaleti;
 
 	}
 
@@ -350,11 +451,27 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				BeanArticolRetur articol = (BeanArticolRetur) arg0.getAdapter().getItem(arg2);
 				selectedArticol = articol;
-				showArticolData(articol);
-				showPanel("cantitateRetur");
+
+				if (!articol.getCod().equals(codArtTranspPalet)) {
+					showArticolData(articol);
+					showPanel("cantitateRetur");
+				}
 
 			}
 		});
+	}
+
+	private BeanArticolRetur getTransportRetur() {
+
+		BeanArticolRetur transpRetur = new BeanArticolRetur();
+		transpRetur.setCod(codArtTranspPalet);
+		transpRetur.setNume("PRESTARI SERVICII TRANSPORT");
+		transpRetur.setCantitate(getNrPaletiRetur());
+		transpRetur.setCantitateRetur(getNrPaletiRetur());
+		transpRetur.setUm("BUC");
+
+		return transpRetur;
+
 	}
 
 	private void showPanel(String panel) {
@@ -389,7 +506,6 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 
 	}
 
-	
 	public void setListArtRetur(String nrDocument, List<BeanArticolRetur> listArticole, String codClient, String numeClient) {
 		this.listArticole = listArticole;
 		this.nrDocument = nrDocument;

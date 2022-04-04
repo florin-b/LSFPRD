@@ -17,15 +17,22 @@
         android:orientation="horizontal" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_weight="0.6"
             android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/textFurnizor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_light_blue"
+                android:textSize="17sp"
+                android:typeface="sans"
+                android:visibility="gone" />
+
             <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left" >
@@ -251,15 +258,13 @@
                     android:background="@drawable/button_style_6"
                     android:gravity="center"
                     android:text="Transport:" />
-                
-                
+
                 <Button
                     android:id="@+id/debugBtn"
                     style="@style/button_text_2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    
                     android:background="@drawable/button_style_6"
                     android:gravity="center"
                     android:text="Debug" />
@@ -273,7 +278,6 @@
                     android:typeface="sans" />
             </LinearLayout>
 
-            
             <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="fill_parent"

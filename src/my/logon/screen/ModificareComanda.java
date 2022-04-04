@@ -36,12 +36,14 @@ import model.HelperTranspBuc;
 import model.InfoStrings;
 import model.ListaArticoleComandaGed;
 import model.ListaArticoleModificareComanda;
+import model.OperatiiArticolImpl;
 import model.UserInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import utils.UtilsComenzi;
 import utils.UtilsComenziGed;
 import utils.UtilsFormatting;
 import utils.UtilsGeneral;
@@ -408,9 +410,12 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 					nextScreenLivr = new Intent(getApplicationContext(), SelectAdrLivrCmdGed.class);
 					nextScreenLivr.putExtra("codClient", selectedClientCode);
 					nextScreenLivr.putExtra("parrentClass", "ModificareComanda");
+					nextScreenLivr.putExtra("tipPlataContract", DateLivrare.getInstance().getTipPlata());
 
 				} else {
 					nextScreenLivr = new Intent(getApplicationContext(), SelectAdrLivrCmd.class);
+					nextScreenLivr.putExtra("parrentClass", "ModificareComanda");
+					nextScreenLivr.putExtra("tipPlataContract", DateLivrare.getInstance().getTipPlata());
 				}
 
 				selectedCmdAdrLivr = selectedCmd;
@@ -485,7 +490,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			// ***************sf. cantar
 
 			textFactRed.setText(UtilsGeneral.getTipReducere(dateLivrareInstance.getRedSeparat()));
-			textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrareInstance.getTipPlata()));
+			textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrareInstance.getTipPlata(), dateLivrareInstance.getTermenPlata()));
 			textTransport.setText(UtilsGeneral.getDescTipTransport(dateLivrareInstance.getTransport()));
 
 			if (!isUserCV() && !isComandaGed()) {
@@ -621,7 +626,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 						prepareArtForDelivery();
 
-						if (dateLivrareInstance.getTipPlata().equals("E") && totalComanda > 5000 && tipClientVar.equals("PJ")) {
+						if ((dateLivrareInstance.getTipPlata().equals("E") || dateLivrareInstance.getTipPlata().equals("N")
+								| dateLivrareInstance.getTipPlata().equals("E1") || dateLivrareInstance.getTipPlata().equals("R"))
+								&& totalComanda > 5000 && tipClientVar.equals("PJ")) {
 							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
 									.show();
 							return;
@@ -729,7 +736,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private boolean isExceptieComandaIP() {
 		return UtilsUser.isUserIP() && comandaSelectata.getTipClientInstPublica() == EnumTipClientIP.CONSTR;
 	}
-	
+
 	private void afiseazaPretMacaraDialog(String result) {
 
 		costDescarcare = HelperCostDescarcare.deserializeCostMacara(result);
@@ -883,8 +890,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				|| InfoStrings.getClientGenericGedWood_faraFact(tempDistribUL, "PF").equals(selectedClientCode)
 				|| InfoStrings.getClientGenericGed_CONSGED_faraFactura(tempDistribUL, "PF").equals(selectedClientCode)
 				|| InfoStrings.getClientCVO_cuFact_faraCnp(tempDistribUL, "").equals(selectedClientCode)
-				|| InfoStrings.getClientGed_FaraFactura(tempDistribUL).equals(selectedClientCode)
-				|| !isComandaDistrib)
+				|| InfoStrings.getClientGed_FaraFactura(tempDistribUL).equals(selectedClientCode) || !isComandaDistrib)
 
 			return true;
 		else
@@ -1064,6 +1070,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				obj.put("istoricPret", listArticoleComanda.get(i).getIstoricPret());
 				obj.put("valTransport", listArticoleComanda.get(i).getValTransport());
 				obj.put("filialaSite", listArticoleComanda.get(i).getFilialaSite());
+				obj.put("listCabluri", new OperatiiArticolImpl(this).serializeCabluri05(listArticoleComanda.get(i).getListCabluri()));
 
 				if (!UtilsUser.isAgentOrSDorKA()) {
 					if ((listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1)
@@ -1143,7 +1150,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("nrTel", DateLivrare.getInstance().getNrTel());
 			obj.put("redSeparat", DateLivrare.getInstance().getRedSeparat());
 			obj.put("Cantar", DateLivrare.getInstance().getCantar());
-			obj.put("tipPlata", DateLivrare.getInstance().getTipPlata());
+			obj.put("tipPlata",
+					UtilsComenzi.getTipPlataClient(DateLivrare.getInstance().getTipPlata(),
+							CreareComandaGed.tipPlataContract.concat(CreareComanda.tipPlataContract).trim()));
 			obj.put("Transport", DateLivrare.getInstance().getTransport());
 			obj.put("dateLivrare", DateLivrare.getInstance().getDateLivrare());
 			obj.put("termenPlata", DateLivrare.getInstance().getTermenPlata());
@@ -1361,6 +1370,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		totalComanda = 0;
 		codTipReducere = "-1";
 		permitArticoleDistribIP = true;
+		CreareComanda.tipPlataContract = " ";
+		CreareComandaGed.tipPlataContract = " ";
 
 		try {
 			ListaArticoleComandaGed.getInstance().clearArticoleComanda();
@@ -1474,6 +1485,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		DateLivrareAfisare dateLivrare = articoleComanda.getDateLivrare();
 
 		DateLivrare.getInstance().setDateLivrareAfisare(dateLivrare);
+		DateLivrare.getInstance().setClientBlocat(articoleComanda.getDateLivrare().isClientBlocat());
 
 		listArticoleComanda = articoleComanda.getListArticole();
 
@@ -1506,7 +1518,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		textPersContact.setText(dateLivrare.getPersContact());
 		textTelefon.setText(dateLivrare.getNrTel());
 		textCantar.setText(UtilsGeneral.getTipCantarire(dateLivrare.getCantar()));
-		textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrare.getTipPlata()));
+		textTipPlata.setText(UtilsGeneral.getDescTipPlata(dateLivrare.getTipPlata(), dateLivrare.getTermenPlata()));
 		textTransport.setText(UtilsGeneral.getDescTipTransport(dateLivrare.getTransport()));
 		textFactRed.setText(UtilsGeneral.getTipReducere(dateLivrare.getRedSeparat()));
 

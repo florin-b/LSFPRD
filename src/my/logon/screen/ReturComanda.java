@@ -11,6 +11,7 @@ import listeners.OperatiiReturListener;
 import model.ClientReturListener;
 import model.OperatiiReturMarfa;
 import model.UserInfo;
+import my.logon.screen.R;
 import utils.UtilsGeneral;
 import utils.UtilsUser;
 import android.app.ActionBar;
@@ -42,6 +43,7 @@ public class ReturComanda extends FragmentActivity implements ClientReturListene
 	private ArticoleReturComanda articoleReturComanda;
 	private String numeClient, codClient;
 	private String nrDocument;
+	private BeanDocumentRetur docSelected;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -151,7 +153,7 @@ public class ReturComanda extends FragmentActivity implements ClientReturListene
 		this.codClient = codClient;
 
 		String codDepart = UserInfo.getInstance().getCodDepart();
-		if (UtilsUser.isUserGed())
+		if (UtilsUser.isUserGed() || UtilsUser.isUserIP())
 			codDepart = "11";
 
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
@@ -160,11 +162,17 @@ public class ReturComanda extends FragmentActivity implements ClientReturListene
 		params.put("unitLog", UserInfo.getInstance().getUnitLog());
 		params.put("tipDocument", "CMD");
 		params.put("interval", interval);
+		params.put("tipUserSap", UserInfo.getInstance().getTipUserSap());
 		opRetur.getDocumenteClient(params);
 	}
 
-	public void documentSelected(String nrDocument) {
-		this.nrDocument = nrDocument;
+	public void documentSelected(BeanDocumentRetur documentRetur) {
+
+		dateLivrareReturComanda.setTipTransportComanda(documentRetur.getTipTransport());
+		dateLivrareReturComanda.setDataLivrareComanda(documentRetur.getDataLivrare());
+
+		this.nrDocument = documentRetur.getNumar();
+		this.docSelected = documentRetur;
 		HashMap<String, String> params = UtilsGeneral.newHashMapInstance();
 		params.put("nrDocument", nrDocument);
 		params.put("tipDocument", "CMD");
@@ -198,13 +206,19 @@ public class ReturComanda extends FragmentActivity implements ClientReturListene
 			break;
 		case GET_ARTICOLE_DOCUMENT:
 			artReturListener.setListArtRetur(nrDocument, opRetur.deserializeListArticole((String) result), codClient, numeClient);
-			dateLivrareReturComanda.setListAdreseLivrare(opRetur.getListAdrese());
-			dateLivrareReturComanda.setPersoaneContact(opRetur.getListPersoane());
+			dateLivrareReturComanda.setListAdreseLivrare(docSelected.getListAdrese());
+			dateLivrareReturComanda.setPersoaneContact(docSelected.getListPersoane());
 			viewPager.setCurrentItem(2, true);
 			break;
 		default:
 			break;
 		}
+
+	}
+
+	@Override
+	public void documentSelected(String nrDocument) {
+		
 
 	}
 }

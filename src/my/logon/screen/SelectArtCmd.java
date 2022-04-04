@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 import listeners.ArticolCantListener;
+import listeners.Cablu05SelectedListener;
 import listeners.OperatiiArticolListener;
 import model.ArticolComanda;
 import model.Constants;
@@ -63,14 +64,16 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import beans.ArticolCant;
 import beans.ArticolDB;
+import beans.BeanCablu05;
 import dialogs.ArticoleCantDialog;
+import dialogs.Cabluri05Dialog;
 import enums.EnumArticoleDAO;
 import enums.EnumDepartExtra;
 import enums.EnumFiliale;
 import enums.EnumTipComanda;
 import enums.TipCmdDistrib;
 
-public class SelectArtCmd extends ListActivity implements OperatiiArticolListener, ArticolCantListener {
+public class SelectArtCmd extends ListActivity implements OperatiiArticolListener, ArticolCantListener, Cablu05SelectedListener {
 
 	Button articoleBtn, saveArtBtn, pretBtn;
 	String filiala = "", nume = "", cod = "", umStoc = "";
@@ -113,6 +116,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private String istoricPret;
 	private double procReducereCmp = 0;
 	private double valoareUmrez = 1, valoareUmren = 1;
+	private List<BeanCablu05> listCabluri;
 
 	NumberFormat nf2;
 
@@ -145,7 +149,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private ArrayList<ArticolDB> listArticoleStatistic;
 	private ArrayList<ArticolDB> listArticoleCustodie;
 	private double discountASDL;
-	
+
 	private Spinner spinnerFilialeCustodie;
 	private List<ArticolCant> listArticoleCant;
 
@@ -293,7 +297,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	private void addSpinnerFilialeCustodie() {
 
-		ArrayAdapter<EnumFiliale> adapterFil = new ArrayAdapter<EnumFiliale>(getBaseContext(), android.R.layout.simple_list_item_1, EnumFiliale.values());
+		ArrayAdapter<EnumFiliale> adapterFil = new ArrayAdapter<EnumFiliale>(getBaseContext(), android.R.layout.simple_list_item_1,
+				EnumFiliale.values());
 		LayoutInflater mInflater = LayoutInflater.from(this);
 		View mCustomView = mInflater.inflate(R.layout.spinner_layout, null);
 		spinnerFilialeCustodie = (Spinner) mCustomView.findViewById(R.id.spinnerDep);
@@ -326,8 +331,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		getActionBar().setCustomView(mCustomView);
 		getActionBar().setDisplayShowCustomEnabled(true);
 
-	}	
-	
+	}
+
 	private void addSpinnerDepartamente() {
 
 		if (isLivrareCustodie())
@@ -352,7 +357,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				if (selectedDepartamentAgent.equals("11") || selectedDepartamentAgent.equals("05")) {
 					adapterSpinnerDepozite.clear();
 					adapterSpinnerDepozite.addAll(UtilsGeneral.getDepoziteGed());
-					
+
 					UtilsGeneral.trateazaExceptieMAV_BU(adapterSpinnerDepozite);
 
 					if (selectedDepartamentAgent.equals("11"))
@@ -844,7 +849,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						}
 
 						afisPretUmAlternativa();
-						
+
 					}// sf. verif. cantitate
 
 				} catch (Exception ex) {
@@ -909,6 +914,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 			selectedUnitMas = "";
 			selectedUnitMasPret = "";
+			listCabluri = null;
+
 			if (listUmVanz.size() > 1) {
 				artMap = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
 				selectedUnitMas = artMap.get("rowText");
@@ -1029,7 +1036,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
-	
 	private void showArticoleCantDialog(String listArticoleSer) {
 		listArticoleCant = opArticol.deserializeArticoleCant(listArticoleSer);
 
@@ -1045,9 +1051,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		}
 
 	}
-	
+
 	private void showArticoleCantDialog() {
-		if (listArticoleCant!= null && !listArticoleCant.isEmpty()) {
+		if (listArticoleCant != null && !listArticoleCant.isEmpty()) {
 
 			int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.6);
 			int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.5);
@@ -1057,8 +1063,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			articoleCant.getWindow().setLayout(width, height);
 			articoleCant.show();
 		}
-	}	
-	
+	}
+
 	boolean isNotDepartRestricted(String codDepart) {
 		if (UserInfo.getInstance().getTipAcces().equals("27"))
 			return true;
@@ -1187,6 +1193,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						return;
 					}
 
+					if (isConditieCabluri05BV90() && listCabluri == null) {
+						getCabluri05(codArticol);
+						return;
+					}
+
 					String localUnitMas = "";
 					String alteValori = "", subCmp = "0";
 					boolean altDepozit = false;
@@ -1233,7 +1244,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						}
 
 					}
-					
+
 					String cantArticol = textCant.getText().toString().trim();
 
 					if (selectedCant != Double.parseDouble(cantArticol)) {
@@ -1398,6 +1409,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						unArticol.setLungime(articolDBSelected.getLungime());
 						unArticol.setCmp(cmpArt);
 						unArticol.setFilialaSite(CreareComanda.filialaAlternativa);
+						unArticol.setListCabluri(listCabluri);
 
 						if (procRedFin > 0)
 							unArticol.setIstoricPret(istoricPret);
@@ -1422,9 +1434,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 									Toast.LENGTH_LONG).show();
 
 						}
-						
+
 						showArticoleCantDialog();
-						
+
 						if (UtilsArticole.isArticolPal(articolDBSelected.getSintetic()))
 							afiseazaArticoleCant(codArticol, CreareComanda.filialaAlternativa);
 
@@ -1454,6 +1466,8 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 						valoareUmrez = 1;
 						valoareUmren = 1;
+
+						listCabluri = null;
 
 						redBtnTable.setVisibility(View.GONE);
 						labelStoc.setVisibility(View.GONE);
@@ -1489,6 +1503,37 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	}
 
+	private boolean isConditieCabluri05BV90() {
+		return articolDBSelected.getDepart().equals("05") && CreareComanda.filialaAlternativa.equals("BV90");
+	}
+
+	private void getCabluri05(String codArticol) {
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codArticol", codArticol);
+		params.put("sinteticArticol", articolDBSelected.getSintetic());
+		opArticol.getCabluri05(params);
+
+	}
+
+	private void afisCabluri05(List<BeanCablu05> listCabluri) {
+
+		if (listCabluri.isEmpty()) {
+			this.listCabluri = listCabluri;
+			saveArtBtn.performClick();
+			return;
+		}
+
+		int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.5);
+		int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.55);
+
+		Cabluri05Dialog cabluriDialog = new Cabluri05Dialog(SelectArtCmd.this, listCabluri, textCant.getText().toString().trim());
+		cabluriDialog.getWindow().setLayout(width, height);
+		cabluriDialog.setCabluSelectedListener(this);
+		cabluriDialog.show();
+
+	}
+
 	private void afiseazaArticoleCant(String codArticol, String filiala) {
 
 		HashMap<String, String> params = new HashMap<String, String>();
@@ -1496,14 +1541,12 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		params.put("codArtPal", codArticol);
 
 		opArticol.getArticoleCant(params);
-	}	
-	
-	
+	}
+
 	private boolean isUserExceptieFiliale() {
 		return globalCodDepartSelectetItem.equals("01") || globalCodDepartSelectetItem.equals("02");
-	}	
-	
-	
+	}
+
 	private void saveArticolCustodie() {
 
 		if (textCant.getText().toString().isEmpty()) {
@@ -1813,7 +1856,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				}
 
 				afisPretUmAlternativa();
-				
+
 				procDisc.setText(nf2.format(procDiscClient));
 				txtPretArt.setEnabled(true);
 				textProcRed.setFocusableInTouchMode(true);
@@ -1971,7 +2014,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			((TextView) findViewById(R.id.txtPretUmAlt)).setText("");
 
 	}
-	
+
 	private String getPretIstoric(String infoIstoric) {
 
 		String pretIstoric = "0";
@@ -2095,7 +2138,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		textUM.setText("");
 		textStoc.setText("");
 		textCant.setText("");
-		
+
 		valoareUmrez = 1;
 		valoareUmren = 1;
 
@@ -2161,14 +2204,13 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 			String varLocalUnitLog = "";
 
-			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE)
-			{
+			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE) {
 				if (globalDepozSel.equals("MAV1"))
-					varLocalUnitLog = DateLivrare.getInstance().getCodFilialaCLP().substring(0, 2) + "2" + DateLivrare.getInstance().getCodFilialaCLP().substring(3, 4);
+					varLocalUnitLog = DateLivrare.getInstance().getCodFilialaCLP().substring(0, 2) + "2"
+							+ DateLivrare.getInstance().getCodFilialaCLP().substring(3, 4);
 				else
 					varLocalUnitLog = DateLivrare.getInstance().getCodFilialaCLP();
-			}
-			else {
+			} else {
 				if (globalDepozSel.equals("MAV1") || globalDepozSel.equals("DSCM")) {
 					if (CreareComanda.filialaAlternativa.equals("BV90"))
 						varLocalUnitLog = "BV92";
@@ -2226,7 +2268,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			listArtPret((String) result);
 			break;
 
-
 		case GET_ARTICOLE_STATISTIC:
 			((TextView) findViewById(R.id.textAfisStatistic)).setVisibility(View.VISIBLE);
 			listArticoleStatistic = opArticol.deserializeArticoleVanzare((String) result);
@@ -2255,14 +2296,15 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		case GET_ARTICOLE_CANT:
 			showArticoleCantDialog((String) result);
 			break;
+		case GET_CABLURI_05:
+			afisCabluri05(opArticol.deserializeCabluri05((String) result));
 		default:
 			break;
 
 		}
 
 	}
-	
-	
+
 	@Override
 	public void articolCantSelected(ArticolCant articolCant) {
 
@@ -2289,7 +2331,14 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	@Override
 	public void articolCantClosed() {
 		listArticoleCant.clear();
-		
+
+	}
+
+	@Override
+	public void cabluriSelected(List<BeanCablu05> listCabluri) {
+		this.listCabluri = listCabluri;
+		saveArtBtn.performClick();
+
 	}
 
 }

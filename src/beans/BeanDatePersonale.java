@@ -1,5 +1,7 @@
 package beans;
 
+import java.util.List;
+
 public class BeanDatePersonale {
 
 	private String cnp;
@@ -7,6 +9,9 @@ public class BeanDatePersonale {
 	private String codjudet;
 	private String localitate;
 	private String strada;
+	private List<String> termenPlata;
+	private boolean clientBlocat;
+	private String tipPlata;
 
 	public String getCnp() {
 		return cnp;
@@ -46,6 +51,30 @@ public class BeanDatePersonale {
 
 	public void setStrada(String strada) {
 		this.strada = strada;
+	}
+	
+	public List<String> getTermenPlata() {
+		return termenPlata;
+	}
+
+	public void setTermenPlata(List<String> termenPlata) {
+		this.termenPlata = termenPlata;
+	}
+
+	public boolean isClientBlocat() {
+		return clientBlocat;
+	}
+
+	public void setClientBlocat(boolean clientBlocat) {
+		this.clientBlocat = clientBlocat;
+	}
+
+	public String getTipPlata() {
+		return tipPlata;
+	}
+
+	public void setTipPlata(String tipPlata) {
+		this.tipPlata = tipPlata;
 	}
 
 	@Override

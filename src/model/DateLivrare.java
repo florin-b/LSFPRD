@@ -85,6 +85,7 @@ public class DateLivrare {
 	private ObiectivConsilier obiectivConsilier;
 	private String refClient;
 	private TipCmdGed tipComandaGed = TipCmdGed.COMANDA_VANZARE;
+	private boolean isClientBlocat;
 	
 	private DateLivrareAfisare dateLivrareAfisare;
 
@@ -624,6 +625,14 @@ public class DateLivrare {
 		this.tipComandaGed = tipComandaGed;
 	}
 	
+	public boolean isClientBlocat() {
+		return isClientBlocat;
+	}
+
+	public void setClientBlocat(boolean isClientBlocat) {
+		this.isClientBlocat = isClientBlocat;
+	}
+	
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -677,6 +686,7 @@ public class DateLivrare {
 		obiectivConsilier = null;
 		refClient = "";
 		tipComandaGed = TipCmdGed.COMANDA_VANZARE;
+		isClientBlocat = false;
 
 	}
 

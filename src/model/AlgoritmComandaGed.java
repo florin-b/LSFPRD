@@ -48,7 +48,7 @@ public class AlgoritmComandaGed {
 
 					if (UtilsComenziGed.isArticolTransport(articol) || articol.isRespins())
 						continue;
-					
+
 					pretUnitarGed = getPretGed(articol);
 
 					// exceptie articol transport
@@ -87,7 +87,7 @@ public class AlgoritmComandaGed {
 
 					if (pretMediuDistrib == 0) // se ia in calcul pretul ged
 					{
-						
+
 						pretMediuDistrib = pretUnitarGed;
 						adaosMediuDistrib = 0;
 					}
@@ -285,9 +285,23 @@ public class AlgoritmComandaGed {
 		double localCoef = 0;
 
 		if (UserInfo.getInstance().getCoefCorectie().contains(codDepart)) {
+
 			String[] arrayCoefs = UserInfo.getInstance().getCoefCorectie().split(";");
-			String[] oneCoef = arrayCoefs[Integer.parseInt(codDepart) - 1].split(":");
-			localCoef = Double.parseDouble(oneCoef[1]);
+
+			for (String coef : arrayCoefs) {
+
+				if (coef.contains(":")) {
+
+					String[] oneCoef = coef.split(":");
+
+					if (oneCoef[0].equals(codDepart)) {
+						localCoef = Double.parseDouble(oneCoef[1]);
+						break;
+					}
+				}
+
+			}
+
 		}
 
 		return localCoef;

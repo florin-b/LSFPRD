@@ -16,21 +16,34 @@
         android:layout_weight="0.45"
         android:orientation="vertical" >
 
-        <EditText
-            android:id="@+id/txtNumeClient"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:gravity="bottom"
-            android:inputType="textNoSuggestions"
-            android:maxLength="30"
-            android:singleLine="true"
-            android:textColor="@color/editTextColor1"
-            android:textSize="19sp"
-            android:typeface="monospace" />
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <Spinner
+                android:id="@+id/spinnerCautare"
+                android:layout_width="0dip"
+                android:layout_height="40dip"
+                android:layout_margin="5dip"
+                android:layout_weight="0.2"
+                android:textColor="@color/artRowColor1" />
+
+            <EditText
+                android:id="@+id/txtNumeClient"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="0.7"
+                android:inputType="textNoSuggestions"
+                android:maxLength="30"
+                android:singleLine="true"
+                android:textColor="@color/editTextColor1"
+                android:textSize="19sp"
+                android:typeface="monospace" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/listClienti"
@@ -63,32 +76,6 @@
                 android:paddingLeft="50dip"
                 android:paddingRight="50dip"
                 android:text="@string/strCauta" />
-
-            <View
-                android:layout_width="50dip"
-                android:layout_height="match_parent" >
-            </View>
-
-            <Spinner
-                android:id="@+id/spinnerLuna"
-                android:layout_width="0dp"
-                android:layout_height="45dip"
-                android:layout_gravity="bottom|left"
-                android:layout_weight="0.1"
-                android:gravity="left" />
-
-            <View
-                android:layout_width="30dip"
-                android:layout_height="match_parent" >
-            </View>
-
-            <Spinner
-                android:id="@+id/spinnerAn"
-                android:layout_width="0dp"
-                android:layout_height="45dip"
-                android:layout_gravity="bottom|left"
-                android:layout_weight="0.1"
-                android:gravity="left" />
 
             <View
                 android:layout_width="30dip"

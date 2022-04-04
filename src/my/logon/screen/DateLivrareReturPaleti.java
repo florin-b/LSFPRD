@@ -41,6 +41,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 import dialogs.MapAddressDialogF4;
 import enums.EnumMotivRespingere;
+import enums.EnumTipClientIP;
+import enums.EnumTipComanda;
 
 public class DateLivrareReturPaleti extends Fragment implements OnItemClickListener, OnTouchListener, MapListener {
 
@@ -58,15 +60,18 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 
 	private Button btnPozitieAdresa;
 
-	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU", "CALARASI",
-			"CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA", "IALOMITA", "IASI",
-			"ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA", "TELEORMAN", "TIMIS", "TULCEA",
-			"VALCEA", "VASLUI", "VRANCEA" };
+	String[] judete = { "ALBA", "ARAD", "ARGES", "BACAU", "BIHOR", "BISTRITA-NASAUD", "BOTOSANI", "BRAILA", "BRASOV", "BUCURESTI", "BUZAU",
+			"CALARASI", "CARAS-SEVERIN", "CLUJ", "CONSTANTA", "COVASNA", "DAMBOVITA", "DOLJ", "GALATI", "GIURGIU", "GORJ", "HARGHITA", "HUNEDOARA",
+			"IALOMITA", "IASI", "ILFOV", "MARAMURES", "MEHEDINTI", "MURES", "NEAMT", "OLT", "PRAHOVA", "SALAJ", "SATU-MARE", "SIBIU", "SUCEAVA",
+			"TELEORMAN", "TIMIS", "TULCEA", "VALCEA", "VASLUI", "VRANCEA" };
 
-	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52", "18", "19",
-			"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
-	
+	String[] codJudete = { "01", "02", "03", "04", "05", "06", "07", "09", "08", "40", "10", "51", "11", "12", "13", "14", "15", "16", "17", "52",
+			"18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "31", "30", "32", "33", "34", "35", "36", "38", "37", "39" };
+
 	public static boolean isAltaAdresa = false;
+
+	public static EnumTipComanda tipCmdRetur = EnumTipComanda.DISTRIBUTIE;
+	public static EnumTipClientIP tipClientIP;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -271,8 +276,8 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 	private void fillSpinnerJudete() {
 
 		ArrayList<HashMap<String, String>> listJudete = new ArrayList<HashMap<String, String>>();
-		SimpleAdapter adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete, new String[] { "numeJudet", "codJudet" },
-				new int[] { R.id.textNumeJudet, R.id.textCodJudet });
+		SimpleAdapter adapterJudete = new SimpleAdapter(getActivity(), listJudete, R.layout.rowlayoutjudete,
+				new String[] { "numeJudet", "codJudet" }, new int[] { R.id.textNumeJudet, R.id.textCodJudet });
 
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("numeJudet", "Selectat judetul");
@@ -434,6 +439,14 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 		}
 	}
 
+	public static void setTipComandaRetur(EnumTipComanda tipComandaRetur) {
+		tipCmdRetur = tipComandaRetur;
+	}
+
+	public static void setTipClientIP(EnumTipClientIP paramClientIP) {
+		tipClientIP = paramClientIP;
+	}
+
 	private void setAdresaLivrare(Address address) {
 
 		textOras.setText(address.getCity());
@@ -478,7 +491,6 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 		return false;
 	}
 
-	
 	public void addressSelected(LatLng coord, android.location.Address address) {
 		setAdresaLivrare(MapUtils.getAddress(address));
 
