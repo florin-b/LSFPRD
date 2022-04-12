@@ -130,6 +130,8 @@ public class ArticoleReturPaleti extends Fragment implements ListaArtReturListen
 
 		if (isTipTranspPretPaleti() && DateLivrareReturPaleti.tipClientIP != null && DateLivrareReturPaleti.tipClientIP == EnumTipClientIP.NONCONSTR)
 			return true;
+		else if (isTipTranspPretPaleti() && DateLivrareReturPaleti.tipClientIP != null && DateLivrareReturPaleti.tipClientIP == EnumTipClientIP.CONSTR)
+			return false;
 		else
 			return isTipTranspPretPaleti() && (UtilsUser.isCV() || DateLivrareReturPaleti.tipCmdRetur == EnumTipComanda.GED);
 

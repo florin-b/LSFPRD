@@ -100,9 +100,9 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	private static final String METHOD_NAME = "getClientJud";
 	int posJudetSel = 0;
 
-	private String[] tipPlataContract = { "LC - Limita credit", "N - Numerar in filiala", "OP - ordin de plata", "R - ramburs" };
-	private String[] tipPlataClBlocat = { "N - Numerar in filiala", "OP - ordin de plata", "R - ramburs" };
-	private String[] tipPlataRest = { "N - Numerar in filiala", "OP - ordin de plata", "R - ramburs" };
+	private String[] tipPlataContract = { "LC - Limita credit", "N - Numerar in filiala", "OPA - OP avans", "R - ramburs" };
+	private String[] tipPlataClBlocat = { "OPA - OP avans", "R - ramburs", "N - Numerar in filiala" };
+	private String[] tipPlataRest = { "OPA - OP avans", "R - ramburs", "N - Numerar in filiala" };
 
 	private String[] tipTransport = { "TRAP - Transport Arabesque", "TCLI - Transport client", "TFRN - Transport furnizor" };
 
@@ -176,7 +176,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		if (bundle != null && bundle.getString("parrentClass") != null && bundle.getString("parrentClass").equals("ModificareComanda")) {
 
-			if (bundle.getString("tipPlataContract").equals("B") || bundle.getString("tipPlataContract").equals("C")) {
+			if ((Double.parseDouble(bundle.getString("limitaCredit")) > 1) && !bundle.getString("termenPlata").equals("C000")) {
 				CreareComanda.tipPlataContract = bundle.getString("tipPlataContract");
 				DateLivrare.getInstance().setTipPlata("LC");
 			}
@@ -293,6 +293,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		} else
 			adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataRest);
 
+		if (isComandaDl()) {
+			List<String> metsPlata = new ArrayList<String>();
+
+			for (int ii = 0; ii < adapterSpinnerPlata.getCount(); ii++)
+				if (!adapterSpinnerPlata.getItem(ii).toString().startsWith("R"))
+					metsPlata.add(adapterSpinnerPlata.getItem(ii));
+
+			adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, metsPlata.toArray(new String[0]));
+
+		}
+
 		adapterSpinnerPlata.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerPlata.setAdapter(adapterSpinnerPlata);
 		addListenerTipPlata();
@@ -367,8 +378,6 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		}
 
-		spinnerTermenPlata.setEnabled(false);
-
 		performGetJudete();
 
 		int i = 0;
@@ -396,15 +405,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		// tip plata
 
-		if (!CreareComanda.tipPlataContract.trim().isEmpty() && CreareComanda.tipPlataContract.equals("O")) {
-			setTipPlataSelected(CreareComanda.tipPlataContract);
-		} else {
-			for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
-				if (adapterSpinnerPlata.getItem(i).toString().split("-")[0].trim().equals(
-						UtilsComenzi.setTipPlataClient(DateLivrare.getInstance().getTipPlata()))) {
-					spinnerPlata.setSelection(i);
-					break;
-				}
+		for (i = 0; i < adapterSpinnerPlata.getCount(); i++) {
+			if (adapterSpinnerPlata.getItem(i).toString().split("-")[0].trim().equals(
+					UtilsComenzi.setTipPlataClient(DateLivrare.getInstance().getTipPlata()))) {
+				spinnerPlata.setSelection(i);
+				break;
 			}
 		}
 
@@ -996,7 +1001,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 				checkAviz.setEnabled(true);
 				spinnerResponsabil.setEnabled(true);
-				spinnerTermenPlata.setEnabled(false);
+				spinnerTermenPlata.setEnabled(true);
 				((TextView) findViewById(R.id.tipPlataContract)).setVisibility(View.INVISIBLE);
 
 				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("N")
@@ -1009,16 +1014,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					spinnerResponsabil.setSelection(2);
 					spinnerResponsabil.setEnabled(false);
 					spinnerTermenPlata.setSelection(0);
-				}
-
-				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("O")) {
-					spinnerTermenPlata.setEnabled(true);
-					spinnerResponsabil.setSelection(0);
+					spinnerTermenPlata.setEnabled(false);
 				}
 
 				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("R")) {
 					spinnerResponsabil.setEnabled(true);
 					spinnerResponsabil.setSelection(1);
+				}
+
+				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("O")) {
+					spinnerTermenPlata.setSelection(0);
+					spinnerTermenPlata.setEnabled(false);
 				}
 
 				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("L")) {
@@ -1030,7 +1036,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 					spinnerTermenPlata.setVisibility(View.VISIBLE);
 				}
 
-				if (pos == 2 && spinnerResponsabil.getSelectedItemPosition() == 1) {
+				if (spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("R") && spinnerResponsabil.getSelectedItemPosition() == 1) {
 					layoutValoareIncasare.setVisibility(View.VISIBLE);
 
 					if (DateLivrare.getInstance().isValIncModif()) {
@@ -1066,7 +1072,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		spinnerResponsabil.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 
-				if (pos == 1 && spinnerPlata.getSelectedItemPosition() == 2) {
+				if (pos == 1 && spinnerPlata.getSelectedItem().toString().substring(0, 1).equals("R")) {
 					layoutValoareIncasare.setVisibility(View.VISIBLE);
 
 					if (DateLivrare.getInstance().isValIncModif()) {

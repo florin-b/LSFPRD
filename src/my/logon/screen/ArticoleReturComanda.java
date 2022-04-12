@@ -386,7 +386,7 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 
 			String codMotiv = EnumMotivRespArticol.getCodRetur(spinnerMotivRetur.getSelectedItem().toString());
 
-			if (dateDiff > 2 && !codMotiv.equals("4")) {
+			if (dateDiff > 30 && !codMotiv.equals("4")) {
 				showInfoMotivReturDialog();
 				return false;
 			}
@@ -404,7 +404,7 @@ public class ArticoleReturComanda extends Fragment implements ListaArtReturListe
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setMessage(
-				"\nPentru acest motiv de retur livrarea trebuia facuta cu cel mult 2 zile in urma. \nAceasta comanda s-a livrat in data de "
+				"\nPentru acest motiv de retur livrarea trebuia facuta cu cel mult 30 zile in urma. \nAceasta comanda s-a livrat in data de "
 						+ UtilsDates.formatDateFromSap(DateLivrareReturComanda.dataLivrareComanda) + ".\n").setCancelable(false)
 				.setPositiveButton("Inchide", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {

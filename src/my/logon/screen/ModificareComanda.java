@@ -411,11 +411,15 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 					nextScreenLivr.putExtra("codClient", selectedClientCode);
 					nextScreenLivr.putExtra("parrentClass", "ModificareComanda");
 					nextScreenLivr.putExtra("tipPlataContract", DateLivrare.getInstance().getTipPlata());
+					nextScreenLivr.putExtra("limitaCredit", String.valueOf(DateLivrare.getInstance().getLimitaCredit()));
+					nextScreenLivr.putExtra("termenPlata", DateLivrare.getInstance().getTermenPlata());
 
 				} else {
 					nextScreenLivr = new Intent(getApplicationContext(), SelectAdrLivrCmd.class);
 					nextScreenLivr.putExtra("parrentClass", "ModificareComanda");
 					nextScreenLivr.putExtra("tipPlataContract", DateLivrare.getInstance().getTipPlata());
+					nextScreenLivr.putExtra("limitaCredit", String.valueOf(DateLivrare.getInstance().getLimitaCredit()));
+					nextScreenLivr.putExtra("termenPlata", DateLivrare.getInstance().getTermenPlata());
 				}
 
 				selectedCmdAdrLivr = selectedCmd;

@@ -92,7 +92,7 @@ public class UtilsComenzi {
 			return tipPlataContract;
 		else if (tipPlataSelect.equals("N"))
 			return "E";
-		else if (tipPlataSelect.equals("OP"))
+		else if (tipPlataSelect.equals("OPA"))
 			return "O";
 		else if (tipPlataSelect.equals("R"))
 			return "E1";
@@ -108,7 +108,7 @@ public class UtilsComenzi {
 		if (tipPlataClient.equals("E"))
 			return "N";
 		else if (tipPlataClient.equals("O"))
-			return "OP";
+			return "OPA";
 		else if (tipPlataClient.equals("E1"))
 			return "R";
 		if (tipPlataClient.equals("CB"))
