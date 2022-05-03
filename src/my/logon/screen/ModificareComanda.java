@@ -1080,7 +1080,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 					if ((listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1)
 							|| comandaSelectata.isCmdInstPublica()) {
 						alertDV = true;
-						if (!comandaFinala.getComandaBlocata().equals("21"))
+						if (!comandaFinala.getComandaBlocata().equals("21") && !comandaFinala.getComandaBlocata().equals("20"))
 							comandaFinala.setComandaBlocata("1");
 
 						aprobariCV.add(listArticoleComanda.get(i).getDepartSintetic());
@@ -1179,6 +1179,7 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 			obj.put("prelucrare", DateLivrare.getInstance().getPrelucrare());
 			obj.put("clientRaft", DateLivrare.getInstance().isClientRaft());
 			obj.put("meserias", DateLivrare.getInstance().getCodMeserias());
+			obj.put("isComandaACZC", comandaSelectata.isComandaACZC());
 
 			if (isComandaGed())
 				obj.put("factRed", "NU");

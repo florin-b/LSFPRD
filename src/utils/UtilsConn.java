@@ -11,13 +11,13 @@ public class UtilsConn {
 
 	private static final String FTP_CENTRAL_USR = "litesfa";
 	private static final String FTP_CENTRAL_PASS = "egoo4Ur";
-	private static final String FTP_CENTRAL_VER_FILE = "/Update/LiteSFA/LiteReportsVer.txt";
-	private static final String FTP_CENTRAL_APK_FILE = "/Update/LiteSFA/LiteSFA.apk";
+	private static final String FTP_CENTRAL_VER_FILE = "/Update/LiteSFA/SFAVer6/LiteReportsVer.txt";
+	private static final String FTP_CENTRAL_APK_FILE = "/Update/LiteSFA/SFAVer6/LiteSFA.apk";
 
 	private static final String FTP_LOCAL_USR = "update";
 	private static final String FTP_LOCAL_PASS = "Umig9eep";
-	private static final String FTP_LOCAL_VER_FILE = "Update/LiteSFA/LiteReportsVer.txt";
-	private static final String FTP_LOCAL_APK_FILE = "Update/LiteSFA/LiteSFA.apk";
+	private static final String FTP_LOCAL_VER_FILE = "Update/LiteSFA/SFAVer6/LiteReportsVer.txt";
+	private static final String FTP_LOCAL_APK_FILE = "Update/LiteSFA/SFAVer6/LiteSFA.apk";
 
 	private static final String NO_IP = "0.0.0.0";
 

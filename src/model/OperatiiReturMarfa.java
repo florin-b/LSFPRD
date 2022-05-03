@@ -118,7 +118,7 @@ public class OperatiiReturMarfa implements AsyncTaskListener {
 					docRetur.setData(jsonObj.getString("data"));
 					docRetur.setTipTransport(jsonObj.getString("tipTransport"));
 					docRetur.setDataLivrare(jsonObj.getString("dataLivrare"));
-					
+					docRetur.setCmdACZC(Boolean.parseBoolean(jsonObj.getString("isCmdACZC")));
 					
 					JSONObject objectExtra = new JSONObject(jsonObj.getString("extraDate"));
 					

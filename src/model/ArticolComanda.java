@@ -91,6 +91,9 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 	private double valT1;	
 	
 	private double pretFaraTva;
+	private double aczcDeLivrat;
+	private double aczcLivrat;
+	
 	private List<BeanCablu05> listCabluri;
 
 	public int getNrCrt() {
@@ -636,6 +639,24 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 		this.listCabluri = listCabluri;
 	}
 	
+	
+	
+	public double getAczcDeLivrat() {
+		return aczcDeLivrat;
+	}
+
+	public void setAczcDeLivrat(double aczcDeLivrat) {
+		this.aczcDeLivrat = aczcDeLivrat;
+	}
+
+	public double getAczcLivrat() {
+		return aczcLivrat;
+	}
+
+	public void setAczcLivrat(double aczcLivrat) {
+		this.aczcLivrat = aczcLivrat;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

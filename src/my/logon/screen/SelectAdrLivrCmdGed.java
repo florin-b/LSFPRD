@@ -1682,6 +1682,10 @@ public class SelectAdrLivrCmdGed extends Activity implements AsyncTaskListener, 
 				+ spinnerTransp.getSelectedItem().toString() + "#" + factRed + "#");
 
 		dateLivrareInstance.setTermenPlata(spinnerTermenPlata.getSelectedItem().toString());
+		
+		 if (UtilsUser.isAgentOrSD() && !dateLivrareInstance.getTermenPlata().equals("C000") && dateLivrareInstance.getTipComandaGed().equals(TipCmdGed.ARTICOLE_COMANDA)) {
+	            Toast.makeText(getApplicationContext(), "Pentru comenzile AC/ZC trebuie sa existe un proces verbal de angajament semnat de client.", Toast.LENGTH_LONG).show();
+	        }
 
 		dateLivrareInstance.setObsLivrare(observatii.replace("#", "-").replace("@", "-"));
 		dateLivrareInstance.setObsPlata(obsPlata.replace("#", "-").replace("@", "-"));

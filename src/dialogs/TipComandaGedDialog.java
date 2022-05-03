@@ -65,6 +65,7 @@ public class TipComandaGedDialog extends Dialog implements ComenziDAOListener {
 		final RadioButton radioAmob = (RadioButton) findViewById(R.id.radioAmob);
 		final RadioButton radioCLP = (RadioButton) findViewById(R.id.radioCLP);
 		final RadioButton radioDL = (RadioButton) findViewById(R.id.radioDL);
+		final RadioButton radioACZC = (RadioButton) findViewById(R.id.radioACZC);
 
 		if (UtilsUser.isUserIP())
 			radioCLP.setVisibility(View.INVISIBLE);
@@ -91,6 +92,8 @@ public class TipComandaGedDialog extends Dialog implements ComenziDAOListener {
 					tipComanda = TipCmdGed.COMANDA_VANZARE;
 				else if (radioDL.isChecked())
 					tipComanda = TipCmdGed.DISPOZITIE_LIVRARE;
+				else if (radioACZC.isChecked())
+					tipComanda = TipCmdGed.ARTICOLE_COMANDA;
 				else if (radioAmob.isChecked()) {
 					tipComanda = TipCmdGed.COMANDA_AMOB;
 					if (idComanda.equals("-1"))
@@ -158,6 +161,18 @@ public class TipComandaGedDialog extends Dialog implements ComenziDAOListener {
 			public void onClick(View v) {
 				spinnerComenziAmob.setVisibility(View.VISIBLE);
 				getComenziAMOB();
+
+			}
+
+		});
+		
+		radioACZC.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				spinnerComenziAmob.setVisibility(View.INVISIBLE);
+				spinnerFilialeClp.setVisibility(View.INVISIBLE);
+				textInfoClp.setVisibility(View.INVISIBLE);
 
 			}
 

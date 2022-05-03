@@ -122,6 +122,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 	private BeanComandaCreata comandaCurenta;
 	private TextView textTipReducere;
 	private TextView textValMarjaT1, textProcMarjaT1, textMetodaPlata;
+	private TextView textFilialaClp;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -232,8 +233,10 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 
 		textValMarjaT1 = (TextView) findViewById(R.id.textValMarjaT1);
 		textProcMarjaT1 = (TextView) findViewById(R.id.textProcMarjaT1);
-		
+
 		textMetodaPlata = (TextView) findViewById(R.id.textMetodaPlata);
+
+		textFilialaClp = (TextView) findViewById(R.id.textFilialaClp);
 
 		textComandaBV90 = (TextView) findViewById(R.id.textComandaBV90);
 		textComandaBV90.setVisibility(View.INVISIBLE);
@@ -348,6 +351,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 						textPondereB_30.setVisibility(View.INVISIBLE);
 						textTipTransport.setVisibility(View.INVISIBLE);
 						textMetodaPlata.setVisibility(View.INVISIBLE);
+						textFilialaClp.setVisibility(View.INVISIBLE);
+
 						textComandaBV90.setVisibility(View.INVISIBLE);
 						checkEliminaTransp.setVisibility(View.INVISIBLE);
 						textTipReducere.setVisibility(View.INVISIBLE);
@@ -605,6 +610,12 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		String title = "Confirmare";
 		String alertMessage = "Aprobati comanda?";
 
+		if (comandaCurenta.isComandaACZC()) {
+			alertMessage += "\n\n";
+			alertMessage += "Aceasta este o solicitare de produse la comanda AC/ZC.\n";
+			alertMessage += "Trebuie sa avem proces verbal de angajament semnat de client.";
+		}
+
 		GenericAlertDialog alertDialog = new GenericAlertDialog(AprobareComanda.this, title, alertMessage, EnumDialogConstraints.APROBARE_COMANDA);
 		alertDialog.setGenericDialogListener(this);
 		alertDialog.showAlertDialog();
@@ -814,6 +825,14 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 		textAdresaLivrare.setText("Adresa livrare: " + strAdresaLivrare.toString());
 		textTipTransport.setText("Transport: " + UtilsGeneral.getDescTipTransport(dateLivrare.getTransport()));
 		textMetodaPlata.setText("Plata: " + UtilsGeneral.getDescTipPlata(dateLivrare.getTipPlata(), dateLivrare.getTermenPlata()));
+
+		textFilialaClp.setVisibility(View.INVISIBLE);
+		textFilialaClp.setText("");
+
+		if (dateLivrare.getCodFilialaCLP() != null && dateLivrare.getCodFilialaCLP().length() == 4) {
+			textFilialaClp.setText("Filiala clp: " + dateLivrare.getCodFilialaCLP());
+			textFilialaClp.setVisibility(View.VISIBLE);
+		}
 
 		String strTipReducere = UtilsGeneral.getTipReducere(dateLivrare.getFactRed()).isEmpty() ? " " : "Tip reducere: "
 				+ UtilsGeneral.getTipReducere(dateLivrare.getFactRed());
@@ -1066,6 +1085,7 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 				textMetodaPlata.setVisibility(View.INVISIBLE);
 				checkEliminaTransp.setVisibility(View.INVISIBLE);
 				textTipReducere.setVisibility(View.INVISIBLE);
+				textFilialaClp.setVisibility(View.INVISIBLE);
 
 				slideButtonAprob.setBackgroundResource(R.drawable.slideright32);
 
@@ -1100,6 +1120,8 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 				textTipTransport.setVisibility(View.VISIBLE);
 				textMetodaPlata.setVisibility(View.VISIBLE);
 				textTipReducere.setVisibility(View.VISIBLE);
+				textFilialaClp.setVisibility(View.VISIBLE);
+
 				slideButtonAprob.setBackgroundResource(R.drawable.slideleft32);
 				setCheckEliminaTranspVisibility();
 

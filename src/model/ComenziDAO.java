@@ -379,6 +379,11 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					dateLivrare.setClientBlocat(Boolean.valueOf(jsonLivrare.getString("isClientBlocat")));
 				
 				dateLivrare.setLimitaCredit(Double.valueOf(jsonLivrare.getString("limitaCredit")));
+				
+                if (jsonLivrare.has("nrCmdClp"))
+                    dateLivrare.setNrCmdClp(jsonLivrare.getString("nrCmdClp"));
+                else
+                    dateLivrare.setNrCmdClp("");
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
@@ -457,6 +462,12 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 					if (articolObject.has("listCabluri"))
 						articol.setListCabluri(new OperatiiArticolImpl(context).deserializeCantCabluri05(articolObject.getString("listCabluri")));
 
+					if (articolObject.has("aczcDeLivrat"))
+                        articol.setAczcDeLivrat(Double.valueOf(articolObject.getString("aczcDeLivrat")));
+
+                    if (articolObject.has("aczcLivrat"))
+                        articol.setAczcLivrat(Double.valueOf(articolObject.getString("aczcLivrat")));
+					
 					listArticole.add(articol);
 
 				}
@@ -584,6 +595,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 					if (comandaObject.has("isAprobatDistrib"))
 						comanda.setAprobDistrib(Boolean.valueOf(comandaObject.getString("isAprobatDistrib")));
+					
+					 if (comandaObject.has("isComandaACZC"))
+	                        comanda.setComandaACZC(Boolean.valueOf(comandaObject.getString("isComandaACZC")));
 
 					listComenzi.add(comanda);
 

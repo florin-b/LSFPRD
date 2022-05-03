@@ -6,7 +6,7 @@
     android:orientation="horizontal" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+       
         android:layout_width="0dip"
         android:layout_height="match_parent"
         android:layout_weight="0.6"
@@ -39,7 +39,7 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+           
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top|left"
@@ -341,6 +341,16 @@
                 android:typeface="serif"
                 android:visibility="invisible" />
 
+            <TextView
+                android:id="@+id/textFilialaClp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:textColor="@color/detColor7"
+                android:textSize="16sp"
+                android:typeface="serif"
+                android:visibility="invisible" />
+            
             <TextView
                 android:id="@+id/textComandaBV90"
                 android:layout_width="wrap_content"

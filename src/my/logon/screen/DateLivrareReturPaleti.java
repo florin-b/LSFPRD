@@ -47,14 +47,14 @@ import enums.EnumTipComanda;
 public class DateLivrareReturPaleti extends Fragment implements OnItemClickListener, OnTouchListener, MapListener {
 
 	ClientReturListener clientListener;
-	Spinner spinnerTransport, spinnerDataRetur, spinnerMotivRetur, spinnerAdresaRetur, spinnerJudet;
-	String[] arrayTipTransport = { "Selectati tip transport", "TRAP - Transport Arabesque", "TCLI - Transport client", "TERT - Transport curier" };
+	Spinner spinnerTransport, spinnerDataRetur,  spinnerAdresaRetur, spinnerJudet;
+	String[] arrayTipTransport = { "Selectati tip transport", "TRAP - Transport Arabesque", "TCLI - Transport client" };
 	LinearLayout layoutAdresaNoua;
 	private List<BeanAdresaLivrare> listAdrese;
 	private ListPopupWindow lpw;
 
 	private EditText textOras, textStrada, textPersoana, textTelefon, textObservatii;
-	public static String dataRetur, tipTransport, motivRetur, adresaCodJudet = "", adresaOras = "", adresaStrada = "", numePersContact = "",
+	public static String dataRetur, tipTransport,  adresaCodJudet = "", adresaOras = "", adresaStrada = "", numePersContact = "",
 			telPersContact = "", adresaCodAdresa = "", observatii = "";
 	private String[] arrayPersoane, arrayTelefoane;
 
@@ -84,10 +84,6 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 		spinnerTransport = (Spinner) v.findViewById(R.id.spinnerTranspRetur);
 		populateSpinnerTransport();
 		setListenerSpinnerTransport();
-
-		spinnerMotivRetur = (Spinner) v.findViewById(R.id.spinnerMotivRetur);
-		populateSpinnerMotivRetur();
-		setListenerSpinnerRetur();
 
 		spinnerAdresaRetur = (Spinner) v.findViewById(R.id.spinnerAdresaRetur);
 		setSpinnerAdresaListener();
@@ -212,29 +208,9 @@ public class DateLivrareReturPaleti extends Fragment implements OnItemClickListe
 		});
 	}
 
-	private void populateSpinnerMotivRetur() {
-		List<String> listMotive = EnumMotivRespingere.getStringList();
 
-		ArrayAdapter<String> adapterMotive = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, listMotive);
 
-		listMotive.add(0, "Selectati motiv retur");
-		spinnerMotivRetur.setAdapter(adapterMotive);
 
-	}
-
-	private void setListenerSpinnerRetur() {
-		spinnerMotivRetur.setOnItemSelectedListener(new OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position > 0)
-					motivRetur = EnumMotivRespingere.getCodRetur(spinnerMotivRetur.getSelectedItem().toString());
-				else
-					motivRetur = "";
-			}
-
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-	}
 
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
