@@ -1,22 +1,19 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import listeners.AsyncTaskListener;
-import listeners.OperatiiArticolListener;
-import my.logon.screen.AsyncTaskWSCall;
+import android.content.Context;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import utils.UtilsGeneral;
-import android.content.Context;
-import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import beans.AntetCmdMathaus;
 import beans.ArticolCant;
 import beans.ArticolDB;
 import beans.BeanArticolSimulat;
@@ -24,9 +21,18 @@ import beans.BeanArticolStoc;
 import beans.BeanCablu05;
 import beans.BeanGreutateArticol;
 import beans.BeanParametruPretGed;
+import beans.ComandaMathaus;
+import beans.CostTransportMathaus;
+import beans.DateArticolMathaus;
+import beans.LivrareMathaus;
 import beans.PretArticolGed;
 import enums.EnumArticoleDAO;
 import enums.EnumUnitMas;
+import listeners.AsyncTaskListener;
+import listeners.OperatiiArticolListener;
+import my.logon.screen.AsyncTaskWSCall;
+import utils.UtilsGeneral;
+
 
 public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 
@@ -132,12 +138,25 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		this.params = params;
 		performOperation();
 
-	}
-
+	}		
+	
 	public void getStocCustodie(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_STOC_CUSTODIE;
 		this.params = params;
 		performOperation();
+	}
+
+	public void getStocMathaus(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_STOC_MATHAUS;
+		this.params = params;
+		performOperation();
+	}
+
+	public void getInfoPretMathaus(HashMap<String, String> params) {
+		numeComanda = EnumArticoleDAO.GET_INFOPRET_MATHAUS;
+		this.params = params;
+		performOperation();
+
 	}
 
 	public void getArticoleCant(HashMap<String, String> params) {
@@ -151,13 +170,13 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		this.params = params;
 		performOperation();
 	}
-	
+
 	public void getArticoleACZC(HashMap<String, String> params) {
 		numeComanda = EnumArticoleDAO.GET_ARTICOLE_ACZC;
 		this.params = params;
 		performOperation();
 	}
-
+	
 	@Override
 	public Object getDepartBV90(String codArticol) {
 		numeComanda = EnumArticoleDAO.GET_DEP_BV90;
@@ -420,6 +439,152 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		return jsonArray.toString();
 	}
 
+	public String serializeCostTransportMathaus(List<CostTransportMathaus> costTransport) {
+
+		JSONArray jsonArray = new JSONArray();
+
+		try {
+
+			for (CostTransportMathaus cost : costTransport) {
+
+				JSONObject object = new JSONObject();
+				object.put("filiala", cost.getFiliala());
+				object.put("tipTransp", cost.getTipTransp());
+				object.put("valTransp", cost.getValTransp());
+				object.put("codArtTransp", cost.getCodArtTransp());
+				jsonArray.put(object);
+
+			}
+		} catch (JSONException e) {
+
+			e.printStackTrace();
+		}
+
+		return jsonArray.toString();
+
+	}
+
+	public LivrareMathaus deserializeLivrareMathaus(String result) {
+
+		LivrareMathaus livrareMathaus = new LivrareMathaus();
+
+		try {
+
+			JSONObject jsonObject = new JSONObject((String) result);
+
+			livrareMathaus.setComandaMathaus(deserializeStocMathaus(jsonObject.getString("comandaMathaus")));
+
+			List<CostTransportMathaus> listCostTransport = new ArrayList<CostTransportMathaus>();
+
+			JSONArray jsonArrayTransp = new JSONArray(jsonObject.getString("costTransport"));
+
+			for (int i = 0; i < jsonArrayTransp.length(); i++) {
+
+				JSONObject transpObject = jsonArrayTransp.getJSONObject(i);
+
+				CostTransportMathaus cost = new CostTransportMathaus();
+				cost.setFiliala(transpObject.getString("filiala"));
+				cost.setTipTransp(transpObject.getString("tipTransp"));
+				cost.setValTransp(transpObject.getString("valTransp").equals("null") ? "0" : transpObject.getString("valTransp"));
+				cost.setCodArtTransp(transpObject.getString("codArtTransp").equals("null") ? "0" : transpObject.getString("codArtTransp"));
+				listCostTransport.add(cost);
+
+			}
+
+			livrareMathaus.setCostTransport(listCostTransport);
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return livrareMathaus;
+	}
+
+	public ComandaMathaus deserializeStocMathaus(String result) {
+
+		ComandaMathaus comandaMathaus = new ComandaMathaus();
+		List<DateArticolMathaus> listArticole = new ArrayList<DateArticolMathaus>();
+
+		try {
+
+			JSONObject jsonObject = new JSONObject((String) result);
+			comandaMathaus.setSellingPlant(jsonObject.getString("sellingPlant"));
+
+			JSONArray jsonArrayLoc = new JSONArray(jsonObject.getString("deliveryEntryDataList"));
+
+			for (int i = 0; i < jsonArrayLoc.length(); i++) {
+
+				JSONObject articolObject = jsonArrayLoc.getJSONObject(i);
+
+				DateArticolMathaus articol = new DateArticolMathaus();
+				articol.setDeliveryWarehouse(articolObject.getString("deliveryWarehouse"));
+				articol.setProductCode(articolObject.getString("productCode"));
+				articol.setQuantity(Double.parseDouble(articolObject.getString("quantity")));
+				articol.setUnit(articolObject.getString("unit"));
+
+				listArticole.add(articol);
+			}
+
+			comandaMathaus.setDeliveryEntryDataList(listArticole);
+
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return comandaMathaus;
+	}
+
+	public String serializeAntetCmdMathaus(AntetCmdMathaus antetComanda) {
+
+		JSONObject jsonAntet = new JSONObject();
+
+		try {
+			jsonAntet.put("localitate", antetComanda.getLocalitate());
+			jsonAntet.put("codJudet", antetComanda.getCodJudet());
+			jsonAntet.put("codClient", antetComanda.getCodClient());
+			jsonAntet.put("tipPers", antetComanda.getTipPers());
+			jsonAntet.put("depart", antetComanda.getDepart());
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return jsonAntet.toString();
+
+	}
+
+	public String serializeComandaMathaus(ComandaMathaus comandaMathaus) {
+
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = null;
+		JSONObject jsonComanda = new JSONObject();
+
+		try {
+
+			jsonComanda.put("sellingPlant", comandaMathaus.getSellingPlant());
+
+			for (DateArticolMathaus articol : comandaMathaus.getDeliveryEntryDataList()) {
+				jsonObject = new JSONObject();
+				jsonObject.put("productCode", articol.getProductCode());
+				jsonObject.put("quantity", articol.getQuantity());
+				jsonObject.put("unit", articol.getUnit());
+				jsonObject.put("valPoz", String.valueOf(articol.getValPoz()));
+				jsonObject.put("tip2", articol.getTip2());
+				jsonArray.put(jsonObject);
+			}
+
+			jsonComanda.put("deliveryEntryDataList", jsonArray);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return jsonComanda.toString();
+
+	}
+
+
+
 	@Override
 	public String serializeListArtSim(List<BeanArticolSimulat> listArticole) {
 
@@ -449,8 +614,10 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 		}
 
 		return jsonArray.toString();
-	}
-
+	}	
+	
+	
+	
 	public void deserializeListArtStoc(String listArticole) {
 		// Object json = new JSONTokener(serializedListArticole).nextValue();
 
@@ -572,7 +739,8 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 
 		return listArticole;
 	}
-
+	
+	
 	public ArrayList<ArticolCant> deserializeArticoleCant(String listArticoleSer) {
 		ArticolCant articol = null;
 		ArrayList<ArticolCant> listArticole = new ArrayList<ArticolCant>();
@@ -588,7 +756,7 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 					JSONObject articolObject = jsonArray.getJSONObject(i);
 
 					articol = new ArticolCant();
-
+					
 					articol.setCod(articolObject.getString("cod"));
 					articol.setNume(articolObject.getString("denumire"));
 					articol.setSintetic(articolObject.getString("sintetic"));

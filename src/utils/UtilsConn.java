@@ -13,9 +13,13 @@ public class UtilsConn {
 	private static final String FTP_CENTRAL_PASS = "egoo4Ur";
 	private static final String FTP_CENTRAL_VER_FILE = "/Update/LiteSFA/SFAVer6/LiteReportsVer.txt";
 	private static final String FTP_CENTRAL_APK_FILE = "/Update/LiteSFA/SFAVer6/LiteSFA.apk";
+	
 
 	private static final String FTP_LOCAL_USR = "update";
 	private static final String FTP_LOCAL_PASS = "Umig9eep";
+	
+
+	
 	private static final String FTP_LOCAL_VER_FILE = "Update/LiteSFA/SFAVer6/LiteReportsVer.txt";
 	private static final String FTP_LOCAL_APK_FILE = "Update/LiteSFA/SFAVer6/LiteSFA.apk";
 
@@ -42,6 +46,12 @@ public class UtilsConn {
 			ftpAccess.setVerFile(FTP_CENTRAL_VER_FILE);
 			ftpAccess.setApkFile(FTP_CENTRAL_APK_FILE);
 		}
+		
+		ftpAccess.setIp(FTP_CENTRAL_IP);
+		ftpAccess.setUser(FTP_CENTRAL_USR);
+		ftpAccess.setPass(FTP_CENTRAL_PASS);
+		ftpAccess.setVerFile(FTP_CENTRAL_VER_FILE);
+		ftpAccess.setApkFile(FTP_CENTRAL_APK_FILE);
 
 		return ftpAccess;
 	}

@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import beans.ArticolMathaus;
 import beans.BeanCablu05;
 
 public class ArticolComanda implements Comparable<ArticolComanda> {
@@ -95,6 +96,17 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 	private double aczcLivrat;
 	
 	private List<BeanCablu05> listCabluri;
+	private ArticolMathaus articolMathaus;
+	
+	private String tipTransport;
+
+	public String getTipTransport() {
+		return tipTransport;
+	}
+
+	public void setTipTransport(String tipTransport) {
+		this.tipTransport = tipTransport;
+	}
 
 	public int getNrCrt() {
 		return nrCrt;
@@ -655,6 +667,16 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	public void setAczcLivrat(double aczcLivrat) {
 		this.aczcLivrat = aczcLivrat;
+	}
+	
+	
+
+	public ArticolMathaus getArticolMathaus() {
+		return articolMathaus;
+	}
+
+	public void setArticolMathaus(ArticolMathaus articolMathaus) {
+		this.articolMathaus = articolMathaus;
 	}
 
 	@Override

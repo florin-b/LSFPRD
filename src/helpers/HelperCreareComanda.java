@@ -1,10 +1,14 @@
 package helpers;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import model.ArticolComanda;
 import model.DateLivrare;
 import model.UserInfo;
+import beans.ArticolTaxaVerde;
 
 public class HelperCreareComanda {
 
@@ -56,6 +60,53 @@ public class HelperCreareComanda {
 		String filialeRem = "BU, BV, CT, MS, TM";
 
 		return filialeRem.contains(filiala);
+	}
+	
+	public static List<ArticolTaxaVerde> getArticoleTVerde(List<ArticolTaxaVerde> listArticole) {
+
+		Set<String> filialeArt = getFilialeComanda(listArticole);
+
+		List<ArticolTaxaVerde> listArticoleTVerde = new ArrayList<ArticolTaxaVerde>();
+
+		for (String filiala : filialeArt) {
+
+			ArticolTaxaVerde articolNou = new ArticolTaxaVerde();
+			articolNou.setFiliala(filiala);
+
+			double valTVerde = 0;
+			String depart = "";
+			String depozit = "";
+			String transp = "";
+			for (ArticolTaxaVerde articol : listArticole) {
+				if (articol.getFiliala().equals(filiala)) {
+					valTVerde += articol.getValoare();
+					depart = articol.getDepart();
+					depozit = articol.getDepozit();
+					transp = articol.getTipTransp();
+				}
+			}
+
+			articolNou.setTipTransp(transp);
+			articolNou.setDepozit(depozit);
+			articolNou.setDepart(depart);
+			articolNou.setValoare(valTVerde);
+			listArticoleTVerde.add(articolNou);
+
+		}
+
+
+		return listArticoleTVerde;
+
+	}
+
+	private static Set<String> getFilialeComanda(List<ArticolTaxaVerde> listArticole) {
+
+		Set<String> filiale = new HashSet<String>();
+		for (ArticolTaxaVerde articol : listArticole) {
+			filiale.add(articol.getFiliala());
+		}
+		return filiale;
+
 	}
 
 }

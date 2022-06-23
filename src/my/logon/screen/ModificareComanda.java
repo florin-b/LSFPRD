@@ -1965,8 +1965,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 	private void adaugaPalet(ArticolPalet articolPalet, EnumPaleti status) {
 
 		String depozitPalet = HelperCostDescarcare.getDepozitPalet(listArticoleComanda, articolPalet.getCodArticol());
+		String unitlogPalet = HelperCostDescarcare.getUnitlogPalet(listArticoleComanda, articolPalet.getCodArticol());
 
-		ArticolComanda articol = HelperCostDescarcare.getArticolPalet(articolPalet, depozitPalet);
+		ArticolComanda articol = HelperCostDescarcare.getArticolPalet(articolPalet, depozitPalet, unitlogPalet);
 
 		listArticoleComanda.add(articol);
 		adapterArticole.setListArticole(listArticoleComanda);
@@ -1974,7 +1975,6 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 		costDescarcare.getArticoleDescarcare().get(0)
 				.setCantitate(costDescarcare.getArticoleDescarcare().get(0).getCantitate() + articol.getCantitate());
-
 	}
 
 	private void respingePalet() {

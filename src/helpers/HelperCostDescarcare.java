@@ -98,7 +98,7 @@ public class HelperCostDescarcare {
 
 	}
 
-	public static ArticolComanda getArticolPalet(ArticolPalet articolPalet, String depozit) {
+	public static ArticolComanda getArticolPalet(ArticolPalet articolPalet, String depozit, String unitLog) {
 
 		ArticolComanda articolComanda = new ArticolComanda();
 
@@ -127,7 +127,7 @@ public class HelperCostDescarcare {
 		articolComanda.setTipArt("");
 		articolComanda.setDepart(articolPalet.getDepart());
 		articolComanda.setDepartSintetic(articolPalet.getDepart());
-		articolComanda.setFilialaSite(UserInfo.getInstance().getUnitLog());
+		articolComanda.setFilialaSite(unitLog);
 		articolComanda.setUmPalet(true);
 
 		return articolComanda;
@@ -243,6 +243,19 @@ public class HelperCostDescarcare {
 		}
 
 		return depozit;
+	}
+	
+	public static String getUnitlogPalet(List<ArticolComanda> listArticole, String codArticolPalet) {
+		String unitLog = "";
+
+		for (ArticolComanda art : listArticole) {
+			if (art.getCodArticol().contains(codArticolPalet)) {
+				unitLog = art.getFilialaSite();
+				break;
+			}
+		}
+
+		return unitLog;
 	}
 
 }

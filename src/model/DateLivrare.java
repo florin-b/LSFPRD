@@ -4,14 +4,16 @@
  */
 package model;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
+
+import enums.EnumZona;
+import beans.CostTransportMathaus;
 import beans.DateLivrareAfisare;
 import beans.Delegat;
 import beans.FurnizorComanda;
 import beans.ObiectivConsilier;
-
-import com.google.android.gms.maps.model.LatLng;
-
-import enums.EnumZona;
 import enums.TipCmdDistrib;
 import enums.TipCmdGed;
 
@@ -85,6 +87,8 @@ public class DateLivrare {
 	private ObiectivConsilier obiectivConsilier;
 	private String refClient;
 	private TipCmdGed tipComandaGed = TipCmdGed.COMANDA_VANZARE;
+	private String filialeExtraMathaus = "";
+	private List<CostTransportMathaus> costTransportMathaus;
 	private boolean isClientBlocat;
 	private double limitaCredit;
 	
@@ -634,7 +638,7 @@ public class DateLivrare {
 	public void setClientBlocat(boolean isClientBlocat) {
 		this.isClientBlocat = isClientBlocat;
 	}
-	
+
 	public double getLimitaCredit() {
 		return limitaCredit;
 	}
@@ -642,7 +646,23 @@ public class DateLivrare {
 	public void setLimitaCredit(double limitaCredit) {
 		this.limitaCredit = limitaCredit;
 	}
-	
+
+	public String getFilialeExtraMathaus() {
+		return filialeExtraMathaus;
+	}
+
+	public void setFilialeExtraMathaus(String filialeExtraMathaus) {
+		this.filialeExtraMathaus = filialeExtraMathaus;
+	}
+
+	public List<CostTransportMathaus> getCostTransportMathaus() {
+		return costTransportMathaus;
+	}
+
+	public void setCostTransportMathaus(List<CostTransportMathaus> costTransportMathaus) {
+		this.costTransportMathaus = costTransportMathaus;
+	}
+
 	public void resetAll() {
 		codJudet = "";
 		numeJudet = "";
@@ -698,6 +718,8 @@ public class DateLivrare {
 		tipComandaGed = TipCmdGed.COMANDA_VANZARE;
 		isClientBlocat = false;
 		limitaCredit = 0;
+		filialeExtraMathaus = "";
+		costTransportMathaus = null;
 
 	}
 

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import listeners.OperatiiArticolListener;
+import beans.AntetCmdMathaus;
 import beans.ArticolCant;
 import beans.ArticolDB;
 import beans.BeanArticolSimulat;
@@ -12,6 +13,9 @@ import beans.BeanArticolStoc;
 import beans.BeanCablu05;
 import beans.BeanGreutateArticol;
 import beans.BeanParametruPretGed;
+import beans.ComandaMathaus;
+import beans.CostTransportMathaus;
+import beans.LivrareMathaus;
 import beans.PretArticolGed;
 
 public interface OperatiiArticol {
@@ -76,5 +80,19 @@ public interface OperatiiArticol {
 	public String serializeCabluri05(List<BeanCablu05> listCabluri);
 	
 	public void getArticoleACZC(HashMap<String, String> params);
+	
+	public void getStocMathaus(HashMap<String, String> params);
+
+    public void getInfoPretMathaus(HashMap<String, String> params);
+
+    public ComandaMathaus deserializeStocMathaus(String result);
+
+    public LivrareMathaus deserializeLivrareMathaus(String result);
+
+    public String serializeComandaMathaus(ComandaMathaus comandaMathaus);
+
+    public String serializeAntetCmdMathaus(AntetCmdMathaus antetcmdMathaus);
+
+    public String serializeCostTransportMathaus(List<CostTransportMathaus> costTransport);
 
 }

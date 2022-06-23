@@ -321,6 +321,17 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 
 		spinnerTransp = (Spinner) findViewById(R.id.spinnerTransp);
 		adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipTransport);
+
+		if (isComandaACZC()) {
+			List<String> itemsTransp = new ArrayList<String>();
+			for (int ii = 0; ii < adapterSpinnerTransp.getCount(); ii++) {
+				if (!adapterSpinnerTransp.getItem(ii).startsWith("TFRN")) {
+					itemsTransp.add((String) adapterSpinnerTransp.getItem(ii));
+				}
+			}
+			adapterSpinnerTransp = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, itemsTransp);
+		}
+
 		adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinnerTransp.setAdapter(adapterSpinnerTransp);
 		addSpinnerTranspListener();
@@ -954,6 +965,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		return DateLivrare.getInstance().getTipComandaDistrib().equals(TipCmdDistrib.LIVRARE_CUSTODIE);
 	}
 
+	private boolean isComandaACZC() {
+		return DateLivrare.getInstance().getTipComandaDistrib().equals(TipCmdDistrib.ARTICOLE_COMANDA);
+	}
+
 	private void fillJudeteClient(String arrayJudete) {
 
 		if (listJudete != null)
@@ -1519,8 +1534,16 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		listLocalitatiLivrare = listAdrese.getListStringLocalitati();
 
 		setListenerTextLocalitate();
+		
+		getFilialaLivrareMathaus();
 
 	}
+	
+	 private void getFilialaLivrareMathaus() {
+	        HashMap<String, String> params = new HashMap<String, String>();
+	        params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+	        operatiiAdresa.getFilialaLivrareMathaus(params);
+	    }
 
 	private void setListenerTextLocalitate() {
 
@@ -2015,6 +2038,8 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		DateLivrare.getInstance().setCoordonateAdresa(new LatLng(Double.valueOf(tokenCoords[0]), Double.valueOf(tokenCoords[1])));
 
 		setSpinnerTonajValue(adresaLivrare.getTonaj());
+		
+		getFilialaLivrareMathaus();
 
 	}
 
@@ -2152,6 +2177,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		case GET_LOCALITATI_LIVRARE_RAPIDA:
 			HelperAdreseLivrare.setLocalitatiAcceptate((String) result);
 			break;
+		 case GET_FILIALA_MATHAUS:
+             CreareComanda.filialaLivrareMathaus = ((String) result).split(",")[0];
+             CreareComanda.filialeArondateMathaus = (String) result;
+             break;
 		default:
 			break;
 		}
