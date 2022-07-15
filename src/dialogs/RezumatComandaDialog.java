@@ -1,26 +1,25 @@
 package dialogs;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import my.logon.screen.R;
-import adapters.AdapterRezumatComanda;
-import beans.CostTransportMathaus;
-import beans.RezumatComanda;
 import listeners.ComandaMathausListener;
 import listeners.RezumatListener;
 import model.ArticolComanda;
 import model.ListaArticoleComanda;
 import model.ListaArticoleComandaGed;
+import my.logon.screen.R;
+import adapters.AdapterRezumatComanda;
+import android.app.Dialog;
+import android.content.Context;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import beans.CostTransportMathaus;
+import beans.RezumatComanda;
 
 public class RezumatComandaDialog extends Dialog implements RezumatListener {
 
@@ -35,7 +34,8 @@ public class RezumatComandaDialog extends Dialog implements RezumatListener {
 	private String tipTransport;
 	private String filialeArondate;
 
-	public RezumatComandaDialog(Context context, List<ArticolComanda> listArticole, String canal, List<CostTransportMathaus> costTransport, String tipTransport, String filialeArondate) {
+	public RezumatComandaDialog(Context context, List<ArticolComanda> listArticole, String canal, List<CostTransportMathaus> costTransport,
+			String tipTransport, String filialeArondate) {
 		super(context);
 		this.context = context;
 		this.listArticole = listArticole;
@@ -55,8 +55,6 @@ public class RezumatComandaDialog extends Dialog implements RezumatListener {
 	private void setupLayout() {
 
 		listViewComenzi = (ListView) findViewById(R.id.listComenzi);
-
-
 
 		AdapterRezumatComanda adapterRezumat = new AdapterRezumatComanda(context, getRezumatComanda(), costTransport, tipTransport, filialeArondate);
 		adapterRezumat.setRezumatListener(this);
@@ -163,6 +161,47 @@ public class RezumatComandaDialog extends Dialog implements RezumatListener {
 
 			}
 
+		}
+
+		if (listener != null)
+			listener.comandaEliminata();
+
+	}
+
+	@Override
+	public void adaugaArticol(ArticolComanda articolComanda) {
+
+		List<ArticolComanda> listArticoleComanda;
+		if (canalDistrib.equals("10"))
+			listArticoleComanda = ListaArticoleComanda.getInstance().getListArticoleComanda();
+		else
+			listArticoleComanda = ListaArticoleComandaGed.getInstance().getListArticoleComanda();
+
+		listArticoleComanda.add(articolComanda);
+
+		if (listener != null)
+			listener.comandaEliminata();
+
+	}
+
+	@Override
+	public void eliminaArticol(ArticolComanda articolComanda) {
+
+		List<ArticolComanda> listArticoleComanda;
+		if (canalDistrib.equals("10"))
+			listArticoleComanda = ListaArticoleComanda.getInstance().getListArticoleComanda();
+		else
+			listArticoleComanda = ListaArticoleComandaGed.getInstance().getListArticoleComanda();
+
+		Iterator<ArticolComanda> listIterator = listArticoleComanda.iterator();
+
+		while (listIterator.hasNext()) {
+			ArticolComanda articol = listIterator.next();
+
+			if (articol.getCodArticol().equals(articolComanda.getCodArticol())) {
+				listIterator.remove();
+				break;
+			}
 		}
 
 		if (listener != null)

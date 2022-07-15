@@ -1715,6 +1715,10 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		ComandaMathaus comandaMathaus = new ComandaMathaus();
 		comandaMathaus.setSellingPlant(CreareComanda.filialaLivrareMathaus);
 		List<DateArticolMathaus> listArticoleMat = new ArrayList<DateArticolMathaus>();
+		
+		String codDepartLivr = UserInfo.getInstance().getCodDepart();
+        if (UserInfo.getInstance().getTipUserSap().contains("KA"))
+            codDepartLivr = "10";
 
 		for (ArticolComanda artCmd : articoleComanda) {
 
@@ -1742,7 +1746,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		antetComanda.setCodJudet(DateLivrare.getInstance().getCodJudet());
 		antetComanda.setCodClient(comandaFinala.getCodClient());
 		antetComanda.setTipPers(UserInfo.getInstance().getTipUserSap());
-		antetComanda.setDepart(UserInfo.getInstance().getCodDepart());
+		antetComanda.setDepart(codDepartLivr);
 
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("antetComanda", opArticol.serializeAntetCmdMathaus(antetComanda));
@@ -2177,6 +2181,11 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			if (CreareComanda.canalDistrib.equals("10") && existaArticoleMav() && DateLivrare.getInstance().getTipPlata().equals("E")
 					&& DateLivrare.getInstance().getTransport().equals("TCLI"))
 				verificaStocArticoleDistributie();
+			else if (tipComandaDistributie == TipCmdDistrib.ARTICOLE_COMANDA || tipComandaDistributie == TipCmdDistrib.DISPOZITIE_LIVRARE) {
+                prepareArtForDelivery();
+                articoleFinaleStr = serializedResult;
+                performSaveCmd();
+            }
 			else
 				getLivrariMathaus();
 

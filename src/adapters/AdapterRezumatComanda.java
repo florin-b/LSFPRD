@@ -27,280 +27,348 @@ import model.ArticolComanda;
 
 public class AdapterRezumatComanda extends BaseAdapter {
 
-    private List<RezumatComanda> listComenzi;
-    private Context context;
-
-    private double valoareTotal;
-    private NumberFormat nf = new DecimalFormat("#,##0.00");
-    private RezumatListener listener;
-    private List<CostTransportMathaus> costTransport;
-    private String[] tipTransportArray = {"TRAP", "TCLI"};
-    private String tipTransportCmd;
-    private String filialeArondate;
-
-    public AdapterRezumatComanda(Context context, List<RezumatComanda> listComenzi, List<CostTransportMathaus> costTransport, String tipTransportCmd, String filialeArondate) {
-        this.context = context;
-        this.listComenzi = listComenzi;
-        this.costTransport = costTransport;
-        this.tipTransportCmd = tipTransportCmd;
-        this.filialeArondate = filialeArondate;
-        clearTransportArticol(listComenzi);
-
-    }
-
-    static class ViewHolder {
-        TextView textNumeArticole, textCantArticole, textFurnizor, textTransport, textTotal, textNrComanda, tipTransport;
-        ImageButton stergeComandaBtn;
-        LinearLayout layoutTransport;
-        Spinner spinnerTransport;
-    }
+	private List<RezumatComanda> listComenzi;
+	private Context context;
+
+	private double valoareTotal;
+	private NumberFormat nf = new DecimalFormat("#,##0.00");
+	private RezumatListener listener;
+	private List<CostTransportMathaus> costTransport;
+	private String[] tipTransportArray = { "TRAP", "TCLI" };
+	private String tipTransportCmd;
+	private String filialeArondate;
+	private ArticolComanda articolTransport;
+
+	public AdapterRezumatComanda(Context context, List<RezumatComanda> listComenzi, List<CostTransportMathaus> costTransport, String tipTransportCmd,
+			String filialeArondate) {
+		this.context = context;
+		this.listComenzi = listComenzi;
+		this.costTransport = costTransport;
+		this.tipTransportCmd = tipTransportCmd;
+		this.filialeArondate = filialeArondate;
+		clearTransportArticol(listComenzi);
+
+	}
+
+	static class ViewHolder {
+		TextView textNumeArticole, textCantArticole, textFurnizor, textTransport, textTotal, textNrComanda, tipTransport;
+		ImageButton stergeComandaBtn;
+		LinearLayout layoutTransport;
+		Spinner spinnerTransport;
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		final ViewHolder viewHolder;
+
+		if (convertView == null) {
+			convertView = LayoutInflater.from(context).inflate(R.layout.row_rezumat_comanda, parent, false);
+
+			viewHolder = new ViewHolder();
+			viewHolder.textNumeArticole = (TextView) convertView.findViewById(R.id.textNumeArticole);
+			viewHolder.textCantArticole = (TextView) convertView.findViewById(R.id.textCantArticole);
+			viewHolder.textFurnizor = (TextView) convertView.findViewById(R.id.textFurnizor);
+
+			viewHolder.textTransport = (TextView) convertView.findViewById(R.id.textTransport);
+			viewHolder.textTotal = (TextView) convertView.findViewById(R.id.textTotal);
+			viewHolder.textNrComanda = (TextView) convertView.findViewById(R.id.textNrComanda);
+			viewHolder.tipTransport = (TextView) convertView.findViewById(R.id.tipTransport);
+			viewHolder.stergeComandaBtn = (ImageButton) convertView.findViewById(R.id.stergeComandaBtn);
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        final ViewHolder viewHolder;
+			viewHolder.layoutTransport = (LinearLayout) convertView.findViewById(R.id.layoutTransport);
+			viewHolder.spinnerTransport = (Spinner) convertView.findViewById(R.id.spinnerTransport);
+			convertView.setTag(viewHolder);
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.row_rezumat_comanda, parent, false);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
 
-            viewHolder = new ViewHolder();
-            viewHolder.textNumeArticole = (TextView) convertView.findViewById(R.id.textNumeArticole);
-            viewHolder.textCantArticole = (TextView) convertView.findViewById(R.id.textCantArticole);
-            viewHolder.textFurnizor = (TextView) convertView.findViewById(R.id.textFurnizor);
+		final RezumatComanda rezumat = getItem(position);
 
-            viewHolder.textTransport = (TextView) convertView.findViewById(R.id.textTransport);
-            viewHolder.textTotal = (TextView) convertView.findViewById(R.id.textTotal);
-            viewHolder.textNrComanda = (TextView) convertView.findViewById(R.id.textNrComanda);
-            viewHolder.tipTransport = (TextView) convertView.findViewById(R.id.tipTransport);
-            viewHolder.stergeComandaBtn = (ImageButton) convertView.findViewById(R.id.stergeComandaBtn);
+		viewHolder.textNrComanda.setText("Comanda nr. " + (position + 1));
+		viewHolder.textNumeArticole.setText(getNumeArticole(rezumat));
+		viewHolder.textCantArticole.setText(getCantArticole(rezumat));
+		viewHolder.textFurnizor.setText("Livrare: " + rezumat.getFilialaLivrare());
+		viewHolder.tipTransport.setText(getTipTransport(rezumat.getFilialaLivrare()));
 
-            viewHolder.layoutTransport = (LinearLayout) convertView.findViewById(R.id.layoutTransport);
-            viewHolder.spinnerTransport = (Spinner) convertView.findViewById(R.id.spinnerTransport);
-            convertView.setTag(viewHolder);
+		viewHolder.textTransport.setText("Val. transp: " + getCostTransport(rezumat.getFilialaLivrare()));
+		viewHolder.textTotal.setText("Total: " + nf.format(valoareTotal));
 
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+		ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, tipTransportArray);
+		adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		viewHolder.spinnerTransport.setAdapter(adapterSpinnerTransp);
 
-        final RezumatComanda rezumat = getItem(position);
+		String tipTranspArt = getTipTransport(rezumat.getFilialaLivrare());
 
-        viewHolder.textNrComanda.setText("Comanda nr. " + (position + 1));
-        viewHolder.textNumeArticole.setText(getNumeArticole(rezumat));
-        viewHolder.textCantArticole.setText(getCantArticole(rezumat));
-        viewHolder.textFurnizor.setText("Livrare: " + rezumat.getFilialaLivrare());
-        viewHolder.tipTransport.setText(getTipTransport(rezumat.getFilialaLivrare()));
+		if (filialeArondate.contains(rezumat.getFilialaLivrare())) {
+			viewHolder.tipTransport.setVisibility(View.GONE);
+			viewHolder.spinnerTransport.setVisibility(View.VISIBLE);
 
-        viewHolder.textTransport.setText("Val. transp: " + getCostTransport(rezumat.getFilialaLivrare()));
-        viewHolder.textTotal.setText("Total: " + nf.format(valoareTotal));
+			String tipTransSelected = getTransportArticole(rezumat);
+			if (tipTransSelected != null && !tipTransSelected.trim().isEmpty())
+				tipTranspArt = tipTransSelected;
 
-        ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, tipTransportArray);
-        adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        viewHolder.spinnerTransport.setAdapter(adapterSpinnerTransp);
+			if (tipTranspArt.equals("TRAP"))
+				viewHolder.spinnerTransport.setSelection(0);
+			else if (tipTranspArt.equals("TCLI")) {
+				viewHolder.spinnerTransport.setSelection(1);
+			}
+		} else {
+			viewHolder.spinnerTransport.setVisibility(View.GONE);
+			viewHolder.tipTransport.setVisibility(View.VISIBLE);
+			setTransportArticole(rezumat, tipTranspArt);
+		}
 
-        String tipTranspArt = getTipTransport(rezumat.getFilialaLivrare());
+		setListenerSpinnerTransport(viewHolder.spinnerTransport, rezumat, viewHolder);
+		setListenerEliminaBtn(viewHolder.stergeComandaBtn, position);
 
-        if (filialeArondate.contains(rezumat.getFilialaLivrare())) {
-            viewHolder.tipTransport.setVisibility(View.GONE);
-            viewHolder.spinnerTransport.setVisibility(View.VISIBLE);
+		return convertView;
 
-            if (tipTranspArt.equals("TRAP"))
-                viewHolder.spinnerTransport.setSelection(0);
-            else if (tipTranspArt.equals("TCLI")) {
-                viewHolder.spinnerTransport.setSelection(1);
-            }
-        } else {
-            viewHolder.spinnerTransport.setVisibility(View.GONE);
-            viewHolder.tipTransport.setVisibility(View.VISIBLE);
-            setTransportArticole(rezumat, tipTranspArt);
-        }
+	}
 
-        viewHolder.spinnerTransport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String tipTransportSelected = (String) parent.getAdapter().getItem(position);
-                setTransportArticole(rezumat, tipTransportSelected);
+	private void setListenerSpinnerTransport(Spinner spinnerTransport, final RezumatComanda rezumat, final ViewHolder viewHolder) {
 
-                if (tipTransportSelected.equals("TCLI"))
-                    viewHolder.textTransport.setVisibility(View.INVISIBLE);
-                else
-                    viewHolder.textTransport.setVisibility(View.VISIBLE);
-            }
+		spinnerTransport.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				String tipTransportSelected = (String) parent.getAdapter().getItem(position);
+				setTransportArticole(rezumat, tipTransportSelected);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+				if (tipTransportSelected.equals("TCLI")) {
+					eliminaArticolTransport(rezumat, viewHolder);
+					viewHolder.textTransport.setVisibility(View.INVISIBLE);
+				} else {
+					viewHolder.textTransport.setVisibility(View.VISIBLE);
+					adaugaArticolTransport(rezumat);
+				}
 
-            }
-        });
+			}
 
-        setListenerEliminaBtn(viewHolder.stergeComandaBtn, position);
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
 
-        return convertView;
+			}
+		});
+	}
 
-    }
+	private void eliminaArticolTransport(RezumatComanda rezumatComanda, ViewHolder viewHolder) {
 
-    private void clearTransportArticol(List<RezumatComanda> listComenzi) {
+		Iterator<ArticolComanda> artIterator = rezumatComanda.getListArticole().iterator();
 
-        for (int ii = 0; ii < listComenzi.size(); ii++) {
+		while (artIterator.hasNext()) {
 
-            for (int jj = 0; jj < listComenzi.get(ii).getListArticole().size(); jj++) {
-                listComenzi.get(ii).getListArticole().get(jj).setTipTransport(null);
-            }
+			ArticolComanda artCom = artIterator.next();
 
-        }
+			if (isArtTransp(artCom.getNumeArticol())) {
+				articolTransport = artCom;
+				artIterator.remove();
 
-    }
+				if (listener != null)
+					listener.eliminaArticol(articolTransport);
 
-    private void setTransportArticole(RezumatComanda rezumatComanda, String tipTransp) {
+				break;
+			}
 
-        for (ArticolComanda art : rezumatComanda.getListArticole()) {
-            art.setTipTransport(tipTransp);
-        }
+		}
 
+	}
 
-    }
+	private boolean isArtTransp(String numeArticol) {
+		return numeArticol != null && numeArticol.toUpperCase().contains("SERV") && numeArticol.toUpperCase().contains("TRANSP");
+	}
 
-    private String getTipTransport(String filiala) {
+	private void adaugaArticolTransport(RezumatComanda rezumatComanda) {
 
-        String tipTransport = "";
+		boolean artTransp = false;
 
-        for (CostTransportMathaus cost : costTransport) {
+		for (ArticolComanda art : rezumatComanda.getListArticole()) {
+			if (isArtTransp(art.getNumeArticol()))
+				artTransp = true;
+		}
 
-            if (cost.getFiliala().equals(filiala)) {
-                tipTransport = cost.getTipTransp();
-                break;
-            }
+		if (!artTransp && articolTransport != null) {
+			rezumatComanda.getListArticole().add(articolTransport);
 
-        }
+			if (listener != null)
+				listener.adaugaArticol(articolTransport);
+		}
 
-        return tipTransport;
-    }
+	}
 
-    private double getCostTransport(String filiala) {
+	private void clearTransportArticol(List<RezumatComanda> listComenzi) {
 
-        double valTransport = 0;
-        for (CostTransportMathaus cost : costTransport) {
+		for (int ii = 0; ii < listComenzi.size(); ii++) {
 
-            if (cost.getFiliala().equals(filiala) && !cost.getValTransp().equals("0")) {
-                valTransport = Double.valueOf(cost.getValTransp());
-                break;
-            }
+			for (int jj = 0; jj < listComenzi.get(ii).getListArticole().size(); jj++) {
+				listComenzi.get(ii).getListArticole().get(jj).setTipTransport(null);
+			}
 
-        }
+		}
 
-        return valTransport;
+	}
 
-    }
+	private void setTransportArticole(RezumatComanda rezumatComanda, String tipTransp) {
 
-    private void setListenerEliminaBtn(ImageButton eliminaBtn, final int position) {
+		for (ArticolComanda art : rezumatComanda.getListArticole()) {
+			art.setTipTransport(tipTransp);
+		}
 
-        eliminaBtn.setOnClickListener(new OnClickListener() {
+	}
 
-            public void onClick(View v) {
+	private String getTransportArticole(RezumatComanda rezumatComanda) {
 
-                eliminaComanda(position);
+		for (ArticolComanda art : rezumatComanda.getListArticole()) {
+			if (art.getTipTransport() != null)
+				return art.getTipTransport();
+		}
 
-            }
-        });
+		return null;
 
-    }
+	}
 
-    private void eliminaComanda(int position) {
+	private String getTipTransport(String filiala) {
 
-        Iterator<RezumatComanda> listIterator = listComenzi.iterator();
-        List<String> listArticole = null;
+		String tipTransport = "";
 
-        int crntPos = 0;
-        String filialaLivrare = "";
-        while (listIterator.hasNext()) {
-            RezumatComanda rezumat = listIterator.next();
-            if (crntPos == position) {
-                listArticole = getArticoleComanda(rezumat);
-                filialaLivrare = rezumat.getFilialaLivrare();
-                listIterator.remove();
-                break;
-            }
+		for (CostTransportMathaus cost : costTransport) {
 
-            crntPos++;
-        }
+			if (cost.getFiliala().equals(filiala)) {
+				tipTransport = cost.getTipTransp();
+				break;
+			}
 
-        notifyDataSetChanged();
+		}
 
-        if (listener != null)
-            listener.comandaEliminata(listArticole, filialaLivrare);
+		return tipTransport;
+	}
 
-    }
+	private double getCostTransport(String filiala) {
 
-    private List<String> getArticoleComanda(RezumatComanda rezumatComanda) {
+		double valTransport = 0;
+		for (CostTransportMathaus cost : costTransport) {
 
-        List<String> listArticole = new ArrayList<String>();
+			if (cost.getFiliala().equals(filiala) && !cost.getValTransp().equals("0")) {
+				valTransport = Double.valueOf(cost.getValTransp());
+				break;
+			}
 
-        for (ArticolComanda art : rezumatComanda.getListArticole()) {
-            listArticole.add(art.getCodArticol());
-        }
+		}
 
-        return listArticole;
+		return valTransport;
 
-    }
+	}
 
-    private String getNumeArticole(RezumatComanda rezumat) {
+	private void setListenerEliminaBtn(ImageButton eliminaBtn, final int position) {
 
-        StringBuilder str = new StringBuilder();
+		eliminaBtn.setOnClickListener(new OnClickListener() {
 
-        valoareTotal = 0;
+			public void onClick(View v) {
 
-        for (ArticolComanda art : rezumat.getListArticole()) {
-            str.append(art.getNumeArticol());
-            str.append("\n");
+				eliminaComanda(position);
 
-            valoareTotal += art.getPret();
-        }
+			}
+		});
 
-        return str.toString();
+	}
 
-    }
+	private void eliminaComanda(int position) {
 
-    private String getCantArticole(RezumatComanda rezumat) {
+		Iterator<RezumatComanda> listIterator = listComenzi.iterator();
+		List<String> listArticole = null;
 
-        StringBuilder str = new StringBuilder();
+		int crntPos = 0;
+		String filialaLivrare = "";
+		while (listIterator.hasNext()) {
+			RezumatComanda rezumat = listIterator.next();
+			if (crntPos == position) {
+				listArticole = getArticoleComanda(rezumat);
+				filialaLivrare = rezumat.getFilialaLivrare();
+				listIterator.remove();
+				break;
+			}
 
-        for (ArticolComanda art : rezumat.getListArticole()) {
-            str.append(art.getCantitate());
-            str.append(" ");
-            str.append(art.getUm());
-            str.append(addSpaces(art.getUm()));
-            str.append("\n");
-        }
+			crntPos++;
+		}
 
-        return str.toString();
+		notifyDataSetChanged();
 
-    }
+		if (listener != null)
+			listener.comandaEliminata(listArticole, filialaLivrare);
 
-    public String addSpaces(String um) {
+	}
 
-        String spaces = "";
+	private List<String> getArticoleComanda(RezumatComanda rezumatComanda) {
 
-        for (int i = 0; i < 3 - um.length(); i++) {
-            spaces += " ";
-        }
+		List<String> listArticole = new ArrayList<String>();
 
-        return spaces;
-    }
+		for (ArticolComanda art : rezumatComanda.getListArticole()) {
+			listArticole.add(art.getCodArticol());
+		}
 
-    public void setRezumatListener(RezumatListener listener) {
-        this.listener = listener;
-    }
+		return listArticole;
 
-    @Override
-    public int getCount() {
-        return listComenzi.size();
-    }
+	}
 
-    @Override
-    public RezumatComanda getItem(int position) {
-        return listComenzi.get(position);
-    }
+	private String getNumeArticole(RezumatComanda rezumat) {
 
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
+		StringBuilder str = new StringBuilder();
+
+		valoareTotal = 0;
+
+		for (ArticolComanda art : rezumat.getListArticole()) {
+			str.append(art.getNumeArticol());
+			str.append("\n");
+
+			valoareTotal += art.getPret();
+		}
+
+		return str.toString();
+
+	}
+
+	private String getCantArticole(RezumatComanda rezumat) {
+
+		StringBuilder str = new StringBuilder();
+
+		for (ArticolComanda art : rezumat.getListArticole()) {
+			str.append(art.getCantitate());
+			str.append(" ");
+			str.append(art.getUm());
+			str.append(addSpaces(art.getUm()));
+			str.append("\n");
+		}
+
+		return str.toString();
+
+	}
+
+	public String addSpaces(String um) {
+
+		String spaces = "";
+
+		for (int i = 0; i < 3 - um.length(); i++) {
+			spaces += " ";
+		}
+
+		return spaces;
+	}
+
+	public void setRezumatListener(RezumatListener listener) {
+		this.listener = listener;
+	}
+
+	@Override
+	public int getCount() {
+		return listComenzi.size();
+	}
+
+	@Override
+	public RezumatComanda getItem(int position) {
+		return listComenzi.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return 0;
+	}
 
 }

@@ -442,6 +442,9 @@ public class OperatiiArticolImpl implements OperatiiArticol, AsyncTaskListener {
 	public String serializeCostTransportMathaus(List<CostTransportMathaus> costTransport) {
 
 		JSONArray jsonArray = new JSONArray();
+		
+		if (costTransport == null)
+			return jsonArray.toString();
 
 		try {
 
