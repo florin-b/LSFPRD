@@ -1163,8 +1163,11 @@ public class AprobareComanda extends Activity implements ComenziDAOListener, Den
 			}
 		});
 
-		commentsDialog.show();
-		commentsDialog.getWindow().setLayout(500, 290);
+		 int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.5);
+	        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.3);
+
+	        commentsDialog.show();
+	        commentsDialog.getWindow().setLayout(width, height);
 
 	}
 
