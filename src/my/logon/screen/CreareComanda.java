@@ -1713,7 +1713,12 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		List<ArticolComanda> articoleComanda = ListaArticoleComanda.getInstance().getListArticoleComanda();
 		ComandaMathaus comandaMathaus = new ComandaMathaus();
-		comandaMathaus.setSellingPlant(CreareComanda.filialaLivrareMathaus);
+		
+		String filialaLivrareMathaus = CreareComanda.filialaAlternativa;
+        if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE)
+            filialaLivrareMathaus = DateLivrare.getInstance().getCodFilialaCLP();
+
+        comandaMathaus.setSellingPlant(filialaLivrareMathaus);
 		List<DateArticolMathaus> listArticoleMat = new ArrayList<DateArticolMathaus>();
 		
 		String codDepartLivr = UserInfo.getInstance().getCodDepart();
