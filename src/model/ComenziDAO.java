@@ -25,6 +25,7 @@ import beans.BeanComandaDeschisa;
 import beans.BeanConditii;
 import beans.BeanConditiiArticole;
 import beans.BeanConditiiHeader;
+import beans.ComandaCalculDescarcare;
 import beans.DateLivrareAfisare;
 import beans.Delegat;
 import beans.FurnizorComanda;
@@ -175,9 +176,20 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		performOperation(params);
 
 	}
-	
+
 	public void getLivrariMathaus(HashMap<String, String> params) {
 		numeComanda = EnumComenziDAO.GET_LIVRARI_MATHAUS;
+		performOperation(params);
+	}
+
+	public void getCostMacaraComenzi(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_COST_MACARA_COMENZI;
+		performOperation(params);
+
+	}
+	
+	public void getTotalComenziNumerar(HashMap<String, String> params) {
+		numeComanda = EnumComenziDAO.GET_TOTAL_COMENZI_NUMERAR;
 		performOperation(params);
 	}
 
@@ -382,13 +394,19 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 				if (jsonLivrare.has("isClientBlocat"))
 					dateLivrare.setClientBlocat(Boolean.valueOf(jsonLivrare.getString("isClientBlocat")));
-				
+
 				dateLivrare.setLimitaCredit(Double.valueOf(jsonLivrare.getString("limitaCredit")));
+
+				if (jsonLivrare.has("nrCmdClp"))
+					dateLivrare.setNrCmdClp(jsonLivrare.getString("nrCmdClp"));
+				else
+					dateLivrare.setNrCmdClp("");
 				
-                if (jsonLivrare.has("nrCmdClp"))
-                    dateLivrare.setNrCmdClp(jsonLivrare.getString("nrCmdClp"));
-                else
-                    dateLivrare.setNrCmdClp("");
+				if (jsonLivrare.has("marjaBruta"))
+					dateLivrare.setMarjaBruta(Double.valueOf(jsonLivrare.getString("marjaBruta")));
+
+				if (jsonLivrare.has("procMarjaBruta"))
+					dateLivrare.setProcMarjaBruta(Double.valueOf(jsonLivrare.getString("procMarjaBruta")));
 
 				JSONArray jsonArticole = jsonObject.getJSONArray("articoleComanda");
 				String tipAlert, subCmp;
@@ -468,11 +486,11 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 						articol.setListCabluri(new OperatiiArticolImpl(context).deserializeCantCabluri05(articolObject.getString("listCabluri")));
 
 					if (articolObject.has("aczcDeLivrat"))
-                        articol.setAczcDeLivrat(Double.valueOf(articolObject.getString("aczcDeLivrat")));
+						articol.setAczcDeLivrat(Double.valueOf(articolObject.getString("aczcDeLivrat")));
 
-                    if (articolObject.has("aczcLivrat"))
-                        articol.setAczcLivrat(Double.valueOf(articolObject.getString("aczcLivrat")));
-					
+					if (articolObject.has("aczcLivrat"))
+						articol.setAczcLivrat(Double.valueOf(articolObject.getString("aczcLivrat")));
+
 					listArticole.add(articol);
 
 				}
@@ -600,9 +618,9 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 
 					if (comandaObject.has("isAprobatDistrib"))
 						comanda.setAprobDistrib(Boolean.valueOf(comandaObject.getString("isAprobatDistrib")));
-					
-					 if (comandaObject.has("isComandaACZC"))
-	                        comanda.setComandaACZC(Boolean.valueOf(comandaObject.getString("isComandaACZC")));
+
+					if (comandaObject.has("isComandaACZC"))
+						comanda.setComandaACZC(Boolean.valueOf(comandaObject.getString("isComandaACZC")));
 
 					listComenzi.add(comanda);
 
@@ -711,6 +729,25 @@ public class ComenziDAO implements IComenziDAO, AsyncTaskListener {
 		}
 
 		return jsonArrayArt.toString();
+	}
+
+	public String serializeCalcComenziMacara(List<ComandaCalculDescarcare> listComenzi) {
+
+		JSONArray jsonArrayCom = new JSONArray();
+
+		try {
+			for (ComandaCalculDescarcare comanda : listComenzi) {
+				JSONObject jsonObjCom = new JSONObject();
+				jsonObjCom.put("filiala", comanda.getFiliala());
+				jsonObjCom.put("listArticole", serializeArtCalcMacara(comanda.getListArticole()));
+				jsonArrayCom.put(jsonObjCom);
+
+			}
+		} catch (JSONException e) {
+			Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show();
+		}
+
+		return jsonArrayCom.toString();
 	}
 
 	public List<BeanComandaCreata> getComenziDivizie(String divizie) {

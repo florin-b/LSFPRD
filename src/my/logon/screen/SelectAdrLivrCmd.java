@@ -177,8 +177,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		if (bundle != null && bundle.getString("parrentClass") != null && bundle.getString("parrentClass").equals("ModificareComanda")) {
 
 			if ((Double.parseDouble(bundle.getString("limitaCredit")) > 1) && !bundle.getString("termenPlata").equals("C000")) {
-				CreareComanda.tipPlataContract = bundle.getString("tipPlataContract");
-				DateLivrare.getInstance().setTipPlata("LC");
+
+				if (!DateLivrare.getInstance().getTipPlata().equals("N") && !DateLivrare.getInstance().getTipPlata().equals("R")) {
+					CreareComanda.tipPlataContract = bundle.getString("tipPlataContract");
+					DateLivrare.getInstance().setTipPlata("LC");
+				}
 			}
 
 		}
@@ -286,8 +289,11 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		else if (!CreareComanda.tipPlataContract.trim().isEmpty() || DateLivrare.getInstance().getTipPlata().equals("LC")) {
 
 			if (!CreareComanda.tipPlataContract.trim().isEmpty()) {
-				((TextView) findViewById(R.id.tipPlataContract)).setText("Contract: " + CreareComanda.tipPlataContract);
-				DateLivrare.getInstance().setTipPlata("LC");
+
+				if (!DateLivrare.getInstance().getTipPlata().equals("N") && !DateLivrare.getInstance().getTipPlata().equals("R")) {
+					((TextView) findViewById(R.id.tipPlataContract)).setText("Contract: " + CreareComanda.tipPlataContract);
+					DateLivrare.getInstance().setTipPlata("LC");
+				}
 			}
 			adapterSpinnerPlata = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tipPlataContract);
 		} else
@@ -932,7 +938,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 	}
 
 	private void performGetJudete() {
-		
+
 		fillJudeteClient(EnumJudete.getRegionCodes());
 
 	}
@@ -1520,16 +1526,16 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		listLocalitatiLivrare = listAdrese.getListStringLocalitati();
 
 		setListenerTextLocalitate();
-		
+
 		getFilialaLivrareMathaus();
 
 	}
-	
-	 private void getFilialaLivrareMathaus() {
-	        HashMap<String, String> params = new HashMap<String, String>();
-	        params.put("codJudet", DateLivrare.getInstance().getCodJudet());
-	        operatiiAdresa.getFilialaLivrareMathaus(params);
-	    }
+
+	private void getFilialaLivrareMathaus() {
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codJudet", DateLivrare.getInstance().getCodJudet());
+		operatiiAdresa.getFilialaLivrareMathaus(params);
+	}
 
 	private void setListenerTextLocalitate() {
 
@@ -2024,7 +2030,7 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		DateLivrare.getInstance().setCoordonateAdresa(new LatLng(Double.valueOf(tokenCoords[0]), Double.valueOf(tokenCoords[1])));
 
 		setSpinnerTonajValue(adresaLivrare.getTonaj());
-		
+
 		getFilialaLivrareMathaus();
 
 	}
@@ -2163,10 +2169,10 @@ public class SelectAdrLivrCmd extends Activity implements OnTouchListener, OnIte
 		case GET_LOCALITATI_LIVRARE_RAPIDA:
 			HelperAdreseLivrare.setLocalitatiAcceptate((String) result);
 			break;
-		 case GET_FILIALA_MATHAUS:
-             CreareComanda.filialaLivrareMathaus = ((String) result).split(",")[0];
-             CreareComanda.filialeArondateMathaus = (String) result;
-             break;
+		case GET_FILIALA_MATHAUS:
+			CreareComanda.filialaLivrareMathaus = ((String) result).split(",")[0];
+			CreareComanda.filialeArondateMathaus = (String) result;
+			break;
 		default:
 			break;
 		}

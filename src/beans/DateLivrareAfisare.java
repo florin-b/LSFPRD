@@ -65,6 +65,9 @@ public class DateLivrareAfisare {
 	private boolean isClientBlocat;
 	private double limitaCredit = 0;
 	private String nrCmdClp;
+	
+	private double marjaBruta = 0;
+	private double procMarjaBruta = 0;
 
 	public DateLivrareAfisare() {
 
@@ -567,6 +570,23 @@ public class DateLivrareAfisare {
 	public void setNrCmdClp(String nrCmdClp) {
 		this.nrCmdClp = nrCmdClp;
 	}
+
+	public double getMarjaBruta() {
+		return marjaBruta;
+	}
+
+	public void setMarjaBruta(double marjaBruta) {
+		this.marjaBruta = marjaBruta;
+	}
+
+	public double getProcMarjaBruta() {
+		return procMarjaBruta;
+	}
+
+	public void setProcMarjaBruta(double procMarjaBruta) {
+		this.procMarjaBruta = procMarjaBruta;
+	}
+	
 	
 	
 }

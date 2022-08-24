@@ -161,6 +161,7 @@ public class AdapterRezumatComanda extends BaseAdapter {
 			if (isArtTransp(artCom.getNumeArticol())) {
 				articolTransport = artCom;
 				artIterator.remove();
+				notifyDataSetChanged();
 
 				if (listener != null)
 					listener.eliminaArticol(articolTransport);
@@ -187,6 +188,7 @@ public class AdapterRezumatComanda extends BaseAdapter {
 
 		if (!artTransp && articolTransport != null) {
 			rezumatComanda.getListArticole().add(articolTransport);
+			notifyDataSetChanged();
 
 			if (listener != null)
 				listener.adaugaArticol(articolTransport);

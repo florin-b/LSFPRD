@@ -630,14 +630,6 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 						prepareArtForDelivery();
 
-						if ((dateLivrareInstance.getTipPlata().equals("E") || dateLivrareInstance.getTipPlata().equals("N")
-								| dateLivrareInstance.getTipPlata().equals("E1") || dateLivrareInstance.getTipPlata().equals("R"))
-								&& totalComanda > 5000 && tipClientVar.equals("PJ")) {
-							Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT)
-									.show();
-							return;
-						}
-
 						dateLivrareInstance.setTotalComanda(String.valueOf(totalComanda));
 						dateLivrareInstance.setCodAgent(UserInfo.getInstance().getCod());
 						dateLivrareInstance.setFactRed("-1");
@@ -691,7 +683,20 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 						comandaFinala.setCnpClient(dateLivrareInstance.getCnpClient());
 						comandaFinala.setNecesarAprobariCV(comandaSelectata.getAprobariNecesare());
 
-						verificaPretMacara();
+						if ((dateLivrareInstance.getTipPlata().equals("E") || dateLivrareInstance.getTipPlata().equals("N") || dateLivrareInstance.getTipPlata().equals("E1") || dateLivrareInstance.getTipPlata().equals("R")) && tipClientVar.equals("PJ")) {
+                            if (totalComanda > 5000) {
+                                Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
+                                return;
+                            } else
+                                getTotalComenziNumerar();
+                        } else if ((dateLivrareInstance.getTipPlata().equals("E") || dateLivrareInstance.getTipPlata().equals("N") || dateLivrareInstance.getTipPlata().equals("E1") || dateLivrareInstance.getTipPlata().equals("R")) && tipClientVar.equals("PF")) {
+                            if (totalComanda > 10000) {
+                                Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 10000 RON!", Toast.LENGTH_SHORT).show();
+                                return;
+                            } else
+                                getTotalComenziNumerar();
+                        } else
+                            verificaPretMacara();
 
 					}
 				});
@@ -704,6 +709,54 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		}
 	}
 
+	   private void getTotalComenziNumerar() {
+
+	        String tipPers = "PJN";
+	        String codClientNumerar = comandaFinala.getCodClient();
+
+	        if (tipClientVar.equals("PF")) {
+	            tipPers = "PF";
+	            codClientNumerar = DateLivrare.getInstance().getNrTel();
+	        } else if (tipClientVar.equals("PJ") && !comandaFinala.getCnpClient().trim().isEmpty()) {
+	            tipPers = "PJG";
+	            codClientNumerar = CreareComandaGed.cnpClient.replaceAll("RO", "");
+	        }
+
+	        HashMap<String, String> params = new HashMap<String, String>();
+	        params.put("codClient", codClientNumerar);
+	        params.put("dataLivrare", DateLivrare.getInstance().getDataLivrare());
+	        params.put("tipClient", tipPers);
+	        operatiiComenzi.getTotalComenziNumerar(params);
+
+	    }
+
+	    private void afisTotalComenziNumerar(String totalNumerar) {
+
+	        double valPragNumerar = 5000;
+
+	        if (tipClientVar.equals("PF"))
+	            valPragNumerar = 10000;
+
+	        if (totalComanda + Double.valueOf(totalNumerar) > valPragNumerar) {
+
+	            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	            builder.setMessage(
+	                    "\nLa acest client valoarea comenzilor cu plata in numerar livrate in data de " + DateLivrare.getInstance().getDataLivrare() + " depaseste " + (int) valPragNumerar + " de lei.\n\n" +
+	                            "Pentru a salva comanda trebuie sa schimbati metoda de plata sau data de livrare.\n").setCancelable(false)
+	                    .setPositiveButton("Inchide", new DialogInterface.OnClickListener() {
+	                        public void onClick(DialogInterface dialog, int id) {
+	                            dialog.cancel();
+
+	                        }
+	                    });
+	            AlertDialog alert = builder.create();
+	            alert.setCancelable(false);
+	            alert.show();
+
+	        } else
+	            verificaPretMacara();
+	    }	
+	
 	private void verificaPretMacara() {
 
 		HelperCostDescarcare.eliminaCostDescarcare(listArticoleComanda);
@@ -1889,6 +1942,9 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 		case GET_COST_MACARA:
 			afiseazaPretMacaraDialog((String) result);
 			break;
+        case GET_TOTAL_COMENZI_NUMERAR:
+            afisTotalComenziNumerar((String) result);
+            break;			
 		default:
 			break;
 		}
