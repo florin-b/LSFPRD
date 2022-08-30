@@ -108,9 +108,10 @@ public class DepartamentAgent {
 				}
 			}
 			depart.add(EnumDepartExtra.getNumeDepart("11"));
-			depart.add("Mathaus");
+			
 		}
 
+		depart.add("Mathaus");
 		return depart;
 	}
 
