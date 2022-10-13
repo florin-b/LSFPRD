@@ -1848,7 +1848,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			dateArticol.setProductCode(artCmd.getCodArticol());
 			dateArticol.setQuantity(artCmd.getCantitate());
 			dateArticol.setUnit(artCmd.getUm());
-			dateArticol.setValPoz((artCmd.getPretUnit() / artCmd.getMultiplu()) * artCmd.getCantitate());
+			dateArticol.setValPoz(artCmd.getPret());
 
 			if (artCmd.getArticolMathaus() != null)
 				dateArticol.setTip2(artCmd.getArticolMathaus().getTip2());
