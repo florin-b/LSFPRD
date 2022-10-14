@@ -12,6 +12,7 @@ public class ArticolMathaus extends ArticolDB {
 	private boolean isArticolSite;
 	private String tip1;
 	private String tip2;
+	private String planificator;
 
 	public String getCod() {
 		return cod;
@@ -99,6 +100,14 @@ public class ArticolMathaus extends ArticolDB {
 
 	public void setTip2(String tip2) {
 		this.tip2 = tip2;
+	}
+
+	public String getPlanificator() {
+		return planificator;
+	}
+
+	public void setPlanificator(String planificator) {
+		this.planificator = planificator;
 	}
 
 	

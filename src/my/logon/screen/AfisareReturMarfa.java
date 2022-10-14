@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import beans.BeanComandaRetur;
 import beans.BeanComandaReturAfis;
+import beans.BeanStatusComandaRetur;
 import dialogs.GenericAlertDialog;
 import enums.EnumDaNuOpt;
 import enums.EnumDialogConstraints;
@@ -43,7 +44,7 @@ public class AfisareReturMarfa extends Activity implements OperatiiReturListener
 	private Spinner spinnerComenziRetur;
 	public static String selectedCmd = "", selectedCmdSap = "", clpDeSters = "", strCodStatusCmd = "";
 	private ListView listArticoleComandaRetur;
-	private TextView textStrada, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipTransport;
+	private TextView textStrada, textPersContact, textTelefon, textOras, textJudet, textDataLivrare, textTipTransport, textStatus;
 	private LinearLayout layoutDateComanda;
 
 	private static int intervalAfisare = 0, stare = 0;
@@ -97,6 +98,7 @@ public class AfisareReturMarfa extends Activity implements OperatiiReturListener
 		textJudet = (TextView) findViewById(R.id.textJudet);
 		textDataLivrare = (TextView) findViewById(R.id.textDataLivrare);
 		textTipTransport = (TextView) findViewById(R.id.textTransport);
+		textStatus = (TextView) findViewById(R.id.textStatus);
 
 		aprobareLayout = (LinearLayout) findViewById(R.id.aprobareLayout);
 		aprobareLayout.setVisibility(View.INVISIBLE);
@@ -328,6 +330,17 @@ public class AfisareReturMarfa extends Activity implements OperatiiReturListener
 		textJudet.setText(UtilsGeneral.getNumeJudet(comandaRetur.getAdresaCodJudet()));
 		textDataLivrare.setText(comandaRetur.getDataLivrare());
 		textTipTransport.setText(comandaRetur.getTipTransport());
+		
+		StringBuilder stringStatus = new StringBuilder();
+
+        for (BeanStatusComandaRetur statusComanda : comandaRetur.getListStariDoc()) {
+            if (!stringStatus.toString().isEmpty())
+                stringStatus.append("\n");
+            stringStatus.append(statusComanda.getNrDocument() + " : " + statusComanda.getStare());
+
+        }
+
+        textStatus.setText(stringStatus.toString());
 
 	}
 

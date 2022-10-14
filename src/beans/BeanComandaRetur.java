@@ -23,6 +23,7 @@ public class BeanComandaRetur {
 	private String numeClient;
 	private List<BeanArticolRetur> arrayListArticole;
 	private boolean transBack;
+	private List<BeanStatusComandaRetur> listStariDoc;
 
 	public BeanComandaRetur() {
 
@@ -174,5 +175,15 @@ public class BeanComandaRetur {
 	public void setTransBack(boolean transBack) {
 		this.transBack = transBack;
 	}
+
+	public List<BeanStatusComandaRetur> getListStariDoc() {
+		return listStariDoc;
+	}
+
+	public void setListStariDoc(List<BeanStatusComandaRetur> listStariDoc) {
+		this.listStariDoc = listStariDoc;
+	}
+	
+	
 
 }
