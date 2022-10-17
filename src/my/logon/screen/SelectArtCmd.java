@@ -2485,7 +2485,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	
 	private boolean isCondArtStocBV90() {
 
-        return articolMathaus != null && articolMathaus.getPlanificator() != null && articolMathaus.getPlanificator().equals("ND") &&
+        return articolMathaus != null && 
                 (articolMathaus.getDepart().equals(("01")) || articolMathaus.getDepart().equals(("02")) || articolMathaus.getDepart().equals("05)"));
 
     }
