@@ -68,6 +68,7 @@ public class DateLivrareAfisare {
 	
 	private double marjaBruta = 0;
 	private double procMarjaBruta = 0;
+	private String tipPersAgent;
 
 	public DateLivrareAfisare() {
 
@@ -585,6 +586,14 @@ public class DateLivrareAfisare {
 
 	public void setProcMarjaBruta(double procMarjaBruta) {
 		this.procMarjaBruta = procMarjaBruta;
+	}
+
+	public String getTipPersAgent() {
+		return tipPersAgent;
+	}
+
+	public void setTipPersAgent(String tipPersAgent) {
+		this.tipPersAgent = tipPersAgent;
 	}
 	
 	
