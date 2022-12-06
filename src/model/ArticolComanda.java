@@ -99,6 +99,8 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 	private ArticolMathaus articolMathaus;
 	
 	private String tipTransport;
+	
+	private double greutate;
 
 	public String getTipTransport() {
 		return tipTransport;
@@ -677,6 +679,16 @@ public class ArticolComanda implements Comparable<ArticolComanda> {
 
 	public void setArticolMathaus(ArticolMathaus articolMathaus) {
 		this.articolMathaus = articolMathaus;
+	}
+	
+	
+
+	public double getGreutate() {
+		return greutate;
+	}
+
+	public void setGreutate(double greutate) {
+		this.greutate = greutate;
 	}
 
 	@Override

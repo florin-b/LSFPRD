@@ -24,6 +24,7 @@ import java.util.TimerTask;
 
 import listeners.ArtComplDialogListener;
 import listeners.AsyncTaskListener;
+import listeners.CnpDialogListener;
 import listeners.ComandaMathausListener;
 import listeners.ComenziDAOListener;
 import listeners.CostMacaraListener;
@@ -93,6 +94,7 @@ import beans.DateArticolMathaus;
 import beans.LivrareMathaus;
 import beans.RezumatComanda;
 import dialogs.ArtComplDialog;
+import dialogs.CnpDialog;
 import dialogs.CostMacaraDialog;
 import dialogs.CostPaletiDialog;
 import dialogs.PretTransportDialog;
@@ -107,7 +109,7 @@ import enums.TipCmdDistrib;
 
 public class CreareComanda extends Activity implements AsyncTaskListener, ValoareNegociataDialogListener, ComenziDAOListener,
 		PretTransportDialogListener, ArtComplDialogListener, Observer, PaletAlertListener, CostMacaraListener, TipCmdDistribListener,
-		OperatiiArticolListener, PaletiListener, ComandaMathausListener {
+		OperatiiArticolListener, PaletiListener, ComandaMathausListener, CnpDialogListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd;
 	String filiala = "", nume = "", cod = "";
@@ -145,6 +147,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 	public static double valNegociat = 0;
 	public static String depozitUnic = "";
 	public static String filialaAlternativa = UserInfo.getInstance().getUnitLog();
+	public static String cnpClient = "";
 
 	public static String tipPlataContract = " ";
 
@@ -855,6 +858,11 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 								goSaveCmd = true;
 							}
 
+							if (isConditiiSolicitCnp() && CreareComanda.cnpClient.trim().length() == 0) {
+                                showCnpDialog();
+                                return true;
+                            }
+							
 							if (goSaveCmd) {
 								mProgress.setVisibility(View.VISIBLE);
 								mProgress.setProgress(0);
@@ -886,6 +894,33 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 	}
 
+	   private boolean isConditiiSolicitCnp() {
+
+	        if (!CreareComanda.tipClientVar.equals("PF"))
+	            return false;
+
+	        double valGreutateCmd = 0;
+	        double valFTvaCmd = 0;
+
+	        for (ArticolComanda articol : ListaArticoleComanda.getInstance().getListArticoleComanda()) {
+	            if (articol.getGreutate() > 0) {
+	                valGreutateCmd += articol.getGreutate();
+	                valFTvaCmd += articol.getPret();
+	            }
+	        }
+
+	        if (valGreutateCmd > Constants.MAX_GREUTATE_CNP || valFTvaCmd >= Constants.MAX_VALOARE_CNP)
+	            return true;
+
+	        return false;
+	    }
+
+	    private void showCnpDialog() {
+	        CnpDialog dialog = new CnpDialog(this);
+	        dialog.setCnpListener(CreareComanda.this);
+	        dialog.show();
+	    }
+	
 	private boolean isCondPF10_000() {
 		return CreareComanda.tipClientVar.equals("PF") && DateLivrare.getInstance().getTipPlata().equals("E") && totalComanda > 10000;
 	}
@@ -1014,6 +1049,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 						comandaFinala.setIsValIncModif(isValIncModif);
 						comandaFinala.setCodJ(codJ);
 						comandaFinala.setAdresaLivrareGed(adrLivrareGED);
+						comandaFinala.setCnpClient(CreareComanda.cnpClient.length() == 0 ? " " : CreareComanda.cnpClient);
 
 						comandaJson = serializeComanda(comandaFinala);
 						articoleFinaleStr = serializedResult;
@@ -1490,6 +1526,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				articolCmd.setFilialaSite(articol.getFilialaSite());
 				articolCmd.setListCabluri(articol.getListCabluri());
 				articolCmd.setTipTransport(articol.getTipTransport());
+				articolCmd.setGreutate(articol.getGreutate());
 
 				if (isArtGedExceptie(articol))
 					articolCmd.setObservatii(articol.getObservatii());
@@ -1592,6 +1629,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 				obj.put("valTransport", "0");
 				obj.put("procTransport", "0");
 				obj.put("listCabluri", opArticol.serializeCabluri05(listArticole.get(i).getListCabluri()));
+				obj.put("greutate", listArticole.get(i).getGreutate());
 				myArray.put(obj);
 			}
 		} catch (Exception ex) {
@@ -1806,13 +1844,12 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 			for (DateArticolMathaus articolMathaus : articoleMathaus) {
 
 				if (codArticolComanda.equals(articolMathaus.getProductCode())) {
-					if (articolComanda.getFilialaSite().equals("BV90")) {
-						articolComanda.setDepozit(articolComanda.getDepart() + "V1");
-					} else {
-						articolComanda.setFilialaSite(articolMathaus.getDeliveryWarehouse());
-						articolComanda.setDepozit(articolMathaus.getDepozit());
-					}
-					break;
+                    if (articolComanda.getFilialaSite().equals("BV90")) {
+                    } else {
+                        articolComanda.setFilialaSite(articolMathaus.getDeliveryWarehouse());
+                    }
+                    articolComanda.setDepozit(articolMathaus.getDepozit());
+                    break;
 				}
 
 			}
@@ -2086,6 +2123,7 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 		tipClientVar = "";
 		articoleComanda = "";
 		dateLivrare = "";
+		cnpClient = "";
 
 		articoleComanda = "";
 		articoleFinaleStr = "";
@@ -2576,6 +2614,15 @@ public class CreareComanda extends Activity implements AsyncTaskListener, Valoar
 
 		performSaveCmd();
 
+	}
+
+	@Override
+	public void cnpSaved(String cnp) {
+        CreareComanda.cnpClient = cnp;
+        mProgress.setProgress(50);
+        myTimer = new Timer();
+        myTimer.schedule(new UpdateProgress(), 40, 15);
+		
 	}
 
 }

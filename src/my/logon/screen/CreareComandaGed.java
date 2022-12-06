@@ -25,6 +25,7 @@ import java.util.TreeSet;
 
 import listeners.ArtComplDialogListener;
 import listeners.AsyncTaskListener;
+import listeners.CnpDialogListener;
 import listeners.ComenziDAOListener;
 import listeners.CostMacaraListener;
 import listeners.OperatiiArticolListener;
@@ -36,6 +37,7 @@ import model.AlgoritmComandaGed;
 import model.ArticolComanda;
 import model.Comanda;
 import model.ComenziDAO;
+import model.Constants;
 import model.DateLivrare;
 import model.InfoStrings;
 import model.ListaArticoleComandaGed;
@@ -90,6 +92,7 @@ import beans.BeanParametruPretGed;
 import beans.CostDescarcare;
 import beans.PretArticolGed;
 import dialogs.ArtComplDialog;
+import dialogs.CnpDialog;
 import dialogs.CostMacaraDialog;
 import dialogs.CostPaletiDialog;
 import dialogs.TipComandaGedDialog;
@@ -102,7 +105,8 @@ import enums.EnumTipClientIP;
 import enums.TipCmdGed;
 
 public class CreareComandaGed extends Activity implements AsyncTaskListener, ArtComplDialogListener, Observer, OperatiiArticolListener,
-		ValoareNegociataDialogListener, PaletAlertListener, ComenziDAOListener, CostMacaraListener, TipCmdGedListener, PaletiListener {
+		ValoareNegociataDialogListener, PaletAlertListener, ComenziDAOListener, CostMacaraListener, TipCmdGedListener, PaletiListener,
+		CnpDialogListener {
 
 	Button stocBtn, clientBtn, articoleBtn, livrareBtn, saveCmdBtn, slideButtonCmd, valTranspBtn, debugBtn;
 	String filiala = "", nume = "", cod = "";
@@ -1150,6 +1154,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 							return true;
 						}
 
+						if (isConditiiSolicitCnp() && CreareComandaGed.cnpClient.trim().length() == 0) {
+							showCnpDialog();
+							return true;
+						}
+
 						if (existaArticole() && !textAdrLivr.getText().toString().equals("")) {
 
 							mProgress.setVisibility(View.VISIBLE);
@@ -1181,6 +1190,34 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	}
 
+	private boolean isConditiiSolicitCnp() {
+
+		if (!DateLivrare.getInstance().getTipPersClient().equals("PF"))
+			return false;
+
+		double valGreutateCmd = 0;
+		double valFTvaCmd = 0;
+
+		for (ArticolComanda articol : ListaArticoleComandaGed.getInstance().getListArticoleComanda()) {
+			if (articol.getGreutate() > 0) {
+				valGreutateCmd += articol.getGreutate();
+				valFTvaCmd += (articol.getPretFaraTva() * articol.getCantitate()) / articol.getMultiplu();
+			}
+		}
+
+		if (valGreutateCmd > Constants.MAX_GREUTATE_CNP || valFTvaCmd >= Constants.MAX_VALOARE_CNP)
+			return true;
+
+		return false;
+
+	}
+
+	private void showCnpDialog() {
+		CnpDialog dialog = new CnpDialog(this);
+		dialog.setCnpListener(CreareComandaGed.this);
+		dialog.show();
+	}
+
 	private boolean isComandaACZC() {
 		return DateLivrare.getInstance().getTipComandaGed() == TipCmdGed.ARTICOLE_COMANDA;
 	}
@@ -1188,8 +1225,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 	private boolean isCondPF10_000() {
 		return DateLivrare.getInstance().getTipPersClient().equals("PF")
 				&& (DateLivrare.getInstance().getTipPlata().equals("E") || DateLivrare.getInstance().getTipPlata().equals("E1")
-						|| DateLivrare.getInstance().getTipPlata().equals("N") || DateLivrare.getInstance().getTipPlata().equals("R"))
-				;
+						|| DateLivrare.getInstance().getTipPlata().equals("N") || DateLivrare.getInstance().getTipPlata().equals("R"));
 	}
 
 	class UpdateProgress extends TimerTask {
@@ -1238,22 +1274,24 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 						comandaFinala.setValoareIncasare(valIncasare);
 
-						if ((dateLivrareInstance.getTipPlata().equals("E") || dateLivrareInstance.getTipPlata().equals("E1") || dateLivrareInstance.getTipPlata().equals("N") || dateLivrareInstance.getTipPlata().equals("R"))
-                                && CreareComandaGed.tipClient.equals("PJ")) {
-                            if (totalComanda > 5000) {
-                                Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!", Toast.LENGTH_SHORT).show();
-                                return;
-                            } else
-                                getTotalComenziNumerar();
+						if ((dateLivrareInstance.getTipPlata().equals("E") || dateLivrareInstance.getTipPlata().equals("E1")
+								|| dateLivrareInstance.getTipPlata().equals("N") || dateLivrareInstance.getTipPlata().equals("R"))
+								&& CreareComandaGed.tipClient.equals("PJ")) {
+							if (totalComanda > 5000) {
+								Toast.makeText(getApplicationContext(), "Pentru plata in numerar valoarea maxima este de 5000 RON!",
+										Toast.LENGTH_SHORT).show();
+								return;
+							} else
+								getTotalComenziNumerar();
 
-                        } else if (isCondPF10_000()) {
-                            if (totalComanda > 10000) {
-                                Toast.makeText(getApplicationContext(), "Valoarea comenzii este mai mare de 10000 RON.", Toast.LENGTH_SHORT).show();
-                                return;
-                            } else
-                                getTotalComenziNumerar();
-                        } else
-                            valideazaFinal();
+						} else if (isCondPF10_000()) {
+							if (totalComanda > 10000) {
+								Toast.makeText(getApplicationContext(), "Valoarea comenzii este mai mare de 10000 RON.", Toast.LENGTH_SHORT).show();
+								return;
+							} else
+								getTotalComenziNumerar();
+						} else
+							valideazaFinal();
 
 					}
 				});
@@ -1265,54 +1303,55 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 		}
 	}
-	
-	   private void getTotalComenziNumerar() {
 
-	        String tipPers = "PJN";
-	        String codClientNumerar = comandaFinala.getCodClient();
+	private void getTotalComenziNumerar() {
 
-	        if (CreareComandaGed.tipClient.equals("PF")) {
-	            tipPers = "PF";
-	            codClientNumerar = DateLivrare.getInstance().getNrTel();
-	        } else if (CreareComandaGed.tipClient.equals("PJ") && !CreareComandaGed.cnpClient.trim().isEmpty()) {
-	            tipPers = "PJG";
-	            codClientNumerar = CreareComandaGed.cnpClient.replaceAll("RO", "");
-	        }
+		String tipPers = "PJN";
+		String codClientNumerar = comandaFinala.getCodClient();
 
-	        HashMap<String, String> params = new HashMap<String, String>();
-	        params.put("codClient", codClientNumerar);
-	        params.put("dataLivrare", DateLivrare.getInstance().getDataLivrare());
-	        params.put("tipClient", tipPers);
-	        comandaDAO.getTotalComenziNumerar(params);
+		if (CreareComandaGed.tipClient.equals("PF")) {
+			tipPers = "PF";
+			codClientNumerar = DateLivrare.getInstance().getNrTel();
+		} else if (CreareComandaGed.tipClient.equals("PJ") && !CreareComandaGed.cnpClient.trim().isEmpty()) {
+			tipPers = "PJG";
+			codClientNumerar = CreareComandaGed.cnpClient.replaceAll("RO", "");
+		}
 
-	    }
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("codClient", codClientNumerar);
+		params.put("dataLivrare", DateLivrare.getInstance().getDataLivrare());
+		params.put("tipClient", tipPers);
+		comandaDAO.getTotalComenziNumerar(params);
 
-	    private void afisTotalComenziNumerar(String totalNumerar) {
+	}
 
-	        double valPragNumerar = 5000;
+	private void afisTotalComenziNumerar(String totalNumerar) {
 
-	        if (DateLivrare.getInstance().getTipPersClient().equals("PF"))
-	            valPragNumerar = 10000;
+		double valPragNumerar = 5000;
 
-	        if (totalComanda + Double.valueOf(totalNumerar) > valPragNumerar) {
+		if (DateLivrare.getInstance().getTipPersClient().equals("PF"))
+			valPragNumerar = 10000;
 
-	            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	            builder.setMessage(
-	                    "\nLa acest client valoarea comenzilor cu plata in numerar livrate in data de " + DateLivrare.getInstance().getDataLivrare() + " depaseste " + (int) valPragNumerar + " de lei.\n\n" +
-	                            "Pentru a salva comanda trebuie sa schimbati metoda de plata sau data de livrare.\n").setCancelable(false)
-	                    .setPositiveButton("Inchide", new DialogInterface.OnClickListener() {
-	                        public void onClick(DialogInterface dialog, int id) {
-	                            dialog.cancel();
+		if (totalComanda + Double.valueOf(totalNumerar) > valPragNumerar) {
 
-	                        }
-	                    });
-	            AlertDialog alert = builder.create();
-	            alert.setCancelable(false);
-	            alert.show();
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(
+					"\nLa acest client valoarea comenzilor cu plata in numerar livrate in data de " + DateLivrare.getInstance().getDataLivrare()
+							+ " depaseste " + (int) valPragNumerar + " de lei.\n\n"
+							+ "Pentru a salva comanda trebuie sa schimbati metoda de plata sau data de livrare.\n").setCancelable(false)
+					.setPositiveButton("Inchide", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							dialog.cancel();
 
-	        } else
-	            valideazaFinal();
-	    }
+						}
+					});
+			AlertDialog alert = builder.create();
+			alert.setCancelable(false);
+			alert.show();
+
+		} else
+			valideazaFinal();
+	}
 
 	private boolean isComandaBV() {
 
@@ -1434,7 +1473,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		verificaPaletiComanda(costDescarcare.getArticolePaleti());
 
 		if (!costDescarcare.getArticolePaleti().isEmpty()) {
-			
+
 			for (int ii = 0; ii < costDescarcare.getArticoleDescarcare().size(); ii++)
 				costDescarcare.getArticoleDescarcare().get(ii).setCantitate(0);
 
@@ -1680,6 +1719,7 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 				obj.put("procTransport", listArticole.get(i).getProcTransport());
 				obj.put("depart", listArticole.get(i).getDepart());
 				obj.put("listCabluri", new OperatiiArticolImpl(this).serializeCabluri05(listArticole.get(i).getListCabluri()));
+				obj.put("greutate", listArticole.get(i).getGreutate());
 
 				myArray.put(obj);
 
@@ -2439,11 +2479,11 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 
 	private void adaugaPalet(ArticolPalet articolPalet, EnumPaleti status) {
 
-		
 		String depozitPalet = HelperCostDescarcare.getDepozitPalet(ListaArticoleComandaGed.getInstance().getListArticoleComanda(),
 				articolPalet.getCodArticol());
 
-		String unitlogPalet = HelperCostDescarcare.getUnitlogPalet(ListaArticoleComandaGed.getInstance().getListArticoleComanda(), articolPalet.getCodArticol());
+		String unitlogPalet = HelperCostDescarcare.getUnitlogPalet(ListaArticoleComandaGed.getInstance().getListArticoleComanda(),
+				articolPalet.getCodArticol());
 
 		ArticolComanda articol = HelperCostDescarcare.getArticolPalet(articolPalet, depozitPalet, unitlogPalet);
 		ListaArticoleComandaGed.getInstance().addArticolComanda(articol);
@@ -2582,8 +2622,8 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 			afiseazaPretMacaraDialog((String) result);
 			break;
 		case GET_TOTAL_COMENZI_NUMERAR:
-            afisTotalComenziNumerar((String) result);
-            break;
+			afisTotalComenziNumerar((String) result);
+			break;
 		default:
 			break;
 
@@ -2638,6 +2678,15 @@ public class CreareComandaGed extends Activity implements AsyncTaskListener, Art
 		default:
 			break;
 		}
+
+	}
+
+	@Override
+	public void cnpSaved(String cnp) {
+		CreareComandaGed.cnpClient = cnp;
+		mProgress.setProgress(50);
+		myTimer = new Timer();
+		myTimer.schedule(new UpdateProgress(), 40, 15);
 
 	}
 

@@ -5,6 +5,7 @@
 package my.logon.screen;
 
 import helpers.HelperCostDescarcare;
+import helpers.HelperCreareComanda;
 import helpers.HelperMathaus;
 
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ import java.util.TreeSet;
 
 import listeners.ArticolModificareListener;
 import listeners.AsyncTaskListener;
+import listeners.CnpDialogListener;
 import listeners.ComenziDAOListener;
 import listeners.CostMacaraListener;
 import listeners.ModifCmdTranspListener;
@@ -94,6 +96,7 @@ import beans.DateArticolMathaus;
 import beans.DateLivrareAfisare;
 import beans.LivrareMathaus;
 import dialogs.AprobariDialog;
+import dialogs.CnpDialog;
 import dialogs.CostMacaraDialog;
 import dialogs.CostPaletiDialog;
 import dialogs.TranspModifCmdDialog;
@@ -102,7 +105,7 @@ import enums.EnumPaleti;
 import enums.EnumTipClientIP;
 
 public class ModificareComanda extends Activity implements AsyncTaskListener, ComenziDAOListener, ArticolModificareListener, Observer,
-		CostMacaraListener, PaletiListener, ModifCmdTranspListener {
+		CostMacaraListener, PaletiListener, ModifCmdTranspListener, CnpDialogListener {
 
 	Button quitBtn, stocBtn, clientBtn, articoleBtn, livrareBtn, salveazaComandaBtn, stergeComandaBtn, btnCommentariiCond, aprobareBtn;
 	String filiala = "", nume = "", cod = "", globalSubCmp = "0";
@@ -598,6 +601,11 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 							Toast.makeText(getApplicationContext(), "Comanda nu are toate aprobarile!", Toast.LENGTH_SHORT).show();
 							return false;
 						}
+						
+						 if (isConditiiSolicitCnp() && DateLivrare.getInstance().getCnpClient().trim().length() == 0) {
+                             showCnpDialog();
+                             return false;
+                         }
 
 						mProgress.setVisibility(View.VISIBLE);
 						mProgress.setProgress(0);
@@ -627,6 +635,47 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 
 	}
 
+	 private boolean isConditiiSolicitCnp() {
+
+	        if (!ModificareComanda.tipClientVar.equals("PF"))
+	            return false;
+
+	        double valGreutateCmd = 0;
+	        double valFTvaCmd = 0;
+
+	        for (ArticolComanda articol : listArticoleComanda) {
+	            if (articol.getGreutate() > 0) {
+	                valGreutateCmd += articol.getGreutate();
+
+	                if (isComandaDistrib)
+	                    valFTvaCmd += articol.getPret();
+	                else
+	                    valFTvaCmd += HelperCreareComanda.getPretFaraTVA(articol);
+	            }
+	        }
+
+	        if (valGreutateCmd > Constants.MAX_GREUTATE_CNP || valFTvaCmd >= Constants.MAX_VALOARE_CNP)
+	            return true;
+
+	        return false;
+
+	    }
+
+	    private void showCnpDialog() {
+	        CnpDialog dialog = new CnpDialog(this);
+	        dialog.setCnpListener(ModificareComanda.this);
+	        dialog.show();
+	    }
+
+	    @Override
+	    public void cnpSaved(String cnp) {
+	        DateLivrare.getInstance().setCnpClient(cnp);
+	        mProgress.setProgress(50);
+	        myTimer = new Timer();
+	        myTimer.schedule(new UpdateProgress(), 40, 15);
+
+	    }
+	
 	class UpdateProgress extends TimerTask {
 		public void run() {
 			progressVal++;
@@ -1227,7 +1276,8 @@ public class ModificareComanda extends Activity implements AsyncTaskListener, Co
 				obj.put("valTransport", listArticoleComanda.get(i).getValTransport());
 				obj.put("filialaSite", listArticoleComanda.get(i).getFilialaSite());
 				obj.put("listCabluri", new OperatiiArticolImpl(this).serializeCabluri05(listArticoleComanda.get(i).getListCabluri()));
-
+				obj.put("greutate", listArticoleComanda.get(i).getGreutate());
+				
 				if (!UtilsUser.isAgentOrSDorKA()) {
 					if ((listArticoleComanda.get(i).getNumeArticol() != null && listArticoleComanda.get(i).getPonderare() == 1)
 							|| comandaSelectata.isCmdInstPublica()) {

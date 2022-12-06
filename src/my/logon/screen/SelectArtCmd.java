@@ -135,7 +135,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private static ArrayList<HashMap<String, String>> listUmVanz = null;
 
 	SimpleAdapter adapterUmVanz;
-	private double varProc = 0, valMultiplu = 0;
+	private double varProc = 0, valMultiplu = 0, greutateArt = 0;
 
 	String tipAlert = "", codPromo = "", infoArticol = "", Umb = "", cantUmb = "", selectedUnitMas = "", selectedUnitMasPret = "";
 
@@ -1631,6 +1631,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						
 						unArticol.setArticolMathaus(articolMathaus);
 						unArticol.setListCabluri(listCabluri);
+						unArticol.setGreutate(greutateArt);
 
 						if (procRedFin > 0)
 							unArticol.setIstoricPret(istoricPret);
@@ -1688,6 +1689,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						valoareUmrez = 1;
 						valoareUmren = 1;
 
+						greutateArt = 0;
 						listCabluri = null;
 						
                         cautaStocBV90 = false;
@@ -1964,6 +1966,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				String[] tokenPret = pretResponse.split("#");
 
 				valMultiplu = Double.parseDouble(tokenPret[13].trim());
+				greutateArt = Double.parseDouble(tokenPret[23].trim());
 
 				globalCantArt = Double.parseDouble(tokenPret[14]);
 

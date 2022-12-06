@@ -108,5 +108,30 @@ public class HelperCreareComanda {
 		return filiale;
 
 	}
+	
+	public static double getPretFaraTVA(ArticolComanda articol) {
+
+        double valNETW = 0.0;
+
+ 
+        if (articol.getInfoArticol().contains(";")) {
+
+            String[] arrayInfo = articol.getInfoArticol().split(";");
+            String[] tokValue;
+
+            for (int i = 0; i < arrayInfo.length; i++) {
+                if (arrayInfo[i].toUpperCase().contains("NETW")) {
+                    tokValue = arrayInfo[i].split(":");
+                    valNETW = Double.valueOf(tokValue[1]);
+                    continue;
+                }
+
+            }
+
+        }
+
+        return valNETW;
+
+    }
 
 }

@@ -11,5 +11,8 @@ public class Constants {
 	public final static String CMD_SIM_CONDITII = "41";
 	public final static int NR_FILIALE_MATHAUS = 2;
 	public final static int NR_ARTICOLE_MATHAUS_PAGINA = 10;
+	
+	public final static double MAX_GREUTATE_CNP = 500;
+	public final static double MAX_VALOARE_CNP = 10000;
 
 }
