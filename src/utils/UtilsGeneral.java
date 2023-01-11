@@ -10,6 +10,7 @@ import java.util.List;
 
 import model.DateLivrare;
 import model.UserInfo;
+import my.logon.screen.CreareComanda;
 import my.logon.screen.R;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -24,11 +25,11 @@ import enums.TipCmdDistrib;
 public class UtilsGeneral {
 
 	public static String[] numeFiliale = { "Andronache", "Bacau", "Baia-Mare", "Brasov", "Buzau", "Constanta", "Cluj", "Craiova", "Focsani",
-		"Galati", "Glina", "Hunedoara", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Sibiu", "Suceava","Timisoara",
-		"Tg. Mures" };
+			"Galati", "Glina", "Hunedoara", "Iasi", "Militari", "Oradea", "Otopeni", "Piatra-Neamt", "Pitesti", "Ploiesti", "Sibiu", "Suceava",
+			"Timisoara", "Tg. Mures" };
 
-public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "HD10", "IS10",
-		"BU11", "BH10", "BU12", "NT10", "AG10", "PH10", "SB10", "SV10", "TM10", "MS10" };
+	public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "CT10", "CJ10", "DJ10", "VN10", "GL10", "BU10", "HD10", "IS10",
+			"BU11", "BH10", "BU12", "NT10", "AG10", "PH10", "SB10", "SV10", "TM10", "MS10" };
 
 	public static String[] numeDivizii = { "Lemnoase", "Feronerie", "Parchet", "Materiale grele", "Electrice", "Gips", "Chimice", "Instalatii",
 			"Hidroizolatii" };
@@ -90,10 +91,11 @@ public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "C
 		return listDepozite.toArray(new String[listDepozite.size()]);
 
 	}
-	
+
 	public static void trateazaExceptieMAV_BU(ArrayAdapter<String> adapterSpinnerDepozite) {
 
-		//pentru filialele BU se elimina MAV2, conform solicitarii din 17.09.2020
+		// pentru filialele BU se elimina MAV2, conform solicitarii din
+		// 17.09.2020
 		if (UserInfo.getInstance().getUnitLog().startsWith("BU"))
 			adapterSpinnerDepozite.remove("MAV2");
 	}
@@ -179,7 +181,7 @@ public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "C
 		return retVal;
 	}
 
-	public static String getDescTipPlata(String codPlata,String termenPlata) {
+	public static String getDescTipPlata(String codPlata, String termenPlata) {
 
 		String tipPlata = "nedefinit";
 
@@ -547,7 +549,7 @@ public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "C
 
 		if (numeFiliala.equals("SUCEAVA"))
 			fl = "SV10";
-		
+
 		if (numeFiliala.equals("DEVA"))
 			fl = "HD10";
 
@@ -618,6 +620,25 @@ public static String[] codFiliale = { "BU13", "BC10", "MM10", "BV10", "BZ10", "C
 		filialeMathaus.add("GL10");
 
 		return filialeMathaus;
-	}	
-	
+	}
+
+	public static String getUnitLogDistrib(String unitLog) {
+		return unitLog.substring(0, 2) + "1" + unitLog.substring(3, 4);
+	}
+
+	public static boolean isUlDistrib(String unitLog) {
+		return unitLog.substring(2, 3).equals("1");
+	}
+
+	public static boolean isFilMareLivrTCLIDistrib() {
+
+		String filialaLivrare = "";
+		if (DateLivrare.getInstance().getTipComandaDistrib().equals(TipCmdDistrib.COMANDA_VANZARE))
+			filialaLivrare = CreareComanda.filialaAlternativa;
+		else if (DateLivrare.getInstance().getTipComandaDistrib().equals(TipCmdDistrib.COMANDA_LIVRARE))
+			filialaLivrare = DateLivrare.getInstance().getCodFilialaCLP();
+
+		return filialaLivrare.equals("IS10") || filialaLivrare.equals("AG10") || filialaLivrare.equals("BU10");
+	}
+
 }

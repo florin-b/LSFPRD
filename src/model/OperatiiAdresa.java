@@ -32,5 +32,7 @@ public interface OperatiiAdresa {
 	public BeanDateLivrareClient deserializeDateLivrareClient(String result);
 	
 	public void getFilialaLivrareMathaus(HashMap<String, String> params);
+	
+	public void getAdresaFiliala(HashMap<String, String> params);
 
 }

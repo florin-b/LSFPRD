@@ -97,6 +97,13 @@ public class OperatiiAdresaImpl implements OperatiiAdresa, AsyncTaskListener {
 
 	}
 	
+	public void getAdresaFiliala(HashMap<String, String> params) {
+		this.params = params;
+		numeComanda = EnumOperatiiAdresa.GET_ADRESA_FILIALA;
+		performOperation();
+
+	}
+	
 	public List<String> deserializeListLocalitati(Object resultList) {
 
 		List<String> listLocalitati = new ArrayList<String>();

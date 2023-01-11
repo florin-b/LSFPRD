@@ -19,16 +19,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
+import my.logon.screen.R;
 import beans.CostTransportMathaus;
 import beans.RezumatComanda;
+import beans.TranspComenzi;
 import dialogs.ModifPretTranspDialog;
 import listeners.ModifPretTransportListener;
 import listeners.RezumatListener;
 import model.ArticolComanda;
+import model.ArticolComandaGed;
 import model.DateLivrare;
 import model.UserInfo;
-import my.logon.screen.R;
 
 public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTransportListener {
 
@@ -44,15 +45,18 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
     private String tipTransportCmd;
     private String filialeArondate;
     private ArticolComanda articolTransport;
+    private ViewHolder myViewHolder;
     private List<ArticolComanda> listArticoleTransport;
+    private boolean selectTransp;
 
-    public AdapterRezumatComanda(Context context, List<RezumatComanda> listComenzi, List<CostTransportMathaus> costTransport, String tipTransportCmd, String filialeArondate) {
+    public AdapterRezumatComanda(Context context, List<RezumatComanda> listComenzi, List<CostTransportMathaus> costTransport, String tipTransportCmd, String filialeArondate, boolean selectTransp) {
         this.context = context;
         this.listComenzi = listComenzi;
         this.costTransport = costTransport;
         this.tipTransportCmd = tipTransportCmd;
         this.filialeArondate = filialeArondate;
         listArticoleTransport = new ArrayList<ArticolComanda>();
+        this.selectTransp = selectTransp;
         clearTransportArticol(listComenzi);
 
     }
@@ -95,7 +99,7 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-       
+        myViewHolder = viewHolder;
 
         RezumatComanda rezumat = getItem(position);
 
@@ -108,10 +112,7 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
 
         if (getArticolTransport(rezumat.getFilialaLivrare()) == null) {
             viewHolder.textTransport.setText("Val. transp: " + getCostTransport(rezumat.getFilialaLivrare()));
-
             viewHolder.textTotal.setText("Total: " + nf.format(valoareTotal));
-
-
             String tipTranspArt = getTipTransport(rezumat.getFilialaLivrare());
 
             if (filialeArondate.contains(rezumat.getFilialaLivrare()) || isCondTranspTrapBV90(rezumat.getFilialaLivrare(), tipTranspArt)) {
@@ -161,6 +162,27 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
                         viewHolder.spinnerTransport.setSelection(0);
 
 
+                } else if (tipTransportCmd.equals("TCLI")) {
+
+                    String[] tipTransportTCLIArray ;
+                    if (!tipTranspArt.isEmpty()){
+                        tipTransportTCLIArray = new String[]{tipTranspArt, "TCLI"};
+                    }else
+                        tipTransportTCLIArray = new String[]{"TCLI"};
+
+
+                    tipTransportTCLIArray = new String[]{"TRAP","TCLI"};
+
+                    viewHolder.tipTransport.setVisibility(View.GONE);
+                    viewHolder.spinnerTransport.setVisibility(View.VISIBLE);
+                    viewHolder.btnPretTransport.setVisibility(View.INVISIBLE);
+
+                    ArrayAdapter<String> adapterSpinnerTransp = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, tipTransportTCLIArray);
+                    adapterSpinnerTransp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    viewHolder.spinnerTransport.setAdapter(adapterSpinnerTransp);
+
+                    viewHolder.spinnerTransport.setSelection(1);
+
                 } else {
                     viewHolder.spinnerTransport.setVisibility(View.GONE);
                     viewHolder.btnPretTransport.setVisibility(View.INVISIBLE);
@@ -175,6 +197,7 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
         setListenerSpinnerTransport(viewHolder.spinnerTransport, rezumat, viewHolder);
         setListenerEliminaBtn(viewHolder.stergeComandaBtn, position);
         setListenerPretTransp(viewHolder, rezumat);
+        viewHolder.spinnerTransport.setEnabled(selectTransp);
 
         return convertView;
 
@@ -182,7 +205,7 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
 
 
     private boolean isCondTranspTrapBV90(String filialaLivrat, String tipTransport) {
-       return UserInfo.getInstance().getUnitLog().equals("BV10") && filialaLivrat.equals("BV90") && tipTransport.equals("TRAP");
+        return UserInfo.getInstance().getUnitLog().equals("BV10") && filialaLivrat.equals("BV90") && tipTransport.equals("TRAP");
 
     }
 
@@ -249,13 +272,24 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
                     eliminaArticolTransport(rezumat, viewHolder);
                     viewHolder.textTransport.setVisibility(View.INVISIBLE);
                     viewHolder.btnPretTransport.setVisibility(View.INVISIBLE);
+                    listener.setStareRezumat("0", rezumat.getFilialaLivrare());
+                    setTransportComenzi("TCLI", rezumat.getFilialaLivrare());
                 } else {
                     viewHolder.textTransport.setVisibility(View.VISIBLE);
+                    adaugaArticolTransport(rezumat, viewHolder);
 
-                    if (tipTransportSelected.equals("TRAP"))
+                    if (tipTransportSelected.equals("TRAP")) {
                         viewHolder.btnPretTransport.setVisibility(View.VISIBLE);
 
-                    adaugaArticolTransport(rezumat, viewHolder);
+                        if (DateLivrare.getInstance().getTransport().equals("TCLI")) {
+                            listener.setStareRezumat("1", rezumat.getFilialaLivrare());
+                            setTransportComenzi("TRAP", rezumat.getFilialaLivrare());
+                            eliminaArticolTransport(rezumat, viewHolder);
+                        }
+
+                    }
+
+                    //adaugaArticolTransport(rezumat, viewHolder);
                 }
 
             }
@@ -267,6 +301,36 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
         });
     }
 
+
+    private void setTransportComenzi(String tipTransport, String filiala){
+
+        if (!DateLivrare.getInstance().getTransport().equals("TCLI"))
+            return;
+
+        TranspComenzi transpComenzi = new TranspComenzi();
+        transpComenzi.setFiliala(filiala);
+        transpComenzi.setTransport(tipTransport);
+
+        List<TranspComenzi> setT = DateLivrare.getInstance().getTranspComenzi();
+        if (setT == null) {
+            setT = new ArrayList<TranspComenzi>();
+            setT.add(transpComenzi);
+        }
+        else {
+            Iterator<TranspComenzi> iterator = setT.iterator();
+            while (iterator.hasNext()) {
+                TranspComenzi tr = iterator.next();
+
+                if (tr.getFiliala().equals(filiala))
+                    iterator.remove();
+            }
+
+            setT.add(transpComenzi);
+
+        }
+
+        DateLivrare.getInstance().setTranspComenzi(setT);
+    }
 
     private void eliminaArticolTransport(RezumatComanda rezumatComanda, ViewHolder viewHolder) {
 
@@ -296,7 +360,7 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
     }
 
 
-    private void calculeazaTotalComanda(RezumatComanda rezumat, ViewHolder viewHolder){
+    private void calculeazaTotalComanda(RezumatComanda rezumat, ViewHolder viewHolder) {
         getNumeArticole(rezumat);
         viewHolder.textTotal.setText("Total: " + nf.format(valoareTotal));
 
@@ -485,7 +549,10 @@ public class AdapterRezumatComanda extends BaseAdapter implements ModifPretTrans
             str.append(art.getNumeArticol());
             str.append("\n");
 
-            valoareTotal += art.getPret();
+            if (art instanceof ArticolComandaGed)
+                valoareTotal += art.getPretUnitarClient() * art.getCantUmb();
+            else
+                valoareTotal += art.getPret();
         }
 
         return str.toString();

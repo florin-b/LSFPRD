@@ -126,9 +126,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	private double procReducereCmp = 0;
 	private double valoareUmrez = 1, valoareUmren = 1;
 	private List<BeanCablu05> listCabluri;
-    private boolean cautaStocBV90 = false;
-    private boolean verificatStocBV90 = false;
-    private String filialaStocBV90 = "";
+	private boolean cautaStocBV90 = false;
+	private boolean verificatStocBV90 = false;
+	private String filialaStocBV90 = "";
 
 	NumberFormat nf2;
 
@@ -365,19 +365,19 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		List<String> departamenteComanda = DepartamentAgent.getDepartamenteAgent();
 
 		if (isComandaDL())
-            departamenteComanda.remove("Mathaus");
+			departamenteComanda.remove("Mathaus");
 		else if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_VANZARE) {
 
-            if (!CreareComanda.filialeArondateMathaus.contains(UserInfo.getInstance().getUnitLog())) {
-                departamenteComanda.clear();
-                departamenteComanda.add("Mathaus");
-                DateLivrare.getInstance().setTipComandaDistrib(TipCmdDistrib.COMANDA_LIVRARE);
-                DateLivrare.getInstance().setCodFilialaCLP(CreareComanda.filialaLivrareMathaus);
-            }else {
-                DateLivrare.getInstance().setTipComandaDistrib(TipCmdDistrib.COMANDA_VANZARE);
-                DateLivrare.getInstance().setCodFilialaCLP("");
-            }
-        }
+			if (!CreareComanda.filialeArondateMathaus.contains(UserInfo.getInstance().getUnitLog())) {
+				departamenteComanda.clear();
+				departamenteComanda.add("Mathaus");
+				DateLivrare.getInstance().setTipComandaDistrib(TipCmdDistrib.COMANDA_LIVRARE);
+				DateLivrare.getInstance().setCodFilialaCLP(CreareComanda.filialaLivrareMathaus);
+			} else {
+				DateLivrare.getInstance().setTipComandaDistrib(TipCmdDistrib.COMANDA_VANZARE);
+				DateLivrare.getInstance().setCodFilialaCLP("");
+			}
+		}
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_spinner_dropdown_item, departamenteComanda);
 
@@ -516,7 +516,12 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 		new DownloadImageTask(imageArt).execute(articol.getAdresaImgMare());
 
-		btnStocMathaus.performClick();
+		if (DateLivrare.getInstance().getTransport().equals("TCLI")) {
+			globalCodDepartSelectetItem = articolMathaus.getDepart();
+			articolMathaus.setTip2("");
+			performListArtStoc();
+		} else
+			btnStocMathaus.performClick();
 
 	}
 
@@ -563,10 +568,10 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				spinnerUnitMas.setAdapter(adapterUmVanz);
 
 				String filialaStocMathaus = CreareComanda.filialaAlternativa;
-                if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE)
-                    filialaStocMathaus = DateLivrare.getInstance().getCodFilialaCLP();
+				if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE)
+					filialaStocMathaus = DateLivrare.getInstance().getCodFilialaCLP();
 
-                params.put("filiala", filialaStocMathaus);
+				params.put("filiala", filialaStocMathaus);
 				params.put("codArticol", codArticol);
 				params.put("um", umVanz);
 
@@ -586,8 +591,7 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 		if (dateArticol.getQuantity() > 0) {
 			listArtStoc(strStoc);
 			articolMathaus.setTip2("S");
-		}
-		else {
+		} else {
 			globalCodDepartSelectetItem = articolMathaus.getDepart();
 			articolMathaus.setTip2("");
 			performListArtStoc();
@@ -608,7 +612,6 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	}
 
 	private void CreateMenu(Menu menu) {
-
 
 		if ((UtilsUser.isAgentOrSD() || UtilsUser.isOIVPD()) && DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_VANZARE) {
 			MenuItem mnu2 = menu.add(0, 1, 1, "Tip cautare");
@@ -1168,11 +1171,11 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			paramUnitMas = artMap.get("rowText");
 
 		}
-		
+
 		String filialaPret = CreareComanda.filialaAlternativa;
 
-        if (!filialaStocBV90.isEmpty())
-            filialaPret = filialaStocBV90;
+		if (!filialaStocBV90.isEmpty())
+			filialaPret = filialaStocBV90;
 
 		params.put("client", CreareComanda.codClientVar);
 		params.put("articol", codArticol);
@@ -1623,12 +1626,12 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 						unArticol.setCategorie(articolDBSelected.getCategorie());
 						unArticol.setLungime(articolDBSelected.getLungime());
 						unArticol.setCmp(cmpArt);
-						
+
 						if (!filialaStocBV90.isEmpty())
-                            unArticol.setFilialaSite(filialaStocBV90);
-                        else
-                            unArticol.setFilialaSite(CreareComanda.filialaAlternativa);
-						
+							unArticol.setFilialaSite(filialaStocBV90);
+						else
+							unArticol.setFilialaSite(CreareComanda.filialaAlternativa);
+
 						unArticol.setArticolMathaus(articolMathaus);
 						unArticol.setListCabluri(listCabluri);
 						unArticol.setGreutate(greutateArt);
@@ -1691,10 +1694,10 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 						greutateArt = 0;
 						listCabluri = null;
-						
-                        cautaStocBV90 = false;
-                        verificatStocBV90 = false;
-                        filialaStocBV90 = "";
+
+						cautaStocBV90 = false;
+						verificatStocBV90 = false;
+						filialaStocBV90 = "";
 
 						redBtnTable.setVisibility(View.GONE);
 						labelStoc.setVisibility(View.GONE);
@@ -1896,30 +1899,33 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 			artMap = (HashMap<String, String>) spinnerUnitMas.getSelectedItem();
 
-			String stocUM = artMap.get("rowText");
+			if (artMap != null) {
 
-			if (!stocUM.equals(tokenStoc[1]) && !tokenStoc[1].trim().equals("")) // um
-			// vanz
-			// si
-			// um
-			// vanz
-			// difera
-			{
-				HashMap<String, String> tempUmVanz;
-				tempUmVanz = new HashMap<String, String>();
-				tempUmVanz.put("rowText", tokenStoc[1]);
+				String stocUM = artMap.get("rowText");
 
-				listUmVanz.add(tempUmVanz);
-				spinnerUnitMas.setAdapter(adapterUmVanz);
-				spinnerUnitMas.setVisibility(View.VISIBLE);
+				if (!stocUM.equals(tokenStoc[1]) && !tokenStoc[1].trim().equals("")) // um
+				// vanz
+				// si
+				// um
+				// vanz
+				// difera
+				{
+					HashMap<String, String> tempUmVanz;
+					tempUmVanz = new HashMap<String, String>();
+					tempUmVanz.put("rowText", tokenStoc[1]);
+
+					listUmVanz.add(tempUmVanz);
+					spinnerUnitMas.setAdapter(adapterUmVanz);
+					spinnerUnitMas.setVisibility(View.VISIBLE);
+				}
 			}
-			
-			 if (isCondArtStocBV90() && tokenStoc[0].equals("0") && !verificatStocBV90) {
-	                cautaStocBV90 = true;
-	                verificatStocBV90 = true;
-	                performListArtStoc();
-	            }
-	            cautaStocBV90 = false;
+
+			if (isCondArtStocBV90() && tokenStoc[0].equals("0") && !verificatStocBV90) {
+				cautaStocBV90 = true;
+				verificatStocBV90 = true;
+				performListArtStoc();
+			}
+			cautaStocBV90 = false;
 
 		} else {
 
@@ -2410,9 +2416,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 				performListArtStocCustodie();
 			} else {
 				if (isDepartMathaus)
-                    btnStocMathaus.performClick();
-                else
-                    performListArtStoc();
+					btnStocMathaus.performClick();
+				else
+					performListArtStoc();
 			}
 
 		} catch (Exception ex) {
@@ -2445,6 +2451,13 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 			if (codArticol.length() == 8)
 				codArticol = "0000000000" + codArticol;
 
+			if (DateLivrare.getInstance().getTransport().equals("TCLI") && UtilsGeneral.isFilMareLivrTCLIDistrib()) {
+				if (UtilsGeneral.isUlDistrib(DateLivrare.getInstance().getFilialaLivrareTCLI()))
+					globalDepozSel = articolDBSelected.getDepart().substring(0, 2) + "V1";
+				else
+					globalDepozSel = "MAV1";
+			}
+
 			String varLocalUnitLog = "";
 
 			if (DateLivrare.getInstance().getTipComandaDistrib() == TipCmdDistrib.COMANDA_LIVRARE) {
@@ -2463,35 +2476,36 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 					varLocalUnitLog = CreareComanda.filialaAlternativa;
 				}
 			}
-			
+
 			String paramDepozitStoc = globalDepozSel;
 
-            if (isCondArtStocBV90() && cautaStocBV90) {
-                varLocalUnitLog = "BV90";
-                filialaStocBV90 = "BV90";
+			if (isCondArtStocBV90() && cautaStocBV90) {
+				varLocalUnitLog = "BV90";
+				filialaStocBV90 = "BV90";
 
-                if (articolMathaus.getDepart().equals("01"))
-                    paramDepozitStoc = "92V1";
-            }
+				if (articolMathaus.getDepart().equals("01"))
+					paramDepozitStoc = "92V1";
+			}
 
 			params.put("codArt", codArticol);
 			params.put("filiala", varLocalUnitLog);
 			params.put("depozit", paramDepozitStoc);
 			params.put("depart", UserInfo.getInstance().getCodDepart());
-		    params.put("isArtMathaus", String.valueOf(isDepartMathaus));
+			params.put("isArtMathaus", String.valueOf(isDepartMathaus));
 			opArticol.getStocDepozit(params);
 
 		} catch (Exception e) {
 			Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
 		}
 	}
-	
+
 	private boolean isCondArtStocBV90() {
 
-        return articolMathaus != null && 
-                (articolMathaus.getDepart().equals(("01")) || articolMathaus.getDepart().equals(("02")) || articolMathaus.getDepart().equals("05)"));
+		return articolMathaus != null
+				&& (articolMathaus.getDepart().equals(("01")) || articolMathaus.getDepart().equals(("02")) || articolMathaus.getDepart()
+						.equals("05)"));
 
-    }
+	}
 
 	private String addSpace(int nrCars) {
 		String retVal = "";
@@ -2570,35 +2584,35 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 	@Override
 	public void articolCantSelected(ArticolCant articolCant) {
 
-	      List<ArticolDB> listArticole = new ArrayList<ArticolDB>();
-	        articolCant.setCod(articolCant.getCod().replaceFirst("^0*", ""));
-	        listArticole.add(articolCant);
+		List<ArticolDB> listArticole = new ArrayList<ArticolDB>();
+		articolCant.setCod(articolCant.getCod().replaceFirst("^0*", ""));
+		listArticole.add(articolCant);
 
-	        if (isDepartMathaus) {
-	            articolMathaus = new ArticolMathaus();
-	            articolMathaus.setCod(articolCant.getCod());
-	            articolMathaus.setNume(articolCant.getNume());
-	            articolMathaus.setDepart(articolCant.getDepart());
-	            articolMathaus.setUmVanz(articolCant.getUmVanz());
-	            articolMathaus.setUmVanz10(articolCant.getUmVanz10());
-	            articolMathaus.setUmPalet(articolCant.isUmPalet());
-	            articolMathaus.setSintetic(articolCant.getSintetic());
-	            articolMathaus.setNivel1((articolCant.getNivel1()));
-	        } else {
-	            CreareComanda.filialaAlternativa = articolCant.getUlStoc();
+		if (isDepartMathaus) {
+			articolMathaus = new ArticolMathaus();
+			articolMathaus.setCod(articolCant.getCod());
+			articolMathaus.setNume(articolCant.getNume());
+			articolMathaus.setDepart(articolCant.getDepart());
+			articolMathaus.setUmVanz(articolCant.getUmVanz());
+			articolMathaus.setUmVanz10(articolCant.getUmVanz10());
+			articolMathaus.setUmPalet(articolCant.isUmPalet());
+			articolMathaus.setSintetic(articolCant.getSintetic());
+			articolMathaus.setNivel1((articolCant.getNivel1()));
+		} else {
+			CreareComanda.filialaAlternativa = articolCant.getUlStoc();
 
-	            if (articolCant.getDepozit().equals("92V1"))
-	                spinnerDepoz.setSelection(adapterSpinnerDepozite.getPosition("92V1"));
-	            else
-	                spinnerDepoz.setSelection(0);
-	        }
+			if (articolCant.getDepozit().equals("92V1"))
+				spinnerDepoz.setSelection(adapterSpinnerDepozite.getPosition("92V1"));
+			else
+				spinnerDepoz.setSelection(0);
+		}
 
-	        txtNumeArticol.setText("");
-	        resultLayout.setVisibility(View.INVISIBLE);
-	        CautareArticoleAdapter adapterArticole = new CautareArticoleAdapter(this, listArticole);
-	        setListAdapter(adapterArticole);
+		txtNumeArticol.setText("");
+		resultLayout.setVisibility(View.INVISIBLE);
+		CautareArticoleAdapter adapterArticole = new CautareArticoleAdapter(this, listArticole);
+		setListAdapter(adapterArticole);
 
-	        this.getListView().performItemClick(this.getListView().getAdapter().getView(0, null, null), 0, this.getListView().getItemIdAtPosition(0));
+		this.getListView().performItemClick(this.getListView().getAdapter().getView(0, null, null), 0, this.getListView().getItemIdAtPosition(0));
 
 	}
 
@@ -2610,9 +2624,9 @@ public class SelectArtCmd extends ListActivity implements OperatiiArticolListene
 
 	@Override
 	public void articolMathausSelected(ArticolMathaus articol) {
-        cautaStocBV90 = false;
-        verificatStocBV90 = false;
-        filialaStocBV90 = "";
+		cautaStocBV90 = false;
+		verificatStocBV90 = false;
+		filialaStocBV90 = "";
 		afisArticolMathaus(articol);
 
 	}
